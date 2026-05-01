@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔬 Laboratorio de Pruebas Genos V14.8 (CATÁLOGO REAL)</title>
+    <title>🔬 Laboratorio de Pruebas Genos V14.8 (UI REPARADA)</title>
     
-    <!-- ⚠️ CAMBIA "ataques.js" POR EL NOMBRE EXACTO DE TU ARCHIVO DE ATAQUES -->
+    <!-- CONECTADO A TU CATÁLOGO REAL -->
     <script src="AttackCatalog.js"></script> 
     
     <script src="genes.js"></script>
@@ -56,7 +56,9 @@
         .terminal::-webkit-scrollbar-thumb { background: #00ffcc; }
         .term-title { color: #fff; font-weight: bold; margin-bottom: 10px; text-align: center; border-bottom: 1px dashed #1e3a5f; padding-bottom: 5px; }
 
-        .combat-arena { width: 100%; display: flex; flex-direction: column; gap: 20px; }
+        /* ✨ FIX V14.8: Eliminado el display: flex rebelde para que obedezca a las pestañas */
+        .combat-arena { width: 100%; flex-direction: column; gap: 20px; }
+        
         .action-bar { display: flex; gap: 15px; align-items: center; }
         .btn-fight { flex: 1; background: linear-gradient(90deg, #8A2BE2, #4dd0e1); color: #fff; border: none; padding: 15px; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .btn-fight:hover { filter: brightness(1.2); box-shadow: 0 0 20px rgba(138, 43, 226, 0.5); }
@@ -142,7 +144,7 @@
                 </select>
             </div>
 
-            <!-- ✨ NUEVO: SELECTORES DE MT REALES -->
+            <!-- SELECTORES DE MT REALES -->
             <div class="control-group" style="border-left: 3px solid #ffcc00; background: rgba(255, 204, 0, 0.05);">
                 <label style="color:#ffcc00">💿 MT Especial (Slot 2)</label>
                 <select id="sel-mt-especial"><option value="ninguno">Aleatorio / Ninguno</option></select>
@@ -171,7 +173,6 @@
                 <label class="switch"><input type="checkbox" id="chk-escaneado" checked><span class="slider"></span></label>
             </div>
 
-            <!-- Cosméticos movidos abajo para priorizar combate -->
             <div class="control-group"><label>Forma Base</label><select id="sel-forma"></select></div>
             <div class="control-group"><label>Color Base</label><input type="color" id="sel-color" value="#ff6b6b"></div>
             <div class="control-group"><label>Ojos</label><select id="sel-ojos"></select></div>
@@ -340,7 +341,6 @@
             }, delayMs);
         }
 
-        // ✨ CARGAR CATÁLOGO REAL EN LOS SELECTORES
         function rellenarAtaques() {
             const selEsp = document.getElementById("sel-mt-especial");
             const selTac = document.getElementById("sel-mt-tactica");
@@ -569,7 +569,6 @@
 
                 const pAdn = obtenerAdnPlayer();
                 
-                // ✨ AHORA LEE LOS SELECTORES QUE ELEGISTE EN EL PANEL
                 const espVal = document.getElementById("sel-mt-especial").value;
                 const tacVal = document.getElementById("sel-mt-tactica").value;
                 const defVal = document.getElementById("sel-mt-definitivo").value;
@@ -629,7 +628,6 @@
 
                 if (p.hp <= 0 || e.hp <= 0) return;
 
-                // Reducir cooldowns
                 for (let k in p.cooldowns) if (p.cooldowns[k] > 0) p.cooldowns[k]--;
                 for (let k in e.cooldowns) if (e.cooldowns[k] > 0) e.cooldowns[k]--;
 
