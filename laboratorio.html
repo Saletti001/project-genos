@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔬 Laboratorio Genético y de Implantes V15.6</title>
+    <title>🔬 Laboratorio Genético y de Implantes V15.7</title>
     
     <script src="AttackCatalog.js"></script> 
     <script src="genes.js"></script>
@@ -49,13 +49,12 @@
         .pedestal-shadow { width: 170px; height: 45px; background: #111b24; border-radius: 50%; box-shadow: 0 10px 20px rgba(0,0,0,0.4); display: flex; justify-content: center; align-items: center; position: absolute; top: 25px; }
         .pedestal-core { width: 50px; height: 4px; background: #80deea; border-radius: 4px; box-shadow: 0 0 10px #80deea, 0 0 20px #80deea; }
         
-        /* Contenedor SVG con transición suave para el Volteo */
         .geno-display-box { width: 300px; height: 300px; display: flex; justify-content: center; align-items: center; z-index: 1; position: relative; margin-bottom: 60px; transition: transform 0.3s ease; }
         .flipped { transform: scaleX(-1); }
 
         .terminal { background: #0d161c; border: 1px solid #1e3a5f; border-left: 4px solid #00ffcc; border-radius: 8px; padding: 15px; font-family: 'Courier New', Courier, monospace; font-size: 12px; color: #00ffcc; height: 250px; overflow-y: auto; box-shadow: inset 0 0 15px rgba(0,0,0,0.8); line-height: 1.6; }
 
-        .implants-panel-container { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 480px; margin: 0 auto; }
+        .implants-panel-container { display: flex; flex-direction: column; gap: 20px; width: 100%; max-width: 580px; margin: 0 auto; }
         .geno-scanner { width: 100%; background: #0d161c; border: 1px solid #00acc1; border-radius: 12px; padding: 20px 15px; display: flex; flex-direction: column; align-items: center; box-shadow: 0 0 20px rgba(0, 172, 193, 0.1); position: relative; overflow: hidden; }
         .preview-wrapper { position: relative; width: 100%; display: flex; justify-content: center; }
         .scanner-line { position: absolute; width: 70%; height: 2px; background: rgba(77, 208, 225, 0.5); left: 15%; box-shadow: 0 0 15px #4dd0e1; animation: scanMove 3s infinite linear; z-index: 10; pointer-events: none; }
@@ -67,10 +66,11 @@
         .lab-subtab { flex: 1; padding: 12px; background: #1a2a36; border: 1px solid #334; color: #80deea; cursor: pointer; text-align: center; font-weight: bold; border-radius: 8px; transition: 0.3s; text-transform: uppercase; font-size: 12px; }
         .lab-subtab.active { background: #00acc1; color: white; box-shadow: 0 0 10px rgba(0, 172, 193, 0.4); border-color: #00acc1; }
 
-        .slot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 12px; border: 1px solid #1e3a5f; }
-        .implant-slot { background: #0d161c; border: 1px dashed #4dd0e1; padding: 12px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: center; min-height: 70px; }
-        .implant-slot label { font-size: 9px; color: #4dd0e1; margin-bottom: 5px; text-transform: uppercase; }
-        .lab-select { background: transparent; border: none; color: #fff; font-weight: bold; font-size: 11px; width: 100%; text-align: center; text-transform: uppercase; outline: none; cursor: pointer; text-align-last: center; }
+        .slot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: rgba(0,0,0,0.3); border-radius: 12px; border: 1px solid #1e3a5f; }
+        .implant-slot { background: #0d161c; border: 1px dashed #4dd0e1; padding: 10px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: center; min-height: 65px; cursor: pointer; transition: 0.2s;}
+        .implant-slot:hover { background: rgba(0, 172, 193, 0.1); }
+        .implant-slot label { font-size: 9px; color: #4dd0e1; margin-bottom: 5px; text-transform: uppercase; pointer-events: none; }
+        .lab-select { background: transparent; border: none; color: #fff; font-weight: bold; font-size: 10px; width: 100%; text-align: center; text-transform: uppercase; outline: none; cursor: pointer; text-align-last: center; }
         .lab-select option { background: #0d1a24; color: #fff; text-align: left; }
 
         .stats-panel { width: 100%; background: rgba(10, 17, 24, 0.9); border: 1px solid #1e3a5f; border-radius: 12px; padding: 15px; }
@@ -133,7 +133,7 @@
 </head>
 <body>
 
-    <h1>🔬 Laboratorio Central V15.6</h1>
+    <h1>🔬 Laboratorio Central V15.7</h1>
     
     <div class="tabs-container">
         <button class="tab-btn active" onclick="switchTab('tab-adn', this)">🧬 ADN y Biología</button>
@@ -285,26 +285,36 @@
                     <div class="lab-subtab" id="st-eq" onclick="toggleSubTab('eq')">EQUIPO</div>
                 </div>
 
-                <div id="grid-atk" class="slot-grid" style="margin-top:10px;">
-                    <div class="implant-slot" style="background: rgba(0, 172, 193, 0.15); border: 1px solid #00acc1;">
-                        <label>Básico (Genético)</label>
-                        <span id="lbl-atk-basico" style="color:#aaa; font-size:11px; font-weight:bold;">PULSO VITAL</span>
+                <!-- ✨ FIX V15.7: SPLIT VIEW PARA ATAQUES Y CONSOLA INFO -->
+                <div id="view-atk" style="display: flex; gap: 10px; margin-top: 10px;">
+                    <div id="grid-atk" class="slot-grid" style="flex: 1.4; padding: 10px; margin: 0; border: none; background: transparent;">
+                        <div class="implant-slot" style="background: rgba(0, 172, 193, 0.15); border: 1px solid #00acc1;" onclick="mostrarInfoBasico()">
+                            <label>Básico (Genético)</label>
+                            <span id="lbl-atk-basico" style="color:#aaa; font-size:11px; font-weight:bold;">PULSO VITAL</span>
+                        </div>
+                        <div class="implant-slot">
+                            <label>Técnica (Daño)</label>
+                            <select id="sel-mt-especial" class="lab-select"><option value="ninguno">VACÍO</option></select>
+                        </div>
+                        <div class="implant-slot">
+                            <label>Soporte (Buff)</label>
+                            <select id="sel-mt-tactica" class="lab-select"><option value="ninguno">VACÍO</option></select>
+                        </div>
+                        <div class="implant-slot">
+                            <label>Definitivo</label>
+                            <select id="sel-mt-definitivo" class="lab-select"><option value="ninguno">🔒 REQUIERE NV. 25</option></select>
+                        </div>
                     </div>
-                    <div class="implant-slot">
-                        <label>Técnica (Daño)</label>
-                        <select id="sel-mt-especial" class="lab-select"><option value="ninguno">VACÍO</option></select>
-                    </div>
-                    <div class="implant-slot">
-                        <label>Soporte (Buff)</label>
-                        <select id="sel-mt-tactica" class="lab-select"><option value="ninguno">VACÍO</option></select>
-                    </div>
-                    <div class="implant-slot">
-                        <label>Definitivo</label>
-                        <select id="sel-mt-definitivo" class="lab-select"><option value="ninguno">🔒 REQUIERE NV. 25</option></select>
+                    
+                    <div class="terminal" style="flex: 1; height: auto; padding: 12px; display: flex; flex-direction: column; justify-content: flex-start;">
+                        <div class="term-title" style="font-size: 10px; margin-bottom: 5px;">/// INFO. MÓDULO ///</div>
+                        <div id="atk-console-content" style="font-size: 11px;">
+                            <div style="color:#888; text-align:center; padding-top:20px;">> Selecciona un módulo para inspeccionarlo.</div>
+                        </div>
                     </div>
                 </div>
 
-                <div id="grid-eq" class="slot-grid" style="margin-top:10px; display:none;">
+                <div id="grid-eq" class="slot-grid" style="margin-top:10px; display:none; padding: 15px;">
                     <div class="implant-slot">
                         <label>Cabeza</label>
                         <select id="sel-cabeza" class="lab-select"></select>
@@ -394,16 +404,92 @@
             document.getElementById('st-atk').classList.remove('active');
             document.getElementById('st-eq').classList.remove('active');
             document.getElementById(`st-${tab}`).classList.add('active');
-            document.getElementById('grid-atk').style.display = tab === 'atk' ? 'grid' : 'none';
+            document.getElementById('view-atk').style.display = tab === 'atk' ? 'flex' : 'none';
             document.getElementById('grid-eq').style.display = tab === 'eq' ? 'grid' : 'none';
+        }
+
+        // ✨ BUSCADOR DE ATAQUES PARA LA CONSOLA
+        function buscarAtaqueInfo(nombre) {
+            if(!window.AttackCatalog) return null;
+            let cat = window.AttackCatalog.ataquesPorElemento || window.AttackCatalog.movimientos;
+            for(let el in cat) {
+                let listas = [cat[el].especiales, cat[el].soportes, cat[el].definitivos];
+                for(let lista of listas) {
+                    if(lista) {
+                        let atk = lista.find(a => a.nombre === nombre);
+                        if(atk) return { ...atk, elemento: el };
+                    }
+                }
+            }
+            return null;
+        }
+
+        function actualizarConsolaAtaque(nombre) {
+            const content = document.getElementById("atk-console-content");
+            if (!nombre || nombre === "ninguno") {
+                content.innerHTML = `<div style="color:#888; text-align:center; padding-top:20px;">> Selecciona un módulo para inspeccionarlo.</div>`;
+                return;
+            }
+            
+            const info = buscarAtaqueInfo(nombre);
+            if (!info) {
+                content.innerHTML = `<div style="color:#ff3333;">> Error: No se encontró el módulo en la base de datos.</div>`;
+                return;
+            }
+            
+            let colorEl = "#888";
+            if(info.elemento === "Biomutante") colorEl = "#4CAF50";
+            if(info.elemento === "Viral") colorEl = "#ff6b6b";
+            if(info.elemento === "Cibernético") colorEl = "#ffcc00";
+            if(info.elemento === "Sintético") colorEl = "#4dd0e1";
+            if(info.elemento === "Radiactivo") colorEl = "#b19cd9";
+            if(info.elemento === "Tóxico") colorEl = "#8A2BE2";
+            
+            let html = `
+                <div style="color:#4dd0e1; font-weight:900; font-size:12px; margin-bottom:5px;">[${info.nombre.toUpperCase()}]</div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px; border-bottom: 1px dashed #334; padding-bottom:5px;">
+                    <span style="color:${colorEl}; font-weight:bold; text-transform:uppercase;">${info.elemento}</span>
+                    <span style="color:#ffcc00;">PWR: ${info.power || 0}</span>
+                </div>
+                <div style="color:#aaa; margin-bottom:8px; line-height:1.4;">${info.descripcion || "Sin descripción disponible."}</div>
+                <div style="display:flex; gap:10px; font-size:10px; color:#888;">
+                    ${info.cooldown ? `<span style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px;">⏳ CD: ${info.cooldown}</span>` : `<span style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px;">⏳ CD: 0</span>`}
+                    ${info.accuracy ? `<span style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px;">🎯 ACC: ${info.accuracy}%</span>` : ``}
+                </div>
+            `;
+            content.innerHTML = html;
+        }
+
+        function mostrarInfoBasico() {
+            const genoElem = document.getElementById("sel-elemento").value;
+            const nombre = document.getElementById("lbl-atk-basico").innerText;
+            const content = document.getElementById("atk-console-content");
+            
+            let colorEl = "#888";
+            if(genoElem === "Biomutante") colorEl = "#4CAF50";
+            if(genoElem === "Viral") colorEl = "#ff6b6b";
+            if(genoElem === "Cibernético") colorEl = "#ffcc00";
+            if(genoElem === "Sintético") colorEl = "#4dd0e1";
+            if(genoElem === "Radiactivo") colorEl = "#b19cd9";
+            if(genoElem === "Tóxico") colorEl = "#8A2BE2";
+
+            content.innerHTML = `
+                <div style="color:#4dd0e1; font-weight:900; font-size:12px; margin-bottom:5px;">[${nombre}]</div>
+                <div style="display:flex; justify-content:space-between; margin-bottom:5px; border-bottom: 1px dashed #334; padding-bottom:5px;">
+                    <span style="color:${colorEl}; font-weight:bold; text-transform:uppercase;">${genoElem}</span>
+                    <span style="color:#ffcc00;">PWR: Escala x Nivel</span>
+                </div>
+                <div style="color:#aaa; margin-bottom:8px; line-height:1.4;">Ataque básico innato. No requiere enfriamiento y canaliza la energía genética pura de tu Geno.</div>
+                <div style="display:flex; gap:10px; font-size:10px; color:#888;">
+                    <span style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px;">⏳ CD: 0</span>
+                    <span style="background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px;">🎯 ACC: 100%</span>
+                </div>
+            `;
         }
 
         function inyectarSvgSeguro(adnData) {
             if (typeof generarSvgGeno !== 'function') return '';
-            
-            // Llamada pura y original al motor
-            let svgString = generarSvgGeno(adnData); 
-            
+            let svgString = generarSvgGeno(adnData);
             let tempDiv = document.createElement('div');
             tempDiv.innerHTML = svgString;
             let svgEl = tempDiv.querySelector('svg');
@@ -521,6 +607,8 @@
             if (Array.from(selEsp.options).some(o => o.value === valEsp)) selEsp.value = valEsp;
             if (Array.from(selTac.options).some(o => o.value === valTac)) selTac.value = valTac;
             if (Array.from(selDef.options).some(o => o.value === valDef)) selDef.value = valDef;
+            
+            actualizarConsolaAtaque("ninguno"); // Reset console on element change
         }
 
         let genesF = [];
@@ -562,7 +650,15 @@
             function llenarGen(id) { let el = document.getElementById(id); genesF.forEach(g => { let o = document.createElement("option"); o.value = g.id; o.innerText = g.name; el.appendChild(o); }); }
             llenarGen("sel-gen-b"); llenarGen("sel-gen-c");
 
-            // Eventos
+            // Eventos Selectores de Ataque
+            ['sel-mt-especial', 'sel-mt-tactica', 'sel-mt-definitivo'].forEach(id => {
+                let el = document.getElementById(id);
+                if(el) {
+                    el.addEventListener('change', (e) => actualizarConsolaAtaque(e.target.value));
+                    el.addEventListener('focus', (e) => actualizarConsolaAtaque(e.target.value));
+                }
+            });
+
             document.getElementById("sel-rareza").addEventListener("change", (e) => {
                 baseStatsCache = window.generarStatsPorRareza ? window.generarStatsPorRareza(e.target.value) : {hp: 100, atk: 25, def: 15, spd: 20, luk: 15};
                 ['hp','atk','def','spd','luk'].forEach(s => document.getElementById(`base-${s}`).innerText = baseStatsCache[s]);
