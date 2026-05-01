@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔬 Laboratorio de Pruebas Genos V9.1</title>
+    <title>🔬 Laboratorio de Pruebas Genos V14.6</title>
     
+    <!-- Asegúrate de tener estos archivos en la misma carpeta -->
     <script src="genes.js"></script>
     <script src="genoma.js"></script>
     <script src="caras.js"></script> 
     <script src="accesorios.js"></script> 
     <script src="SVGEngine.js"></script>
     <script src="app.js"></script>
+    <script src="ColiseumLogic.js"></script> <!-- ✨ AHORA USA EL MOTOR REAL DE COMBATE -->
 
     <style>
         body { background-color: #0a1118; color: #fff; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; display: flex; flex-direction: column; align-items: center; }
@@ -104,17 +106,20 @@
         .text-dmg { color: #ff3333; font-size: 32px; }
         .text-heal { color: #4CAF50; font-size: 28px; }
         .text-crit { color: #ffcc00; font-size: 36px; font-style: italic; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .ataques-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-    <h1>🔬 Laboratorio Genético V9.1</h1>
+    <h1>🔬 Laboratorio Genético V14.6</h1>
     
     <div class="tabs-container">
         <button id="btn-tab-adn" class="tab-btn active">🔬 ADN y Morfología</button>
         <button id="btn-tab-combat" class="tab-btn">⚔️ Simulación de Combate</button>
     </div>
 
+    <!-- PESTAÑA: CONFIGURACIÓN ADN -->
     <div id="tab-adn" class="tab-content lab-container active">
         <div class="controls">
             <div class="switch-container">
@@ -179,21 +184,27 @@
         </div>
     </div>
 
+    <!-- PESTAÑA: SIMULACIÓN DE COMBATE -->
     <div id="tab-combat" class="tab-content combat-arena lab-container">
         
         <div class="action-bar">
+            <!-- ✨ NUEVO: Selector de Nivel -->
+            <select id="sel-nivel-combate" style="flex: 0.2; padding: 15px; background: #0d1a24; color: #4CAF50; border: 1px solid #4CAF50; border-radius: 8px; font-weight: bold; outline: none; cursor: pointer; text-transform: uppercase;">
+                <option value="1">Nivel 1</option><option value="5">Nivel 5</option>
+                <option value="15">Nivel 15</option><option value="25" selected>Nivel 25 (Meta)</option>
+            </select>
+            
             <select id="sel-enemy-rareza" style="flex: 0.3; padding: 15px; background: #0d1a24; color: #ff6b6b; border: 1px solid #ff6b6b; border-radius: 8px; font-weight: bold; outline: none; cursor: pointer; text-transform: uppercase;">
                 <option value="Común">Rival: Común</option><option value="Raro">Rival: Raro</option>
                 <option value="Épico">Rival: Épico</option><option value="Legendario">Rival: Legendario</option>
                 <option value="Mítico">Rival: Mítico</option>
             </select>
 
-            <select id="sel-enemy-combo" style="flex: 0.4; padding: 15px; background: #0d1a24; color: #ff9800; border: 1px solid #ff9800; border-radius: 8px; font-weight: bold; outline: none; cursor: pointer; text-transform: uppercase;">
+            <select id="sel-enemy-combo" style="flex: 0.3; padding: 15px; background: #0d1a24; color: #ff9800; border: 1px solid #ff9800; border-radius: 8px; font-weight: bold; outline: none; cursor: pointer; text-transform: uppercase;">
                 <option value="aleatorio">Rival: Combo Aleatorio</option>
             </select>
 
-            <button id="btn-generar-combate" class="btn-fight">⚔️ Generar Rival</button>
-            <button id="btn-atacar" class="btn-action" disabled>🔥 Ejecutar Turno</button>
+            <button id="btn-generar-combate" class="btn-fight">⚔️ Generar Escenario</button>
         </div>
         
         <div class="arena-screen">
@@ -240,6 +251,18 @@
             </div>
         </div>
 
+        <!-- ✨ NUEVO: Panel de control de turnos estilo RPG -->
+        <div id="action-panel" style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 8px; border: 1px solid #4dd0e1; display: none;">
+            <div style="text-align: center; color: #aaa; font-size: 12px; margin-bottom: 10px;">SELECCIONA UNA ACCIÓN:</div>
+            <div class="ataques-container">
+                <button id="btn-atk-1" class="btn-action" style="background: linear-gradient(90deg, #1e3a5f, #2b5876);">Básico</button>
+                <button id="btn-atk-2" class="btn-action" style="background: linear-gradient(90deg, #8E24AA, #D81B60);">Especial (CD)</button>
+                <button id="btn-atk-3" class="btn-action" style="background: linear-gradient(90deg, #00897B, #00ACC1);">Táctica (CD)</button>
+                <button id="btn-atk-4" class="btn-action" style="background: linear-gradient(90deg, #E53935, #C62828);">Definitivo (CD)</button>
+            </div>
+            <button id="btn-fin-turno" class="btn-fight" style="width: 100%; margin-top: 15px; background: #333;" disabled>Esperando Acción...</button>
+        </div>
+
         <div id="combat-log" class="terminal" style="height: 200px;">
             <div class="term-title">/// REGISTRO DE BATALLA ///</div>
             <div id="combat-log-content">> Esperando combatientes...</div>
@@ -248,13 +271,6 @@
 
     <script>
         const elementosBase = ["Biomutante", "Viral", "Cibernético", "Radiactivo", "Tóxico", "Sintético"];
-
-        function obtenerMultiplicadorElemental(atkElement, defElement) {
-            const ventajas = { "Biomutante": "Viral", "Viral": "Cibernético", "Cibernético": "Radiactivo", "Radiactivo": "Tóxico", "Tóxico": "Sintético", "Sintético": "Biomutante" };
-            if (ventajas[atkElement] === defElement) return 1.5; 
-            if (ventajas[defElement] === atkElement) return 0.5; 
-            return 1.0; 
-        }
 
         function obtenerCalidad(stats, rareza) {
             const limites = window.TABLA_IVS && window.TABLA_IVS[rareza] ? window.TABLA_IVS[rareza] : { hp: [35, 55], atk: [10, 22], spd: [8, 25], luk: [5, 15] };
@@ -274,9 +290,6 @@
             return { rango, pct, color };
         }
 
-        // ==========================================
-        // NUEVA FUNCIÓN: INYECCIÓN DE SVG SIN DESTRUIR CLASES
-        // ==========================================
         function inyectarSvgSeguro(adnData) {
             if (typeof generarSvgGeno !== 'function') return '';
             let svgString = generarSvgGeno(adnData);
@@ -294,9 +307,6 @@
             return tempDiv.innerHTML;
         }
 
-        // ==========================================
-        // TEXTO FLOTANTE UNIVERSAL
-        // ==========================================
         function mostrarTextoFlotante(esJugador, texto, claseAdicional, delayMs = 0) {
             const sideId = esJugador ? "side-player" : "side-enemy";
             const sideEl = document.getElementById(sideId);
@@ -409,19 +419,6 @@
                     if(gen) {
                         log += `<div style="color:${colorRGB}; margin-top:8px;">>>> ${nombreSlot}: [${gen.name.toUpperCase()}] <<<</div>`;
                         log += `&nbsp;&nbsp;<span style="color:#aaa">Efecto:</span> ${gen.desc}<br>`;
-                        let uso = "Proporciona ventajas estadísticas pasivas.";
-                        if(gen.categoria === "cosmetico") uso = "Cosmético Visual. Aumenta drásticamente el valor del Geno.";
-                        else if(gen.id === "resiliencia_ultima") uso = "Ideal con builds de 'Glass Cannon'. Ponle Stats en ATK; cuando baje al 15% HP barrerá al rival.";
-                        else if(gen.id === "piel_cristal") uso = "Excelente defensa contra Genos de un solo golpe fuerte.";
-                        else if(gen.id === "velocidad_fantasma") uso = "Construye este Geno con alta Velocidad (SPD) y ATK.";
-                        else if(gen.id === "barrera_limite") uso = "Te asegura resistir el peor ataque posible. Combinarlo con genes de curación es letal.";
-                        else if(gen.id === "vampirismo_genetico") uso = "Asegúrate de que tu Geno tenga mucho ATK para que la cura valga la pena.";
-                        else if(gen.id === "reflejo_genetico") uso = "Excelente defensa contra críticos. Devuelve el 30% del daño recibido instantáneamente.";
-                        else if(gen.id === "armadura_adaptativa") uso = "Ideal para contrarrestar equipos que dependen de un solo elemento. Reduce 40% el daño de ataques consecutivos del mismo elemento.";
-                        else if(gen.id === "sangre_fria") uso = "Bloquea pasivas elementales (Quemadura Radiactiva, Veneno Tóxico, Infección). Un salvavidas táctico total.";
-                        else if(gen.id === "especialista_elite") uso = "El Gen del campeón definitivo. Te dará 15 puntos de atributos extra, pero requerirá meses de entrenamiento y recursos.";
-                        
-                        log += `&nbsp;&nbsp;<span style="color:#4CAF50">Táctica recomendada:</span> ${uso}<br>`;
                     }
                 };
 
@@ -433,15 +430,16 @@
 
             function obtenerAdnPlayer() {
                 const rareza = selRareza.value;
-                const stats = window.generarStatsPorRareza ? window.generarStatsPorRareza(rareza) : {hp: 100, atk: 25, spd: 20, luk: 15};
+                const stats = window.generarStatsPorRareza ? window.generarStatsPorRareza(rareza) : {hp: 100, atk: 25, def: 15, spd: 20, luk: 15};
                 const genBData = selGenB.value !== "ninguno" ? genesFuncionales.find(g => g.id === selGenB.value) : null;
                 const genCData = selGenC.value !== "ninguno" ? genesFuncionales.find(g => g.id === selGenC.value) : null;
 
                 return {
-                    id: 999, rarity: rareza, stats: stats, element: selElemento.value,
+                    id: 999, rarity: rareza, rareza: rareza, stats: stats, element: selElemento.value,
                     body_shape: selForma.value, base_color: selColor.value, color: selColor.value,
                     eye_type: selOjos.value, mouth_type: selBoca.value, wing_type: selEspalda.value, hat_type: selCabeza.value,
-                    scanned: chkEscaneado.checked,
+                    scanned: chkEscaneado.checked, level: parseInt(document.getElementById("sel-nivel-combate").value),
+                    maxHp: stats.hp, hp: stats.hp,
                     hidden_genes: { A: selGenA.value !== "ninguno" ? { id: selGenA.value } : null, B: genBData, C: genCData }
                 };
             }
@@ -458,17 +456,15 @@
             renderizarGenoPlayer();
 
             // ==========================================
-            // MOTOR DE COMBATE INTERACTIVO
+            // CONEXIÓN CON EL MOTOR COLISEUMLOGIC (V14.6)
             // ==========================================
             const btnGenerarRival = document.getElementById("btn-generar-combate");
-            const btnAtacar = document.getElementById("btn-atacar");
             const logCombate = document.getElementById("combat-log-content");
             const logContainer = document.getElementById("combat-log");
-
-            let playerCombat = null; let enemyCombat = null; let numeroTurno = 1;
+            const actionPanel = document.getElementById("action-panel");
 
             function scrollToBottom() { logContainer.scrollTop = logContainer.scrollHeight; }
-            function addLog(text) { logCombate.innerHTML += `<div>${text}</div>`; scrollToBottom(); }
+            function addLog(text) { logCombate.innerHTML += `<div style="margin-bottom:4px;">${text}</div>`; scrollToBottom(); }
 
             function actualizarUICombate(p, esJugador) {
                 const prefix = esJugador ? "c-p" : "c-e";
@@ -485,7 +481,10 @@
                 else fillBar.style.background = "#f44336";
 
                 document.getElementById(`${prefix}-hp-text`).innerText = `HP: ${Math.floor(p.hp)} / ${p.maxHp}`;
-                if (p.hp <= 0) document.getElementById(esJugador ? "side-player" : "side-enemy").style.filter = "grayscale(1) brightness(0.5)";
+                if (p.hp <= 0) {
+                    document.getElementById(esJugador ? "side-player" : "side-enemy").style.filter = "grayscale(1) brightness(0.5)";
+                    actionPanel.style.display = "none";
+                }
             }
 
             function flashDamage(esJugador) {
@@ -493,239 +492,162 @@
                 el.classList.add("hit"); setTimeout(() => el.classList.remove("hit"), 150);
             }
 
+            function actualizarBotonesHabilidades() {
+                const p = window.ColiseumLogic.player;
+                if (!p) return;
+
+                ['ataque', 'especial', 'tactica', 'definitivo'].forEach((slot, idx) => {
+                    const btn = document.getElementById(`btn-atk-${idx+1}`);
+                    const ataque = p.ataquesEquipados[slot];
+                    
+                    if (!ataque) {
+                        btn.innerText = "BLOQUEADO";
+                        btn.disabled = true;
+                        btn.style.opacity = "0.5";
+                        return;
+                    }
+
+                    btn.style.opacity = "1";
+                    let cd = p.cooldowns[slot] || 0;
+                    
+                    if (cd > 0) {
+                        btn.innerText = `⏳ [CD: ${cd}]`;
+                        btn.disabled = true;
+                    } else {
+                        btn.innerText = ataque.nombre;
+                        btn.disabled = false;
+                        btn.onclick = () => resolverTurno(slot);
+                    }
+                });
+            }
+
             btnGenerarRival.onclick = () => {
                 logCombate.innerHTML = "";
-                addLog(`<span style="color:#4dd0e1">> INICIALIZANDO ARENA HOLOGRÁFICA...</span>`);
+                addLog(`<span style="color:#4dd0e1">> CONECTANDO CON COLISEUM LOGIC V14.6...</span>`);
                 
                 document.getElementById("side-player").style.filter = "none";
                 document.getElementById("side-enemy").style.filter = "none";
-                numeroTurno = 1;
 
+                // Preparar jugador usando el motor real
                 const pAdn = obtenerAdnPlayer();
-                playerCombat = {
-                    nombre: "Tu Geno", isPlayer: true,
-                    maxHp: pAdn.stats.hp, hp: pAdn.stats.hp, atk: pAdn.stats.atk, spd: pAdn.stats.spd, luk: pAdn.stats.luk,
-                    element: pAdn.element,
-                    genesId: [pAdn.hidden_genes.B?.id, pAdn.hidden_genes.C?.id],
-                    crystalSkin: pAdn.hidden_genes.B?.id === "piel_cristal" || pAdn.hidden_genes.C?.id === "piel_cristal",
-                    resilienciaUsada: false, barreraUsada: false,
-                    ultimoElementoRecibido: null, sangreFriaUsada: false,
-                    escudoCibernetico: pAdn.element === "Cibernético", estados: []
+                
+                // Le forzamos ataques aleatorios para la prueba si no tiene
+                pAdn.ataques = {
+                    atk_2: window.ColiseumLogic.obtenerAtaqueAleatorio(pAdn.element, "especiales"),
+                    atk_3: window.ColiseumLogic.obtenerAtaqueAleatorio("Sintético", "soportes"), // Soporte universal
+                    atk_4: pAdn.level >= 25 ? window.ColiseumLogic.obtenerAtaqueAleatorio(pAdn.element, "definitivos") : null
                 };
 
+                window.ColiseumLogic.prepararJugador(pAdn);
+
+                // Generar enemigo procedural respetando el nivel
+                const nivelElegido = parseInt(document.getElementById("sel-nivel-combate").value);
+                window.ColiseumLogic.generarRivalProcedural(nivelElegido);
+
+                // Sobreescribir rareza o combo del enemigo si el lab lo exige
                 const enemyRareza = document.getElementById("sel-enemy-rareza").value;
                 const enemyComboSelection = document.getElementById("sel-enemy-combo").value;
-                const enemyStats = window.generarStatsPorRareza ? window.generarStatsPorRareza(enemyRareza) : {hp: 80, atk: 20, spd: 20, luk: 15};
-                
-                const eForma = formasCuerpo[Math.floor(Math.random() * formasCuerpo.length)];
-                const coloresRival = ["#ff6b6b", "#4dd0e1", "#fdfd96", "#b19cd9", "#77DD77", "#ff9800", "#ffb347", "#a8e6cf"];
-                const eColor = coloresRival[Math.floor(Math.random() * coloresRival.length)];
-                const eElement = elementosBase[Math.floor(Math.random() * elementosBase.length)];
-                
-                let eHiddenGenes = {A: null, B: null, C: null};
 
-                if (enemyComboSelection !== "aleatorio" && window.COMBOS_OFICIALES) {
-                    const comboElegido = window.COMBOS_OFICIALES.find(c => c.nombre === enemyComboSelection);
-                    const gB = genesFuncionales.find(g => g.id === comboElegido.ids[0]);
-                    const gC = genesFuncionales.find(g => g.id === comboElegido.ids[1]);
-                    eHiddenGenes = { A: null, B: gB, C: gC };
-                } else {
-                    if (typeof window.generarGenesV9 === 'function') {
-                        eHiddenGenes = window.generarGenesV9(enemyRareza);
-                    } else {
-                        let gB = genesFuncionales[Math.floor(Math.random() * genesFuncionales.length)];
-                        let gC = genesFuncionales[Math.floor(Math.random() * genesFuncionales.length)];
-                        while(gB.id === gC.id) gC = genesFuncionales[Math.floor(Math.random() * genesFuncionales.length)];
-                        eHiddenGenes = {A: null, B: gB, C: gC};
-                    }
+                if (enemyRareza !== window.ColiseumLogic.enemy.rareza) {
+                    window.ColiseumLogic.enemy.rareza = enemyRareza;
+                    let nStats = window.generarStatsPorRareza(enemyRareza);
+                    window.ColiseumLogic.enemy.maxHp = nStats.hp; window.ColiseumLogic.enemy.hp = nStats.hp;
                 }
 
-                const eAdn = { 
-                    id: 888, scanned: true, rarity: enemyRareza, stats: enemyStats, element: eElement,
-                    body_shape: eForma, base_color: eColor, color: eColor,
-                    eye_type: opcionesOjos[Math.floor(Math.random() * opcionesOjos.length)], 
-                    mouth_type: opcionesBocas[Math.floor(Math.random() * opcionesBocas.length)], 
-                    wing_type: opcionesEspaldas[Math.floor(Math.random() * opcionesEspaldas.length)], 
-                    hat_type: opcionesCabezas[Math.floor(Math.random() * opcionesCabezas.length)],
-                    hidden_genes: eHiddenGenes 
-                };
+                const playerC = window.ColiseumLogic.player;
+                const enemyC = window.ColiseumLogic.enemy;
 
-                const eGenB_id = eHiddenGenes.B ? eHiddenGenes.B.id : "ninguno";
-                const eGenC_id = eHiddenGenes.C ? eHiddenGenes.C.id : "ninguno";
+                document.getElementById("combat-player-svg").innerHTML = inyectarSvgSeguro(playerC.adn);
+                document.getElementById("combat-enemy-svg").innerHTML = inyectarSvgSeguro(enemyC.adn);
 
-                enemyCombat = {
-                    nombre: "Rival Salvaje", isPlayer: false,
-                    maxHp: eAdn.stats.hp, hp: eAdn.stats.hp, atk: eAdn.stats.atk, spd: eAdn.stats.spd, luk: eAdn.stats.luk,
-                    element: eAdn.element,
-                    genesId: [eGenB_id, eGenC_id],
-                    crystalSkin: eGenB_id === "piel_cristal" || eGenC_id === "piel_cristal",
-                    resilienciaUsada: false, barreraUsada: false,
-                    ultimoElementoRecibido: null, sangreFriaUsada: false,
-                    escudoCibernetico: eElemento === "Cibernético", estados: []
-                };
+                document.getElementById("c-p-rareza").innerText = playerC.rareza;
+                document.getElementById("c-p-elem").innerText = playerC.element;
+                document.getElementById("c-e-rareza").innerText = enemyC.rareza;
+                document.getElementById("c-e-elem").innerText = enemyC.element;
 
-                document.getElementById("combat-player-svg").innerHTML = inyectarSvgSeguro(pAdn);
-                document.getElementById("combat-player-svg").style.color = pAdn.color;
-                
-                document.getElementById("combat-enemy-svg").innerHTML = inyectarSvgSeguro(eAdn);
-                document.getElementById("combat-enemy-svg").style.color = eAdn.color;
-
-                document.getElementById("c-p-rareza").innerText = pAdn.rarity;
-                document.getElementById("c-p-elem").innerText = pAdn.element;
-                document.getElementById("c-e-rareza").innerText = eAdn.rarity;
-                document.getElementById("c-e-elem").innerText = eAdn.element;
-
-                let calP = obtenerCalidad(pAdn.stats, pAdn.rarity);
-                document.getElementById("c-p-calidad").innerText = `[${calP.rango} ${calP.pct}%]`;
+                let calP = obtenerCalidad(playerC.baseAtk ? {hp: playerC.maxHp, atk: playerC.baseAtk, def: playerC.baseDef, spd: playerC.baseSpd, luk: playerC.baseLuk} : pAdn.stats, playerC.rareza);
+                document.getElementById("c-p-calidad").innerText = `[${calP.rango}]`;
                 document.getElementById("c-p-calidad").style.color = calP.color;
-                
-                let calE = obtenerCalidad(eAdn.stats, eAdn.rarity);
-                document.getElementById("c-e-calidad").innerText = `[${calE.rango} ${calE.pct}%]`;
-                document.getElementById("c-e-calidad").style.color = calE.color;
 
-                document.getElementById("c-p-genb").innerText = pAdn.hidden_genes.B ? pAdn.hidden_genes.B.name : "Vacío";
-                document.getElementById("c-p-genc").innerText = pAdn.hidden_genes.C ? pAdn.hidden_genes.C.name : "Vacío";
-                document.getElementById("c-e-genb").innerText = eHiddenGenes.B ? eHiddenGenes.B.name : "Vacío";
-                document.getElementById("c-e-genc").innerText = eHiddenGenes.C ? eHiddenGenes.C.name : "Vacío";
+                document.getElementById("c-p-genb").innerText = playerC.genesId[0];
+                document.getElementById("c-p-genc").innerText = playerC.genesId[1];
+                document.getElementById("c-e-genb").innerText = enemyC.genesId[0];
+                document.getElementById("c-e-genc").innerText = enemyC.genesId[1];
 
-                let comboP = null;
-                let comboE = null;
+                actualizarUICombate(playerC, true);
+                actualizarUICombate(enemyC, false);
 
-                if (window.detectarComboSinergico) {
-                    comboP = window.detectarComboSinergico(playerCombat.genesId[0], playerCombat.genesId[1]);
-                    document.getElementById("c-p-combo").style.display = comboP ? "block" : "none";
-                    if(comboP) document.getElementById("c-p-combo").innerText = `🔥 COMBO: ${comboP}`;
-
-                    comboE = window.detectarComboSinergico(enemyCombat.genesId[0], enemyCombat.genesId[1]);
-                    document.getElementById("c-e-combo").style.display = comboE ? "block" : "none";
-                    if(comboE) document.getElementById("c-e-combo").innerText = `🔥 COMBO: ${comboE}`;
-                }
-
-                actualizarUICombate(playerCombat, true);
-                actualizarUICombate(enemyCombat, false);
-
-                btnAtacar.disabled = false;
-                addLog(`> <span style="color:#ffcc00">Sinergia Rival:</span> ${comboE ? `¡Peligro! Combo ${comboE} activado.` : `Ningún combo detectado.`}`);
-                addLog(`<br><span style="color:#8A2BE2; font-weight:bold;">--- LISTOS PARA COMBATE ---</span>`);
+                actionPanel.style.display = "block";
+                actualizarBotonesHabilidades();
+                addLog(`<br><span style="color:#8A2BE2; font-weight:bold;">--- COMIENZA EL COMBATE (Turno 1) ---</span>`);
             };
 
-            function procesarAtaque(atacante, defensor) {
-                if (atacante.hp <= 0 || defensor.hp <= 0) return;
+            function resolverTurno(slotElegidoPorJugador) {
+                const engine = window.ColiseumLogic;
+                const p = engine.player;
+                const e = engine.enemy;
 
-                let ataques = 1;
-                if (atacante.genesId.includes("velocidad_fantasma") && Math.random() <= 0.20) {
-                    ataques = 2;
-                    addLog(`<span style="color:#b19cd9">* [Velocidad Fantasma] ¡${atacante.nombre} ataca rápido dos veces!</span>`);
+                if (p.hp <= 0 || e.hp <= 0) return;
+
+                // Reducir cooldowns
+                for (let k in p.cooldowns) if (p.cooldowns[k] > 0) p.cooldowns[k]--;
+                for (let k in e.cooldowns) if (e.cooldowns[k] > 0) e.cooldowns[k]--;
+
+                // IA Enemiga (Aleatoria simple para el laboratorio)
+                let slotsEnemigos = ["ataque"];
+                if (e.ataquesEquipados.especial && e.cooldowns.especial === 0) slotsEnemigos.push("especial");
+                if (e.ataquesEquipados.tactica && e.cooldowns.tactica === 0) slotsEnemigos.push("tactica");
+                if (e.ataquesEquipados.definitivo && e.cooldowns.definitivo === 0) slotsEnemigos.push("definitivo");
+                
+                let IA_Action = slotsEnemigos[Math.floor(Math.random() * slotsEnemigos.length)];
+
+                addLog(`<br><span style="color:#fff; border-bottom:1px solid #333;">--- TURNO ${engine.turno} ---</span>`);
+
+                // Determinar quién ataca primero
+                let velP = p.spd + (Math.random() * 5);
+                let velE = e.spd + (Math.random() * 5);
+                
+                let primero = velP >= velE ? {ata: p, def: e, accion: slotElegidoPorJugador, isP: true} : {ata: e, def: p, accion: IA_Action, isP: false};
+                let segundo = velP < velE ? {ata: p, def: e, accion: slotElegidoPorJugador, isP: true} : {ata: e, def: p, accion: IA_Action, isP: false};
+
+                // Ejecutar Primero
+                let res1 = engine.ejecutarAtaqueCompleto(primero.ata, primero.def, primero.accion);
+                res1.logs.forEach(l => addLog(l));
+                if (res1.anims.danoDefensor > 0) { flashDamage(!primero.isP); mostrarTextoFlotante(!primero.isP, `-${res1.anims.danoDefensor}`, "text-dmg"); }
+                if (res1.anims.curacionAtacante > 0) mostrarTextoFlotante(primero.isP, `+${res1.anims.curacionAtacante}`, "text-heal");
+                if (res1.anims.critico) mostrarTextoFlotante(!primero.isP, "CRIT", "text-crit", 200);
+
+                actualizarUICombate(p, true); actualizarUICombate(e, false);
+
+                // Ejecutar Segundo (Si sigue vivo)
+                if (segundo.ata.hp > 0 && segundo.def.hp > 0) {
+                    let res2 = engine.ejecutarAtaqueCompleto(segundo.ata, segundo.def, segundo.accion);
+                    res2.logs.forEach(l => addLog(l));
+                    if (res2.anims.danoDefensor > 0) { flashDamage(!segundo.isP); mostrarTextoFlotante(!segundo.isP, `-${res2.anims.danoDefensor}`, "text-dmg"); }
+                    if (res2.anims.curacionAtacante > 0) mostrarTextoFlotante(segundo.isP, `+${res2.anims.curacionAtacante}`, "text-heal");
+                    if (res2.anims.critico) mostrarTextoFlotante(!segundo.isP, "CRIT", "text-crit", 200);
                 }
 
-                for(let i=0; i<ataques; i++) {
-                    if (defensor.hp <= 0) break;
+                // Efectos de Fin de Turno
+                let finP = engine.procesarEfectosFinTurno(p);
+                finP.logs.forEach(l => addLog(l));
+                if(finP.anims.heal > 0) mostrarTextoFlotante(true, `+${finP.anims.heal}`, "text-heal");
+                if(finP.anims.dmg > 0) { mostrarTextoFlotante(true, `-${finP.anims.dmg}`, "text-dmg"); flashDamage(true); }
 
-                    let dmg = Math.floor(atacante.atk * (i === 1 ? 0.5 : 1) * (0.85 + Math.random() * 0.3));
-                    let multElem = obtenerMultiplicadorElemental(atacante.element, defensor.element);
-                    dmg = Math.floor(dmg * multElem);
+                let finE = engine.procesarEfectosFinTurno(e);
+                finE.logs.forEach(l => addLog(l));
+                if(finE.anims.heal > 0) mostrarTextoFlotante(false, `+${finE.anims.heal}`, "text-heal");
+                if(finE.anims.dmg > 0) { mostrarTextoFlotante(false, `-${finE.anims.dmg}`, "text-dmg"); flashDamage(false); }
 
-                    let probCrit = 0.05 + (atacante.luk * 0.002);
-                    if (atacante.element === "Sintético") probCrit += 0.15;
-                    let isCrit = Math.random() <= probCrit;
-                    if (isCrit) dmg = Math.floor(dmg * 1.5);
+                actualizarUICombate(p, true); actualizarUICombate(e, false);
+                
+                engine.turno++;
+                actualizarBotonesHabilidades();
 
-                    if (defensor.escudoCibernetico) {
-                        dmg = Math.floor(dmg * 0.60); // Ajustado al 40%
-                        defensor.escudoCibernetico = false;
-                        addLog(`<span style="color:#00d2ff">* [Escudo Cibernético] ${defensor.nombre} absorbe 40% del primer impacto.</span>`);
-                    }
-
-                    if (defensor.genesId.includes("armadura_adaptativa")) {
-                        if (defensor.ultimoElementoRecibido === atacante.element) {
-                            dmg = Math.floor(dmg * 0.6);
-                            addLog(`<span style="color:#77DD77">* [Armadura Adaptativa] ¡Resiste el ataque de ${atacante.element}! (-40% Daño)</span>`);
-                        }
-                        defensor.ultimoElementoRecibido = atacante.element;
-                    }
-
-                    if (defensor.crystalSkin) {
-                        dmg = 0; defensor.crystalSkin = false;
-                        addLog(`<span style="color:#80deea">* [Piel de Cristal] ${defensor.nombre} absorbió el impacto (Daño: 0).</span>`);
-                    } else {
-                        
-                        if (defensor.hp - dmg <= 0 && defensor.genesId.includes("barrera_limite") && !defensor.barreraUsada) {
-                            dmg = defensor.hp - 1; 
-                            defensor.barreraUsada = true;
-                            addLog(`<span style="color:#ff5722">* [Barrera Límite] ¡${defensor.nombre} sobrevive a un golpe fatal con 1 HP!</span>`);
-                        }
-
-                        defensor.hp -= dmg;
-                        if(defensor.hp < 0) defensor.hp = 0;
-                        
-                        let tipoGolpe = "";
-                        if (multElem === 1.5) tipoGolpe = ` <span style="color:#4CAF50; font-weight:bold;">(¡Súper Efectivo!)</span>`;
-                        else if (multElem === 0.5) tipoGolpe = ` <span style="color:#888; font-weight:bold;">(Poco efectivo...)</span>`;
-
-                        if (isCrit) {
-                            addLog(`> 💥 <span style="color:#ff0000; font-weight:bold;">¡CRÍTICO!</span> ${atacante.nombre} causa <span style="color:#ff6b6b; font-weight:bold;">${dmg} de daño</span>.${tipoGolpe}`);
-                            mostrarTextoFlotante(defensor.isPlayer, "CRITICAL!", "text-crit");
-                            mostrarTextoFlotante(defensor.isPlayer, `-${dmg}`, "text-dmg", 150);
-                        } else {
-                            addLog(`> ${atacante.nombre} causa <span style="color:#ff6b6b">${dmg} de daño</span>.${tipoGolpe}`);
-                            if (dmg > 0) mostrarTextoFlotante(defensor.isPlayer, `-${dmg}`, "text-dmg");
-                        }
-                        
-                        if (dmg > 0) flashDamage(defensor.isPlayer);
-
-                        if (dmg > 0) {
-                            let efectoAplicar = null;
-                            if (atacante.element === "Radiactivo" && Math.random() <= 0.25) efectoAplicar = "Quemadura";
-                            if (atacante.element === "Tóxico" && Math.random() <= 0.25) efectoAplicar = "Debilidad";
-                            if (atacante.element === "Viral" && Math.random() <= 0.25) efectoAplicar = "Infección";
-
-                            if (efectoAplicar) {
-                                if (defensor.genesId.includes("sangre_fria") && !defensor.sangreFriaUsada) {
-                                    defensor.sangreFriaUsada = true;
-                                    addLog(`<span style="color:#00d2ff">* [Sangre Fría] ¡${defensor.nombre} inmuniza el estado alterado!</span>`);
-                                } else if (!defensor.estados.includes(efectoAplicar)) {
-                                    defensor.estados.push(efectoAplicar);
-                                    addLog(`<span style="color:#ff9800">* ${defensor.nombre} sufre ${efectoAplicar}.</span>`);
-                                    if (efectoAplicar === "Debilidad") defensor.atk = Math.floor(defensor.atk * 0.8);
-                                    if (efectoAplicar === "Infección") defensor.spd = Math.floor(defensor.spd * 0.8);
-                                }
-                            }
-                        }
-
-                        let roboVida = 0;
-                        if (atacante.genesId.includes("vampirismo_genetico") && dmg > 0) {
-                            roboVida = Math.floor(dmg * 0.15);
-                            if (roboVida < 1) roboVida = 1;
-                            atacante.hp += roboVida;
-                            if (atacante.hp > atacante.maxHp) atacante.hp = atacante.maxHp;
-                            addLog(`<span style="color:#e0b0ff">* [Vampirismo] ${atacante.nombre} se cura ${roboVida} HP.</span>`);
-                            mostrarTextoFlotante(atacante.isPlayer, `+${roboVida}`, "text-heal", 200);
-                        }
-
-                        if (isCrit && defensor.genesId.includes("reflejo_genetico") && dmg > 0) {
-                            let danoReflejado = Math.floor(dmg * 0.30);
-                            if (danoReflejado < 1) danoReflejado = 1;
-                            atacante.hp -= danoReflejado;
-                            if (atacante.hp < 0) atacante.hp = 0;
-                            addLog(`<span style="color:#ffcc00">* [Reflejo Genético] ¡${defensor.nombre} devuelve ${danoReflejado} de daño!</span>`);
-                            mostrarTextoFlotante(atacante.isPlayer, `-${danoReflejado}`, "text-dmg", 300);
-                            flashDamage(atacante.isPlayer);
-                        }
-                    }
-
-                    if (defensor.hp > 0 && defensor.hp <= (defensor.maxHp * 0.15) && defensor.genesId.includes("resiliencia_ultima") && !defensor.resilienciaUsada) {
-                        defensor.resilienciaUsada = true;
-                        defensor.atk = Math.floor(defensor.atk * 1.4); defensor.spd = Math.floor(defensor.spd * 1.4);
-                        addLog(`<span style="color:#ffcc00">* [Resiliencia Última] ¡${defensor.nombre} entra en modo Berserker!</span>`);
-                    }
-                }
-                actualizarUICombate(atacante, atacante.isPlayer);
-                actualizarUICombate(defensor, defensor.isPlayer);
+                if (p.hp <= 0) addLog(`<br><span style="color:#ff0000; font-size:16px; font-weight:bold;">¡DERROTA CRÍTICA! Tu Geno ha caído.</span>`);
+                else if (e.hp <= 0) addLog(`<br><span style="color:#4CAF50; font-size:16px; font-weight:bold;">¡VICTORIA! El rival ha sido destruido.</span>`);
             }
-
-            function procesarEfectosFinTurno(fighter) {
-                if (fighter.hp <= 0) return;
-                if (fighter.element === "Biomutante" && fighter.hp < fighter.maxHp) {
-                    let regen = Math.floor(fighter.maxHp * 0.06) + 2; // Ajustado al 6% + 2
-                    fighter.hp += regen;
-                    if (fighter.hp > fighter.maxHp) fighter.hp = fighter.maxHp;
+        }, 500);
+    </script>
+</body>
+</html>
