@@ -61,7 +61,8 @@ const dicDrones = {
     estandar: ``,
     // ✨ REDISEÑO V20: Dron Centinela más pequeño, borde Oro Corona y antena Green/Red
     malla_cibernetica: `
-        <g transform="translate(-35, 15)">
+        <!-- ✨ FIX: Coordenadas ajustadas a (-45, 25) para simetría -->
+        <g transform="translate(-45, 25)">
             <defs>
                 <filter id="glow-dron-grid">
                     <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>

@@ -190,7 +190,8 @@ function generarSvgGeno(genesVisuales) {
             `;
 
             capaCosmeticaFrente += `
-                <g transform="translate(135, 20)">
+                <!-- ✨ FIX: Coordenadas ajustadas a X=165, Y=15 para simetría perfecta con el Dron (-35, 15) -->
+                <g transform="translate(165, 15)">
                     <g class="anim-emblema-${rndId}">
                         <path d="M 15 -5 C 30 -5, 35 10, 35 15 C 35 25, 15 40, 15 40 C 15 40, -5 25, -5 15 C -5 10, 0 -5, 15 -5 Z" fill="rgba(255, 215, 0, 0.2)" stroke="#ffcc00" stroke-width="2" stroke-dasharray="4 2"/>
                         
