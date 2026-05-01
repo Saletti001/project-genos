@@ -1,5 +1,5 @@
 // =========================================
-// ColiseumLogic.js - MODELO MATEMÁTICO V13.11 (PRECISIÓN Y EVASIÓN REAL)
+// ColiseumLogic.js - MODELO MATEMÁTICO V14.5 (ZONA NOVATOS Y STAB BALANCEADO)
 // =========================================
 
 window.ColiseumLogic = {
@@ -48,17 +48,24 @@ window.ColiseumLogic = {
         let eRareza = "Común"; 
         let pRareza = this.player ? (this.player.rareza || this.player.rarity || "Común") : "Común";
 
-        if (pRareza === "Común") {
-            eRareza = roll < 0.60 ? "Raro" : "Común";
-        } else if (pRareza === "Raro") {
-            eRareza = roll < 0.40 ? "Épico" : (roll < 0.90 ? "Raro" : "Común");
-        } else if (pRareza === "Épico") {
-            eRareza = roll < 0.50 ? "Legendario" : (roll < 0.90 ? "Épico" : "Raro");
-        } else if (pRareza === "Legendario" || pRareza === "Mítico") {
-            eRareza = roll < 0.70 ? "Legendario" : "Épico";
+        // ✨ NUEVA ZONA DE NOVATOS (Niveles 1 al 5)
+        if (nivelJugador <= 5) {
+            eRareza = "Común"; // Bloqueamos la rareza a Común estrictamente
+        } else {
+            // Lógica normal de emparejamiento para niveles 6 en adelante
+            if (pRareza === "Común") {
+                eRareza = roll < 0.60 ? "Raro" : "Común";
+            } else if (pRareza === "Raro") {
+                eRareza = roll < 0.40 ? "Épico" : (roll < 0.90 ? "Raro" : "Común");
+            } else if (pRareza === "Épico") {
+                eRareza = roll < 0.50 ? "Legendario" : (roll < 0.90 ? "Épico" : "Raro");
+            } else if (pRareza === "Legendario" || pRareza === "Mítico") {
+                eRareza = roll < 0.70 ? "Legendario" : "Épico";
+            }
         }
         
-        const eStats = window.generarStatsPorRareza ? window.generarStatsPorRareza(eRareza) : {hp: 60, atk: 12, def: 8, spd: 10, luk: 5};
+        // Fallback de seguridad (HP base adaptado al meta)
+        const eStats = window.generarStatsPorRareza ? window.generarStatsPorRareza(eRareza) : {hp: 120, atk: 12, def: 8, spd: 10, luk: 5};
         
         let rollCalidad = Math.random();
         let purezaEnemigo = 60; 
@@ -70,14 +77,21 @@ window.ColiseumLogic = {
 
         eStats.pureza = purezaEnemigo;
         
+        // ✨ Reducimos el bono de pureza si estamos en la zona de novatos para que no peguen tan duro
         let bonoPureza = purezaEnemigo >= 90 ? 4 : (purezaEnemigo >= 80 ? 3 : (purezaEnemigo >= 60 ? 1 : 0));
+        if (nivelJugador <= 5) bonoPureza = Math.floor(bonoPureza / 2);
+
         eStats.hp += bonoPureza * 3;
         eStats.atk += bonoPureza;
         eStats.def += bonoPureza;
         eStats.spd += bonoPureza;
         eStats.luk += bonoPureza;
 
-        let nivelEnemigo = nivelJugador > 10 ? nivelJugador + 3 : nivelJugador;
+        // ✨ Aseguramos que el nivel sea exactamente el mismo en la zona de novatos
+        let nivelEnemigo = nivelJugador;
+        if (nivelJugador > 10) {
+            nivelEnemigo = nivelJugador + 3; // El pico de dificultad vuelve al nivel 11
+        }
 
         const elementos = ["Biomutante", "Viral", "Cibernético", "Radiactivo", "Tóxico", "Sintético"];
         const eElemento = elementos[Math.floor(Math.random() * elementos.length)];
@@ -217,7 +231,7 @@ window.ColiseumLogic = {
         this.player = {
             nombre: mascota.alias || mascota.apodo || mascota.nombre || mascota.name || "Tu Geno", 
             isPlayer: true, adn: mascota,
-            maxHp: pStats.hp, hp: pStats.hp, atk: pStats.atk, def: pStats.def, spd: pStats.spd, luk: pStats.luk,
+            maxHp: mascota.maxHp || pStats.hp, hp: mascota.hp || pStats.hp, atk: pStats.atk, def: pStats.def, spd: pStats.spd, luk: pStats.luk,
             baseAtk: pStats.atk, baseDef: pStats.def, baseSpd: pStats.spd, baseLuk: pStats.luk,
             element: pElemento, rareza: mascota.rarity || "Común", genesId: [pGenB, pGenC], 
             estados: [], efectosActivos: [], cooldowns: { especial: 0, tactica: 0, definitivo: 0 },
@@ -329,8 +343,7 @@ window.ColiseumLogic = {
                 atkBruto = atkBruto * multElem * stab;
                 anims.multElem = multElem;
 
-                // ✨ FIX V13.11: SISTEMA DE PRECISIÓN Y EVASIÓN
-                // 1. Precisión base del ataque (Ej: Cañón Orbital = 0.85)
+                // 1. Precisión base del ataque
                 let precision = (ataqueReal.precision !== undefined) ? ataqueReal.precision : 1.0;
                 if (ataqueReal.nombre === "Oleada Mutante" || ataqueReal.nombre === "Cañón Orbital") precision = 0.85;
 
@@ -342,32 +355,26 @@ window.ColiseumLogic = {
                 // 3. Evasión del Defensor (SISTEMA DE DOBLE TECHO)
                 let evasionPasiva = 0;
                 
-                // Bono natural por Agilidad (0.4% por punto) y Gen Pasivo
                 evasionPasiva += (defensor.spd * 0.004); 
                 if (defensor.genesId.includes("esquiva_genetica")) evasionPasiva += 0.15; 
                 
-                // ✨ TECHO 1: Límite Pasivo (Máximo 40% permanente)
                 evasionPasiva = Math.min(evasionPasiva, 0.40);
 
                 let evasionTotal = evasionPasiva;
 
-                // Se suman los buffs tácticos (Esquiva Calculada, Evasión Viral) que cuestan un turno
                 let buffEvasion = defensor.efectosActivos.find(ef => ef.stat === "evasion");
                 if (buffEvasion) evasionTotal += buffEvasion.valor; 
                 
-                // ✨ TECHO 2: Límite Absoluto (Máximo 85%, siempre hay un 15% de probabilidad de recibir el golpe)
                 evasionTotal = Math.min(evasionTotal, 0.85);
 
                 let probHit = precision - evasionTotal;
-                if (ataqueReal.nombre && ataqueReal.nombre.includes("Láser de Precisión")) probHit = 2.0; // Nunca falla
+                if (ataqueReal.nombre && ataqueReal.nombre.includes("Láser de Precisión")) probHit = 2.0; 
                 
-                // Tirar los dados de evasión
                 if (Math.random() > probHit) {
                     golpeActual.evadido = true;
-                    atkBruto = 0; // Se anula el daño
+                    atkBruto = 0; 
                     logs.push(`> <span style="color:#e0e0e0; font-style:italic;">💨 ¡${this.cName(defensor)} logró evadir el ataque!</span>`);
                     
-                    // Sinergia especial: Esquiva Calculada aumenta la SPD si tiene éxito
                     if (buffEvasion && buffEvasion.nombre.includes("Esquiva Calculada")) {
                         let spdBoost = Math.floor(defensor.baseSpd * 0.10) || 1;
                         defensor.spd += spdBoost;
@@ -506,7 +513,6 @@ window.ColiseumLogic = {
                 logs.push(`<span style="color:#80deea">🛡️ ¡${this.cName(atacante)} aumenta su Defensa en +${val}!</span>`);
             }
 
-            // ✨ APLICACIÓN DE BUFFS DE EVASIÓN
             if (ataqueReal.nombre && ataqueReal.nombre.includes("Esquiva Calculada") && !ataqueReal.buffEvasion) ataqueReal.buffEvasion = 0.75;
             if (ataqueReal.nombre && ataqueReal.nombre.includes("Evasión Viral") && !ataqueReal.buffEvasion) ataqueReal.buffEvasion = 0.60;
             
@@ -620,7 +626,7 @@ window.ColiseumLogic = {
                         fighter.estados = fighter.estados.filter(e => e !== ef.valor);
                         logs.push(`<span style="color:#888;">> ⏳ El estado [${ef.nombre}] sobre ${this.cName(fighter)} se disipó.</span>`);
                     } else if (ef.stat) {
-                        if (ef.stat !== "evasion") { // La evasión no restaura stats, simplemente desaparece
+                        if (ef.stat !== "evasion") { 
                             fighter[ef.stat] -= ef.valor;
                         }
                         let accion = ef.valor > 0 ? "terminó" : "se recuperó";
@@ -631,7 +637,6 @@ window.ColiseumLogic = {
             }
         }
         
-        // ✨ FIX BALANCE V10.2: Nerf a pasiva Biomutante (de 6%+2 a 3%)
         if (fighter.element === "Biomutante" && fighter.hp < fighter.maxHp) {
             let regen = Math.floor(fighter.maxHp * 0.03) || 1;
             fighter.hp = Math.min(fighter.maxHp, fighter.hp + regen); anims.heal += regen;
