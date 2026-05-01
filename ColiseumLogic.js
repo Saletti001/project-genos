@@ -1,5 +1,5 @@
 // =========================================
-// ColiseumLogic.js - MODELO MATEMÁTICO V14.5 (ZONA NOVATOS Y STAB BALANCEADO)
+// ColiseumLogic.js - MODELO MATEMÁTICO V14.6 (ZONA NOVATOS HASTA LV 8)
 // =========================================
 
 window.ColiseumLogic = {
@@ -48,11 +48,11 @@ window.ColiseumLogic = {
         let eRareza = "Común"; 
         let pRareza = this.player ? (this.player.rareza || this.player.rarity || "Común") : "Común";
 
-        // ✨ NUEVA ZONA DE NOVATOS (Niveles 1 al 5)
-        if (nivelJugador <= 5) {
+        // ✨ ZONA DE NOVATOS AMPLIADA (Niveles 1 al 8)
+        if (nivelJugador <= 8) {
             eRareza = "Común"; // Bloqueamos la rareza a Común estrictamente
         } else {
-            // Lógica normal de emparejamiento para niveles 6 en adelante
+            // Lógica normal de emparejamiento para niveles 9 en adelante
             if (pRareza === "Común") {
                 eRareza = roll < 0.60 ? "Raro" : "Común";
             } else if (pRareza === "Raro") {
@@ -79,7 +79,7 @@ window.ColiseumLogic = {
         
         // ✨ Reducimos el bono de pureza si estamos en la zona de novatos para que no peguen tan duro
         let bonoPureza = purezaEnemigo >= 90 ? 4 : (purezaEnemigo >= 80 ? 3 : (purezaEnemigo >= 60 ? 1 : 0));
-        if (nivelJugador <= 5) bonoPureza = Math.floor(bonoPureza / 2);
+        if (nivelJugador <= 8) bonoPureza = Math.floor(bonoPureza / 2);
 
         eStats.hp += bonoPureza * 3;
         eStats.atk += bonoPureza;
@@ -337,7 +337,7 @@ window.ColiseumLogic = {
                 
                 let multElem = ventajas[ataqueReal.elemento] === defensor.element ? 1.35 : (ventajas[defensor.element] === ataqueReal.elemento ? 0.75 : 1.0);
 
-                // ✨ NUEVA REGLA: STAB del 20% SOLO si el atacante y defensor son de elementos distintos
+                // ✨ REGLA DE STAB BALANCEADO
                 let stab = (slotAccion !== "ataque" && atacante.element === ataqueReal.elemento && atacante.element !== defensor.element) ? 1.20 : 1.0;
 
                 atkBruto = atkBruto * multElem * stab;
