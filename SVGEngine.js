@@ -1,8 +1,8 @@
 // =========================================
-// SVGEngine.js - V19 (CORRECCIÓN DE ALAS, AURAS Y ANIMACIONES DEL DRON)
+// SVGEngine.js - V20 (HONGO RESTAURADO Y SIMETRÍA DRON/EMBLEMA)
 // =========================================
 
-function generarSvgGeno(genesVisuales) {
+function generarSvgGeno(genesVisuales, omitirAnimacion = false) {
     const safeData = genesVisuales || {};
     
     // =========================================
@@ -37,9 +37,9 @@ function generarSvgGeno(genesVisuales) {
                 @keyframes bionucleoFlota { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
                 @keyframes adnPulse { 0%, 100% { opacity: 0.8; transform: scaleX(1); } 50% { opacity: 1; transform: scaleX(1.03); } }
                 @keyframes burbujas { 0% { transform: translateY(10px); opacity: 0; } 50% { opacity: 0.9; } 100% { transform: translateY(-35px); opacity: 0; } }
-                .capsula-anim { animation: bionucleoFlota 3.5s ease-in-out infinite; transform-origin: center; }
-                .adn-glow { animation: adnPulse 2.5s ease-in-out infinite; transform-origin: center; filter: url(#glow-adn-${rndId}); }
-                .burbuja { animation: burbujas 2s ease-in infinite; fill: #ffffff; }
+                .capsula-anim { ${omitirAnimacion ? '' : 'animation: bionucleoFlota 3.5s ease-in-out infinite;'} transform-origin: center; }
+                .adn-glow { ${omitirAnimacion ? '' : 'animation: adnPulse 2.5s ease-in-out infinite;'} transform-origin: center; filter: url(#glow-adn-${rndId}); }
+                .burbuja { ${omitirAnimacion ? 'display:none;' : 'animation: burbujas 2s ease-in infinite;'} fill: #ffffff; }
             </style>
             <g class="capsula-anim">
                 <rect x="32" y="25" width="36" height="70" rx="12" fill="none" stroke="#4dd0e1" stroke-width="1.5" stroke-opacity="0.7"/>
@@ -91,12 +91,9 @@ function generarSvgGeno(genesVisuales) {
     const boca = obtenerPieza(typeof dicBocas !== 'undefined' ? dicBocas : {}, safeData.mouth_type, "estandar");
     const hat = obtenerPieza(typeof dicSombreros !== 'undefined' ? dicSombreros : {}, safeData.hat_type, "ninguno");
     const wing = obtenerPieza(typeof dicAlas !== 'undefined' ? dicAlas : {}, safeData.wing_type, "ninguno");
-    
-    // Leer Cosméticos Dinámicos
     const auraRaw = obtenerPieza(typeof dicAuras !== 'undefined' ? dicAuras : {}, safeData.aura_type, "ninguno");
     let dronRaw = obtenerPieza(typeof dicDrones !== 'undefined' ? dicDrones : {}, safeData.skin_type, "estandar");
 
-    // Limpieza estricta de IDs en los cosméticos para evitar duplicados en la misma pantalla
     if (dronRaw) {
         dronRaw = dronRaw.replace(/glow-dron-grid/g, `glow-dron-${rndId}`);
         dronRaw = dronRaw.replace(/url\(#glow-dron-grid\)/g, `url(#glow-dron-${rndId})`);
@@ -106,6 +103,26 @@ function generarSvgGeno(genesVisuales) {
     
     switch (shape) {
         case "gota": pathD = "M 80 24 Q 28 80 28 108 A 52 52 0 0 0 132 108 Q 132 80 80 24 Z"; shineD = "M 65 50 Q 55 65 58 80 Q 62 70 70 55 Z"; break;
+        case "hongo": 
+            const tallo = "M 72 110 C 72 120 65 130 60 135 C 50 148 65 150 80 150 C 95 150 110 148 100 135 C 95 130 88 120 88 110 Z";
+            pathD = "M 15 90 C 15 20, 145 20, 145 90 C 145 118, 122 122, 80 122 C 38 122, 15 118, 15 90 Z"; 
+            shineD = "M 40 55 Q 50 40 70 40 Q 55 48 40 55 Z"; 
+            const seedStr = (safeData.id || "hongo") + color + shape;
+            let baseSeed = 0;
+            for (let i = 0; i < seedStr.length; i++) { baseSeed = seedStr.charCodeAt(i) + ((baseSeed << 5) - baseSeed); }
+            baseSeed = Math.abs(baseSeed);
+            const randomFijo = (s) => { let x = Math.sin(s) * 10000; return x - Math.floor(x); };
+            let generatedManchas = `<g fill="#ffffff" opacity="0.6">`;
+            for (let i = 0; i < 8; i++) {
+                const cx = 25 + randomFijo(baseSeed + i) * (135 - 25);
+                const cy = 30 + randomFijo(baseSeed + i + 10) * (110 - 30);
+                const r = 3 + randomFijo(baseSeed + i + 20) * (8 - 3);
+                generatedManchas += `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${r.toFixed(1)}"/>`;
+            }
+            generatedManchas += `</g>`;
+            extras = `<path d="${tallo}" fill="${color}" stroke="#1a2a36" stroke-width="5"/><path d="${tallo}" fill="url(#${gradId})"/>`;
+            detallesFrente = `<defs><clipPath id="hongoMask-${rndId}"><path d="${pathD}"/></clipPath></defs><g clip-path="url(#hongoMask-${rndId})">${generatedManchas}</g>`;
+            break;
         case "triangulo": pathD = "M 80 24 Q 88 24 96 40 L 136 120 Q 144 136 120 136 L 40 136 Q 16 136 24 120 L 64 40 Q 72 24 80 24 Z"; shineD = "M 72 48 L 48 104 Q 56 80 80 56 Z"; break;
         case "circulo": pathD = "M 24 88 A 56 56 0 1 0 136 88 A 56 56 0 1 0 24 88 Z"; shineD = "M 40 72 A 40 40 0 0 1 88 40 A 48 48 0 0 0 40 96 Z"; break;
         case "cuadrado": pathD = "M 32 48 Q 32 32 48 32 L 112 32 Q 128 32 128 48 L 128 112 Q 128 128 112 128 L 48 128 Q 32 128 32 112 Z"; shineD = "M 45 48 Q 45 45 56 45 L 96 45 Q 64 64 45 88 Z"; break;
@@ -118,7 +135,7 @@ function generarSvgGeno(genesVisuales) {
     }
 
     // =========================================
-    // ✨ INYECCIÓN V9.0: LOS 10 GENES COSMÉTICOS
+    // ✨ INYECCIÓN DE GENES COSMÉTICOS Y SIMETRÍA
     // =========================================
     let capaFondo = ""; 
     let capaCosmeticaFrente = ""; 
@@ -126,8 +143,11 @@ function generarSvgGeno(genesVisuales) {
     let cssExtra = "";
     let estiloCuerpoEnLinea = "";
 
-    if (safeData.scanned && safeData.hidden_genes && safeData.hidden_genes.A) {
-        const idGenCosmetico = safeData.hidden_genes.A.id;
+    // Compatibilidad tanto con la estructura vieja (hidden_gene) como con la nueva (hidden_genes.A)
+    const oculto = safeData.hidden_genes ? safeData.hidden_genes.A : safeData.hidden_gene;
+
+    if (safeData.scanned && oculto) {
+        const idGenCosmetico = oculto.id;
 
         if (idGenCosmetico === "cromatico_latente") {
             estiloCuerpoEnLinea = "filter: hue-rotate(180deg) saturate(1.5);";
@@ -150,7 +170,7 @@ function generarSvgGeno(genesVisuales) {
         }
 
         if (idGenCosmetico === "aura_linaje") {
-            capaFondo = `
+            capaFondo += `
                 <g class="anim-aura">
                     <circle cx="80" cy="85" r="70" fill="none" stroke="#ffcc00" stroke-width="4" stroke-dasharray="15 10" opacity="0.6"/>
                     <circle cx="80" cy="85" r="60" fill="none" stroke="#ffffff" stroke-width="1.5" stroke-dasharray="5 20" opacity="0.8"/>
@@ -189,12 +209,11 @@ function generarSvgGeno(genesVisuales) {
                 }
             `;
 
+            // ✨ FIX V20: Emblema posicionado exactamente al opuesto del Dron para simetría perfecta
             capaCosmeticaFrente += `
-                <!-- ✨ FIX: Coordenadas ajustadas a X=165, Y=15 para simetría perfecta con el Dron (-35, 15) -->
                 <g transform="translate(165, 15)">
                     <g class="anim-emblema-${rndId}">
                         <path d="M 15 -5 C 30 -5, 35 10, 35 15 C 35 25, 15 40, 15 40 C 15 40, -5 25, -5 15 C -5 10, 0 -5, 15 -5 Z" fill="rgba(255, 215, 0, 0.2)" stroke="#ffcc00" stroke-width="2" stroke-dasharray="4 2"/>
-                        
                         <g class="anim-centro-${rndId}">
                             <path d="M 15 2 L 19 10 L 28 10 L 21 16 L 24 25 L 15 20 L 6 25 L 9 16 L 2 10 L 11 10 Z" fill="#ffffff" stroke="#ffcc00" stroke-width="1"/>
                             <circle cx="15" cy="15" r="4" fill="#00ffff" />
@@ -212,11 +231,7 @@ function generarSvgGeno(genesVisuales) {
         }
 
         if (idGenCosmetico === "rastro_elemental") {
-            capaFondo += `
-                <g transform="translate(-15, 0)" opacity="0.3" filter="blur(3px)">
-                    <path d="${pathD}" fill="${color}"/>
-                </g>
-            `;
+            capaFondo += `<g transform="translate(-15, 0)" opacity="0.3" filter="blur(3px)"><path d="${pathD}" fill="${color}"/></g>`;
         }
 
         if (idGenCosmetico === "eco_visual") {
@@ -257,19 +272,21 @@ function generarSvgGeno(genesVisuales) {
             @keyframes deslizarHolograma { 0% { transform: translateY(-20px); opacity: 0.3; } 50% { opacity: 0.8; } 100% { transform: translateY(20px); opacity: 0.3; } }
             @keyframes flotarDron { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
             
-            .g-cuerpo { transform-origin: 80px 136px; animation: respirar 3.5s ease-in-out infinite; }
-            .g-ojos { transform-origin: 80px 85px; animation: parpadear 5s infinite; }
-            .anim-flotar { animation: respirar 3s ease-in-out infinite; }
-            .anim-fuego { animation: propulsor 0.1s infinite alternate ease-in-out; }
-            .anim-aura { transform-origin: 80px 85px; animation: rotarAura 15s linear infinite; }
-            .anim-holograma { animation: deslizarHolograma 4s ease-in-out infinite alternate; }
-            .anim-flotar-dron { animation: flotarDron 4s ease-in-out infinite; }
+            .g-cuerpo { transform-origin: 80px 136px; ${omitirAnimacion ? '' : 'animation: respirar 3.5s ease-in-out infinite;'} }
+            .g-ojos { transform-origin: 80px 85px; ${omitirAnimacion ? '' : 'animation: parpadear 5s infinite;'} }
+            .anim-flotar { ${omitirAnimacion ? '' : 'animation: respirar 3s ease-in-out infinite;'} }
+            .anim-fuego { ${omitirAnimacion ? '' : 'animation: propulsor 0.1s infinite alternate ease-in-out;'} }
+            .anim-aura { transform-origin: 80px 85px; ${omitirAnimacion ? '' : 'animation: rotarAura 15s linear infinite;'} }
+            .anim-holograma { ${omitirAnimacion ? '' : 'animation: deslizarHolograma 4s ease-in-out infinite alternate;'} }
+            .anim-flotar-dron { ${omitirAnimacion ? '' : 'animation: flotarDron 4s ease-in-out infinite;'} }
             
             ${cssExtra}
         </style>
         
         ${capaFondo}
-        ${auraRaw} <g class="g-cuerpo ${claseCuerpoExtra}" style="${estiloCuerpoEnLinea}">
+        ${auraRaw} 
+        
+        <g class="g-cuerpo ${claseCuerpoExtra}" style="${estiloCuerpoEnLinea}">
             <g transform="translate(${safeAnclaje.espaldaX}, ${safeAnclaje.espaldaY})">${wing}</g>
             ${extras}
             <path d="${pathD}" fill="${color}" stroke="#1a2a36" stroke-width="5"/>
@@ -277,7 +294,8 @@ function generarSvgGeno(genesVisuales) {
             ${detallesFrente}
             <path d="${shineD}" fill="#fff" opacity="0.4"/>
             ${capaCosmeticaFrente}
-            ${dronRaw} <g class="g-ojos">${ojo}</g>
+            ${dronRaw} 
+            <g class="g-ojos">${ojo}</g>
             <g class="g-boca">${boca}</g>
             <g transform="translate(${safeAnclaje.cabezaX}, ${safeAnclaje.cabezaY})">${hat}</g>
         </g>
