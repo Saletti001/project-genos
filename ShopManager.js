@@ -5,21 +5,67 @@
 window.ShopManager = {
     inicializado: false,
     
-    // GALERÍA DE ARTE VECTORIAL (Colores sólidos a prueba de bugs)
+    // GALERÍA DE ARTE VECTORIAL (Medallas estilo Medabots - Colores sólidos)
     iconosSVG: {
         // --- 1. ELEMENTOS DE COMBATE (MTs) ---
-        "Biomutante": `<svg viewBox="0 0 100 100" width="1em" height="1em"><path d="M50 10 C60 30 70 40 50 55 C30 40 40 30 50 10 Z" fill="#4CAF50"/><path d="M50 55 C70 50 90 60 90 75 C80 90 60 80 50 55 Z" fill="#4CAF50"/><path d="M50 55 C30 50 10 60 10 75 C20 90 40 80 50 55 Z" fill="#4CAF50"/><circle cx="50" cy="55" r="5" fill="#121822"/><path d="M50 55 L50 95" stroke="#4CAF50" stroke-width="6" stroke-linecap="round"/></svg>`,
         
-        "Viral": `<svg viewBox="0 0 100 100" width="1em" height="1em"><circle cx="50" cy="50" r="28" fill="#D500F9"/><path d="M50 5 L50 22 M50 95 L50 78 M5 50 L22 50 M95 50 L78 50 M18 18 L30 30 M82 82 L70 70 M18 82 L30 70 M82 18 L70 30" stroke="#D500F9" stroke-width="8" stroke-linecap="round"/><circle cx="50" cy="5" r="5" fill="#EA80FC"/><circle cx="50" cy="95" r="5" fill="#EA80FC"/><circle cx="5" cy="50" r="5" fill="#EA80FC"/><circle cx="95" cy="50" r="5" fill="#EA80FC"/><circle cx="40" cy="45" r="5" fill="#121822"/><circle cx="60" cy="55" r="5" fill="#121822"/></svg>`,
+        // Biomutante (Escudo con hoja interior)
+        "Biomutante": `<svg viewBox="0 0 100 100" width="1em" height="1em">
+            <path d="M15 20 L50 5 L85 20 L85 50 C85 75 65 90 50 95 C35 90 15 75 15 50 Z" fill="#121822" stroke="#4CAF50" stroke-width="6" stroke-linejoin="round"/>
+            <path d="M50 25 C65 35 65 50 50 65 C35 50 35 35 50 25 Z" fill="#4CAF50"/>
+            <path d="M50 65 L50 82" stroke="#4CAF50" stroke-width="6" stroke-linecap="round"/>
+            <path d="M50 52 C65 47 72 52 72 62 C65 65 55 60 50 52 Z" fill="#4CAF50"/>
+            <path d="M50 52 C35 47 28 52 28 62 C35 65 45 60 50 52 Z" fill="#4CAF50"/>
+        </svg>`,
         
-        "Cibernético": `<svg viewBox="0 0 100 100" width="1em" height="1em"><path d="M20 30 L80 30 L90 55 L75 80 L25 80 L10 55 Z" fill="#00B0FF"/><rect x="30" y="45" width="12" height="12" fill="#121822"/><rect x="58" y="45" width="12" height="12" fill="#121822"/><path d="M36 30 L36 15 L64 15 L64 30" stroke="#00B0FF" stroke-width="6" fill="none"/><circle cx="36" cy="15" r="5" fill="#84FFFF"/><circle cx="64" cy="15" r="5" fill="#84FFFF"/><path d="M40 70 L60 70" stroke="#121822" stroke-width="4" stroke-linecap="round"/></svg>`,
+        // Viral (Rombo con núcleo de virus)
+        "Viral": `<svg viewBox="0 0 100 100" width="1em" height="1em">
+            <polygon points="50,5 95,50 50,95 5,50" fill="#121822" stroke="#D500F9" stroke-width="6" stroke-linejoin="round"/>
+            <circle cx="50" cy="50" r="14" fill="#D500F9"/>
+            <circle cx="50" cy="50" r="5" fill="#121822"/>
+            <path d="M50 22 L50 36 M50 78 L50 64 M22 50 L36 50 M78 50 L64 50" stroke="#D500F9" stroke-width="6" stroke-linecap="round"/>
+            <circle cx="50" cy="22" r="4" fill="#D500F9"/>
+            <circle cx="50" cy="78" r="4" fill="#D500F9"/>
+            <circle cx="22" cy="50" r="4" fill="#D500F9"/>
+            <circle cx="78" cy="50" r="4" fill="#D500F9"/>
+        </svg>`,
         
-        "Radiactivo": `<svg viewBox="0 0 100 100" width="1em" height="1em"><circle cx="50" cy="50" r="42" fill="#121822" stroke="#FF9800" stroke-width="6"/><circle cx="50" cy="50" r="9" fill="#FF9800"/><path d="M50 35 A15 15 0 0 0 35 50 L12 50 A38 38 0 0 1 50 12 Z" fill="#FF9800"/><path d="M50 35 A15 15 0 0 1 65 50 L88 50 A38 38 0 0 0 50 12 Z" fill="#FF9800" transform="rotate(120 50 50)"/><path d="M50 35 A15 15 0 0 1 65 50 L88 50 A38 38 0 0 0 50 12 Z" fill="#FF9800" transform="rotate(240 50 50)"/></svg>`,
+        // Cibernético (Octágono con circuito central)
+        "Cibernético": `<svg viewBox="0 0 100 100" width="1em" height="1em">
+            <polygon points="30,10 70,10 90,30 90,70 70,90 30,90 10,70 10,30" fill="#121822" stroke="#00B0FF" stroke-width="6" stroke-linejoin="round"/>
+            <rect x="35" y="35" width="30" height="30" fill="none" stroke="#00B0FF" stroke-width="6" rx="4"/>
+            <circle cx="50" cy="50" r="6" fill="#00B0FF"/>
+            <path d="M50 10 L50 35 M50 90 L50 65 M10 50 L35 50 M90 50 L65 50" stroke="#00B0FF" stroke-width="6"/>
+        </svg>`,
         
-        "Tóxico": `<svg viewBox="0 0 100 100" width="1em" height="1em"><path d="M35 15 L65 15 L65 30 L80 80 A10 10 0 0 1 70 95 L30 95 A10 10 0 0 1 20 80 L35 30 Z" fill="#121822" stroke="#AEEA00" stroke-width="6" stroke-linejoin="round"/><path d="M26 60 L74 60 L78 80 A5 5 0 0 1 70 90 L30 90 A5 5 0 0 1 22 80 Z" fill="#AEEA00"/><rect x="40" y="5" width="20" height="10" rx="3" fill="#8D6E63"/><circle cx="40" cy="70" r="4" fill="#121822" opacity="0.6"/><circle cx="55" cy="80" r="6" fill="#121822" opacity="0.6"/><circle cx="65" cy="65" r="3" fill="#121822" opacity="0.6"/><circle cx="50" cy="45" r="5" fill="#C6FF00"/><circle cx="40" cy="35" r="3" fill="#C6FF00"/></svg>`,
+        // Radiactivo (Círculo con símbolo atómico)
+        "Radiactivo": `<svg viewBox="0 0 100 100" width="1em" height="1em">
+            <circle cx="50" cy="50" r="42" fill="#121822" stroke="#FF9800" stroke-width="6"/>
+            <circle cx="50" cy="50" r="9" fill="#FF9800"/>
+            <path d="M50 35 A15 15 0 0 0 35 50 L12 50 A38 38 0 0 1 50 12 Z" fill="#FF9800"/>
+            <path d="M50 35 A15 15 0 0 1 65 50 L88 50 A38 38 0 0 0 50 12 Z" fill="#FF9800" transform="rotate(120 50 50)"/>
+            <path d="M50 35 A15 15 0 0 1 65 50 L88 50 A38 38 0 0 0 50 12 Z" fill="#FF9800" transform="rotate(240 50 50)"/>
+        </svg>`,
         
-        "Sintético": `<svg viewBox="0 0 100 100" width="1em" height="1em"><path d="M50 5 L90 28 L90 72 L50 95 L10 72 L10 28 Z" fill="#1a202c" stroke="#B388FF" stroke-width="6"/><path d="M50 18 L75 32 L75 68 L50 82 L25 68 L25 32 Z" fill="#B388FF"/><path d="M50 18 L50 50 L25 32 M50 50 L75 68 M50 50 L50 82" stroke="#121822" stroke-width="5"/><circle cx="50" cy="50" r="10" fill="#EA80FC"/><circle cx="50" cy="50" r="4" fill="#121822"/></svg>`,
+        // Tóxico (Triángulo de peligro con calavera minimalista)
+        "Tóxico": `<svg viewBox="0 0 100 100" width="1em" height="1em">
+            <polygon points="12,18 88,18 50,90" fill="#121822" stroke="#AEEA00" stroke-width="6" stroke-linejoin="round"/>
+            <rect x="35" y="32" width="30" height="25" rx="10" fill="#AEEA00"/>
+            <rect x="42" y="47" width="16" height="20" rx="3" fill="#AEEA00"/>
+            <circle cx="43" cy="42" r="4" fill="#121822"/>
+            <circle cx="57" cy="42" r="4" fill="#121822"/>
+            <path d="M46 59 L46 67 M50 59 L50 67 M54 59 L54 67" stroke="#121822" stroke-width="2"/>
+        </svg>`,
         
+        // Sintético (Hexágono con cubo dimensional)
+        "Sintético": `<svg viewBox="0 0 100 100" width="1em" height="1em">
+            <path d="M50 5 L90 28 L90 72 L50 95 L10 72 L10 28 Z" fill="#121822" stroke="#B388FF" stroke-width="6" stroke-linejoin="round"/>
+            <path d="M50 18 L75 32 L75 68 L50 82 L25 68 L25 32 Z" fill="#B388FF"/>
+            <path d="M50 18 L50 50 L25 32 M50 50 L75 68 M50 50 L50 82" stroke="#121822" stroke-width="5"/>
+            <circle cx="50" cy="50" r="10" fill="#EA80FC"/>
+            <circle cx="50" cy="50" r="4" fill="#121822"/>
+        </svg>`,
+
         // --- 2. HERRAMIENTAS Y BAZAR ---
         "escaner_basico": `<svg viewBox="0 0 100 100" width="1em" height="1em"><path d="M45 20 A25 25 0 1 1 20 45 A25 25 0 0 1 45 20" fill="none" stroke="#00E5FF" stroke-width="8"/><path d="M62 62 L90 90" stroke="#00E5FF" stroke-width="12" stroke-linecap="round"/><circle cx="45" cy="45" r="12" fill="#00B0FF" opacity="0.5"/><path d="M25 45 L65 45 M45 25 L45 65" stroke="#00E5FF" stroke-width="4" opacity="0.8"/></svg>`,
         
