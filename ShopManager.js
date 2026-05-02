@@ -1,5 +1,5 @@
 // =========================================
-// ShopManager.js - BAZAR, MATRIZ TÁCTICA Y PREMIUM (INCLUYE BIO-NÚCLEO BÁSICO)
+// ShopManager.js - BAZAR, MATRIZ TÁCTICA Y PREMIUM (V9.6 - INCUBADORAS & POL)
 // =========================================
 
 window.ShopManager = {
@@ -19,8 +19,8 @@ window.ShopManager = {
         "escaner_basico": `<svg viewBox="0 0 100 100" width="1em" height="1em"><path d="M45 20 A25 25 0 1 1 20 45 A25 25 0 0 1 45 20" fill="none" stroke="#00E5FF" stroke-width="8"/><path d="M62 62 L90 90" stroke="#00E5FF" stroke-width="12" stroke-linecap="round"/><circle cx="45" cy="45" r="12" fill="#00B0FF" opacity="0.5"/><path d="M25 45 L65 45 M45 25 L45 65" stroke="#00E5FF" stroke-width="4" opacity="0.8"/></svg>`,
         "escaner_completo": `<svg viewBox="0 0 100 100" width="1em" height="1em"><path d="M25 20 Q50 50 75 80 M75 20 Q50 50 25 80" fill="none" stroke="#D500F9" stroke-width="8"/><line x1="33" y1="50" x2="67" y2="50" stroke="#D500F9" stroke-width="5"/><line x1="42" y1="30" x2="58" y2="70" stroke="#D500F9" stroke-width="5"/><line x1="58" y1="30" x2="42" y2="70" stroke="#D500F9" stroke-width="5"/><circle cx="25" cy="20" r="7" fill="#AA00FF"/><circle cx="75" cy="80" r="7" fill="#AA00FF"/><circle cx="75" cy="20" r="7" fill="#AA00FF"/><circle cx="25" cy="80" r="7" fill="#AA00FF"/></svg>`,
         "antidoto_uni": `<svg viewBox="0 0 100 100" width="1em" height="1em"><path d="M40 10 L60 10 L60 30 L85 80 A10 10 0 0 1 75 95 L25 95 A10 10 0 0 1 15 80 L40 30 Z" fill="none" stroke="#C6FF00" stroke-width="6"/><path d="M25 75 L75 75 L65 50 L35 50 Z" fill="#C6FF00"/><circle cx="45" cy="65" r="5" fill="#fff" opacity="0.9"/><circle cx="58" cy="58" r="3" fill="#fff" opacity="0.7"/></svg>`,
+        "incubator_01": `<svg viewBox="0 0 100 100" width="1em" height="1em"><rect x="38" y="10" width="24" height="8" rx="4" fill="#ff9800"/><rect x="25" y="18" width="50" height="72" rx="10" fill="#1a2a36" stroke="#ff9800" stroke-width="6"/><rect x="35" y="45" width="30" height="35" rx="4" fill="#ff5722"/><path d="M50 35 L50 40 M40 35 L40 40 M60 35 L60 40" stroke="#ff9800" stroke-width="4" stroke-linecap="round"/><path d="M50 50 Q58 60 50 70 Q42 60 50 50" fill="#ffeb3b"/></svg>`,
         
-        // Icono de respaldo (Fallback) en caso de que el motor genético no responda a tiempo
         "bio_nucleo_basico": `<svg viewBox="0 0 100 100" width="1em" height="1em"><rect x="25" y="10" width="50" height="80" rx="20" fill="#002233" stroke="#00d2ff" stroke-width="3"/><path d="M 40 25 Q 50 35 60 25 T 40 45 Q 50 55 60 45 T 40 65 Q 50 75 60 65" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M 60 25 Q 50 35 40 25 T 60 45 Q 50 55 40 45 T 60 65 Q 50 75 40 65" fill="none" stroke="#00d2ff" stroke-width="3" stroke-linecap="round"/><path d="M 30 15 L 70 15 L 65 5 L 35 5 Z" fill="#4dd0e1"/><path d="M 30 85 L 70 85 L 65 95 L 35 95 Z" fill="#4dd0e1"/><rect x="30" y="15" width="5" height="70" rx="2" fill="#fff" opacity="0.3"/></svg>`,
         
         // --- 3. EXPANSIÓN PREMIUM ---
@@ -327,7 +327,7 @@ window.ShopManager = {
                 return; 
             }
 
-            let itemParaInventario = { id: item.id, name: item.name, icon: item.icon, type: item.type, desc: item.desc, maxStack: window.miInventario.stackLimits[item.type] };
+            let itemParaInventario = { id: item.id, name: item.name, icon: item.icon, type: item.type, desc: item.desc, maxStack: window.miInventario.stackLimits[item.type] || 20 };
             
             if(item.type === "MT") {
                 itemParaInventario.subType = item.subType;
@@ -366,6 +366,20 @@ window.ShopManager = {
                 alert(`🎒 ¡Mochila expandida permanentemente a ${item.value} ranuras!`);
                 this.renderPremium(); 
                 if(window.guardarJuego) window.guardarJuego();
+            } else {
+                // ✨ FIX PARA PERMITIR COMPRAR ÍTEMS NORMALES (COMO LA INCUBADORA) CON POL
+                let itemParaInventario = { id: item.id, name: item.name, icon: item.icon, type: item.type, desc: item.desc, maxStack: (window.miInventario.stackLimits && window.miInventario.stackLimits[item.type]) ? window.miInventario.stackLimits[item.type] : 20 };
+                
+                let agregadoExitosamente = window.miInventario.addItem(itemParaInventario);
+                
+                if (agregadoExitosamente) {
+                    window.miWallet.pol -= item.price;
+                    const polText = document.getElementById("pol-amount");
+                    if(polText) polText.innerText = `🔷 ${window.miWallet.pol.toFixed(1)} POL`;
+                    window.miInventario.updateUI();
+                    alert(`✅ Has comprado: ${item.name}`);
+                    if(window.guardarJuego) window.guardarJuego();
+                }
             }
         }
     },
@@ -374,18 +388,17 @@ window.ShopManager = {
         const grid = document.getElementById("shop-bazar-grid");
         grid.innerHTML = "";
         
-        // ✨ LÓGICA DE CLONACIÓN: Extraer dinámicamente la cápsula de ADN desde tu propio motor del juego
         let iconoBioNucleo = this.iconosSVG["bio_nucleo_basico"];
         if (typeof window.generarSvgGeno === 'function') {
             let svgGenerado = window.generarSvgGeno({ isEgg: true, color: '#00d2ff', base_color: '#00d2ff' });
             if (svgGenerado && svgGenerado.includes('<svg')) {
-                // Reemplazamos sus dimensiones fijas para que fluya con el CSS y ocupe todo el espacio de la tienda
                 iconoBioNucleo = svgGenerado.replace(/width="[^"]+"/, 'width="1em"').replace(/height="[^"]+"/, 'height="1em"');
             }
         }
         
         const items = [
             { id: "bio_nucleo_basico", name: "Bio-Núcleo Básico", icon: iconoBioNucleo, type: "egg", price: 200, currency: "EV", desc: "Espécimen base (Común) inyectado aleatoriamente. Ideal para iniciar nuevas líneas de sangre." },
+            { id: "incubator_01", name: "Incubadora Térmica", icon: this.iconosSVG["incubator_01"], type: "consumable", price: 0.20, currency: "POL", desc: "Batería térmica de alta capacidad. Proporciona la energía necesaria para incubar un Bio-Núcleo." },
             { id: "escaner_basico", name: "Escáner Básico", icon: this.iconosSVG["escaner_basico"], type: "basic", price: 0.15, currency: "EV", desc: "Revela slots activos del Geno." },
             { id: "escaner_completo", name: "Escáner Completo", icon: this.iconosSVG["escaner_completo"], type: "basic", price: 0.50, currency: "EV", desc: "Revela la genética exacta S-D." },
             { id: "antidoto_uni", name: "Antídoto Universal", icon: this.iconosSVG["antidoto_uni"], type: "consumable", price: 0.10, currency: "EV", desc: "Limpia cualquier estado alterado." }
@@ -393,6 +406,7 @@ window.ShopManager = {
 
         items.forEach(item => {
             if(item.id === "bio_nucleo_basico") grid.appendChild(this.crearTarjeta(item, "#00d2ff", "#005c8a", "EV"));
+            else if (item.id === "incubator_01") grid.appendChild(this.crearTarjeta(item, "#ff9800", "#e65100", "POL"));
             else grid.appendChild(this.crearTarjeta(item, "#69F0AE", "#2E7D32", "EV"));
         });
     },
