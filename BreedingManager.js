@@ -9,18 +9,27 @@ document.addEventListener("DOMContentLoaded", () => {
         #incubator-grid::-webkit-scrollbar { display: none; }
         #incubator-grid { -ms-overflow-style: none; scrollbar-width: none; overflow-x: auto; }
         
-        /* ✨ FIX: Desplazamiento seguro para tarjetas muy altas */
+        /* ✨ FIX DEFINITIVO: Scroll interno como en la ventana de Stats */
         #geno-id-card-modal:not(.hidden) {
             display: flex !important;
-            align-items: flex-start !important; /* Fuerza a que inicie desde arriba */
+            align-items: center !important; /* Mantiene la tarjeta centrada verticalmente */
             justify-content: center !important;
-            overflow-y: auto !important; /* Activa el scroll vertical */
-            padding-top: 80px !important; /* Espacio para que el avatar no choque con el techo */
-            padding-bottom: 50px !important;
+            padding: 20px !important; /* Margen para que no toque los bordes del celular */
+            overflow: hidden !important; /* Bloquea el scroll en el fondo oscuro */
+        }
+        
+        /* Apunta directamente a la tarjeta física dentro del modal */
+        #geno-id-card-modal > div {
+            max-height: 85vh !important; /* Limita la altura de la tarjeta al 85% de la pantalla */
+            overflow-y: auto !important; /* El scroll ocurre DENTRO de la tarjeta */
+            -ms-overflow-style: none; 
+            scrollbar-width: none;
         }
         
         /* Oculta la barra de scroll para mantener el estilo limpio */
-        #geno-id-card-modal::-webkit-scrollbar { display: none; }
+        #geno-id-card-modal > div::-webkit-scrollbar { 
+            display: none; 
+        }
         
         #breeding-selector h3, 
         #geno-id-card-modal h2, 
