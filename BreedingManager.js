@@ -1,5 +1,5 @@
 // =========================================
-// BreedingManager.js - UI DEL CENTRO DE CRIANZA Y BIO-NÚCLEOS (V9.3 - UI PULIDA)
+// BreedingManager.js - UI DEL CENTRO DE CRIANZA Y BIO-NÚCLEOS (V9.4)
 // =========================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -9,23 +9,24 @@ document.addEventListener("DOMContentLoaded", () => {
         #incubator-grid::-webkit-scrollbar { display: none; }
         #incubator-grid { -ms-overflow-style: none; scrollbar-width: none; overflow-x: auto; }
         
-        /* ✨ FIX ABSOLUTO: Centrado forzado y diseño responsivo */
+        /* ✨ FIX ABSOLUTO: Centrado sin oscurecer la pantalla extra */
         #geno-id-card-modal:not(.hidden) {
-            position: fixed !important;
+            position: absolute !important;
             top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
             display: flex !important;
             align-items: center !important;
             justify-content: center !important;
             padding: 15px !important;
-            background: rgba(10, 20, 30, 0.95) !important;
+            overflow: hidden !important;
             z-index: 9999 !important;
+            /* Se eliminó el background oscuro extra */
         }
         
         #geno-id-card-modal > div {
             width: 100% !important;
-            max-width: 400px !important; /* Ancho similar al panel de Stats */
+            max-width: 400px !important; 
             max-height: 85vh !important;
-            margin: 0 !important;
+            margin: auto !important;
             overflow-y: auto !important; 
             -ms-overflow-style: none; 
             scrollbar-width: none;
@@ -179,24 +180,24 @@ document.addEventListener("DOMContentLoaded", () => {
         let oldIdEl = document.getElementById("id-card-serial");
         if (oldIdEl) oldIdEl.remove();
         let oldLvlEl = document.getElementById("id-card-level");
-        if (oldLvlEl) oldLvlEl.style.display = "none"; // Ocultamos el viejo nivel de la barra
+        if (oldLvlEl) oldLvlEl.style.display = "none";
 
-        // ✨ INYECCIÓN ORDENADA: 1. Nivel justo bajo el nombre
+        // ✨ 1. Nivel centrado justo bajo el nombre
         let lvlBadge = document.getElementById("id-card-lvl-badge");
         if (!lvlBadge) {
             lvlBadge = document.createElement("div");
             lvlBadge.id = "id-card-lvl-badge";
-            lvlBadge.style = "color: #00d2ff; font-weight: bold; font-size: 16px; margin-top: 5px; text-transform: uppercase; letter-spacing: 2px;";
+            lvlBadge.style = "color: #00d2ff; font-weight: bold; font-size: 16px; margin-top: 5px; text-transform: uppercase; letter-spacing: 2px; text-align: center; width: 100%;";
             nameNode.parentNode.insertBefore(lvlBadge, nameNode.nextSibling);
         }
         lvlBadge.innerText = `NV. ${g.level || 1}`;
 
-        // ✨ INYECCIÓN ORDENADA: 2. Emblema y luego el ID (debajo del Nivel)
+        // ✨ 2. Emblema más grande y con menos espacio hacia arriba
         let containerElementoID = document.getElementById("id-card-emblema-container");
         if (!containerElementoID) {
             containerElementoID = document.createElement("div");
             containerElementoID.id = "id-card-emblema-container";
-            containerElementoID.style = "display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 15px; margin-bottom: 10px;";
+            containerElementoID.style = "display: flex; flex-direction: column; align-items: center; justify-content: center; margin-top: 5px; margin-bottom: 10px;";
             lvlBadge.parentNode.insertBefore(containerElementoID, lvlBadge.nextSibling);
         }
 
@@ -205,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
         iconoElemento = iconoElemento.replace('margin-right: 6px;', 'margin-right: 0;'); 
 
         containerElementoID.innerHTML = `
-            <div style="font-size: 45px; margin-bottom: 5px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.8));">
+            <div style="font-size: 55px; margin-bottom: 5px; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.8));">
                 ${iconoElemento}
             </div>
             <div style="font-size: 10px; color: #888; font-family: monospace; letter-spacing: 1px;">ID: #${g.id}</div>
@@ -220,19 +221,17 @@ document.addEventListener("DOMContentLoaded", () => {
         const criasEl = document.getElementById("id-card-breeds");
         if(criasEl) criasEl.innerText = `${maxCrias - (g.breedCount || 0)} de ${maxCrias}`;
 
-        // Asegurar que g.baseStats existe (Parche para Genos viejos)
         if (!g.baseStats) {
             g.baseStats = {
                 hp: g.stats?.hp || 50, atk: g.stats?.atk || 15, def: g.stats?.def || 10, spd: g.stats?.spd || 15, luk: g.stats?.luk || 15
             };
         }
 
-        // ✨ NUEVO FIX: RECONSTRUCCIÓN TOTAL DEL PANEL DE STATS (1 COLUMNA)
+        // PANEL DE STATS (1 COLUMNA)
         let hpEl = document.getElementById("id-card-hp");
         if(hpEl) {
             let statsContainer = hpEl.closest('div[style*="grid"]') || hpEl.parentElement.parentElement;
             if(statsContainer) {
-                // Forzamos la caja original de 2 columnas a ser Flex vertical de 1 columna
                 statsContainer.style.display = "flex";
                 statsContainer.style.flexDirection = "column";
                 statsContainer.style.gap = "0";
@@ -266,7 +265,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     `;
                 };
 
-                // Reescribimos todo el HTML interior con el formato limpio
                 statsContainer.innerHTML = `
                     ${buildStatRow("❤️", "Vit", "hp")}
                     ${buildStatRow("⚔️", "Fue", "atk")}
