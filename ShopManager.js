@@ -1,5 +1,5 @@
 // =========================================
-// ShopManager.js - BAZAR, MATRIZ TÁCTICA Y PREMIUM (INCLUYE MODAL DE DETALLES)
+// ShopManager.js - BAZAR, MATRIZ TÁCTICA Y PREMIUM (INCLUYE BIO-NÚCLEO BÁSICO)
 // =========================================
 
 window.ShopManager = {
@@ -19,6 +19,7 @@ window.ShopManager = {
         "escaner_basico": `<svg viewBox="0 0 100 100" width="1em" height="1em"><path d="M45 20 A25 25 0 1 1 20 45 A25 25 0 0 1 45 20" fill="none" stroke="#00E5FF" stroke-width="8"/><path d="M62 62 L90 90" stroke="#00E5FF" stroke-width="12" stroke-linecap="round"/><circle cx="45" cy="45" r="12" fill="#00B0FF" opacity="0.5"/><path d="M25 45 L65 45 M45 25 L45 65" stroke="#00E5FF" stroke-width="4" opacity="0.8"/></svg>`,
         "escaner_completo": `<svg viewBox="0 0 100 100" width="1em" height="1em"><path d="M25 20 Q50 50 75 80 M75 20 Q50 50 25 80" fill="none" stroke="#D500F9" stroke-width="8"/><line x1="33" y1="50" x2="67" y2="50" stroke="#D500F9" stroke-width="5"/><line x1="42" y1="30" x2="58" y2="70" stroke="#D500F9" stroke-width="5"/><line x1="58" y1="30" x2="42" y2="70" stroke="#D500F9" stroke-width="5"/><circle cx="25" cy="20" r="7" fill="#AA00FF"/><circle cx="75" cy="80" r="7" fill="#AA00FF"/><circle cx="75" cy="20" r="7" fill="#AA00FF"/><circle cx="25" cy="80" r="7" fill="#AA00FF"/></svg>`,
         "antidoto_uni": `<svg viewBox="0 0 100 100" width="1em" height="1em"><path d="M40 10 L60 10 L60 30 L85 80 A10 10 0 0 1 75 95 L25 95 A10 10 0 0 1 15 80 L40 30 Z" fill="none" stroke="#C6FF00" stroke-width="6"/><path d="M25 75 L75 75 L65 50 L35 50 Z" fill="#C6FF00"/><circle cx="45" cy="65" r="5" fill="#fff" opacity="0.9"/><circle cx="58" cy="58" r="3" fill="#fff" opacity="0.7"/></svg>`,
+        "bio_nucleo_basico": `<svg viewBox="0 0 100 100" width="1em" height="1em"><rect x="25" y="15" width="50" height="70" rx="25" fill="#121822" stroke="#4dd0e1" stroke-width="6"/><path d="M25 35 Q50 45 75 35 M25 65 Q50 75 75 65" fill="none" stroke="#4dd0e1" stroke-width="4"/><circle cx="50" cy="50" r="10" fill="#00d2ff"/></svg>`,
         
         // --- 3. EXPANSIÓN PREMIUM ---
         "exp_20": `<svg viewBox="0 0 100 100" width="1em" height="1em"><rect x="20" y="30" width="60" height="60" rx="10" fill="#8A2BE2"/><path d="M35 30 L35 15 A15 15 0 0 1 65 15 L65 30" fill="none" stroke="#8A2BE2" stroke-width="8"/><rect x="28" y="50" width="44" height="25" rx="5" fill="#5E35B1"/><circle cx="50" cy="62" r="5" fill="#D1C4E9"/><path d="M20 40 L80 40" stroke="#5E35B1" stroke-width="4"/></svg>`,
@@ -39,13 +40,12 @@ window.ShopManager = {
         const contenedor = document.getElementById("shop-screen");
         if (!contenedor) return;
 
-        // INYECCIÓN DE CSS: FONDOS IGUALADOS AL RESTO DE LA INTERFAZ (#1A2A36)
+        // INYECCIÓN DE CSS
         const style = document.createElement('style');
         style.innerHTML = `
             .tienda-scroll-area::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
             .tienda-scroll-area { -ms-overflow-style: none !important; scrollbar-width: none !important; }
             
-            /* Pestañas Neón */
             .shop-tab-neon {
                 flex: 1; padding: 12px 5px; font-weight: 900; cursor: pointer; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
                 background: rgba(26, 42, 54, 0.6); border: 1px solid #384a5e; color: #a0aec0; transition: all 0.3s ease;
@@ -58,14 +58,13 @@ window.ShopManager = {
                 box-shadow: inset 0 15px 20px -15px var(--tab-color), 0 -5px 15px -10px var(--tab-color);
             }
 
-            /* Tarjetas Neón */
             .shop-card-neon {
                 background: linear-gradient(180deg, #2A3B4C 0%, #1A2A36 100%);
                 border: 1px solid #384a5e; border-radius: 12px; padding: 18px 12px;
                 transition: all 0.3s ease; position: relative; overflow: hidden;
                 display: flex; flex-direction: column; align-items: center; text-align: center;
                 box-shadow: 0 4px 10px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.05);
-                cursor: pointer; /* Indicar que toda la tarjeta es clickeable */
+                cursor: pointer;
             }
             .shop-card-neon::before {
                 content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
@@ -78,7 +77,6 @@ window.ShopManager = {
             }
             .shop-card-neon:hover::before { height: 6px; box-shadow: 0 0 15px var(--card-color); }
             
-            /* Botones Neón */
             .shop-btn-neon {
                 width: 100%; padding: 10px; border: none; border-radius: 8px; margin-top: auto;
                 font-weight: 900; color: #fff; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; font-size: 13px;
@@ -127,7 +125,7 @@ window.ShopManager = {
                 <div class="fab-content" style="font-size: 13px; cursor: pointer; padding: 12px 0; text-align: center;">VOLVER AL LABORATORIO</div>
             </div>
 
-            <!-- MODAL DE DETALLES DEL ÍTEM (OCULTO POR DEFECTO) -->
+            <!-- MODAL DE DETALLES DEL ÍTEM -->
             <div id="shop-detail-modal" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 20, 30, 0.90); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
                 <div id="shop-detail-content" style="background: linear-gradient(180deg, #1A2A36 0%, #0F172A 100%); border: 2px solid #00d2ff; border-radius: 16px; padding: 30px 20px; width: 85%; max-width: 350px; position: relative; text-align: center;">
                     <button id="close-shop-detail" style="position: absolute; top: 10px; right: 15px; background: transparent; border: none; color: #aaa; font-size: 24px; font-weight: bold; cursor: pointer;">&times;</button>
@@ -182,13 +180,11 @@ window.ShopManager = {
             <button class="shop-btn-neon">Comprar</button>
         `;
 
-        // ✨ AL HACER CLIC EN EL BOTÓN COMPRAR (Evita que se abra el modal)
         div.querySelector("button").addEventListener("click", (e) => {
-            e.stopPropagation(); // Detiene el clic para que no active el evento de la tarjeta
+            e.stopPropagation(); 
             this.procesarCompra(item);
         });
 
-        // ✨ AL HACER CLIC EN LA TARJETA (Abre el Modal de Detalles)
         div.addEventListener("click", () => {
             this.abrirDetalle(item, colorLuz);
         });
@@ -196,7 +192,6 @@ window.ShopManager = {
         return div;
     },
 
-    // ✨ NUEVA FUNCIÓN: ABRIR MODAL DE DETALLES
     abrirDetalle: function(item, colorLuz) {
         const modal = document.getElementById("shop-detail-modal");
         const content = document.getElementById("shop-detail-content");
@@ -208,7 +203,6 @@ window.ShopManager = {
 
         if(!modal) return;
 
-        // Estilizar colores basados en el ítem
         content.style.borderColor = colorLuz;
         content.style.boxShadow = `0 10px 30px rgba(0,0,0,0.8), inset 0 0 20px ${colorLuz}40`;
         nameEl.style.textShadow = `0 2px 5px ${colorLuz}80`;
@@ -217,32 +211,31 @@ window.ShopManager = {
         nameEl.innerText = item.name;
         descEl.innerText = item.desc;
 
-        // Crear Etiquetas (Tags) de información
         let tagsHTML = "";
         const createTag = (text, color) => `<span style="background: ${color}20; color: ${color}; border: 1px solid ${color}; padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: bold; text-transform: uppercase;">${text}</span>`;
 
         if (item.type === "MT") {
             tagsHTML += createTag("Módulo MT", "#a0aec0");
             tagsHTML += createTag(item.element, colorLuz);
-            tagsHTML += createTag(item.subType, "#fff"); // Especial, Soporte, Definitivo
+            tagsHTML += createTag(item.subType, "#fff");
             if(item.power > 0) tagsHTML += createTag(`Potencia: ${item.power}`, "#ff6b6b");
         } else if (item.type === "expansion") {
             tagsHTML += createTag("Infraestructura", colorLuz);
             tagsHTML += createTag(`Espacio: +${item.value}`, "#fff");
+        } else if (item.type === "egg") {
+            tagsHTML += createTag("Genética", colorLuz);
+            tagsHTML += createTag("Incubación", "#fff");
         } else {
             tagsHTML += createTag(item.type === "consumable" ? "Consumible" : "Herramienta", colorLuz);
         }
         tagsContainer.innerHTML = tagsHTML;
 
-        // Precio en el modal
         priceEl.innerHTML = item.currency === "EV" 
             ? `<span style="color: ${colorLuz}; text-shadow: 0 0 8px ${colorLuz}80;">✨ ${item.price.toFixed(2)} EV</span>` 
             : `<span style="color: ${colorLuz}; text-shadow: 0 0 8px ${colorLuz}80;">🔷 ${item.price.toFixed(2)} POL</span>`;
 
-        // Mostrar Modal
         modal.style.display = "flex";
 
-        // Lógica para cerrar
         const btnClose = document.getElementById("close-shop-detail");
         const closeModal = (e) => {
             if(e.target === modal || e.target === btnClose) {
@@ -262,6 +255,77 @@ window.ShopManager = {
                 return;
             }
             
+            // ✨ LÓGICA ESPECIAL PARA EL BIO-NÚCLEO BÁSICO
+            if (item.id === "bio_nucleo_basico") {
+                const maxSlots = window.miInventario.maxSlots || 10;
+                const slotsCount = window.miInventario.slots ? window.miInventario.slots.length : 0;
+                if (slotsCount >= maxSlots + 2) {
+                    alert("🎒 ¡Almacén y Espacios de Emergencia LLENOS!\nLibera espacio para recibir este Bio-Núcleo.");
+                    return;
+                }
+
+                window.miInventario.vitalEssence -= item.price;
+
+                const formasBase = ["gota", "frijol", "circulo", "cuadrado", "triangulo"];
+                const coloresBase = ["#ff6b6b", "#4dd0e1", "#fdfd96", "#b19cd9", "#77DD77", "#ff9800", "#ffb347", "#a8e6cf"];
+                const elementosBase = ["Biomutante", "Viral", "Cibernético", "Radiactivo", "Tóxico", "Sintético"];
+                
+                const colorRandom = coloresBase[Math.floor(Math.random() * coloresBase.length)];
+                const prefijos = ["Neo", "Bio", "Geno", "Cyto", "Viro", "Rad", "Syn", "Evo", "Nexo", "Mut"];
+                const sufijos = ["-X", "-Prime", "morph", "cyte", "tron", "plasm", "-7", "core", "gen", "-Z"];
+                const nombreHijo = prefijos[Math.floor(Math.random() * prefijos.length)] + sufijos[Math.floor(Math.random() * sufijos.length)];
+                
+                const rarezaInicial = "Común";
+                const statsBase = window.generarStatsPorRareza ? window.generarStatsPorRareza(rarezaInicial) : { hp: 50, atk: 15, def: 10, spd: 15, luk: 15 };
+                
+                const huevo = {
+                    id: typeof window.generarNuevoID === 'function' ? window.generarNuevoID() : Date.now(), 
+                    name: nombreHijo, 
+                    isEgg: true, 
+                    incubating: false, 
+                    hatchDuration: 60000, // 1 Minuto de incubación para Genos básicos
+                    hatchTime: 0, 
+                    generation: 1, breedCount: 0, level: 1, xp: 0, xpNeeded: 100,
+                    rarity: rarezaInicial, 
+                    stats: statsBase,
+                    hidden_genes: window.generarGenesV9 ? window.generarGenesV9(rarezaInicial) : {A:null,B:null,C:null}, 
+                    scanned: false,
+                    genes: {
+                        cuerpo: { dom: formasBase[Math.floor(Math.random() * formasBase.length)], rec: formasBase[Math.floor(Math.random() * formasBase.length)] },
+                        ojos: { dom: "estandar", rec: "estandar" },
+                        boca: { dom: "feliz", rec: "feliz" },
+                        espalda: { dom: "ninguno", rec: "ninguno" },
+                        cabeza: { dom: "ninguno", rec: "ninguno" },
+                        afinidad: { dom: elementosBase[Math.floor(Math.random() * elementosBase.length)], rec: elementosBase[Math.floor(Math.random() * elementosBase.length)] }
+                    },
+                    base_color: colorRandom, color: colorRandom
+                };
+
+                huevo.body_shape = huevo.genes.cuerpo.dom;
+                huevo.element = huevo.genes.afinidad.dom;
+                huevo.eye_type = "estandar";
+                huevo.mouth_type = "feliz";
+
+                if(!window.misGenos) window.misGenos = []; 
+                window.misGenos.push(huevo);
+
+                const svgCapsula = typeof generarSvgGeno === 'function' ? generarSvgGeno({ isEgg: true, color: colorRandom }) : '🧬';
+                window.miInventario.addItem({
+                    id: "bionucleo_" + huevo.id,
+                    name: "Bio-Núcleo #" + huevo.id,
+                    icon: svgCapsula,
+                    color: colorRandom,
+                    type: "bio_nucleo",
+                    maxStack: 1,
+                    desc: "Material genético puro de tienda. Requiere incubación."
+                }, 1);
+
+                window.miInventario.updateUI();
+                alert("✅ ¡Has comprado un Bio-Núcleo Básico!\nRevisa tu Cámara de Bio-Núcleos en el Centro de Crianza para incubarlo.");
+                if(window.guardarJuego) window.guardarJuego();
+                return; // Cortamos aquí para que no lo procese como un ítem normal
+            }
+
             let itemParaInventario = { id: item.id, name: item.name, icon: item.icon, type: item.type, desc: item.desc, maxStack: window.miInventario.stackLimits[item.type] };
             
             if(item.type === "MT") {
@@ -310,12 +374,17 @@ window.ShopManager = {
         grid.innerHTML = "";
         
         const items = [
+            { id: "bio_nucleo_basico", name: "Bio-Núcleo Básico", icon: this.iconosSVG["bio_nucleo_basico"], type: "egg", price: 200, currency: "EV", desc: "Espécimen base (Común) inyectado aleatoriamente. Ideal para iniciar nuevas líneas de sangre." },
             { id: "escaner_basico", name: "Escáner Básico", icon: this.iconosSVG["escaner_basico"], type: "basic", price: 0.15, currency: "EV", desc: "Revela slots activos del Geno." },
             { id: "escaner_completo", name: "Escáner Completo", icon: this.iconosSVG["escaner_completo"], type: "basic", price: 0.50, currency: "EV", desc: "Revela la genética exacta S-D." },
             { id: "antidoto_uni", name: "Antídoto Universal", icon: this.iconosSVG["antidoto_uni"], type: "consumable", price: 0.10, currency: "EV", desc: "Limpia cualquier estado alterado." }
         ];
 
-        items.forEach(item => grid.appendChild(this.crearTarjeta(item, "#69F0AE", "#2E7D32", "EV")));
+        items.forEach(item => {
+            // Le damos colores turquesa especiales al Bio-núcleo para que resalte
+            if(item.id === "bio_nucleo_basico") grid.appendChild(this.crearTarjeta(item, "#00d2ff", "#005c8a", "EV"));
+            else grid.appendChild(this.crearTarjeta(item, "#69F0AE", "#2E7D32", "EV"));
+        });
     },
 
     renderDojo: function() {
