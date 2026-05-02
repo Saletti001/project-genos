@@ -1,13 +1,11 @@
 // =========================================
-// ShopManager.js - BAZAR, MATRIZ TÁCTICA Y PREMIUM (V9.6 - INCUBADORAS & POL)
+// ShopManager.js - BAZAR, MATRIZ TÁCTICA Y PREMIUM (V9.7 - FIX CENTRADO GENO)
 // =========================================
 
 window.ShopManager = {
     inicializado: false,
     
-    // GALERÍA DE ARTE VECTORIAL (Medallas estilo Medabots - Colores sólidos)
     iconosSVG: {
-        // --- 1. ELEMENTOS DE COMBATE (MTs) ---
         "Biomutante": `<svg viewBox="0 0 100 100" width="1em" height="1em"><path d="M15 20 L50 5 L85 20 L85 50 C85 75 65 90 50 95 C35 90 15 75 15 50 Z" fill="#121822" stroke="#69F0AE" stroke-width="6" stroke-linejoin="round"/><path d="M50 25 C65 35 65 50 50 65 C35 50 35 35 50 25 Z" fill="#69F0AE"/><path d="M50 65 L50 82" stroke="#69F0AE" stroke-width="6" stroke-linecap="round"/><path d="M50 52 C65 47 72 52 72 62 C65 65 55 60 50 52 Z" fill="#69F0AE"/><path d="M50 52 C35 47 28 52 28 62 C35 65 45 60 50 52 Z" fill="#69F0AE"/></svg>`,
         "Viral": `<svg viewBox="0 0 100 100" width="1em" height="1em"><polygon points="50,5 95,50 50,95 5,50" fill="#121822" stroke="#E040FB" stroke-width="6" stroke-linejoin="round"/><circle cx="50" cy="50" r="14" fill="#E040FB"/><circle cx="50" cy="50" r="5" fill="#121822"/><path d="M50 22 L50 36 M50 78 L50 64 M22 50 L36 50 M78 50 L64 50" stroke="#E040FB" stroke-width="6" stroke-linecap="round"/><circle cx="50" cy="22" r="4" fill="#E040FB"/><circle cx="50" cy="78" r="4" fill="#E040FB"/><circle cx="22" cy="50" r="4" fill="#E040FB"/><circle cx="78" cy="50" r="4" fill="#E040FB"/></svg>`,
         "Cibernético": `<svg viewBox="0 0 100 100" width="1em" height="1em"><polygon points="30,10 70,10 90,30 90,70 70,90 30,90 10,70 10,30" fill="#121822" stroke="#00E5FF" stroke-width="6" stroke-linejoin="round"/><rect x="35" y="35" width="30" height="30" fill="none" stroke="#00E5FF" stroke-width="6" rx="4"/><circle cx="50" cy="50" r="6" fill="#00E5FF"/><path d="M50 10 L50 35 M50 90 L50 65 M10 50 L35 50 M90 50 L65 50" stroke="#00E5FF" stroke-width="6"/></svg>`,
@@ -15,15 +13,12 @@ window.ShopManager = {
         "Tóxico": `<svg viewBox="0 0 100 100" width="1em" height="1em"><polygon points="12,18 88,18 50,90" fill="#121822" stroke="#C6FF00" stroke-width="6" stroke-linejoin="round"/><rect x="35" y="32" width="30" height="25" rx="10" fill="#C6FF00"/><rect x="42" y="47" width="16" height="20" rx="3" fill="#C6FF00"/><circle cx="43" cy="42" r="4" fill="#121822"/><circle cx="57" cy="42" r="4" fill="#121822"/><path d="M46 59 L46 67 M50 59 L50 67 M54 59 L54 67" stroke="#121822" stroke-width="2"/></svg>`,
         "Sintético": `<svg viewBox="0 0 100 100" width="1em" height="1em"><path d="M50 5 L90 28 L90 72 L50 95 L10 72 L10 28 Z" fill="#121822" stroke="#B388FF" stroke-width="6" stroke-linejoin="round"/><path d="M50 18 L75 32 L75 68 L50 82 L25 68 L25 32 Z" fill="#B388FF"/><path d="M50 18 L50 50 L25 32 M50 50 L75 68 M50 50 L50 82" stroke="#121822" stroke-width="5"/><circle cx="50" cy="50" r="10" fill="#EA80FC"/><circle cx="50" cy="50" r="4" fill="#121822"/></svg>`,
         
-        // --- 2. HERRAMIENTAS Y BAZAR ---
         "escaner_basico": `<svg viewBox="0 0 100 100" width="1em" height="1em"><path d="M45 20 A25 25 0 1 1 20 45 A25 25 0 0 1 45 20" fill="none" stroke="#00E5FF" stroke-width="8"/><path d="M62 62 L90 90" stroke="#00E5FF" stroke-width="12" stroke-linecap="round"/><circle cx="45" cy="45" r="12" fill="#00B0FF" opacity="0.5"/><path d="M25 45 L65 45 M45 25 L45 65" stroke="#00E5FF" stroke-width="4" opacity="0.8"/></svg>`,
         "escaner_completo": `<svg viewBox="0 0 100 100" width="1em" height="1em"><path d="M25 20 Q50 50 75 80 M75 20 Q50 50 25 80" fill="none" stroke="#D500F9" stroke-width="8"/><line x1="33" y1="50" x2="67" y2="50" stroke="#D500F9" stroke-width="5"/><line x1="42" y1="30" x2="58" y2="70" stroke="#D500F9" stroke-width="5"/><line x1="58" y1="30" x2="42" y2="70" stroke="#D500F9" stroke-width="5"/><circle cx="25" cy="20" r="7" fill="#AA00FF"/><circle cx="75" cy="80" r="7" fill="#AA00FF"/><circle cx="75" cy="20" r="7" fill="#AA00FF"/><circle cx="25" cy="80" r="7" fill="#AA00FF"/></svg>`,
         "antidoto_uni": `<svg viewBox="0 0 100 100" width="1em" height="1em"><path d="M40 10 L60 10 L60 30 L85 80 A10 10 0 0 1 75 95 L25 95 A10 10 0 0 1 15 80 L40 30 Z" fill="none" stroke="#C6FF00" stroke-width="6"/><path d="M25 75 L75 75 L65 50 L35 50 Z" fill="#C6FF00"/><circle cx="45" cy="65" r="5" fill="#fff" opacity="0.9"/><circle cx="58" cy="58" r="3" fill="#fff" opacity="0.7"/></svg>`,
         "incubator_01": `<svg viewBox="0 0 100 100" width="1em" height="1em"><rect x="38" y="10" width="24" height="8" rx="4" fill="#ff9800"/><rect x="25" y="18" width="50" height="72" rx="10" fill="#1a2a36" stroke="#ff9800" stroke-width="6"/><rect x="35" y="45" width="30" height="35" rx="4" fill="#ff5722"/><path d="M50 35 L50 40 M40 35 L40 40 M60 35 L60 40" stroke="#ff9800" stroke-width="4" stroke-linecap="round"/><path d="M50 50 Q58 60 50 70 Q42 60 50 50" fill="#ffeb3b"/></svg>`,
-        
         "bio_nucleo_basico": `<svg viewBox="0 0 100 100" width="1em" height="1em"><rect x="25" y="10" width="50" height="80" rx="20" fill="#002233" stroke="#00d2ff" stroke-width="3"/><path d="M 40 25 Q 50 35 60 25 T 40 45 Q 50 55 60 45 T 40 65 Q 50 75 60 65" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M 60 25 Q 50 35 40 25 T 60 45 Q 50 55 40 45 T 60 65 Q 50 75 40 65" fill="none" stroke="#00d2ff" stroke-width="3" stroke-linecap="round"/><path d="M 30 15 L 70 15 L 65 5 L 35 5 Z" fill="#4dd0e1"/><path d="M 30 85 L 70 85 L 65 95 L 35 95 Z" fill="#4dd0e1"/><rect x="30" y="15" width="5" height="70" rx="2" fill="#fff" opacity="0.3"/></svg>`,
         
-        // --- 3. EXPANSIÓN PREMIUM ---
         "exp_20": `<svg viewBox="0 0 100 100" width="1em" height="1em"><rect x="20" y="30" width="60" height="60" rx="10" fill="#8A2BE2"/><path d="M35 30 L35 15 A15 15 0 0 1 65 15 L65 30" fill="none" stroke="#8A2BE2" stroke-width="8"/><rect x="28" y="50" width="44" height="25" rx="5" fill="#5E35B1"/><circle cx="50" cy="62" r="5" fill="#D1C4E9"/><path d="M20 40 L80 40" stroke="#5E35B1" stroke-width="4"/></svg>`,
         "exp_30": `<svg viewBox="0 0 100 100" width="1em" height="1em"><rect x="15" y="25" width="70" height="65" rx="12" fill="#D500F9"/><path d="M30 25 L30 10 A20 20 0 0 1 70 10 L70 25" fill="none" stroke="#D500F9" stroke-width="10"/><rect x="22" y="45" width="56" height="30" rx="8" fill="#AA00FF"/><circle cx="38" cy="60" r="6" fill="#EA80FC"/><circle cx="62" cy="60" r="6" fill="#EA80FC"/><path d="M15 35 L85 35" stroke="#AA00FF" stroke-width="5"/></svg>`,
         "exp_40": `<svg viewBox="0 0 100 100" width="1em" height="1em"><rect x="10" y="20" width="80" height="70" rx="6" fill="#FFD700"/><rect x="18" y="28" width="64" height="54" rx="4" fill="#F57F17"/><circle cx="50" cy="55" r="16" fill="#FFF59D"/><circle cx="50" cy="55" r="6" fill="#F57F17"/><line x1="50" y1="39" x2="50" y2="45" stroke="#F57F17" stroke-width="4"/><line x1="30" y1="20" x2="30" y2="28" stroke="#F57F17" stroke-width="4"/><line x1="70" y1="20" x2="70" y2="28" stroke="#F57F17" stroke-width="4"/></svg>`
@@ -42,7 +37,6 @@ window.ShopManager = {
         const contenedor = document.getElementById("shop-screen");
         if (!contenedor) return;
 
-        // INYECCIÓN DE CSS
         const style = document.createElement('style');
         style.innerHTML = `
             .tienda-scroll-area::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
@@ -118,7 +112,6 @@ window.ShopManager = {
                     <div id="shop-premium-grid" class="sanctuary-grid"></div>
                 </div>
                 
-                <!-- ESPACIADOR FANTASMA -->
                 <div style="height: 130px; width: 100%; flex-shrink: 0; display: block;"></div>
                 
             </div>
@@ -127,7 +120,6 @@ window.ShopManager = {
                 <div class="fab-content" style="font-size: 13px; cursor: pointer; padding: 12px 0; text-align: center;">VOLVER AL LABORATORIO</div>
             </div>
 
-            <!-- MODAL DE DETALLES DEL ÍTEM -->
             <div id="shop-detail-modal" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 20, 30, 0.90); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
                 <div id="shop-detail-content" style="background: linear-gradient(180deg, #1A2A36 0%, #0F172A 100%); border: 2px solid #00d2ff; border-radius: 16px; padding: 30px 20px; width: 85%; max-width: 350px; position: relative; text-align: center;">
                     <button id="close-shop-detail" style="position: absolute; top: 10px; right: 15px; background: transparent; border: none; color: #aaa; font-size: 24px; font-weight: bold; cursor: pointer;">&times;</button>
@@ -279,6 +271,11 @@ window.ShopManager = {
                 const rarezaInicial = "Común";
                 const statsBase = window.generarStatsPorRareza ? window.generarStatsPorRareza(rarezaInicial) : { hp: 50, atk: 15, def: 10, spd: 15, luk: 15 };
                 
+                const formaElegida = formasBase[Math.floor(Math.random() * formasBase.length)];
+                const formaRecesiva = formasBase[Math.floor(Math.random() * formasBase.length)];
+                const elementoElegido = elementosBase[Math.floor(Math.random() * elementosBase.length)];
+                const elementoRecesivo = elementosBase[Math.floor(Math.random() * elementosBase.length)];
+
                 const huevo = {
                     id: typeof window.generarNuevoID === 'function' ? window.generarNuevoID() : Date.now(), 
                     name: nombreHijo, 
@@ -292,20 +289,36 @@ window.ShopManager = {
                     hidden_genes: window.generarGenesV9 ? window.generarGenesV9(rarezaInicial) : {A:null,B:null,C:null}, 
                     scanned: false,
                     genes: {
-                        cuerpo: { dom: formasBase[Math.floor(Math.random() * formasBase.length)], rec: formasBase[Math.floor(Math.random() * formasBase.length)] },
+                        cuerpo: { dom: formaElegida, rec: formaRecesiva },
                         ojos: { dom: "estandar", rec: "estandar" },
                         boca: { dom: "feliz", rec: "feliz" },
                         espalda: { dom: "ninguno", rec: "ninguno" },
                         cabeza: { dom: "ninguno", rec: "ninguno" },
-                        afinidad: { dom: elementosBase[Math.floor(Math.random() * elementosBase.length)], rec: elementosBase[Math.floor(Math.random() * elementosBase.length)] }
+                        afinidad: { dom: elementoElegido, rec: elementoRecesivo }
                     },
-                    base_color: colorRandom, color: colorRandom
+                    base_color: colorRandom, 
+                    color: colorRandom,
+                    
+                    // ✨ FIX DE CENTRADO: Inyección de todas las variables legacy
+                    shape: formaElegida,
+                    body_shape: formaElegida,
+                    element: elementoElegido,
+                    eye_type: "estandar",
+                    mouth_type: "feliz",
+                    wing_type: "ninguno",
+                    hat_type: "ninguno",
+                    reward: 100,
+                    visual_genes: {
+                        body_shape: formaElegida,
+                        eye_type: "estandar",
+                        mouth_type: "feliz",
+                        base_color: colorRandom
+                    }
                 };
 
-                huevo.body_shape = huevo.genes.cuerpo.dom;
-                huevo.element = huevo.genes.afinidad.dom;
-                huevo.eye_type = "estandar";
-                huevo.mouth_type = "feliz";
+                if (typeof window.generarSvgGeno === 'function') {
+                    huevo.svg = window.generarSvgGeno(huevo);
+                }
 
                 if(!window.misGenos) window.misGenos = []; 
                 window.misGenos.push(huevo);
@@ -367,7 +380,6 @@ window.ShopManager = {
                 this.renderPremium(); 
                 if(window.guardarJuego) window.guardarJuego();
             } else {
-                // ✨ FIX PARA PERMITIR COMPRAR ÍTEMS NORMALES (COMO LA INCUBADORA) CON POL
                 let itemParaInventario = { id: item.id, name: item.name, icon: item.icon, type: item.type, desc: item.desc, maxStack: (window.miInventario.stackLimits && window.miInventario.stackLimits[item.type]) ? window.miInventario.stackLimits[item.type] : 20 };
                 
                 let agregadoExitosamente = window.miInventario.addItem(itemParaInventario);
