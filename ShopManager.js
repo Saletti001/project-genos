@@ -1,5 +1,5 @@
 // =========================================
-// ShopManager.js - BAZAR, MATRIZ TÁCTICA Y PREMIUM (VERSIÓN DEFINITIVA)
+// ShopManager.js - BAZAR, MATRIZ TÁCTICA Y PREMIUM (INCLUYE MODAL DE DETALLES)
 // =========================================
 
 window.ShopManager = {
@@ -58,13 +58,14 @@ window.ShopManager = {
                 box-shadow: inset 0 15px 20px -15px var(--tab-color), 0 -5px 15px -10px var(--tab-color);
             }
 
-            /* Tarjetas Neón (Integradas con el tono base #1a2a36) */
+            /* Tarjetas Neón */
             .shop-card-neon {
                 background: linear-gradient(180deg, #2A3B4C 0%, #1A2A36 100%);
                 border: 1px solid #384a5e; border-radius: 12px; padding: 18px 12px;
                 transition: all 0.3s ease; position: relative; overflow: hidden;
                 display: flex; flex-direction: column; align-items: center; text-align: center;
                 box-shadow: 0 4px 10px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.05);
+                cursor: pointer; /* Indicar que toda la tarjeta es clickeable */
             }
             .shop-card-neon::before {
                 content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
@@ -97,7 +98,6 @@ window.ShopManager = {
                 <h2 class="screen-title" style="color: #00d2ff; text-align: center; text-shadow: 0 0 15px rgba(0,210,255,0.4); margin-bottom: 20px; font-weight: 900; letter-spacing: 2px;">TERMINAL COMERCIAL</h2>
                 
                 <div style="display: flex; justify-content: center; margin-bottom: 20px; padding: 0 10px; border-bottom: 1px solid #384a5e;">
-                    <!-- Se cambió el nombre y se quitó el (EV) -->
                     <button id="tab-shop-bazar" class="shop-tab-neon" style="--tab-color: #69F0AE;">Suministros</button>
                     <button id="tab-shop-dojo" class="shop-tab-neon" style="--tab-color: #00E5FF;">Matriz Táctica</button>
                     <button id="tab-shop-premium" class="shop-tab-neon" style="--tab-color: #E040FB;">Premium</button>
@@ -118,13 +118,25 @@ window.ShopManager = {
                     <div id="shop-premium-grid" class="sanctuary-grid"></div>
                 </div>
                 
-                <!-- ESPACIADOR FANTASMA: Obliga al scroll a bajar más allá del botón flotante -->
+                <!-- ESPACIADOR FANTASMA -->
                 <div style="height: 130px; width: 100%; flex-shrink: 0; display: block;"></div>
                 
             </div>
             
             <div class="fab-btn btn-go-home" onclick="navegarA('room-area')" style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); width: 70%; max-width: 300px; z-index: 100;">
                 <div class="fab-content" style="font-size: 13px; cursor: pointer; padding: 12px 0; text-align: center;">VOLVER AL LABORATORIO</div>
+            </div>
+
+            <!-- MODAL DE DETALLES DEL ÍTEM (OCULTO POR DEFECTO) -->
+            <div id="shop-detail-modal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 20, 30, 0.90); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+                <div id="shop-detail-content" style="background: linear-gradient(180deg, #1A2A36 0%, #0F172A 100%); border: 2px solid #00d2ff; border-radius: 16px; padding: 30px 20px; width: 85%; max-width: 350px; position: relative; text-align: center;">
+                    <button id="close-shop-detail" style="position: absolute; top: 10px; right: 15px; background: transparent; border: none; color: #aaa; font-size: 24px; font-weight: bold; cursor: pointer;">&times;</button>
+                    <div id="shop-detail-icon" style="font-size: 5rem; margin-bottom: 15px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));"></div>
+                    <h3 id="shop-detail-name" style="color: #fff; margin: 0 0 10px 0; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;"></h3>
+                    <div id="shop-detail-tags" style="display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; flex-wrap: wrap;"></div>
+                    <p id="shop-detail-desc" style="color: #cbd5e1; font-size: 13px; line-height: 1.5; margin-bottom: 20px; padding: 12px; background: rgba(0,0,0,0.4); border-radius: 8px;"></p>
+                    <div id="shop-detail-price" style="font-size: 18px; font-weight: 900; letter-spacing: 1px;"></div>
+                </div>
             </div>
         `;
 
@@ -163,15 +175,84 @@ window.ShopManager = {
             : `<div style="font-weight: 900; color: ${colorLuz}; margin: 10px 0 15px 0; font-size: 15px; text-shadow: 0 0 8px ${colorLuz}80;">🔷 ${item.price.toFixed(2)} POL</div>`;
 
         div.innerHTML = `
-            <div style="font-size: 3.5rem; margin-bottom: 10px; filter: drop-shadow(0px 8px 10px rgba(0,0,0,0.8));">${item.icon}</div>
-            <h4 style="margin: 5px 0 8px 0; font-size: 14px; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.8);">${item.name}</h4>
-            <p style="font-size: 11px; color: #cbd5e1; margin: 0; line-height: 1.4; height: 35px; overflow: hidden;">${item.desc}</p>
+            <div style="font-size: 3.5rem; margin-bottom: 10px; filter: drop-shadow(0px 8px 10px rgba(0,0,0,0.8)); pointer-events: none;">${item.icon}</div>
+            <h4 style="margin: 5px 0 8px 0; font-size: 14px; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); pointer-events: none;">${item.name}</h4>
+            <p style="font-size: 11px; color: #cbd5e1; margin: 0; line-height: 1.4; height: 35px; overflow: hidden; pointer-events: none;">${item.desc}</p>
             ${precioTag}
             <button class="shop-btn-neon">Comprar</button>
         `;
 
-        div.querySelector("button").addEventListener("click", () => this.procesarCompra(item));
+        // ✨ AL HACER CLIC EN EL BOTÓN COMPRAR (Evita que se abra el modal)
+        div.querySelector("button").addEventListener("click", (e) => {
+            e.stopPropagation(); // Detiene el clic para que no active el evento de la tarjeta
+            this.procesarCompra(item);
+        });
+
+        // ✨ AL HACER CLIC EN LA TARJETA (Abre el Modal de Detalles)
+        div.addEventListener("click", () => {
+            this.abrirDetalle(item, colorLuz);
+        });
+
         return div;
+    },
+
+    // ✨ NUEVA FUNCIÓN: ABRIR MODAL DE DETALLES
+    abrirDetalle: function(item, colorLuz) {
+        const modal = document.getElementById("shop-detail-modal");
+        const content = document.getElementById("shop-detail-content");
+        const iconContainer = document.getElementById("shop-detail-icon");
+        const nameEl = document.getElementById("shop-detail-name");
+        const tagsContainer = document.getElementById("shop-detail-tags");
+        const descEl = document.getElementById("shop-detail-desc");
+        const priceEl = document.getElementById("shop-detail-price");
+
+        if(!modal) return;
+
+        // Estilizar colores basados en el ítem
+        content.style.borderColor = colorLuz;
+        content.style.boxShadow = `0 10px 30px rgba(0,0,0,0.8), inset 0 0 20px ${colorLuz}40`;
+        nameEl.style.textShadow = `0 2px 5px ${colorLuz}80`;
+
+        iconContainer.innerHTML = item.icon;
+        nameEl.innerText = item.name;
+        descEl.innerText = item.desc;
+
+        // Crear Etiquetas (Tags) de información
+        let tagsHTML = "";
+        const createTag = (text, color) => `<span style="background: ${color}20; color: ${color}; border: 1px solid ${color}; padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: bold; text-transform: uppercase;">${text}</span>`;
+
+        if (item.type === "MT") {
+            tagsHTML += createTag("Módulo MT", "#a0aec0");
+            tagsHTML += createTag(item.element, colorLuz);
+            tagsHTML += createTag(item.subType, "#fff"); // Especial, Soporte, Definitivo
+            if(item.power > 0) tagsHTML += createTag(`Potencia: ${item.power}`, "#ff6b6b");
+        } else if (item.type === "expansion") {
+            tagsHTML += createTag("Infraestructura", colorLuz);
+            tagsHTML += createTag(`Espacio: +${item.value}`, "#fff");
+        } else {
+            tagsHTML += createTag(item.type === "consumable" ? "Consumible" : "Herramienta", colorLuz);
+        }
+        tagsContainer.innerHTML = tagsHTML;
+
+        // Precio en el modal
+        priceEl.innerHTML = item.currency === "EV" 
+            ? `<span style="color: ${colorLuz}; text-shadow: 0 0 8px ${colorLuz}80;">✨ ${item.price.toFixed(2)} EV</span>` 
+            : `<span style="color: ${colorLuz}; text-shadow: 0 0 8px ${colorLuz}80;">🔷 ${item.price.toFixed(2)} POL</span>`;
+
+        // Mostrar Modal
+        modal.style.display = "flex";
+
+        // Lógica para cerrar
+        const btnClose = document.getElementById("close-shop-detail");
+        const closeModal = (e) => {
+            if(e.target === modal || e.target === btnClose) {
+                modal.style.display = "none";
+                modal.removeEventListener("click", closeModal);
+                btnClose.removeEventListener("click", closeModal);
+            }
+        };
+        modal.addEventListener("click", closeModal);
+        btnClose.addEventListener("click", closeModal);
     },
 
     procesarCompra: function(item) {
