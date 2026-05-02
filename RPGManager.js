@@ -240,7 +240,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     };
 
                     htmlADN += `
-                        <div style="font-size: 12px; color: #D500F9; text-transform: uppercase; margin-top: 20px; margin-bottom: 5px; font-weight: bold; letter-spacing: 1px; text-align: center;">Genoma Base (S-D)</div>
+                        <div style="font-size: 12px; color: #D500F9; text-transform: uppercase; margin-top: 20px; margin-bottom: 2px; font-weight: bold; letter-spacing: 1px; text-align: center;">Genoma Base</div>
+                        <div style="font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 1px; text-align: center; margin-bottom: 8px;">
+                            <span style="color:#4CAF50; font-weight:bold;">D:</span> Dominante &nbsp;&nbsp;|&nbsp;&nbsp; <span style="color:#f44336; font-weight:bold;">R:</span> Recesivos
+                        </div>
                         ${buildDRSlotCompact("FORMA", g.genes.cuerpo)}
                         ${buildDRSlotCompact("AFINIDAD", g.genes.afinidad)}
                         ${buildDRSlotCompact("OJOS", g.genes.ojos)}
