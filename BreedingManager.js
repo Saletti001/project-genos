@@ -1,5 +1,5 @@
 // =========================================
-// BreedingManager.js - UI DEL CENTRO DE CRIANZA Y BIO-NÚCLEOS (V9.6 - FIX LÍMITE DE CAPACIDAD)
+// BreedingManager.js - UI DEL CENTRO DE CRIANZA Y BIO-NÚCLEOS (V9.7 - FIX CÁLCULO DE RAREZA Y DEFENSA)
 // =========================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
         #incubator-grid::-webkit-scrollbar { display: none; }
         #incubator-grid { -ms-overflow-style: none; scrollbar-width: none; overflow-x: auto; }
         
-        /* ✨ FIX ABSOLUTO: Centrado perfecto al 100% sin padding destructivo */
         #geno-id-card-modal:not(.hidden) {
             position: absolute !important;
             top: 0 !important; 
@@ -20,23 +19,22 @@ document.addEventListener("DOMContentLoaded", () => {
             align-items: center !important;
             justify-content: center !important;
             z-index: 9999 !important;
-            background: transparent !important; /* Sin oscurecer el fondo */
+            background: transparent !important; 
             box-sizing: border-box !important;
         }
         
         #geno-id-card-modal > div {
-            width: 90% !important; /* Deja un 5% de margen natural a cada lado */
+            width: 90% !important; 
             max-width: 400px !important; 
             max-height: 85vh !important;
             overflow-y: auto !important; 
             -ms-overflow-style: none; 
             scrollbar-width: none;
             box-sizing: border-box !important;
-            margin: 0 !important; /* Evita que márgenes heredados lo desvíen */
+            margin: 0 !important; 
             position: relative;
         }
         
-        /* Oculta la barra de scroll para mantener el estilo limpio */
         #geno-id-card-modal > div::-webkit-scrollbar { display: none; }
         
         #breeding-selector h3, 
@@ -111,7 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if(!g.level) g.level = 1;
             if(g.breedCount === undefined) g.breedCount = 0;
             if(g.generation === undefined) g.generation = 0;
-            if(!g.stats) g.stats = { hp: 50, atk: 15, spd: 15, luk: 15 };
+            if(!g.stats) g.stats = { hp: 50, atk: 15, spd: 15, luk: 15, def: 10 };
         });
         if(window.miMascota && window.miMascota.breedCount === undefined) window.miMascota.breedCount = 0;
     }
@@ -552,21 +550,26 @@ document.addEventListener("DOMContentLoaded", () => {
                     return Math.floor(base * multiplicador);
                 };
 
+                // ✨ FIX DE LA DEFENSA PERDIDA: Añadimos la herencia de la defensa
                 const statsHijo = {
                     hp: typeof window.heredarStat === 'function' ? window.heredarStat(padre1.stats?.hp || 50, padre2.stats?.hp || 50) : varianza(padre1.stats?.hp || 50, padre2.stats?.hp || 50),
                     atk: typeof window.heredarStat === 'function' ? window.heredarStat(padre1.stats?.atk || 15, padre2.stats?.atk || 15) : varianza(padre1.stats?.atk || 15, padre2.stats?.atk || 15),
+                    def: typeof window.heredarStat === 'function' ? window.heredarStat(padre1.stats?.def || 10, padre2.stats?.def || 10) : varianza(padre1.stats?.def || 10, padre2.stats?.def || 10),
                     spd: typeof window.heredarStat === 'function' ? window.heredarStat(padre1.stats?.spd || 15, padre2.stats?.spd || 15) : varianza(padre1.stats?.spd || 15, padre2.stats?.spd || 15),
                     luk: typeof window.heredarStat === 'function' ? window.heredarStat(padre1.stats?.luk || 15, padre2.stats?.luk || 15) : varianza(padre1.stats?.luk || 15, padre2.stats?.luk || 15)
                 };
 
-                let totalStats = statsHijo.hp + statsHijo.atk + statsHijo.spd + statsHijo.luk;
+                // ✨ FIX CÁLCULO DE RAREZA MATEMÁTICAMENTE CORRECTO
+                let totalStats = statsHijo.hp + statsHijo.atk + statsHijo.def + statsHijo.spd + statsHijo.luk;
                 let rarezaHijo = "Común";
                 
                 if (window.TABLA_IVS) {
-                    const reqMitico = (window.TABLA_IVS["Mítico"].hp[0] + window.TABLA_IVS["Mítico"].atk[0] + window.TABLA_IVS["Mítico"].spd[0] + window.TABLA_IVS["Mítico"].luk[0]) * 0.8;
-                    const reqLegend = (window.TABLA_IVS["Legendario"].hp[0] + window.TABLA_IVS["Legendario"].atk[0] + window.TABLA_IVS["Legendario"].spd[0] + window.TABLA_IVS["Legendario"].luk[0]) * 0.8;
-                    const reqEpico = (window.TABLA_IVS["Épico"].hp[0] + window.TABLA_IVS["Épico"].atk[0] + window.TABLA_IVS["Épico"].spd[0] + window.TABLA_IVS["Épico"].luk[0]) * 0.8;
-                    const reqRaro = (window.TABLA_IVS["Raro"].hp[0] + window.TABLA_IVS["Raro"].atk[0] + window.TABLA_IVS["Raro"].spd[0] + window.TABLA_IVS["Raro"].luk[0]) * 0.8;
+                    const getMinimo = (rarity) => window.TABLA_IVS[rarity].hp[0] + window.TABLA_IVS[rarity].atk[0] + window.TABLA_IVS[rarity].def[0] + window.TABLA_IVS[rarity].spd[0] + window.TABLA_IVS[rarity].luk[0];
+
+                    const reqMitico = getMinimo("Mítico");
+                    const reqLegend = getMinimo("Legendario");
+                    const reqEpico = getMinimo("Épico");
+                    const reqRaro = getMinimo("Raro");
                     
                     if (totalStats >= reqMitico) rarezaHijo = "Mítico";
                     else if (totalStats >= reqLegend) rarezaHijo = "Legendario";
@@ -740,7 +743,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 const restante = huevo.hatchTime - Date.now();
                 if (restante > 0) {
                     card.querySelector(`#btn-skip-${huevo.id}`)?.addEventListener("click", () => {
-                        // ✨ FIX CAPACIDAD: Verifica antes de gastar el POL y eclosionar
                         const genosActivos = (window.misGenos || []).filter(g => !g.isEgg).length;
                         const max = window.maxGenoSlots || 6;
                         if (genosActivos >= max) {
@@ -764,7 +766,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
                 } else {
                     card.querySelector(`#btn-claim-${huevo.id}`)?.addEventListener("click", () => {
-                        // ✨ FIX CAPACIDAD: Verifica antes de reclamar
                         const genosActivos = (window.misGenos || []).filter(g => !g.isEgg).length;
                         const max = window.maxGenoSlots || 6;
                         if (genosActivos >= max) {
