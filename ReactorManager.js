@@ -1,5 +1,5 @@
 // =========================================
-// ReactorManager.js - FUSIONES Y MUTACIONES (V15.1 - FIX CALCULADORA Y MUTACIONES SEGURAS)
+// ReactorManager.js - FUSIONES Y MUTACIONES (V15.2 - FIX CRÍTICO: CUELGUE EN ANIMACIÓN)
 // =========================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -10,11 +10,11 @@ document.addEventListener("DOMContentLoaded", () => {
         window.calcularCalidad = function(stats, rareza, nivel) {
             let rLimpia = rareza || "Común";
             if (typeof rLimpia === "string" && rLimpia.includes("+")) {
-                rLimpia = rLimpia.replace("+", ""); // Lo evalúa como la clase base
+                rLimpia = rLimpia.replace("+", ""); 
             }
             return calcOriginal(stats, rLimpia, nivel);
         };
-        window.calcularCalidadParcheada = true; // Evita que se inyecte dos veces
+        window.calcularCalidadParcheada = true; 
     }
 
     // ✨ ESTILOS
@@ -379,7 +379,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     
                     const limiteCritico = reglas.probCrit;
                     const limiteNormal = limiteCritico + reglas.probNorm;
-                    const limiteEstancada = limiteNormal + probStag;
+                    
+                    // ✨ FIX CRÍTICO: Aquí estaba el error tipográfico (probStag -> reglas.probStag)
+                    const limiteEstancada = limiteNormal + reglas.probStag;
 
                     const inyectarNuevoMutante = (resultado) => {
                         const baseRarity = resultado.rarity.replace("+", "");
@@ -393,7 +395,6 @@ document.addEventListener("DOMContentLoaded", () => {
                             statsBase.luk = Math.floor(statsBase.luk * 1.15);
                         }
 
-                        // ✨ FIX MAESTRO: Nombres de SVG seguros y exclusión de caras "normales".
                         const ojosMutantes = ["alien", "ciclope", "furioso", "bizco"];
                         const bocasMutantes = ["colmillos", "babeando", "cremallera", "triste"];
                         
