@@ -1,16 +1,16 @@
 // =========================================
-// ReactorManager.js - FUSIONES Y MUTACIONES (V14.7 - FIX LÍNEAS DE FONDO Y UI CIAN)
+// ReactorManager.js - FUSIONES Y MUTACIONES (V14.8 - FIX LÍNEAS FINAS DE FONDO)
 // =========================================
 
 document.addEventListener("DOMContentLoaded", () => {
     
-    // ✨ INYECCIÓN DE ESTILOS: Forzamos el aspecto visual exacto de la pantalla principal
+    // ✨ INYECCIÓN DE ESTILOS: Fondo corregido con líneas de 1px
     const style = document.createElement('style');
     style.innerHTML = `
-        /* 1. Fondo Cian con líneas horizontales (Separación y opacidad corregidas) */
+        /* 1. Fondo Cian con líneas horizontales finas (1px) y separadas (6px total) */
         #alchemy-screen {
             background-color: #4dd0e1 !important;
-            background-image: repeating-linear-gradient(0deg, transparent, transparent 4px, rgba(0,0,0,0.03) 4px, rgba(0,0,0,0.03) 8px) !important;
+            background-image: repeating-linear-gradient(to bottom, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 6px) !important;
             height: 100vh !important;
             overflow-y: auto !important;
             padding: 20px !important;
@@ -137,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
             margin-top: 20px !important;
         }
         
-        /* ✨ FIX MAESTRO: Botón Volver al Laboratorio Sólido y Sin Bordes */
+        /* Botón Volver al Laboratorio Sólido y Sin Bordes */
         #alchemy-screen .btn-go-home {
             background: #0f172a !important; 
             color: #4dd0e1 !important;
@@ -157,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     document.head.appendChild(style);
 
-    // ✨ DOM SCRIPT: Empaquetamos todo en una caja negra (panel) y dejamos el botón original afuera
+    // ✨ DOM SCRIPT: Empaquetamos todo en una caja negra (panel)
     setTimeout(() => {
         const alchemyScreen = document.getElementById("alchemy-screen");
         if (alchemyScreen && !alchemyScreen.querySelector('.reactor-panel-wrapper')) {
