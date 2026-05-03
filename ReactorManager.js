@@ -1,5 +1,5 @@
 // =========================================
-// ReactorManager.js - FUSIONES Y MUTACIONES (V15.6 - RULETA COMPLETA DE CARAS.JS)
+// ReactorManager.js - FUSIONES Y MUTACIONES (V15.7 - ALEATORIEDAD DE CUERPO, COLOR Y ELEMENTO)
 // =========================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -186,21 +186,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const reactorRules = {
         "1": { 
             reqRarity: "Común", cost: 100, probCrit: 3, probNorm: 35, probStag: 35, 
-            resCrit: { rarity: "Épico", name: "Mutante Primordial", color: "#8A2BE2", shape: "estrella", element: "Sintético" },
-            resNorm: { rarity: "Raro", name: "Geno Evolucionado", color: "#4169E1", shape: "frijol", element: "Cibernético" },
-            resStag: { rarity: "Común+", name: "Superviviente", color: "#32CD32", shape: "gota", element: "Biomutante" }
+            resCrit: { rarity: "Épico" },
+            resNorm: { rarity: "Raro" },
+            resStag: { rarity: "Común+" }
         },
         "2": { 
             reqRarity: "Raro", cost: 500, probCrit: 0.5, probNorm: 25, probStag: 35, 
-            resCrit: { rarity: "Legendario", name: "Anomalía Leyenda", color: "#FFD700", shape: "estrella", element: "Radiactivo" },
-            resNorm: { rarity: "Épico", name: "Geno Superior", color: "#8A2BE2", shape: "estrella", element: "Sintético" },
-            resStag: { rarity: "Raro+", name: "Veterano Raro", color: "#4169E1", shape: "frijol", element: "Cibernético" }
+            resCrit: { rarity: "Legendario" },
+            resNorm: { rarity: "Épico" },
+            resStag: { rarity: "Raro+" }
         },
         "3": { 
             reqRarity: "Épico", cost: 2500, probCrit: 0.1, probNorm: 5, probStag: 40, 
-            resCrit: { rarity: "Mítico", name: "Dios Primigenio", color: "#ff4d4d", shape: "estrella", element: "Viral" },
-            resNorm: { rarity: "Legendario", name: "Mito Viviente", color: "#FFD700", shape: "estrella", element: "Radiactivo" },
-            resStag: { rarity: "Épico+", name: "Titán Épico", color: "#8A2BE2", shape: "estrella", element: "Sintético" }
+            resCrit: { rarity: "Mítico" },
+            resNorm: { rarity: "Legendario" },
+            resStag: { rarity: "Épico+" }
         }
     };
 
@@ -393,38 +393,32 @@ document.addEventListener("DOMContentLoaded", () => {
                             statsBase.luk = Math.floor(statsBase.luk * 1.15);
                         }
 
-                        // ✨ FIX MAESTRO: Tomamos TODAS las caras disponibles de tu diccionario
-                        // Se verifica si dicOjos y dicBocas existen (desde tu caras.js), 
-                        // sino, usa un respaldo con TODAS las keys exactas que me pasaste.
-                        const todosLosOjos = typeof dicOjos !== 'undefined' ? Object.keys(dicOjos) : [
-                            "base_brillo", "guisante_clasico", "nuez_defensa", "girasol_feliz", "feliz_curva", 
-                            "feroz_jalapeno", "furia_roja", "amenaza_toxica", "berzerker", "furia_cejas_premium", 
-                            "furia_ceno_premium", "rabia_dilatada_premium", "feroz", "derpy_bizco", "hipnotico_magico", 
-                            "hipnotico", "cansado_ojeras", "derpy", "cicatriz", "sorprendido", "cansado", "puntos", 
-                            "ceja_levantada", "pupila_vertical", "gafas", "cyber_visor", "robot_ojo_rojo", 
-                            "monoculo_tactico", "foco_luminoso", "foco", "ninja_sombra", "ninja", "felino_cazador", 
-                            "felino", "target_escaner", "visor_blindado", "toxico_derretido", "mutacion_asimetrica", 
-                            "anillos_nucleares", "glitch_digital", "hex_optico", "ojos_cosidos", "vacio_oscuro", 
-                            "agujeros_negros", "mosca_mutante", "error_fatal", "parasito_cerebral", "espiral_neon", 
-                            "ciclope_mecanico", "llanto_toxico", "visor_rejilla", "sangre_bioluminiscente", "tres_ojos"
-                        ];
+                        // ✨ FIX MAESTRO: Cuerpos, Colores y Elementos Aleatorios
+                        const formasMutantes = ["gota", "frijol", "estrella"]; 
+                        const elementosMutantes = ["Cibernético", "Biomutante", "Sintético", "Radiactivo", "Viral", "Tóxico", "Fuego", "Agua", "Planta", "Eléctrico"];
+                        
+                        const formaElegida = formasMutantes[Math.floor(Math.random() * formasMutantes.length)];
+                        const elementoElegido = elementosMutantes[Math.floor(Math.random() * elementosMutantes.length)];
+                        
+                        // Generador de Color HEX aleatorio
+                        const randomColorHex = "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
 
+                        // Caras Aleatorias
+                        const todosLosOjos = typeof dicOjos !== 'undefined' ? Object.keys(dicOjos) : [
+                            "mutacion_asimetrica", "ojos_cosidos", "vacio_oscuro", 
+                            "agujeros_negros", "mosca_mutante", "error_fatal", 
+                            "parasito_cerebral", "glitch_digital", "tres_ojos", "derpy_bizco"
+                        ];
                         const todasLasBocas = typeof dicBocas !== 'undefined' ? Object.keys(dicBocas) : [
-                            "base", "abierta_feliz", "risita_gato", "canon_guisante", "depredador_carnivora", 
-                            "grunido_colmillos", "apretado_furia", "grito_batalla", "derpy_lengua", "diente_solitario", 
-                            "trompa_hielo", "torcida_esceptico", "diente_unico", "boca_X", "labios", "rejilla_robot", 
-                            "mandibula_mecha", "vampiro_noble", "barba_ruda", "grunido", "apretado", "vampiro_3_corregida", 
-                            "canon", "recta_seria", "furia_ceno_boca_premium", "rejilla_ventilacion", "boca_cosida", 
-                            "placa_remachada", "conector_plano", "fauces_toxicas", "ecualizador_led", "mandibula_bulldog", 
-                            "trituradora_engranajes", "cicatriz_energia", "sanguijuela_alien", "sonrisa_derretida", 
-                            "pantalla_led_rota", "esqueleto_expuesto", "tubo_alimentacion", "cremallera_cerrada", 
-                            "sonrisa_cheshire_cyber", "mandibula_zombi", "agujero_negro", "brackets_metalicos", 
-                            "fauces_multiples", "tubos_escape", "placa_base", "labios_grapados"
+                            "depredador_carnivora", "grunido_colmillos", "boca_cosida", 
+                            "fauces_toxicas", "sanguijuela_alien", "sonrisa_derretida", 
+                            "mandibula_zombi", "fauces_multiples", "labios_grapados", "cremallera_cerrada"
                         ];
                         
                         const ojoElegido = todosLosOjos[Math.floor(Math.random() * todosLosOjos.length)];
                         const bocaElegida = todasLasBocas[Math.floor(Math.random() * todasLasBocas.length)];
 
+                        // Nombres Aleatorios
                         const nuevoId = typeof window.generarNuevoID === 'function' ? window.generarNuevoID() : Date.now();
                         const prefijos = ["Neo", "Bio", "Geno", "Cyto", "Viro", "Rad", "Syn", "Evo", "Nexo", "Mut"];
                         const sufijos = ["-X", "-Prime", "morph", "cyte", "tron", "plasm", "-7", "core", "gen", "-Z"];
@@ -434,9 +428,9 @@ document.addEventListener("DOMContentLoaded", () => {
                             id: nuevoId,
                             name: nombreAleatorio, 
                             rarity: resultado.rarity,
-                            element: resultado.element,
-                            base_color: resultado.color, color: resultado.color,
-                            body_shape: resultado.shape, 
+                            element: elementoElegido,
+                            base_color: randomColorHex, color: randomColorHex,
+                            body_shape: formaElegida, 
                             eye_type: ojoElegido, 
                             mouth_type: bocaElegida,
                             wing_type: "ninguno", hat_type: "ninguno",
@@ -445,12 +439,12 @@ document.addEventListener("DOMContentLoaded", () => {
                             hidden_genes: window.generarGenesV9 ? window.generarGenesV9(baseRarity) : {A:null, B:null, C:null},
                             scanned: false,
                             genes: {
-                                cuerpo: { dom: resultado.shape, rec: resultado.shape },
+                                cuerpo: { dom: formaElegida, rec: formaElegida },
                                 ojos: { dom: ojoElegido, rec: ojoElegido },
                                 boca: { dom: bocaElegida, rec: bocaElegida },
                                 espalda: { dom: "ninguno", rec: "ninguno" },
                                 cabeza: { dom: "ninguno", rec: "ninguno" },
-                                afinidad: { dom: resultado.element, rec: resultado.element }
+                                afinidad: { dom: elementoElegido, rec: elementoElegido }
                             }
                         };
                         window.misGenos.push(mutante);
