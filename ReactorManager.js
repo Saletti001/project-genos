@@ -1,5 +1,5 @@
 // =========================================
-// ReactorManager.js - FUSIONES Y MUTACIONES (V14.14 - FIX LIMPIEZA DE RAREZAS HEREDADAS)
+// ReactorManager.js - FUSIONES Y MUTACIONES (V14.15 - FIX TAMAÑO Y BORDES DE MUESTRAS)
 // =========================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const style = document.createElement('style');
     style.innerHTML = `
         /* Fondo Cian con líneas horizontales finas */
-        #alchemy-screen {
+        #alchemy-screen:not(.hidden) {
             background-color: #4dd0e1 !important;
             background-image: repeating-linear-gradient(to bottom, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 6px) !important;
             height: 100vh !important;
@@ -217,7 +217,6 @@ document.addEventListener("DOMContentLoaded", () => {
     window.renderizarAlquimia = function() {
         if(!selectNivel) return;
         
-        // 🔧 FIX MAESTRO: Limpieza de rarezas corruptas ("Común+", "Raro+", etc.) del guardado antiguo.
         if (window.misGenos && window.misGenos.length > 0) {
             let modificado = false;
             window.misGenos.forEach(g => {
@@ -226,7 +225,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     modificado = true;
                 }
             });
-            // Si curamos algún ADN corrupto, guardamos la partida automáticamente
             if (modificado && typeof window.guardarProgreso === 'function') window.guardarProgreso();
         }
 
@@ -242,7 +240,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const costEl = document.getElementById("reactor-cost-display");
         if(costEl) costEl.innerText = reglas.cost + " ✨";
 
-        // Aquí filtramos: Tiene que ser de la rareza, NO ser huevo, y NO ser tu mascota activa.
         const genosDisponibles = window.misGenos.filter(g => g.rarity === reglas.reqRarity && !g.isEgg && (!window.miMascota || window.miMascota.id !== g.id));
         
         const countEl = document.getElementById("alchemy-common-count");
@@ -294,13 +291,16 @@ document.addEventListener("DOMContentLoaded", () => {
             } else {
                 genosLibres.forEach(geno => {
                     const card = document.createElement("div");
-                    card.style = "min-width: 50px; height: 50px; background: #0d1a24; border: 1px solid #384a5e; border-radius: 10px; display: flex; justify-content: center; align-items: center; cursor: pointer; flex-shrink: 0; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.1s;";
+                    
+                    // ✨ FIX APLICADO: Fondo transparente, sin bordes, con sombra sutil para flotar libremente
+                    card.style = "min-width: 55px; height: 55px; background: transparent; border: none; display: flex; justify-content: center; align-items: center; cursor: pointer; flex-shrink: 0; transition: transform 0.1s; filter: drop-shadow(0 4px 4px rgba(0,0,0,0.4));";
                     
                     const pColor = geno.color || geno.base_color || "#ccc";
                     let svg = typeof window.generarSvgGeno === 'function' ? window.generarSvgGeno(geno) : '';
                     svg = svg.replace(/<svg[^>]*>/, '<svg width="100%" height="100%" viewBox="-20 0 200 160" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="overflow: visible;">');
                     
-                    card.innerHTML = `<div style="width: 40px; height: 40px; color: ${pColor}; display: flex; justify-content: center; align-items: center;">${svg}</div>`;
+                    // Aumentado el tamaño del contenedor del SVG para aprovechar el espacio extra sin bordes
+                    card.innerHTML = `<div style="width: 55px; height: 55px; color: ${pColor}; display: flex; justify-content: center; align-items: center;">${svg}</div>`;
                     
                     card.addEventListener("mousedown", () => card.style.transform = "scale(0.9)");
                     card.addEventListener("mouseup", () => card.style.transform = "scale(1)");
