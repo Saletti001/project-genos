@@ -1,6 +1,36 @@
 // =========================================
-// ReactorManager.js - FUSIONES Y MUTACIONES (V15.11 - FIX CÁLCULO NATIVO DE CALIDAD +)
+// ReactorManager.js - FUSIONES Y MUTACIONES (V15.12 - FIX COLORES VIBRANTES)
 // =========================================
+
+// ✨ PARCHE GLOBAL INTELIGENTE: Ejecutamos un radar que busca la calculadora hasta atraparla
+let intentosParche = 0;
+const intervalParche = setInterval(() => {
+    if (typeof window.calcularCalidad === "function" && !window.calcularCalidadParcheada) {
+        const calcOriginal = window.calcularCalidad; 
+        
+        window.calcularCalidad = function(stats, rareza, nivel) {
+            let rLimpia = rareza || "Común";
+            let sClon = { ...stats }; 
+
+            if (typeof rLimpia === "string" && rLimpia.includes("+")) {
+                rLimpia = rLimpia.replace("+", ""); 
+                if (sClon.hp !== undefined) {
+                    sClon.hp = Math.round(sClon.hp / 1.15);
+                    sClon.atk = Math.round(sClon.atk / 1.15);
+                    sClon.def = Math.round(sClon.def / 1.15);
+                    sClon.spd = Math.round(sClon.spd / 1.15);
+                    sClon.luk = Math.round(sClon.luk / 1.15);
+                }
+            }
+            return calcOriginal(sClon, rLimpia, nivel);
+        };
+        window.calcularCalidadParcheada = true;
+        clearInterval(intervalParche); 
+    }
+    
+    intentosParche++;
+    if (intentosParche > 100) clearInterval(intervalParche); 
+}, 100);
 
 document.addEventListener("DOMContentLoaded", () => {
     
@@ -128,7 +158,6 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     document.head.appendChild(style);
 
-    // ✨ DOM SCRIPT
     setTimeout(() => {
         const alchemyScreen = document.getElementById("alchemy-screen");
         const breedingScreen = document.getElementById("breeding-screen");
@@ -372,13 +401,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         const baseRarity = resultado.rarity.replace("+", "");
                         let statsBase = window.generarStatsPorRareza ? window.generarStatsPorRareza(baseRarity) : { hp: 50, atk: 15, def: 10, spd: 15, luk: 15 };
                         
-                        // ✨ FIX: CALCULADORA NATIVA DE MUTANTES (Para guardar el rango original)
                         if (resultado.rarity.includes("+")) {
-                            // Extraemos la tabla que usa app.js (TABLA_IVS) porque es la correcta que incluye Defensa
                             const tablaStats = window.TABLA_IVS || window.ESCALA_RAREZAS; 
                             const limites = tablaStats[baseRarity] || tablaStats["Común"];
                             
-                            // Calculamos la calidad ORIGINAL antes de inflar los números
                             let tMin = limites.hp[0] + limites.atk[0] + (limites.def ? limites.def[0] : 0) + limites.spd[0] + limites.luk[0];
                             let tMax = limites.hp[1] + limites.atk[1] + (limites.def ? limites.def[1] : 0) + limites.spd[1] + limites.luk[1];
                             let tObt = statsBase.hp + statsBase.atk + (statsBase.def || 0) + statsBase.spd + statsBase.luk;
@@ -388,19 +414,17 @@ document.addEventListener("DOMContentLoaded", () => {
                             if (pct < 0) pct = 0;
 
                             let rangoOriginal = "D";
-                            if (pct >= 90) rangoOriginal = "S";      // Según tu app.js S es 90
-                            else if (pct >= 75) rangoOriginal = "A"; // Según tu app.js A es 75
+                            if (pct >= 90) rangoOriginal = "S";      
+                            else if (pct >= 75) rangoOriginal = "A"; 
                             else if (pct >= 50) rangoOriginal = "B";
                             else if (pct >= 25) rangoOriginal = "C";
 
-                            // Ahora sí, le inyectamos la radiación para que sea una bestia
                             statsBase.hp = Math.floor(statsBase.hp * 1.15);
                             statsBase.atk = Math.floor(statsBase.atk * 1.15);
                             if (statsBase.def) statsBase.def = Math.floor(statsBase.def * 1.15);
                             statsBase.spd = Math.floor(statsBase.spd * 1.15);
                             statsBase.luk = Math.floor(statsBase.luk * 1.15);
                             
-                            // Guardamos la calidad sellada genéticamente para que RPGManager no la sobrescriba
                             statsBase.rango = rangoOriginal;
                             statsBase.calidadPorcentaje = pct;
                         }
@@ -411,7 +435,23 @@ document.addEventListener("DOMContentLoaded", () => {
                         const formaElegida = formasMutantes[Math.floor(Math.random() * formasMutantes.length)];
                         const elementoElegido = elementosMutantes[Math.floor(Math.random() * elementosMutantes.length)];
                         
-                        const randomColorHex = "#" + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+                        // ✨ FIX MAESTRO: Generador de colores HSL vibrantes (evita negros y grises)
+                        const generarColorVibrante = () => {
+                            const h = Math.floor(Math.random() * 360); 
+                            const s = Math.floor(Math.random() * 40) + 60; // 60% a 100% de saturación
+                            const l = Math.floor(Math.random() * 30) + 55; // 55% a 85% de luminosidad
+                            
+                            const l_dec = l / 100;
+                            const a = (s / 100) * Math.min(l_dec, 1 - l_dec);
+                            const f = n => {
+                                const k = (n + h / 30) % 12;
+                                const color = l_dec - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+                                return Math.round(255 * color).toString(16).padStart(2, '0');
+                            };
+                            return `#${f(0)}${f(8)}${f(4)}`;
+                        };
+
+                        const randomColorHex = generarColorVibrante();
 
                         const todosLosOjos = typeof dicOjos !== 'undefined' ? Object.keys(dicOjos) : [
                             "mutacion_asimetrica", "ojos_cosidos", "vacio_oscuro", 
