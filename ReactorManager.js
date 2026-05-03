@@ -1,35 +1,79 @@
 // =========================================
-// ReactorManager.js - FUSIONES Y MUTACIONES (V14.10 - CLONACIÓN DINÁMICA DEL DOM)
+// ReactorManager.js - FUSIONES Y MUTACIONES (V14.11 - LA MEZCLA PERFECTA VISUAL + BOTÓN GLOBAL)
 // =========================================
 
 document.addEventListener("DOMContentLoaded", () => {
     
-    // ✨ ESTILOS INTERNOS: Solo afectamos los botoncitos propios del reactor, cero fondos globales.
+    // ✨ INYECCIÓN DE ESTILOS: Recuperamos el panel oscuro y el fondo cian, ignorando el botón global
     const style = document.createElement('style');
     style.innerHTML = `
-        /* Descripción interna */
+        /* 1. Fondo Cian con líneas horizontales finas y disposición Flex para empujar el botón al fondo */
+        #alchemy-screen {
+            background-color: #4dd0e1 !important;
+            background-image: repeating-linear-gradient(to bottom, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 6px) !important;
+            height: 100vh !important;
+            overflow-y: auto !important;
+            padding: 20px !important;
+            box-sizing: border-box !important;
+            display: flex !important;
+            flex-direction: column !important;
+        }
+
+        /* 2. Caja Negra Central (Usa margin-bottom: auto para empujar el botón hacia abajo) */
+        #alchemy-screen .reactor-panel-wrapper {
+            background: #1a2a36 !important;
+            border: none !important;
+            border-radius: 16px !important;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4) !important;
+            padding: 25px 20px !important;
+            margin-bottom: auto !important;
+        }
+
+        /* Limpieza de contenedores internos heredados */
+        #alchemy-screen .reactor-panel-wrapper > div {
+            border: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+            padding: 0 !important;
+        }
+        
+        /* 3. Título Principal */
+        #alchemy-screen h2 {
+            color: #4dd0e1 !important;
+            text-shadow: none !important;
+            text-transform: uppercase !important;
+            letter-spacing: 2px !important;
+            margin: 0 0 15px 0 !important;
+            font-weight: bold !important;
+            text-align: center !important;
+            font-size: 16px !important;
+            border-bottom: 1px solid rgba(255,255,255,0.05) !important;
+            padding-bottom: 15px !important;
+        }
+        
+        /* 4. Descripción */
         #reactor-description {
-            color: #888;
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-align: center;
-            line-height: 1.4;
+            color: #888 !important;
+            font-size: 10px !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1px !important;
+            font-weight: bold !important;
+            margin-bottom: 20px !important;
+            text-align: center !important;
+            line-height: 1.4 !important;
         }
 
         /* Selector de Nivel */
         select#reactor-level-select {
-            background: #0d1a24;
-            color: #4dd0e1;
-            border: 1px solid #111c24;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 11px;
-            letter-spacing: 1px;
+            background: #0d1a24 !important;
+            color: #4dd0e1 !important;
+            border: 1px solid #111c24 !important;
+            padding: 12px !important;
+            border-radius: 8px !important;
+            font-weight: bold !important;
+            text-transform: uppercase !important;
+            font-size: 11px !important;
+            letter-spacing: 1px !important;
             outline: none;
             cursor: pointer;
             width: 100%;
@@ -37,25 +81,31 @@ document.addEventListener("DOMContentLoaded", () => {
             text-align: center;
             box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
         }
-        select#reactor-level-select option { background: #0d1a24; color: #4dd0e1; }
+        
+        select#reactor-level-select option {
+            background: #0d1a24;
+            color: #4dd0e1;
+        }
 
         /* Textos de Costo y Disponibles */
         #alchemy-screen p:has(span#alchemy-common-count),
         #alchemy-screen p:has(span#reactor-cost-display) {
-            display: flex;
-            justify-content: space-between;
-            color: #fff;
-            font-size: 11px;
-            border-bottom: 1px dashed rgba(255,255,255,0.1);
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            display: flex !important;
+            justify-content: space-between !important;
+            color: #fff !important;
+            font-size: 11px !important;
+            border-bottom: 1px dashed rgba(255,255,255,0.1) !important;
+            padding-bottom: 10px !important;
+            margin-bottom: 20px !important;
+            font-weight: normal !important;
         }
 
         /* Caja de genos para cargar */
         #reactor-available-genos {
-            background: #0d1a24; 
-            border-radius: 12px;
-            padding: 15px;
+            background: #0d1a24 !important; 
+            border: none !important;
+            border-radius: 12px !important;
+            padding: 15px !important;
             min-height: 70px;
             display: flex;
             gap: 10px;
@@ -67,93 +117,61 @@ document.addEventListener("DOMContentLoaded", () => {
         #reactor-available-genos::-webkit-scrollbar { display: none; }
         
         #reactor-available-genos-container > p, p.instruction-text {
-            color: #64748b;
-            font-size: 10px;
-            margin-bottom: 8px;
-            text-align: left;
+            color: #64748b !important;
+            font-size: 10px !important;
+            margin-bottom: 8px !important;
+            text-align: left !important;
+            text-transform: none !important;
+            font-weight: normal !important;
         }
 
-        /* Botón de Acción Principal (El de iniciar fusión) */
+        /* Botón de Acción Principal (El de adentro) */
         #btn-fuse-genos {
-            border-radius: 10px;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            padding: 15px;
-            transition: all 0.3s ease;
-            border: none;
-            color: #fff;
+            border-radius: 10px !important;
+            font-weight: 900 !important;
+            text-transform: uppercase !important;
+            letter-spacing: 1px !important;
+            padding: 15px !important;
+            transition: all 0.3s ease !important;
+            border: none !important;
+            color: #fff !important;
             width: 100%;
-            margin-top: 20px;
+            margin-top: 20px !important;
         }
+        
+        /* ¡ATENCIÓN! No hay reglas para .btn-go-home aquí. Dejamos que tu CSS global brille con su neón. */
     `;
     document.head.appendChild(style);
 
-    // ✨ MAGIA DE CLONACIÓN: Copiamos la ropa del Centro de Crianza al Reactor
+    // ✨ DOM SCRIPT: Empaquetamos todo en una caja negra (panel) y dejamos el botón original AFUERA intacto
     setTimeout(() => {
         const alchemyScreen = document.getElementById("alchemy-screen");
-        const breedingScreen = document.getElementById("breeding-screen");
-
-        if (alchemyScreen && breedingScreen) {
+        if (alchemyScreen && !alchemyScreen.querySelector('.reactor-panel-wrapper')) {
             
-            // 1. Clonamos las clases de fondo (Pantalla Cian)
-            alchemyScreen.className = breedingScreen.className;
+            const wrapper = document.createElement("div");
+            wrapper.className = "reactor-panel-wrapper";
             
-            // 2. Clonamos la caja negra central
-            if (!alchemyScreen.querySelector('.reactor-panel-wrapper')) {
-                const breedingPanel = breedingScreen.querySelector('div');
-                const wrapper = document.createElement("div");
-                
-                if (breedingPanel) {
-                    wrapper.className = breedingPanel.className + " reactor-panel-wrapper";
-                    wrapper.style.cssText = breedingPanel.style.cssText;
-                } else {
-                    wrapper.className = "reactor-panel-wrapper panel";
-                }
-                
-                // Metemos los controles del reactor a la nueva caja clonada
-                Array.from(alchemyScreen.children).forEach(child => {
-                    if (!child.classList.contains('btn-go-home') && child !== wrapper && child.tagName !== 'STYLE') {
-                        if(child.tagName === 'DIV') {
-                            child.style.border = "none";
-                            child.style.boxShadow = "none";
-                            child.style.background = "transparent";
-                            child.style.padding = "0";
-                        }
-                        wrapper.appendChild(child);
+            Array.from(alchemyScreen.children).forEach(child => {
+                // Movemos todo al wrapper, EXCEPTO el botón de volver
+                if (!child.classList.contains('btn-go-home') && child !== wrapper) {
+                    if(child.tagName === 'DIV') {
+                        child.style.border = "none";
+                        child.style.boxShadow = "none";
+                        child.style.background = "transparent";
+                        child.style.padding = "0";
                     }
-                });
-                
-                const btnVolver = alchemyScreen.querySelector('.btn-go-home');
-                if (btnVolver) { alchemyScreen.insertBefore(wrapper, btnVolver); } 
-                else { alchemyScreen.appendChild(wrapper); }
-                
-                // Clonamos el estilo del Título
-                const titleEl = wrapper.querySelector("h2");
-                const titleCrianza = breedingScreen.querySelector("h2");
-                if (titleEl && titleCrianza) {
-                    titleEl.innerText = "REACTOR GENÉTICO";
-                    titleEl.className = titleCrianza.className;
-                    titleEl.style.cssText = titleCrianza.style.cssText;
+                    wrapper.appendChild(child);
                 }
-            }
-
-            // 3. EL TOQUE MÁGICO: Clonamos el Botón Neón de Volver
-            const btnCrianza = breedingScreen.querySelector('.btn-go-home');
-            const btnReactor = alchemyScreen.querySelector('.btn-go-home');
+            });
             
-            if (btnCrianza && btnReactor) {
-                // Le robamos literalmente las clases y los estilos en línea al botón de crianza
-                btnReactor.className = btnCrianza.className;
-                btnReactor.style.cssText = btnCrianza.style.cssText;
-                
-                // Si el botón de Crianza tiene spans internos para hacer el brillo de neón, los copiamos
-                if (btnCrianza.innerHTML !== btnReactor.innerHTML && btnCrianza.innerText.trim().toUpperCase() === "VOLVER AL LABORATORIO") {
-                    btnReactor.innerHTML = btnCrianza.innerHTML;
-                }
+            alchemyScreen.insertBefore(wrapper, alchemyScreen.firstChild);
+            
+            const titleEl = wrapper.querySelector("h2");
+            if (titleEl) {
+                titleEl.innerText = "REACTOR GENÉTICO";
             }
         }
-    }, 150);
+    }, 50);
 
     const reactorRules = {
         "1": { 
@@ -188,7 +206,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const possibleInstructionTexts = document.querySelectorAll("#alchemy-screen p");
     possibleInstructionTexts.forEach(p => {
-        if(p.innerText.toLowerCase().includes("toca un geno")) p.classList.add("instruction-text");
+        if(p.innerText.toLowerCase().includes("toca un geno")) {
+            p.classList.add("instruction-text");
+        }
     });
 
     window.renderizarAlquimia = function() {
@@ -197,7 +217,9 @@ document.addEventListener("DOMContentLoaded", () => {
         const reglas = reactorRules[nivel];
         
         const descEl = document.getElementById("reactor-description");
-        if(descEl) descEl.innerText = `COMBINA 5 ESPECÍMENES (${reglas.reqRarity.toUpperCase()}S) PARA INICIAR LA SECUENCIA DE FUSIÓN. COSTE: ${reglas.cost} ✨`;
+        if(descEl) {
+            descEl.innerText = `COMBINA 5 ESPECÍMENES (${reglas.reqRarity.toUpperCase()}S) PARA INICIAR LA SECUENCIA DE FUSIÓN. COSTE: ${reglas.cost} ✨`;
+        }
         
         const reqNameEl = document.getElementById("reactor-req-name");
         if(reqNameEl) reqNameEl.innerText = reglas.reqRarity + "s";
@@ -220,10 +242,12 @@ document.addEventListener("DOMContentLoaded", () => {
             
             for(let i=0; i<5; i++) {
                 const slot = document.createElement("div");
+                
                 slot.style = "width: 55px; height: 55px; border-radius: 12px; display: flex; justify-content: center; align-items: center; cursor: pointer; position: relative; transition: all 0.2s;";
                 
                 if (window.genosEnReactor[i]) {
                     const geno = window.genosEnReactor[i];
+                    
                     const pColor = geno.color || geno.base_color || "#ccc";
                     let svg = typeof window.generarSvgGeno === 'function' ? window.generarSvgGeno(geno) : '';
                     svg = svg.replace(/<svg[^>]*>/, '<svg width="100%" height="100%" viewBox="-20 0 200 160" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="overflow: visible;">');
@@ -249,6 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const containerDisponibles = document.getElementById("reactor-available-genos");
         if(containerDisponibles) {
             containerDisponibles.innerHTML = "";
+            
             const genosLibres = genosDisponibles.filter(g => !window.genosEnReactor.find(enR => enR.id === g.id));
             
             if (genosLibres.length === 0) {
