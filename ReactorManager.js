@@ -1,14 +1,14 @@
 // =========================================
-// ReactorManager.js - FUSIONES Y MUTACIONES (V14.12 - FUSIÓN FINAL: PANEL PERFECTO + BOTÓN NEÓN)
+// ReactorManager.js - FUSIONES Y MUTACIONES (V14.13 - FIX DE NAVEGACIÓN Y PANTALLA PEGADA)
 // =========================================
 
 document.addEventListener("DOMContentLoaded", () => {
     
-    // ✨ ESTILOS: Solo afectamos el fondo y el panel. IGNORAMOS el botón por completo.
+    // ✨ ESTILOS: Arreglado el error crítico de display: flex que bloqueaba la clase .hidden
     const style = document.createElement('style');
     style.innerHTML = `
-        /* Fondo Cian con líneas horizontales finas (Idéntico a V14.11) */
-        #alchemy-screen {
+        /* Fondo Cian (Solo se aplica si la pantalla NO está oculta) */
+        #alchemy-screen:not(.hidden) {
             background-color: #4dd0e1 !important;
             background-image: repeating-linear-gradient(to bottom, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 6px) !important;
             height: 100vh !important;
@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
             flex-direction: column !important;
         }
 
-        /* Caja Negra Central (Empuja el botón al fondo) */
+        /* Caja Negra Central */
         #alchemy-screen .reactor-panel-wrapper {
             background: #1a2a36 !important;
             border: none !important;
@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
             font-weight: normal !important;
         }
 
-        /* Botón de Acción Principal (El de iniciar fusión) */
+        /* Botón de Acción Principal */
         #btn-fuse-genos {
             border-radius: 10px !important;
             font-weight: 900 !important;
@@ -143,7 +143,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const breedingScreen = document.getElementById("breeding-screen");
 
         if (alchemyScreen) {
-            // 1. Armamos la caja negra del reactor (El panel perfecto)
             if (!alchemyScreen.querySelector('.reactor-panel-wrapper')) {
                 const wrapper = document.createElement("div");
                 wrapper.className = "reactor-panel-wrapper";
@@ -165,7 +164,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (titleEl) titleEl.innerText = "REACTOR GENÉTICO";
             }
 
-            // 2. Clonamos SOLO el botón neón desde el Centro de Crianza (Como lo hicimos en la V14.10)
             if (breedingScreen) {
                 const btnCrianza = breedingScreen.querySelector('.btn-go-home');
                 const btnReactor = alchemyScreen.querySelector('.btn-go-home');
