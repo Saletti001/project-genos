@@ -1,5 +1,5 @@
 // =========================================
-// app.js - CONTROLADOR PRINCIPAL Y NAVEGACIÓN (V14.16 - FIX CALCULADORA Y CAMPANA DE GAUSS)
+// app.js - CONTROLADOR PRINCIPAL Y NAVEGACIÓN (V14.17 - FIX DEFINITIVO ANIMACIÓN Y TAMAÑO NATIVO)
 // Requiere cargar 'genes.js' previamente en el HTML.
 // =========================================
 
@@ -34,12 +34,11 @@ window.TABLA_IVS = {
     "Mítico": { hp: [240, 320], atk: [60, 100], def: [40, 70], spd: [50, 110], luk: [45, 70] }
 };
 
-// ✨ FIX GACHA: CURVA DE CAMPANA (Hace que los Rango A y S sean realmente raros)
+// ✨ FIX GACHA: CURVA DE CAMPANA
 window.generarStatsPorRareza = function(rareza) {
     const limites = window.TABLA_IVS[rareza] || window.TABLA_IVS["Común"];
     
-    // El promedio de 3 Math.random() crea una Campana de Gauss (Distribución normal)
-    // La mayoría caerá en la media (50%), haciendo que los extremos sean raros.
+    // El promedio de 3 Math.random() crea una Campana de Gauss
     const bellCurveRandom = () => (Math.random() + Math.random() + Math.random()) / 3;
     
     const randStat = (min, max) => Math.floor(bellCurveRandom() * (max - min + 1)) + min;
@@ -60,13 +59,11 @@ window.calcularCalidad = function(stats, rareza, nivel) {
     const totalMin = limites.hp[0] + limites.atk[0] + limites.def[0] + limites.spd[0] + limites.luk[0];
     const totalMax = limites.hp[1] + limites.atk[1] + limites.def[1] + limites.spd[1] + limites.luk[1];
     
-    // Evitamos calcular usando stats buffeados por nivel. Buscamos los baseStats puros si existen.
     const statsUsar = stats.baseStats ? stats.baseStats : stats;
     const currentTotal = (statsUsar.hp || 0) + (statsUsar.atk || 0) + (statsUsar.def || 0) + (statsUsar.spd || 0) + (statsUsar.luk || 0);
     
     let porcentaje = ((currentTotal - totalMin) / (totalMax - totalMin)) * 100;
     
-    // Limites de seguridad
     if (porcentaje > 100) porcentaje = 100;
     if (porcentaje < 0) porcentaje = 0;
     
@@ -399,6 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const pColor = geno.color || geno.base_color || "#ccc";
             let svg = typeof generarSvgGeno === 'function' ? generarSvgGeno(geno) : '';
+            // El viewBox artificial (-20 0 200 160) se queda SÓLO en la tarjeta pequeña para que cuadre en la grilla
             svg = svg.replace(/<svg[^>]*>/, '<svg width="100%" height="100%" viewBox="-20 0 200 160" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="overflow: visible;">');
             
             card.innerHTML = `
@@ -406,12 +404,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span style="color: white; font-weight: bold; font-size: 12px; margin-top: 10px; text-align: center;">${geno.name || 'Sujeto'}</span>
             `;
             
+            // ✨ FIX MAESTRO FINAL: Se elimina por completo el .replace() destructivo
+            // Dejamos que el motor gráfico inyecte el SVG puro en el pedestal, tal y como lo hace el F5
             card.onclick = () => {
                 window.miMascota = geno;
                 if (pedestal) {
                     const svgPedestal = typeof generarSvgGeno === 'function' ? generarSvgGeno(geno) : '';
-                    let pSvg = svgPedestal.replace(/<svg[^>]*>/, '<svg width="100%" height="100%" viewBox="-45 -45 250 250" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="overflow: visible;">');
-                    pedestal.innerHTML = `<div class="geno-idle" style="position: absolute; width: 250px; height: 250px; color: ${pColor}; top: 35%; left: 50%; transform: translate(-50%, -50%); display: flex; justify-content: center; align-items: center;">${pSvg}</div>`;
+                    pedestal.innerHTML = `<div class="geno-idle" style="position: absolute; top: 35%; left: 50%; transform: translate(-50%, -50%); display: flex; justify-content: center; align-items: center; color: ${pColor};">${svgPedestal}</div>`;
                 }
                 const nameEl = document.getElementById('geno-name');
                 if (nameEl) nameEl.innerText = `${geno.name} #${geno.id}`;
@@ -576,8 +575,9 @@ function iniciarSecuenciaBienvenida() {
         if (pedestal) {
             pedestal.style.display = "block";
             const svgPedestal = typeof generarSvgGeno === 'function' ? generarSvgGeno(miPrimerGeno) : '';
-            let pSvg = svgPedestal.replace(/<svg[^>]*>/, '<svg width="100%" height="100%" viewBox="-45 -45 250 250" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="overflow: visible;">');
-            pedestal.innerHTML = `<div class="geno-idle" style="position: absolute; width: 250px; height: 250px; color: ${miPrimerGeno.color}; top: 35%; left: 50%; transform: translate(-50%, -50%); display: flex; justify-content: center; align-items: center;">${pSvg}</div>`;
+            
+            // ✨ FIX MAESTRO FINAL
+            pedestal.innerHTML = `<div class="geno-idle" style="position: absolute; top: 35%; left: 50%; transform: translate(-50%, -50%); display: flex; justify-content: center; align-items: center; color: ${miPrimerGeno.color};">${svgPedestal}</div>`;
         }
         
         const nameEl = document.getElementById('geno-name');
