@@ -1,9 +1,10 @@
 // =========================================
-// ReactorManager.js - FUSIONES Y MUTACIONES (V15.3 - FIX CARAS MUTANTES PARA TODOS)
+// ReactorManager.js - FUSIONES Y MUTACIONES (V15.6 - RULETA COMPLETA DE CARAS.JS)
 // =========================================
 
 document.addEventListener("DOMContentLoaded", () => {
     
+    // ✨ PARCHE GLOBAL: Calculadora
     if (typeof window.calcularCalidad === "function" && !window.calcularCalidadParcheada) {
         const calcOriginal = window.calcularCalidad;
         window.calcularCalidad = function(stats, rareza, nivel) {
@@ -16,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.calcularCalidadParcheada = true; 
     }
 
+    // ✨ ESTILOS
     const style = document.createElement('style');
     style.innerHTML = `
         #alchemy-screen:not(.hidden) {
@@ -139,6 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     document.head.appendChild(style);
 
+    // ✨ DOM SCRIPT
     setTimeout(() => {
         const alchemyScreen = document.getElementById("alchemy-screen");
         const breedingScreen = document.getElementById("breeding-screen");
@@ -390,23 +393,46 @@ document.addEventListener("DOMContentLoaded", () => {
                             statsBase.luk = Math.floor(statsBase.luk * 1.15);
                         }
 
-                        // ✨ FIX: AHORA LAS MUTACIONES SE APLICAN A TODOS LOS GENOS DEL REACTOR
-                        const ojosMutantes = ["alien", "ciclope", "furioso", "bizco", "tierno"];
-                        const bocasMutantes = ["colmillos", "babeando", "cremallera", "triste"];
+                        // ✨ FIX MAESTRO: Tomamos TODAS las caras disponibles de tu diccionario
+                        // Se verifica si dicOjos y dicBocas existen (desde tu caras.js), 
+                        // sino, usa un respaldo con TODAS las keys exactas que me pasaste.
+                        const todosLosOjos = typeof dicOjos !== 'undefined' ? Object.keys(dicOjos) : [
+                            "base_brillo", "guisante_clasico", "nuez_defensa", "girasol_feliz", "feliz_curva", 
+                            "feroz_jalapeno", "furia_roja", "amenaza_toxica", "berzerker", "furia_cejas_premium", 
+                            "furia_ceno_premium", "rabia_dilatada_premium", "feroz", "derpy_bizco", "hipnotico_magico", 
+                            "hipnotico", "cansado_ojeras", "derpy", "cicatriz", "sorprendido", "cansado", "puntos", 
+                            "ceja_levantada", "pupila_vertical", "gafas", "cyber_visor", "robot_ojo_rojo", 
+                            "monoculo_tactico", "foco_luminoso", "foco", "ninja_sombra", "ninja", "felino_cazador", 
+                            "felino", "target_escaner", "visor_blindado", "toxico_derretido", "mutacion_asimetrica", 
+                            "anillos_nucleares", "glitch_digital", "hex_optico", "ojos_cosidos", "vacio_oscuro", 
+                            "agujeros_negros", "mosca_mutante", "error_fatal", "parasito_cerebral", "espiral_neon", 
+                            "ciclope_mecanico", "llanto_toxico", "visor_rejilla", "sangre_bioluminiscente", "tres_ojos"
+                        ];
+
+                        const todasLasBocas = typeof dicBocas !== 'undefined' ? Object.keys(dicBocas) : [
+                            "base", "abierta_feliz", "risita_gato", "canon_guisante", "depredador_carnivora", 
+                            "grunido_colmillos", "apretado_furia", "grito_batalla", "derpy_lengua", "diente_solitario", 
+                            "trompa_hielo", "torcida_esceptico", "diente_unico", "boca_X", "labios", "rejilla_robot", 
+                            "mandibula_mecha", "vampiro_noble", "barba_ruda", "grunido", "apretado", "vampiro_3_corregida", 
+                            "canon", "recta_seria", "furia_ceno_boca_premium", "rejilla_ventilacion", "boca_cosida", 
+                            "placa_remachada", "conector_plano", "fauces_toxicas", "ecualizador_led", "mandibula_bulldog", 
+                            "trituradora_engranajes", "cicatriz_energia", "sanguijuela_alien", "sonrisa_derretida", 
+                            "pantalla_led_rota", "esqueleto_expuesto", "tubo_alimentacion", "cremallera_cerrada", 
+                            "sonrisa_cheshire_cyber", "mandibula_zombi", "agujero_negro", "brackets_metalicos", 
+                            "fauces_multiples", "tubos_escape", "placa_base", "labios_grapados"
+                        ];
                         
-                        const ojoElegido = ojosMutantes[Math.floor(Math.random() * ojosMutantes.length)];
-                        const bocaElegida = bocasMutantes[Math.floor(Math.random() * bocasMutantes.length)];
+                        const ojoElegido = todosLosOjos[Math.floor(Math.random() * todosLosOjos.length)];
+                        const bocaElegida = todasLasBocas[Math.floor(Math.random() * todasLasBocas.length)];
 
                         const nuevoId = typeof window.generarNuevoID === 'function' ? window.generarNuevoID() : Date.now();
                         const prefijos = ["Neo", "Bio", "Geno", "Cyto", "Viro", "Rad", "Syn", "Evo", "Nexo", "Mut"];
                         const sufijos = ["-X", "-Prime", "morph", "cyte", "tron", "plasm", "-7", "core", "gen", "-Z"];
                         const nombreAleatorio = prefijos[Math.floor(Math.random() * prefijos.length)] + sufijos[Math.floor(Math.random() * sufijos.length)];
-                        
-                        const finalName = (resultado.name === "Superviviente" || resultado.name === "Veterano Raro" || resultado.name === "Titán Épico") ? resultado.name : nombreAleatorio;
 
                         const mutante = {
                             id: nuevoId,
-                            name: finalName,
+                            name: nombreAleatorio, 
                             rarity: resultado.rarity,
                             element: resultado.element,
                             base_color: resultado.color, color: resultado.color,
