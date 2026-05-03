@@ -1,5 +1,5 @@
 // =========================================
-// BreedingManager.js - UI DEL CENTRO DE CRIANZA Y BIO-NÚCLEOS (V9.5 - FIX CENTRADO)
+// BreedingManager.js - UI DEL CENTRO DE CRIANZA Y BIO-NÚCLEOS (V9.6 - FIX LÍMITE DE CAPACIDAD)
 // =========================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -740,6 +740,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 const restante = huevo.hatchTime - Date.now();
                 if (restante > 0) {
                     card.querySelector(`#btn-skip-${huevo.id}`)?.addEventListener("click", () => {
+                        // ✨ FIX CAPACIDAD: Verifica antes de gastar el POL y eclosionar
+                        const genosActivos = (window.misGenos || []).filter(g => !g.isEgg).length;
+                        const max = window.maxGenoSlots || 6;
+                        if (genosActivos >= max) {
+                            alert("⚠️ LÍMITE DE ALOJAMIENTO ALCANZADO\nNo tienes más espacio en 'Mis Genos'. Expande tu capacidad con ➕ POL antes de abrir este núcleo.");
+                            return;
+                        }
+
                         if(window.miWallet && window.miWallet.pol >= 0.5) {
                             window.miWallet.pol -= 0.5; actualizarPolUI();
                             huevo.isEgg = false; 
@@ -756,6 +764,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     });
                 } else {
                     card.querySelector(`#btn-claim-${huevo.id}`)?.addEventListener("click", () => {
+                        // ✨ FIX CAPACIDAD: Verifica antes de reclamar
+                        const genosActivos = (window.misGenos || []).filter(g => !g.isEgg).length;
+                        const max = window.maxGenoSlots || 6;
+                        if (genosActivos >= max) {
+                            alert("⚠️ LÍMITE DE ALOJAMIENTO ALCANZADO\nNo tienes más espacio en 'Mis Genos'. Expande tu capacidad con ➕ POL antes de reclamar este Geno.");
+                            return;
+                        }
+
                         huevo.isEgg = false;
                         
                         if(window.miInventario && window.miInventario.slots) {
