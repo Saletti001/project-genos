@@ -1,32 +1,42 @@
 // =========================================
-// ReactorManager.js - FUSIONES Y MUTACIONES (V15.9 - FIX BALANCE CALIDAD "+")
+// ReactorManager.js - FUSIONES Y MUTACIONES (V15.10 - FIX CAZADOR DE CALCULADORA)
 // =========================================
 
-document.addEventListener("DOMContentLoaded", () => {
-    
-    // ✨ PARCHE GLOBAL MEJORADO: Calculadora inteligente
+// ✨ PARCHE GLOBAL INTELIGENTE: Ejecutamos un radar que busca la calculadora hasta atraparla
+let intentosParche = 0;
+const intervalParche = setInterval(() => {
+    // Si la función ya existe en tu juego y aún no la hemos parcheado...
     if (typeof window.calcularCalidad === "function" && !window.calcularCalidadParcheada) {
-        const calcOriginal = window.calcularCalidad;
+        const calcOriginal = window.calcularCalidad; // Guardamos la original
+        
         window.calcularCalidad = function(stats, rareza, nivel) {
             let rLimpia = rareza || "Común";
-            let statsParaCalcular = { ...stats }; // Clonamos para no borrar los stats reales
+            let sClon = { ...stats }; // Clonamos para no arruinar los stats reales del Geno
 
-            // Si es un mutante "+", le quitamos el 15% de bono temporalmente SOLO para calcular la pureza
+            // Si es un mutante "+", le quitamos el bono del 15% temporalmente SOLO para el cálculo de la barra
             if (typeof rLimpia === "string" && rLimpia.includes("+")) {
                 rLimpia = rLimpia.replace("+", ""); 
-                if (statsParaCalcular.hp) {
-                    statsParaCalcular.hp = Math.round(statsParaCalcular.hp / 1.15);
-                    statsParaCalcular.atk = Math.round(statsParaCalcular.atk / 1.15);
-                    statsParaCalcular.def = Math.round(statsParaCalcular.def / 1.15);
-                    statsParaCalcular.spd = Math.round(statsParaCalcular.spd / 1.15);
-                    statsParaCalcular.luk = Math.round(statsParaCalcular.luk / 1.15);
+                if (sClon.hp !== undefined) {
+                    sClon.hp = Math.round(sClon.hp / 1.15);
+                    sClon.atk = Math.round(sClon.atk / 1.15);
+                    sClon.def = Math.round(sClon.def / 1.15);
+                    sClon.spd = Math.round(sClon.spd / 1.15);
+                    sClon.luk = Math.round(sClon.luk / 1.15);
                 }
             }
-            return calcOriginal(statsParaCalcular, rLimpia, nivel);
+            return calcOriginal(sClon, rLimpia, nivel);
         };
-        window.calcularCalidadParcheada = true; 
+        window.calcularCalidadParcheada = true;
+        clearInterval(intervalParche); // ¡Atrapada y parcheada! Apagamos el radar.
     }
+    
+    intentosParche++;
+    if (intentosParche > 100) clearInterval(intervalParche); // Nos rendimos tras 10 segundos por seguridad
+}, 100);
 
+// ✨ INICIO DEL MÓDULO VISUAL
+document.addEventListener("DOMContentLoaded", () => {
+    
     // ✨ ESTILOS
     const style = document.createElement('style');
     style.innerHTML = `
