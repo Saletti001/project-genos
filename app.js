@@ -1,5 +1,5 @@
 // =========================================
-// app.js - CONTROLADOR PRINCIPAL Y NAVEGACIÓN (V14.14 - FIX DEFINITIVO DOBLE ANIMACIÓN)
+// app.js - CONTROLADOR PRINCIPAL Y NAVEGACIÓN (V14.15 - FIX DEFINITIVO ANIMACIÓN Y ESCALA NATIVA)
 // Requiere cargar 'genes.js' previamente en el HTML.
 // =========================================
 
@@ -363,7 +363,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const pColor = geno.color || geno.base_color || "#ccc";
             let svg = typeof generarSvgGeno === 'function' ? generarSvgGeno(geno) : '';
-            // El viewBox para la tarjeta pequeña sigue normal
+            // Modificamos solo el SVG de la cuadrícula para que se vea miniatura
             svg = svg.replace(/<svg[^>]*>/, '<svg width="100%" height="100%" viewBox="-20 0 200 160" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="overflow: visible;">');
             
             card.innerHTML = `
@@ -371,16 +371,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 <span style="color: white; font-weight: bold; font-size: 12px; margin-top: 10px; text-align: center;">${geno.name || 'Sujeto'}</span>
             `;
             
+            // ✨ FIX DEFINITIVO (CERO REGEX EN EL PEDESTAL)
+            // Se inserta el dibujo natural, sin forzar anchos de 250px, dejando que el motor nativo (y el F5) manden.
             card.onclick = () => {
                 window.miMascota = geno;
                 if (pedestal) {
                     const svgPedestal = typeof generarSvgGeno === 'function' ? generarSvgGeno(geno) : '';
-                    
-                    // ✨ FIX DEFINITIVO: Cámara centrada sin escalar (-45 -45 250 250)
-                    let pSvg = svgPedestal.replace(/<svg[^>]*>/, '<svg width="100%" height="100%" viewBox="-45 -45 250 250" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="overflow: visible;">');
-                    
-                    // ✨ FIX DEFINITIVO: Sin la clase .geno-idle para evitar doble salto
-                    pedestal.innerHTML = `<div style="position: absolute; width: 250px; height: 250px; color: ${pColor}; top: 35%; left: 50%; transform: translate(-50%, -50%); display: flex; justify-content: center; align-items: center;">${pSvg}</div>`;
+                    pedestal.innerHTML = `<div class="geno-idle" style="position: absolute; top: 35%; left: 50%; transform: translate(-50%, -50%); display: flex; justify-content: center; align-items: center; color: ${pColor};">${svgPedestal}</div>`;
                 }
                 const nameEl = document.getElementById('geno-name');
                 if (nameEl) nameEl.innerText = `${geno.name} #${geno.id}`;
@@ -546,9 +543,8 @@ function iniciarSecuenciaBienvenida() {
             pedestal.style.display = "block";
             const svgPedestal = typeof generarSvgGeno === 'function' ? generarSvgGeno(miPrimerGeno) : '';
             
-            // ✨ FIX DEFINITIVO: Sin doble animación y centrado
-            let pSvg = svgPedestal.replace(/<svg[^>]*>/, '<svg width="100%" height="100%" viewBox="-45 -45 250 250" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="overflow: visible;">');
-            pedestal.innerHTML = `<div style="position: absolute; width: 250px; height: 250px; color: ${miPrimerGeno.color}; top: 35%; left: 50%; transform: translate(-50%, -50%); display: flex; justify-content: center; align-items: center;">${pSvg}</div>`;
+            // ✨ FIX DEFINITIVO (CERO REGEX EN EL PEDESTAL)
+            pedestal.innerHTML = `<div class="geno-idle" style="position: absolute; top: 35%; left: 50%; transform: translate(-50%, -50%); display: flex; justify-content: center; align-items: center; color: ${miPrimerGeno.color};">${svgPedestal}</div>`;
         }
         
         const nameEl = document.getElementById('geno-name');
