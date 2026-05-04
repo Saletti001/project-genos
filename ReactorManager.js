@@ -1,5 +1,5 @@
 // =========================================
-// ReactorManager.js - FUSIONES Y MUTACIONES (V15.32 - FIX TEXTO RESPONSIVO)
+// ReactorManager.js - FUSIONES Y MUTACIONES (V15.33 - FIX DEFINITIVO TEXTO CORTO)
 // =========================================
 
 // ✨ PARCHE GLOBAL INTELIGENTE: Ejecutamos un radar que busca la calculadora hasta atraparla
@@ -116,6 +116,12 @@ document.addEventListener("DOMContentLoaded", () => {
         .custom-option:last-child { border-bottom: none; }
         .custom-option:hover { background: #4dd0e1; color: #1a2a36; }
         .custom-option.selected { background: rgba(77,208,225,0.2); color: #fff; }
+
+        /* Eliminamos border del CSS base para que no haya duplicados */
+        #alchemy-screen p:has(span#alchemy-common-count),
+        #alchemy-screen p:has(span#reactor-cost-display) {
+            border-bottom: none !important;
+        }
 
         #reactor-available-genos {
             background: #0d1a24 !important; 
@@ -302,46 +308,33 @@ document.addEventListener("DOMContentLoaded", () => {
         const descEl = document.getElementById("reactor-description");
         if(descEl) descEl.innerText = `COMBINA 5 ESPECÍMENES (${reglas.reqRarity.toUpperCase()}S) PARA INICIAR LA SECUENCIA DE FUSIÓN.`;
         
-        const reqNameEl = document.getElementById("reactor-req-name");
-        const countEl = document.getElementById("alchemy-common-count");
-        const costEl = document.getElementById("reactor-cost-display");
-
-        // ✨ FIX GRAMATICAL
-        if (reqNameEl) {
-            let plural = reglas.reqRarity === "Común" ? "Comunes" : reglas.reqRarity + "s";
-            reqNameEl.innerText = plural;
+        // ✨ FIX MAESTRO: Borramos el texto redundante y lo hacemos super limpio
+        let pContainer = document.querySelector("#alchemy-screen p:has(span#alchemy-common-count)");
+        if (pContainer && !pContainer.dataset.limpio) {
+            pContainer.dataset.limpio = "true"; // Marcador para no repetir esto
             
-            if (reqNameEl.nextSibling && reqNameEl.nextSibling.nodeType === 3) {
-                reqNameEl.nextSibling.nodeValue = reqNameEl.nextSibling.nodeValue.replace(/s\):/g, "):");
-            }
-        }
-
-        if (costEl) {
-            costEl.innerHTML = `${reglas.cost} ${window.iconoEV}`;
-        }
-
-        // ✨ FIX MAESTRO MÓVIL: Evita amontonamiento forzando un Flex-Wrap resistente
-        if (countEl && countEl.parentNode && countEl.parentNode.tagName === 'P') {
-            const pContainer = countEl.parentNode;
+            // Destruimos el contenido viejo ("Disponibles (Comunes):") y lo recreamos perfectamente
+            pContainer.innerHTML = `
+                <span>Disponibles: <strong id="alchemy-common-count" style="color: #fff; font-size: 14px;">0</strong></span>
+                <span style="display:flex; align-items:center; gap:4px;">Costo: <strong id="reactor-cost-display" style="color: #ffcc00; font-size: 14px;">0</strong></span>
+            `;
             
-            // Flexbox con wrap permite que "Costo" baje si la pantalla es muy chica
             pContainer.style.display = "flex";
-            pContainer.style.flexWrap = "wrap"; 
             pContainer.style.justifyContent = "space-between";
             pContainer.style.alignItems = "center";
-            pContainer.style.gap = "10px"; // Si baja de línea, no se pega
-            
-            // Restauramos visualmente la línea punteada clásica
-            pContainer.style.background = "transparent";
             pContainer.style.borderBottom = "1px dashed rgba(255,255,255,0.2)";
-            pContainer.style.borderTop = "none";
-            pContainer.style.borderLeft = "none";
-            pContainer.style.borderRight = "none";
-            pContainer.style.padding = "0 0 12px 0";
+            pContainer.style.paddingBottom = "12px";
             pContainer.style.marginBottom = "20px";
             pContainer.style.color = "#fff";
             pContainer.style.fontSize = "13px";
-            pContainer.style.fontWeight = "normal";
+        }
+
+        // Volvemos a capturar los elementos por si acabamos de reconstruir el HTML
+        const countEl = document.getElementById("alchemy-common-count");
+        const costEl = document.getElementById("reactor-cost-display");
+
+        if (costEl) {
+            costEl.innerHTML = `${reglas.cost} ${window.iconoEV}`;
         }
 
         const genosDisponibles = window.misGenos.filter(g => 
@@ -350,7 +343,7 @@ document.addEventListener("DOMContentLoaded", () => {
             (!window.miMascota || window.miMascota.id !== g.id)
         );
         
-        if(countEl) countEl.innerText = genosDisponibles.length;
+        if (countEl) countEl.innerText = genosDisponibles.length;
 
         const obtenerCalidadVisual = (g) => {
             if (g.stats && g.stats.calidadPorcentaje !== undefined) {
