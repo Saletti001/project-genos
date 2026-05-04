@@ -1,5 +1,5 @@
 // =========================================
-// SanctuaryManager.js - LÓGICA DEL SANTUARIO V9.1 (FIX BOTÓN VOLVER)
+// SanctuaryManager.js - LÓGICA DEL SANTUARIO V9.2 (FIX BOTÓN PREMIUM Y SCROLL)
 // =========================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,6 +8,17 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- ESTILOS INYECTADOS PARA EL SANTUARIO ---
     const style = document.createElement('style');
     style.innerHTML = `
+        /* 🚫 Eliminar barra de scroll gris nativa */
+        #sanctuary-screen::-webkit-scrollbar {
+            display: none !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
+        #sanctuary-screen {
+            -ms-overflow-style: none !important;
+            scrollbar-width: none !important;
+        }
+
         /* Clonado exacto del fondo del Reactor */
         #sanctuary-screen:not(.hidden) {
             background-color: #4dd0e1 !important;
@@ -74,11 +85,15 @@ document.addEventListener("DOMContentLoaded", () => {
             width: 100%;
         }
 
-        /* ✨ FIX MAESTRO MÓVIL: Regla idéntica a la del Reactor */
+        /* ✨ FIX MAESTRO MÓVIL: Botón idéntico, centrado y con dimensiones relativas */
         #sanctuary-screen .btn-go-home {
             position: relative !important;
             margin-top: auto !important; 
             margin-bottom: 20px !important;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            width: 70% !important;
+            max-width: 300px !important;
             flex-shrink: 0 !important;
             z-index: 10 !important;
         }
@@ -88,44 +103,60 @@ document.addEventListener("DOMContentLoaded", () => {
     // --- REESTRUCTURACIÓN DEL HTML AL CARGAR ---
     setTimeout(() => {
         const sanctuaryScreen = document.getElementById("sanctuary-screen");
+        const breedingScreen = document.getElementById("breeding-screen");
         
-        if (sanctuaryScreen && !sanctuaryScreen.querySelector('.sanctuary-panel-wrapper')) {
-            const wrapper = document.createElement("div");
-            wrapper.className = "sanctuary-panel-wrapper";
-            
-            Array.from(sanctuaryScreen.children).forEach(child => {
-                if (!child.classList.contains('btn-go-home') && child !== wrapper) {
-                    
-                    if (child.tagName === 'P') {
-                        child.className = "sanctuary-desc";
-                    }
+        if (sanctuaryScreen) {
+            if (!sanctuaryScreen.querySelector('.sanctuary-panel-wrapper')) {
+                const wrapper = document.createElement("div");
+                wrapper.className = "sanctuary-panel-wrapper";
+                
+                Array.from(sanctuaryScreen.children).forEach(child => {
+                    if (!child.classList.contains('btn-go-home') && child !== wrapper) {
+                        
+                        if (child.tagName === 'P') {
+                            child.className = "sanctuary-desc";
+                        }
 
-                    if (child.tagName === 'DIV' && child.innerText.includes('Límite diario')) {
-                        child.style.display = 'none'; 
-                    }
+                        if (child.tagName === 'DIV' && child.innerText.includes('Límite diario')) {
+                            child.style.display = 'none'; 
+                        }
 
-                    wrapper.appendChild(child);
+                        wrapper.appendChild(child);
+                    }
+                });
+
+                sanctuaryScreen.insertBefore(wrapper, sanctuaryScreen.firstChild);
+                
+                const gridEl = document.getElementById("sanctuary-grid");
+                gridEl.className = "sanctuary-grid-modern"; 
+                
+                const limitHud = document.createElement('div');
+                limitHud.className = "sanctuary-limit-hud";
+                limitHud.innerHTML = `
+                    <div style="display: flex; align-items: center; gap: 5px; font-size: 12px; color: #fff;">
+                        <span style="color: #94a3b8; font-weight: normal; text-transform: uppercase; font-size: 10px; letter-spacing: 1px;">Estado:</span>
+                        <strong style="color: #4CAF50; font-size: 12px; letter-spacing: 1px;">SANTUARIO ACTIVO</strong>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 5px; font-size: 12px; color: #fff;">
+                        <span style="color: #94a3b8; font-weight: normal; text-transform: uppercase; font-size: 10px; letter-spacing: 1px;">Liberaciones:</span>
+                        <strong id="hud-daily-release-count" style="color: #fff; display: flex; align-items: center; gap: 4px; font-size: 14px; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 12px;">0/3</strong>
+                    </div>
+                `;
+                wrapper.insertBefore(limitHud, gridEl);
+            }
+
+            // ✨ FIX BOTÓN: Robar el botón premium desde Crianza e inyectarlo en el Santuario
+            if (breedingScreen) {
+                const btnCrianza = breedingScreen.querySelector('.btn-go-home');
+                const btnSanctuary = sanctuaryScreen.querySelector('.btn-go-home');
+                if (btnCrianza && btnSanctuary) {
+                    btnSanctuary.className = btnCrianza.className; 
+                    // Nota: No copiamos cssText intencionalmente para que no se pegue el "position: absolute"
+                    if (btnCrianza.innerHTML !== btnSanctuary.innerHTML) {
+                        btnSanctuary.innerHTML = btnCrianza.innerHTML; 
+                    }
                 }
-            });
-
-            sanctuaryScreen.insertBefore(wrapper, sanctuaryScreen.firstChild);
-            
-            const gridEl = document.getElementById("sanctuary-grid");
-            gridEl.className = "sanctuary-grid-modern"; 
-            
-            const limitHud = document.createElement('div');
-            limitHud.className = "sanctuary-limit-hud";
-            limitHud.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 5px; font-size: 12px; color: #fff;">
-                    <span style="color: #94a3b8; font-weight: normal; text-transform: uppercase; font-size: 10px; letter-spacing: 1px;">Estado:</span>
-                    <strong style="color: #4CAF50; font-size: 12px; letter-spacing: 1px;">SANTUARIO ACTIVO</strong>
-                </div>
-                <div style="display: flex; align-items: center; gap: 5px; font-size: 12px; color: #fff;">
-                    <span style="color: #94a3b8; font-weight: normal; text-transform: uppercase; font-size: 10px; letter-spacing: 1px;">Liberaciones:</span>
-                    <strong id="hud-daily-release-count" style="color: #fff; display: flex; align-items: center; gap: 4px; font-size: 14px; background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 12px;">0/3</strong>
-                </div>
-            `;
-            wrapper.insertBefore(limitHud, gridEl);
+            }
         }
     }, 50);
 
