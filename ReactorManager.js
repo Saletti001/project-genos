@@ -1,5 +1,5 @@
 // =========================================
-// ReactorManager.js - FUSIONES Y MUTACIONES (V15.23 - FIX ESPACIO Y TEXTOS)
+// ReactorManager.js - FUSIONES Y MUTACIONES (V15.24 - FIX SIMETRÍA PERFECTA)
 // =========================================
 
 // ✨ PARCHE GLOBAL INTELIGENTE: Ejecutamos un radar que busca la calculadora hasta atraparla
@@ -119,18 +119,18 @@ document.addEventListener("DOMContentLoaded", () => {
             font-weight: normal !important;
         }
 
-        /* ✨ FIX MAESTRO: Estiramos al límite absoluto del relleno exterior (-25px) */
+        /* ✨ FIX MAESTRO: Simetría matemática absoluta */
         #reactor-available-genos {
             background: #0d1a24 !important; 
             border: none !important;
             border-radius: 8px !important; 
-            padding: 15px 15px !important; /* Damos un respiro interno a los lados */
-            margin: 0 -25px !important; /* 👈 Invade todo el borde vacío */
-            width: calc(100% + 50px) !important; /* 👈 Compensa para no romper el grid */
+            padding: 15px 20px !important; /* Empareja exactamente con el margen negativo */
+            margin: 0 -20px !important; /* Toca justo el borde interno del panel, sin desbordarse */
+            width: calc(100% + 40px) !important; /* Compensa los 20px de cada lado */
             box-sizing: border-box !important;
             min-height: 110px; 
             display: flex;
-            gap: 6px; 
+            gap: 8px; /* 3 espacios de 8px */
             overflow-x: auto;
             -ms-overflow-style: none; 
             scrollbar-width: none;
@@ -373,7 +373,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 genosLibres.forEach(geno => {
                     const card = document.createElement("div");
                     
-                    // Aseguramos matemáticamente que entren 4 y le damos un toque más de altura
+                    // ✨ FIX: Fórmula perfeccionada (25% menos el espacio de 3 huecos repartido en 4 cartas = 6px)
                     card.style = "min-width: calc(25% - 6px); height: 95px; background: rgba(0,0,0,0.3); border: 1px solid rgba(77,208,225,0.2); border-radius: 8px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; cursor: pointer; flex-shrink: 0; transition: transform 0.1s; position: relative; padding: 6px 2px; box-sizing: border-box;";
                     
                     const pColor = geno.color || geno.base_color || "#ccc";
@@ -384,8 +384,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     let colorRango = rango === "S" ? "#ffcc00" : rango === "A" ? "#00d2ff" : rango === "B" ? "#4CAF50" : rango === "C" ? "#f0ad4e" : "#d9534f";
                     let pct = geno.stats && geno.stats.calidadPorcentaje !== undefined ? geno.stats.calidadPorcentaje : 0;
 
-                    // ✨ FIX: Bloque de texto superior ajustado (D y % justo debajo del Nivel)
-                    // ✨ FIX: SVG bajado y pegado al nombre
                     card.innerHTML = `
                         <div style="width: 100%; text-align: left; padding-left: 6px; line-height: 1.1;">
                             <div style="font-size: 9px; font-weight: bold; color: #888; margin-bottom: 2px;">Nv.${geno.level || 1}</div>
