@@ -1,5 +1,5 @@
 // =========================================
-// ReactorManager.js - FUSIONES Y MUTACIONES (V15.30 - FIX RESCATE DE LAYOUT Y MÓVIL)
+// ReactorManager.js - FUSIONES Y MUTACIONES (V15.31 - FIX HUD TEXTOS Y SCROLL SEGURO)
 // =========================================
 
 // ✨ PARCHE GLOBAL INTELIGENTE: Ejecutamos un radar que busca la calculadora hasta atraparla
@@ -46,7 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
             height: 100% !important; 
             min-height: 100vh !important;
             overflow-y: auto !important;
-            padding: 20px 20px 40px 20px !important;
+            /* ✨ FIX SCROLL SEGURO: Aumentamos a 80px el padding inferior para proteger el botón Volver */
+            padding: 20px 20px 80px 20px !important;
             box-sizing: border-box !important;
             display: flex !important;
             flex-direction: column !important;
@@ -59,15 +60,13 @@ document.addEventListener("DOMContentLoaded", () => {
             box-shadow: 0 10px 25px rgba(0,0,0,0.4) !important;
             padding: 25px 20px !important;
             margin-bottom: 20px !important;
-            flex-shrink: 0 !important; /* Impide aplastamientos en móvil */
+            flex-shrink: 0 !important; 
             overflow: hidden !important; 
         }
 
-        /* ✨ FIX MAESTRO MÓVIL: Obliga al botón a respetar el espacio y no flotar */
         #alchemy-screen .btn-go-home {
             position: relative !important;
             margin-top: auto !important; 
-            margin-bottom: 20px !important;
             flex-shrink: 0 !important;
             z-index: 10 !important;
         }
@@ -117,6 +116,14 @@ document.addEventListener("DOMContentLoaded", () => {
         .custom-option:last-child { border-bottom: none; }
         .custom-option:hover { background: #4dd0e1; color: #1a2a36; }
         .custom-option.selected { background: rgba(77,208,225,0.2); color: #fff; }
+
+        /* Eliminamos cualquier estilo flex viejo del párrafo para no causar bugs de envoltura de texto */
+        #alchemy-screen p:has(span#alchemy-common-count),
+        #alchemy-screen p:has(span#reactor-cost-display) {
+            display: block !important;
+            border-bottom: none !important;
+            padding-bottom: 0 !important;
+        }
 
         #reactor-available-genos {
             background: #0d1a24 !important; 
@@ -303,47 +310,45 @@ document.addEventListener("DOMContentLoaded", () => {
         const descEl = document.getElementById("reactor-description");
         if(descEl) descEl.innerText = `COMBINA 5 ESPECÍMENES (${reglas.reqRarity.toUpperCase()}S) PARA INICIAR LA SECUENCIA DE FUSIÓN.`;
         
+        // ✨ FIX HUD TEXTOS: Destruimos el texto problemático y construimos un panel inviolable
+        let tempCountEl = document.getElementById("alchemy-common-count");
+        if (tempCountEl && tempCountEl.parentNode && tempCountEl.parentNode.tagName === 'P' && !tempCountEl.parentNode.dataset.hudReconstruido) {
+            const pContainer = tempCountEl.parentNode;
+            pContainer.dataset.hudReconstruido = "true"; 
+            
+            // Le damos estilo contenedor para que la caja negra interna respire
+            pContainer.style.display = "block";
+            pContainer.style.marginBottom = "25px";
+            pContainer.style.borderBottom = "none";
+            pContainer.style.paddingBottom = "0";
+
+            // Sobrescribimos todo su interior con dos bloques de div estructurados
+            pContainer.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.25); padding: 12px 15px; border-radius: 8px; border: 1px solid rgba(77,208,225,0.15);">
+                    <div style="display: flex; align-items: center; gap: 5px; font-size: 12px; color: #fff;">
+                        <span style="color: #94a3b8; font-weight: normal;">Disponibles (<span id="reactor-req-name"></span>):</span>
+                        <strong id="alchemy-common-count" style="color: #4dd0e1; font-size: 14px; text-shadow: 0 0 5px rgba(77,208,225,0.4);">0</strong>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 5px; font-size: 12px; color: #fff;">
+                        <span style="color: #94a3b8; font-weight: normal;">Costo:</span>
+                        <strong id="reactor-cost-display" style="color: #ffcc00; display: flex; align-items: center; gap: 4px; font-size: 14px; text-shadow: 0 0 5px rgba(255,204,0,0.4);">0</strong>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Recuperamos los elementos RECIÉN CREADOS por si los acabamos de inyectar
         const reqNameEl = document.getElementById("reactor-req-name");
         const countEl = document.getElementById("alchemy-common-count");
         const costEl = document.getElementById("reactor-cost-display");
 
-        // ✨ FIX MAESTRO DE TEXTOS: Modificamos respetando el HTML original
         if (reqNameEl) {
             let plural = reglas.reqRarity === "Común" ? "Comunes" : reglas.reqRarity + "s";
             reqNameEl.innerText = plural;
-            
-            // Borramos la 's' extra que ponía el HTML viejo ("Comúns):")
-            if (reqNameEl.nextSibling && reqNameEl.nextSibling.nodeType === 3) {
-                reqNameEl.nextSibling.nodeValue = reqNameEl.nextSibling.nodeValue.replace(/s\):/g, "):");
-            }
         }
 
         if (costEl) {
             costEl.innerHTML = `${reglas.cost} ${window.iconoEV}`;
-        }
-
-        // ✨ FIX LAYOUT: Separamos limpiamente usando el contenedor padre
-        if (countEl && countEl.parentNode && countEl.parentNode.tagName === 'P') {
-            const pContainer = countEl.parentNode;
-            pContainer.style.display = "flex";
-            pContainer.style.justifyContent = "space-between";
-            pContainer.style.alignItems = "center";
-            pContainer.style.background = "rgba(0,0,0,0.2)";
-            pContainer.style.padding = "12px 15px";
-            pContainer.style.borderRadius = "8px";
-            pContainer.style.border = "1px solid rgba(77,208,225,0.15)";
-            pContainer.style.marginBottom = "25px";
-            
-            // Textos estilizados en la propia p
-            pContainer.style.color = "#fff";
-            pContainer.style.fontSize = "12px";
-            pContainer.style.fontWeight = "bold";
-            
-            if (costEl) {
-                costEl.style.color = "#ffcc00";
-                costEl.style.display = "flex";
-                costEl.style.alignItems = "center";
-            }
         }
 
         const genosDisponibles = window.misGenos.filter(g => 
@@ -352,7 +357,7 @@ document.addEventListener("DOMContentLoaded", () => {
             (!window.miMascota || window.miMascota.id !== g.id)
         );
         
-        if(countEl) countEl.innerText = genosDisponibles.length;
+        if (countEl) countEl.innerText = genosDisponibles.length;
 
         const obtenerCalidadVisual = (g) => {
             if (g.stats && g.stats.calidadPorcentaje !== undefined) {
