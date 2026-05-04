@@ -1,5 +1,5 @@
 // =========================================
-// ReactorManager.js - FUSIONES Y MUTACIONES (V15.12 - FIX COLORES VIBRANTES)
+// ReactorManager.js - FUSIONES Y MUTACIONES (V15.13 - FIX INTERFAZ SELECTOR CUSTOM)
 // =========================================
 
 // ✨ PARCHE GLOBAL INTELIGENTE: Ejecutamos un radar que busca la calculadora hasta atraparla
@@ -88,24 +88,21 @@ document.addEventListener("DOMContentLoaded", () => {
             line-height: 1.4 !important;
         }
 
-        select#reactor-level-select {
-            background: #0d1a24 !important;
-            color: #4dd0e1 !important;
-            border: 1px solid #111c24 !important;
-            padding: 12px !important;
-            border-radius: 8px !important;
-            font-weight: bold !important;
-            text-transform: uppercase !important;
-            font-size: 11px !important;
-            letter-spacing: 1px !important;
-            outline: none;
-            cursor: pointer;
-            width: 100%;
-            margin-bottom: 20px;
-            text-align: center;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.3);
-        }
-        select#reactor-level-select option { background: #0d1a24; color: #4dd0e1; }
+        /* ✨ FIX MAESTRO DE INTERFAZ: Menú desplegable estilo videojuego sci-fi */
+        .custom-select-wrapper { position: relative; width: 100%; margin-bottom: 20px; user-select: none; }
+        .custom-select-trigger { background: #0d1a24 !important; color: #4dd0e1 !important; border: 1px solid #111c24 !important; padding: 15px !important; border-radius: 8px !important; font-weight: bold !important; text-transform: uppercase !important; font-size: 11px !important; letter-spacing: 1px !important; cursor: pointer; text-align: center; box-shadow: inset 0 2px 5px rgba(0,0,0,0.3); display: flex; justify-content: space-between; align-items: center; transition: all 0.2s; }
+        .custom-select-trigger:hover { border-color: #4dd0e1 !important; box-shadow: 0 0 10px rgba(77,208,225,0.2), inset 0 2px 5px rgba(0,0,0,0.3); }
+        .custom-select-trigger::after { content: '▼'; font-size: 10px; color: #4dd0e1; transition: transform 0.2s; }
+        .custom-select-trigger.open::after { transform: rotate(180deg); }
+        
+        .custom-select-options { position: absolute; top: 100%; left: 0; width: 100%; background: #0d1a24; border: 1px solid #4dd0e1; border-radius: 8px; margin-top: 5px; box-shadow: 0 10px 25px rgba(0,0,0,0.7); z-index: 999; display: none; overflow: hidden; }
+        .custom-select-options.open { display: block; animation: fadeInSelect 0.2s ease-in-out; }
+        @keyframes fadeInSelect { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .custom-option { padding: 15px; color: #4dd0e1; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; text-align: center; cursor: pointer; transition: all 0.2s; border-bottom: 1px dashed rgba(77,208,225,0.2); }
+        .custom-option:last-child { border-bottom: none; }
+        .custom-option:hover { background: #4dd0e1; color: #1a2a36; }
+        .custom-option.selected { background: rgba(77,208,225,0.2); color: #fff; }
 
         #alchemy-screen p:has(span#alchemy-common-count),
         #alchemy-screen p:has(span#reactor-cost-display) {
@@ -223,7 +220,62 @@ document.addEventListener("DOMContentLoaded", () => {
     const selectNivel = document.getElementById("reactor-level-select");
     window.genosEnReactor = []; 
     
-    if(selectNivel) {
+    // ✨ FIX MAESTRO: Creador del Select Custom
+    if (selectNivel) {
+        // Ocultar el original feo
+        selectNivel.style.display = "none";
+        
+        // Crear el Wrapper si no existe
+        if (!document.getElementById("custom-reactor-select")) {
+            const wrapper = document.createElement("div");
+            wrapper.className = "custom-select-wrapper";
+            wrapper.id = "custom-reactor-select";
+
+            const trigger = document.createElement("div");
+            trigger.className = "custom-select-trigger";
+            trigger.innerText = selectNivel.options[selectNivel.selectedIndex].text;
+
+            const optionsContainer = document.createElement("div");
+            optionsContainer.className = "custom-select-options";
+
+            Array.from(selectNivel.options).forEach((opt, index) => {
+                const customOpt = document.createElement("div");
+                customOpt.className = "custom-option" + (opt.selected ? " selected" : "");
+                customOpt.innerText = opt.text;
+                
+                customOpt.addEventListener("click", () => {
+                    selectNivel.selectedIndex = index;
+                    trigger.innerText = opt.text;
+                    trigger.classList.remove("open");
+                    optionsContainer.classList.remove("open");
+                    
+                    Array.from(optionsContainer.children).forEach(c => c.classList.remove("selected"));
+                    customOpt.classList.add("selected");
+                    
+                    // Disparamos el evento manualmente para que el código viejo se entere
+                    selectNivel.dispatchEvent(new Event("change"));
+                });
+                optionsContainer.appendChild(customOpt);
+            });
+
+            trigger.addEventListener("click", (e) => {
+                e.stopPropagation();
+                trigger.classList.toggle("open");
+                optionsContainer.classList.toggle("open");
+            });
+
+            document.addEventListener("click", (e) => {
+                if (!wrapper.contains(e.target)) {
+                    trigger.classList.remove("open");
+                    optionsContainer.classList.remove("open");
+                }
+            });
+
+            wrapper.appendChild(trigger);
+            wrapper.appendChild(optionsContainer);
+            selectNivel.parentNode.insertBefore(wrapper, selectNivel.nextSibling);
+        }
+
         selectNivel.addEventListener("change", () => {
             window.genosEnReactor = []; 
             window.renderizarAlquimia();
@@ -435,11 +487,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         const formaElegida = formasMutantes[Math.floor(Math.random() * formasMutantes.length)];
                         const elementoElegido = elementosMutantes[Math.floor(Math.random() * elementosMutantes.length)];
                         
-                        // ✨ FIX MAESTRO: Generador de colores HSL vibrantes (evita negros y grises)
                         const generarColorVibrante = () => {
                             const h = Math.floor(Math.random() * 360); 
-                            const s = Math.floor(Math.random() * 40) + 60; // 60% a 100% de saturación
-                            const l = Math.floor(Math.random() * 30) + 55; // 55% a 85% de luminosidad
+                            const s = Math.floor(Math.random() * 40) + 60; 
+                            const l = Math.floor(Math.random() * 30) + 55; 
                             
                             const l_dec = l / 100;
                             const a = (s / 100) * Math.min(l_dec, 1 - l_dec);
