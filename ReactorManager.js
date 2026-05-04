@@ -1,5 +1,5 @@
 // =========================================
-// ReactorManager.js - FUSIONES Y MUTACIONES (V15.26 - FIX SCROLL DE GENOS)
+// ReactorManager.js - FUSIONES Y MUTACIONES (V15.27 - FIX CÁLCULO DE CALIDAD EN TIEMPO REAL)
 // =========================================
 
 // ✨ PARCHE GLOBAL INTELIGENTE: Ejecutamos un radar que busca la calculadora hasta atraparla
@@ -119,7 +119,6 @@ document.addEventListener("DOMContentLoaded", () => {
             font-weight: normal !important;
         }
 
-        /* ✨ FIX MAESTRO: De vuelta a flex-start para no romper el scroll lateral */
         #reactor-available-genos {
             background: #0d1a24 !important; 
             border: none !important;
@@ -130,7 +129,7 @@ document.addEventListener("DOMContentLoaded", () => {
             box-sizing: border-box !important;
             min-height: 110px; 
             display: flex;
-            justify-content: flex-start !important; /* 👈 LIBERADOS: Ya puedes hacer scroll a los primeros */
+            justify-content: flex-start !important;
             gap: 8px; 
             overflow-x: auto;
             -ms-overflow-style: none; 
@@ -311,6 +310,27 @@ document.addEventListener("DOMContentLoaded", () => {
         const costEl = document.getElementById("reactor-cost-display");
         if(costEl) costEl.innerHTML = `${reglas.cost} ${window.iconoEV}`;
 
+        // ✨ FIX MAESTRO: Calculadora en tiempo real para Genos antiguos sin datos
+        const obtenerCalidadVisual = (g) => {
+            if (g.stats && g.stats.calidadPorcentaje !== undefined) {
+                return { rango: g.stats.rango, pct: g.stats.calidadPorcentaje };
+            }
+            const baseRarity = (g.rarity || "Común").replace("+", "");
+            const tabla = window.TABLA_IVS || window.ESCALA_RAREZAS;
+            const lim = tabla[baseRarity] || tabla["Común"];
+            const s = g.baseStats || g.stats;
+            const tMin = lim.hp[0] + lim.atk[0] + (lim.def?lim.def[0]:0) + lim.spd[0] + lim.luk[0];
+            const tMax = lim.hp[1] + lim.atk[1] + (lim.def?lim.def[1]:0) + lim.spd[1] + lim.luk[1];
+            const tObt = s.hp + s.atk + (s.def||0) + s.spd + s.luk - (g.umbralAplicado ? 25 : 0);
+            
+            let p = Math.round(((tObt - tMin) / (tMax - tMin)) * 100);
+            if (p > 100) p = 100; if (p < 0) p = 0;
+            
+            let r = "D";
+            if (p >= 90) r = "S"; else if (p >= 75) r = "A"; else if (p >= 50) r = "B"; else if (p >= 25) r = "C";
+            return { rango: r, pct: p };
+        };
+
         const genosDisponibles = window.misGenos.filter(g => 
             (g.rarity === reglas.reqRarity || g.rarity === reglas.reqRarity + "+") && 
             !g.isEgg && 
@@ -338,9 +358,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     let svg = typeof window.generarSvgGeno === 'function' ? window.generarSvgGeno(geno) : '';
                     svg = svg.replace(/<svg[^>]*>/, '<svg width="100%" height="100%" viewBox="-20 0 200 160" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="overflow: visible;">');
                     
-                    let rango = geno.stats && geno.stats.rango ? geno.stats.rango : "D";
+                    const { rango, pct } = obtenerCalidadVisual(geno);
                     let colorRango = rango === "S" ? "#ffcc00" : rango === "A" ? "#00d2ff" : rango === "B" ? "#4CAF50" : rango === "C" ? "#f0ad4e" : "#d9534f";
-                    let pct = geno.stats && geno.stats.calidadPorcentaje !== undefined ? geno.stats.calidadPorcentaje : 0;
 
                     slot.innerHTML = `
                         <div style="position: absolute; top: -5px; right: -5px; background: #0d1a24; border: 1px solid ${colorRango}; color: ${colorRango}; font-size: 8px; font-weight: 900; padding: 2px 4px; border-radius: 6px; display: flex; align-items: center; justify-content: center; z-index: 10; letter-spacing: 0.5px;">${rango} ${pct}%</div>
@@ -374,16 +393,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 genosLibres.forEach(geno => {
                     const card = document.createElement("div");
                     
-                    // La matemática sigue perfecta, pero ahora se puede hacer scroll hacia la derecha.
                     card.style = "min-width: calc(25% - 6px); height: 95px; background: rgba(0,0,0,0.3); border: 1px solid rgba(77,208,225,0.2); border-radius: 8px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; cursor: pointer; flex-shrink: 0; transition: transform 0.1s; position: relative; padding: 6px 2px; box-sizing: border-box;";
                     
                     const pColor = geno.color || geno.base_color || "#ccc";
                     let svg = typeof window.generarSvgGeno === 'function' ? window.generarSvgGeno(geno) : '';
                     svg = svg.replace(/<svg[^>]*>/, '<svg width="100%" height="100%" viewBox="-20 0 200 160" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="overflow: visible;">');
                     
-                    let rango = geno.stats && geno.stats.rango ? geno.stats.rango : "D";
+                    const { rango, pct } = obtenerCalidadVisual(geno);
                     let colorRango = rango === "S" ? "#ffcc00" : rango === "A" ? "#00d2ff" : rango === "B" ? "#4CAF50" : rango === "C" ? "#f0ad4e" : "#d9534f";
-                    let pct = geno.stats && geno.stats.calidadPorcentaje !== undefined ? geno.stats.calidadPorcentaje : 0;
 
                     card.innerHTML = `
                         <div style="width: 100%; text-align: left; padding-left: 6px; line-height: 1.1;">
