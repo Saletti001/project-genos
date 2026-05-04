@@ -213,14 +213,24 @@
             <p id="reactor-description" style="text-align: center; color: #666; font-size: 14px; padding: 0 20px; margin-bottom: 20px;">Fusiona 5 Genos Comunes para intentar crear 1 Geno Raro.</p>
             <div class="alchemy-panel">
                 <div class="alchemy-stats" style="flex-direction: column; gap: 10px; border-bottom: none; margin-bottom: 10px;">
-                    <select id="reactor-level-select" style="padding: 10px; border-radius: 8px; border: 2px solid #8B5CF6; font-weight: bold; color: #333; outline: none; width: 100%; text-align: center; cursor: pointer; background: #f8f9fa;">
-                        <option value="1">Nivel 1 (Quemar 5 Comunes)</option><option value="2">Nivel 2 (Quemar 5 Raros)</option><option value="3">Nivel 3 (Quemar 5 Épicos)</option>
-                    </select>
-                    <div style="display: flex; justify-content: space-between; width: 100%; margin-top: 10px; padding-bottom: 10px; border-bottom: 1px dashed #ccc;">
-                        <div>Disponibles (<span id="reactor-req-name">Comunes</span>): <span id="alchemy-common-count" style="font-weight: bold;">0</span></div>
-                        <div>Costo: <span id="reactor-cost-display" style="font-weight: bold; color: #b8860b;">100 ✨</span></div>
-                    </div>
-                </div>
+    <select id="reactor-level-select" style="padding: 10px; border-radius: 8px; border: 2px solid #8B5CF6; font-weight: bold; color: #333; outline: none; width: 100%; text-align: center; cursor: pointer; background: #f8f9fa;">
+        <option value="1">Nivel 1 (Quemar 5 Comunes)</option>
+        <option value="2">Nivel 2 (Quemar 5 Raros)</option>
+        <option value="3">Nivel 3 (Quemar 5 Épicos)</option>
+    </select>
+    
+    <!-- Nuevo contenedor simplificado y flexible -->
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; width: 100%; margin-top: 10px; padding-bottom: 10px; border-bottom: 1px dashed #ccc; color: #fff; font-size: 13px;">
+        <div style="display: flex; align-items: center; gap: 5px;">
+            Disponibles: <span id="alchemy-common-count" style="font-weight: bold; color: #4dd0e1; font-size: 14px;">0</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 5px;">
+            Costo: <span id="reactor-cost-display" style="font-weight: bold; color: #ffcc00; font-size: 14px; display: flex; align-items: center;">100 ✨</span>
+        </div>
+        <!-- Elemento oculto para compatibilidad con scripts existentes que busquen este ID -->
+        <span id="reactor-req-name" style="display: none;">Comunes</span>
+    </div>
+</div>
                 <div id="reactor-slots-container" style="display: flex; justify-content: center; gap: 8px; margin-bottom: 15px; width: 100%; min-height: 55px;"></div>
                 <div style="font-size: 11px; color: #888; text-align: left; width: 100%; margin-bottom: 5px;">Toca un Geno para cargarlo:</div>
                 <div id="reactor-available-genos" style="display: flex; overflow-x: auto; gap: 10px; padding: 10px; background: #f0f4f8; border-radius: 8px; margin-bottom: 20px; width: 100%; min-height: 60px; box-sizing: border-box;"></div>
