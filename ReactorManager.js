@@ -1,5 +1,5 @@
 // =========================================
-// ReactorManager.js - FUSIONES Y MUTACIONES (V15.18 - FIX ANCHO CONTENEDOR GENOS)
+// ReactorManager.js - FUSIONES Y MUTACIONES (V15.19 - FIX CUADRÍCULA PERFECTA 4 GENOS)
 // =========================================
 
 // ✨ PARCHE GLOBAL INTELIGENTE: Ejecutamos un radar que busca la calculadora hasta atraparla
@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
             box-shadow: 0 10px 25px rgba(0,0,0,0.4) !important;
             padding: 25px 20px !important;
             margin-bottom: auto !important;
-            overflow: hidden !important; /* Para que no se salga el margen negativo de las opciones */
+            overflow: hidden !important; 
         }
 
         #alchemy-screen .reactor-panel-wrapper > div {
@@ -124,13 +124,13 @@ document.addEventListener("DOMContentLoaded", () => {
             background: #0d1a24 !important; 
             border: none !important;
             border-radius: 12px !important;
-            padding: 15px 8px !important; /* Menos padding interior a los lados */
-            margin: 0 -12px !important; /* Estira la caja hacia los bordes */
-            width: calc(100% + 24px) !important; /* Compensa los márgenes negativos */
+            padding: 15px 8px !important; 
+            margin: 0 -18px !important; /* 👈 Se estira más a los lados */
+            width: calc(100% + 36px) !important; /* 👈 Compensa el estiramiento */
             box-sizing: border-box !important;
             min-height: 110px; 
             display: flex;
-            gap: 8px; /* Menos espacio entre cartas (de 10px a 8px) */
+            gap: 6px; /* 👈 Espaciado más compacto (antes 8px) */
             overflow-x: auto;
             -ms-overflow-style: none; 
             scrollbar-width: none;
@@ -143,7 +143,7 @@ document.addEventListener("DOMContentLoaded", () => {
             color: #64748b !important;
             font-size: 10px !important;
             margin-bottom: 8px !important;
-            margin-left: -5px !important; /* Acomoda el texto al nuevo margen */
+            margin-left: -8px !important; 
             text-align: left !important;
             text-transform: none !important;
             font-weight: normal !important;
@@ -372,7 +372,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 genosLibres.forEach(geno => {
                     const card = document.createElement("div");
                     
-                    card.style = "min-width: 65px; height: 85px; background: rgba(0,0,0,0.3); border: 1px solid rgba(77,208,225,0.2); border-radius: 8px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; cursor: pointer; flex-shrink: 0; transition: transform 0.1s; position: relative; padding: 5px 0;";
+                    // ✨ FIX: Ancho reducido a 62px para que entren 4 perfectos
+                    card.style = "min-width: 62px; height: 85px; background: rgba(0,0,0,0.3); border: 1px solid rgba(77,208,225,0.2); border-radius: 8px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; cursor: pointer; flex-shrink: 0; transition: transform 0.1s; position: relative; padding: 5px 0;";
                     
                     const pColor = geno.color || geno.base_color || "#ccc";
                     let svg = typeof window.generarSvgGeno === 'function' ? window.generarSvgGeno(geno) : '';
@@ -382,12 +383,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     let colorRango = rango === "S" ? "#ffcc00" : rango === "A" ? "#00d2ff" : rango === "B" ? "#4CAF50" : rango === "C" ? "#f0ad4e" : "#d9534f";
 
                     card.innerHTML = `
-                        <div style="width: 100%; display: flex; justify-content: space-between; padding: 0 5px; box-sizing: border-box;">
+                        <div style="width: 100%; display: flex; justify-content: space-between; padding: 0 4px; box-sizing: border-box;">
                             <span style="font-size: 9px; font-weight: bold; color: #888;">Nv.${geno.level || 1}</span>
                             <span style="font-size: 10px; font-weight: 900; color: ${colorRango};">${rango}</span>
                         </div>
-                        <div style="width: 40px; height: 40px; color: ${pColor}; display: flex; justify-content: center; align-items: center; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5)); margin-bottom: 2px;">${svg}</div>
-                        <div style="font-size: 9px; color: #fff; max-width: 60px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${geno.name || "Geno"}</div>
+                        <div style="width: 38px; height: 38px; color: ${pColor}; display: flex; justify-content: center; align-items: center; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5)); margin-bottom: 2px;">${svg}</div>
+                        <div style="font-size: 9px; color: #fff; max-width: 58px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${geno.name || "Geno"}</div>
                     `;
                     
                     card.addEventListener("mousedown", () => card.style.transform = "scale(0.95)");
