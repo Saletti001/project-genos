@@ -1,5 +1,5 @@
 // =========================================
-// ReactorManager.js - FUSIONES Y MUTACIONES (V15.13 - FIX INTERFAZ SELECTOR CUSTOM)
+// ReactorManager.js - FUSIONES Y MUTACIONES (V15.14 - FIX LIMPIEZA DE UI)
 // =========================================
 
 // ✨ PARCHE GLOBAL INTELIGENTE: Ejecutamos un radar que busca la calculadora hasta atraparla
@@ -220,12 +220,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const selectNivel = document.getElementById("reactor-level-select");
     window.genosEnReactor = []; 
     
-    // ✨ FIX MAESTRO: Creador del Select Custom
     if (selectNivel) {
-        // Ocultar el original feo
         selectNivel.style.display = "none";
         
-        // Crear el Wrapper si no existe
         if (!document.getElementById("custom-reactor-select")) {
             const wrapper = document.createElement("div");
             wrapper.className = "custom-select-wrapper";
@@ -252,7 +249,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     Array.from(optionsContainer.children).forEach(c => c.classList.remove("selected"));
                     customOpt.classList.add("selected");
                     
-                    // Disparamos el evento manualmente para que el código viejo se entere
                     selectNivel.dispatchEvent(new Event("change"));
                 });
                 optionsContainer.appendChild(customOpt);
@@ -294,7 +290,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const reglas = reactorRules[nivel];
         
         const descEl = document.getElementById("reactor-description");
-        if(descEl) descEl.innerText = `COMBINA 5 ESPECÍMENES (${reglas.reqRarity.toUpperCase()}S) PARA INICIAR LA SECUENCIA DE FUSIÓN. COSTE: ${reglas.cost} ✨`;
+        // ✨ FIX: Texto de descripción limpio, sin repetir el costo
+        if(descEl) descEl.innerText = `COMBINA 5 ESPECÍMENES (${reglas.reqRarity.toUpperCase()}S) PARA INICIAR LA SECUENCIA DE FUSIÓN.`;
         
         const reqNameEl = document.getElementById("reactor-req-name");
         if(reqNameEl) reqNameEl.innerText = reglas.reqRarity + "s";
