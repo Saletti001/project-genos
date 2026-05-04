@@ -1,5 +1,5 @@
 // =========================================
-// ReactorManager.js - FUSIONES Y MUTACIONES (V15.24 - FIX SIMETRÍA PERFECTA)
+// ReactorManager.js - FUSIONES Y MUTACIONES (V15.25 - FIX CENTRADO MATEMÁTICO)
 // =========================================
 
 // ✨ PARCHE GLOBAL INTELIGENTE: Ejecutamos un radar que busca la calculadora hasta atraparla
@@ -119,18 +119,19 @@ document.addEventListener("DOMContentLoaded", () => {
             font-weight: normal !important;
         }
 
-        /* ✨ FIX MAESTRO: Simetría matemática absoluta */
+        /* ✨ FIX MAESTRO: Centrado absoluto de los elementos en el contenedor */
         #reactor-available-genos {
             background: #0d1a24 !important; 
             border: none !important;
             border-radius: 8px !important; 
-            padding: 15px 20px !important; /* Empareja exactamente con el margen negativo */
-            margin: 0 -20px !important; /* Toca justo el borde interno del panel, sin desbordarse */
-            width: calc(100% + 40px) !important; /* Compensa los 20px de cada lado */
+            padding: 15px 10px !important; 
+            margin: 0 -15px !important; 
+            width: calc(100% + 30px) !important; 
             box-sizing: border-box !important;
             min-height: 110px; 
             display: flex;
-            gap: 8px; /* 3 espacios de 8px */
+            justify-content: center !important; /* 👈 MAGIA: Obliga a que todos queden en el medio */
+            gap: 8px; 
             overflow-x: auto;
             -ms-overflow-style: none; 
             scrollbar-width: none;
@@ -373,8 +374,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 genosLibres.forEach(geno => {
                     const card = document.createElement("div");
                     
-                    // ✨ FIX: Fórmula perfeccionada (25% menos el espacio de 3 huecos repartido en 4 cartas = 6px)
-                    card.style = "min-width: calc(25% - 6px); height: 95px; background: rgba(0,0,0,0.3); border: 1px solid rgba(77,208,225,0.2); border-radius: 8px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; cursor: pointer; flex-shrink: 0; transition: transform 0.1s; position: relative; padding: 6px 2px; box-sizing: border-box;";
+                    // ✨ FIX: Modificamos el ancho para darle aire y permitir que flex-center trabaje
+                    card.style = "min-width: calc(25% - 8px); height: 95px; background: rgba(0,0,0,0.3); border: 1px solid rgba(77,208,225,0.2); border-radius: 8px; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; cursor: pointer; flex-shrink: 0; transition: transform 0.1s; position: relative; padding: 6px 2px; box-sizing: border-box;";
                     
                     const pColor = geno.color || geno.base_color || "#ccc";
                     let svg = typeof window.generarSvgGeno === 'function' ? window.generarSvgGeno(geno) : '';
