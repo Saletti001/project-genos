@@ -1,5 +1,5 @@
 // =========================================
-// SanctuaryManager.js - LÓGICA DEL SANTUARIO V9.4 (FIX LAYOUT ABSOLUTO Y BOTÓN)
+// SanctuaryManager.js - LÓGICA DEL SANTUARIO V9.5 (FIX TARJETAS APLASTADAS)
 // =========================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
             flex-direction: column !important;
         }
 
-        /* ✨ FIX MAESTRO: El contenedor se adapta sin desbordar */
         #sanctuary-screen .sanctuary-panel-wrapper {
             background: #1a2a36 !important;
             border: none !important;
@@ -31,12 +30,11 @@ document.addEventListener("DOMContentLoaded", () => {
             margin-bottom: 20px !important;
             display: flex !important;
             flex-direction: column !important;
-            flex: 1 1 0 !important; /* 👈 Se adapta al espacio sobrante */
-            min-height: 0 !important; /* 👈 CRUCIAL: Impide que el contenido rompa la caja */
+            flex: 1 1 0 !important; 
+            min-height: 0 !important; 
             overflow: hidden !important; 
         }
 
-        /* Protegemos los elementos fijos de arriba para que no se encojan */
         #sanctuary-screen h2.screen-title,
         #sanctuary-screen p.sanctuary-desc,
         .sanctuary-limit-hud {
@@ -78,18 +76,19 @@ document.addEventListener("DOMContentLoaded", () => {
             margin-bottom: 20px;
         }
 
-        /* ✨ FIX SCROLL INTERNO: Solo esta área puede deslizarse */
+        /* ✨ FIX MAESTRO DE TARJETAS: Obligamos a que respeten su altura */
         .sanctuary-grid-modern {
             display: grid !important;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+            grid-auto-rows: max-content !important; /* 👈 Impide que las tarjetas se aplasten */
+            align-content: start !important; /* 👈 Las apila desde arriba hacia abajo */
             gap: 15px !important;
             width: 100% !important;
-            flex: 1 1 0 !important; /* 👈 Ocupa el espacio disponible */
-            min-height: 0 !important; /* 👈 Activa el scroll en Flexbox */
+            flex: 1 1 0 !important; 
+            min-height: 0 !important; 
             overflow-y: auto !important; 
             padding-bottom: 25px !important; 
             
-            /* Ocultar barras de scroll */
             -ms-overflow-style: none !important;
             scrollbar-width: none !important;
         }
@@ -98,15 +97,14 @@ document.addEventListener("DOMContentLoaded", () => {
             display: none !important;
         }
 
-        /* ✨ FIX BOTÓN: Eliminamos la herencia fantasma de fab-btn */
         #sanctuary-screen .btn-go-home {
             position: relative !important;
             left: auto !important;
             right: auto !important;
             top: auto !important;
             bottom: auto !important;
-            transform: none !important; /* Anula traslaciones previas */
-            align-self: center !important; /* Centrado absoluto horizontal */
+            transform: none !important; 
+            align-self: center !important; 
             display: flex !important;
             justify-content: center !important;
             align-items: center !important;
@@ -164,7 +162,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 wrapper.insertBefore(limitHud, gridEl);
             }
 
-            // Inyectamos el diseño premium del botón pero ahora las reglas CSS nuevas lo controlarán
             if (breedingScreen) {
                 const btnCrianza = breedingScreen.querySelector('.btn-go-home');
                 const btnSanctuary = sanctuaryScreen.querySelector('.btn-go-home');
@@ -198,7 +195,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return count;
     }
 
-    // --- CÁLCULO DE RECOMPENSA V8.0 ---
     function calcularRecompensa(geno) {
         let base = 100;
         switch(geno.rarity) {
@@ -214,7 +210,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return Math.floor(base * multiplicador);
     }
 
-    // --- CÁLCULO DE CALIDAD EN TIEMPO REAL ---
     const obtenerCalidadVisual = (g) => {
         if (g.stats && g.stats.calidadPorcentaje !== undefined) {
             return { rango: g.stats.rango, pct: g.stats.calidadPorcentaje };
@@ -277,7 +272,8 @@ document.addEventListener("DOMContentLoaded", () => {
             let colorRango = rango === "S" ? "#ffcc00" : rango === "A" ? "#00d2ff" : rango === "B" ? "#4CAF50" : rango === "C" ? "#f0ad4e" : "#d9534f";
 
             const card = document.createElement("div");
-            card.style = "background: rgba(0,0,0,0.3); border: 1px solid rgba(76, 175, 80, 0.2); border-radius: 12px; display: flex; flex-direction: column; align-items: center; position: relative; overflow: hidden; padding: 10px; box-sizing: border-box;";
+            // ✨ FIX: Agregamos min-height y justify-content para que la tarjeta sea robusta
+            card.style = "background: rgba(0,0,0,0.3); border: 1px solid rgba(76, 175, 80, 0.2); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; position: relative; overflow: hidden; padding: 12px 10px; box-sizing: border-box; min-height: 220px;";
             
             let overlayHtml = '';
             let btnHtml = '';
@@ -289,11 +285,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         <span style="font-size: 24px; filter: drop-shadow(0 0 5px #ff9800); margin-bottom: 5px;">⏳</span>
                         <span style="color: #ff9800; font-size: 10px; font-weight: bold; text-align: center; text-transform: uppercase; letter-spacing: 1px;">En Reposo<br>${horasRestantes}h</span>
                     </div>`;
-                btnHtml = `<button disabled style="margin-top: 10px; width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2a323d; color: #888; font-weight: bold; cursor: not-allowed; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">BLOQUEADO</button>`;
+                btnHtml = `<button disabled style="margin-top: auto; width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2a323d; color: #888; font-weight: bold; cursor: not-allowed; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">BLOQUEADO</button>`;
             } else if (dailyReleases >= maxDailyReleases) {
-                btnHtml = `<button disabled style="margin-top: 10px; width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2a323d; color: #888; font-weight: bold; cursor: not-allowed; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">LÍMITE ALCANZADO</button>`;
+                btnHtml = `<button disabled style="margin-top: auto; width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2a323d; color: #888; font-weight: bold; cursor: not-allowed; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">LÍMITE ALCANZADO</button>`;
             } else {
-                btnHtml = `<button class="btn-liberar-geno" data-id="${geno.id}" style="margin-top: 10px; width: 100%; padding: 12px; border-radius: 8px; background: transparent; border: 1px solid #4CAF50; color: #4CAF50; font-weight: 900; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">LIBERAR ✨</button>`;
+                btnHtml = `<button class="btn-liberar-geno" data-id="${geno.id}" style="margin-top: auto; width: 100%; padding: 12px; border-radius: 8px; background: transparent; border: 1px solid #4CAF50; color: #4CAF50; font-weight: 900; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">LIBERAR ✨</button>`;
             }
 
             const extraBadge = (typeof window.getMultiplicadorEsencia === 'function' && window.getMultiplicadorEsencia(geno) > 1) 
@@ -304,19 +300,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 ${overlayHtml}
                 ${extraBadge}
                 
-                <div style="width: 100%; text-align: left; padding-left: 2px; line-height: 1.1; margin-bottom: 5px;">
+                <div style="width: 100%; text-align: left; padding-left: 2px; line-height: 1.1; margin-bottom: 10px;">
                     <div style="font-size: 9px; font-weight: bold; color: #888; margin-bottom: 2px;">Nv.${geno.level || 1}</div>
                     <div style="font-size: 10px; font-weight: 900; color: ${colorRango}; letter-spacing: 0.5px;">${rango} <span style="font-size: 8px;">${pct}%</span></div>
                 </div>
 
-                <div style="width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; color: ${pColor}; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); margin-bottom: 5px;">
+                <div style="width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; color: ${pColor}; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); margin-bottom: 10px;">
                     ${svg}
                 </div>
                 
                 <div style="font-size: 11px; color: #fff; width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: center; margin-bottom: 2px;">${geno.name || 'Geno'}</div>
                 <div style="font-size: 9px; color: #888; text-transform: uppercase; margin-bottom: 10px;">${(geno.rarity || 'Común').replace('+', '')}</div>
                 
-                <div style="background: rgba(0,0,0,0.5); border-radius: 6px; padding: 6px; width: 100%; box-sizing: border-box; text-align: center; border: 1px solid rgba(255,204,0,0.1);">
+                <div style="background: rgba(0,0,0,0.5); border-radius: 6px; padding: 6px; width: 100%; box-sizing: border-box; text-align: center; border: 1px solid rgba(255,204,0,0.1); margin-bottom: 10px;">
                     <span style="color: #ffcc00; font-weight: bold; font-size: 13px; text-shadow: 0 0 5px rgba(255,204,0,0.5);">+${reward} ${window.iconoEV || '✨'}</span>
                 </div>
                 ${btnHtml}
