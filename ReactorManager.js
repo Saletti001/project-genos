@@ -1,5 +1,5 @@
 // =========================================
-// ReactorManager.js - FUSIONES Y MUTACIONES (V15.15 - FIX LORE "FUSIONAR")
+// ReactorManager.js - FUSIONES Y MUTACIONES (V15.16 - FIX ICONO EV SVG)
 // =========================================
 
 // ✨ PARCHE GLOBAL INTELIGENTE: Ejecutamos un radar que busca la calculadora hasta atraparla
@@ -31,6 +31,9 @@ const intervalParche = setInterval(() => {
     intentosParche++;
     if (intentosParche > 100) clearInterval(intervalParche); 
 }, 100);
+
+// ✨ NUEVO: ICONO SVG GLOBAL PARA LA ESENCIA VITAL (EV)
+window.iconoEV = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: text-bottom; filter: drop-shadow(0 0 4px rgba(255,204,0,0.8)); margin-left: 2px;"><path d="M12 1L14.5 8.5L22 11L14.5 13.5L12 21L9.5 13.5L2 11L9.5 8.5L12 1Z" fill="#FFD700"/><path d="M12 4L13.5 9.5L19 11L13.5 12.5L12 18L10.5 12.5L5 11L10.5 9.5L12 4Z" fill="#FFF8DC"/></svg>`;
 
 document.addEventListener("DOMContentLoaded", () => {
     
@@ -234,7 +237,6 @@ document.addEventListener("DOMContentLoaded", () => {
             optionsContainer.className = "custom-select-options";
 
             Array.from(selectNivel.options).forEach((opt, index) => {
-                // ✨ FIX LORE: Reemplazamos automáticamente QUEMAR por FUSIONAR 
                 const textoAdaptado = opt.text.replace(/QUEMAR/gi, "FUSIONAR");
                 
                 if (opt.selected) trigger.innerText = textoAdaptado;
@@ -299,7 +301,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if(reqNameEl) reqNameEl.innerText = reglas.reqRarity + "s";
         
         const costEl = document.getElementById("reactor-cost-display");
-        if(costEl) costEl.innerText = reglas.cost + " ✨";
+        // ✨ FIX: Usamos innerHTML para renderizar el SVG en lugar del texto puro
+        if(costEl) costEl.innerHTML = `${reglas.cost} ${window.iconoEV}`;
 
         const genosDisponibles = window.misGenos.filter(g => 
             (g.rarity === reglas.reqRarity || g.rarity === reglas.reqRarity + "+") && 
@@ -548,6 +551,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         window.misGenos.push(mutante);
                     };
 
+                    // ✨ FIX: Cambiamos el texto de la alerta para usar "EV" en vez del emoji
                     if (tirada < limiteCritico) {
                         inyectarNuevoMutante(reglas.resCrit);
                         mensaje = `¡ÉXITO CRÍTICO! 🌟\nEl Reactor ha creado una anomalía: [Geno ${reglas.resCrit.rarity}].`;
@@ -565,7 +569,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             window.miInventario.vitalEssence += compensacion;
                             if(typeof window.miInventario.updateUI === 'function') window.miInventario.updateUI();
                         }
-                        mensaje = `¡COLAPSO DEL REACTOR! 💥\nLos 5 Genos se desintegraron. Recuperas ${compensacion} ✨ de los restos irradiados.`;
+                        mensaje = `¡COLAPSO DEL REACTOR! 💥\nLos 5 Genos se desintegraron. Recuperas ${compensacion} EV de los restos irradiados.`;
                     }
 
                     setTimeout(() => {
