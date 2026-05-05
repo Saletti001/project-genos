@@ -1,5 +1,5 @@
 // =========================================
-// SanctuaryManager.js - LÓGICA DEL SANTUARIO V9.5 (FIX TARJETAS APLASTADAS)
+// SanctuaryManager.js - LÓGICA DEL SANTUARIO V9.6 (FIX BRILLO NEÓN DEL BOTÓN)
 // =========================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -76,12 +76,11 @@ document.addEventListener("DOMContentLoaded", () => {
             margin-bottom: 20px;
         }
 
-        /* ✨ FIX MAESTRO DE TARJETAS: Obligamos a que respeten su altura */
         .sanctuary-grid-modern {
             display: grid !important;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
-            grid-auto-rows: max-content !important; /* 👈 Impide que las tarjetas se aplasten */
-            align-content: start !important; /* 👈 Las apila desde arriba hacia abajo */
+            grid-auto-rows: max-content !important; 
+            align-content: start !important; 
             gap: 15px !important;
             width: 100% !important;
             flex: 1 1 0 !important; 
@@ -97,6 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
             display: none !important;
         }
 
+        /* ✨ FIX MAESTRO DE NEÓN: Dejamos que el botón respire sin forzar flex interno */
         #sanctuary-screen .btn-go-home {
             position: relative !important;
             left: auto !important;
@@ -105,14 +105,16 @@ document.addEventListener("DOMContentLoaded", () => {
             bottom: auto !important;
             transform: none !important; 
             align-self: center !important; 
-            display: flex !important;
-            justify-content: center !important;
-            align-items: center !important;
+            margin: 0 auto !important; 
             width: 70% !important;
             max-width: 300px !important;
             flex-shrink: 0 !important;
-            margin: 0 !important;
             z-index: 10 !important;
+            
+            /* Eliminamos estilos por defecto de la etiqueta <button> que rompen el padding del neón */
+            border: none !important;
+            outline: none !important;
+            background-color: transparent !important;
         }
     `;
     document.head.appendChild(style);
@@ -272,7 +274,6 @@ document.addEventListener("DOMContentLoaded", () => {
             let colorRango = rango === "S" ? "#ffcc00" : rango === "A" ? "#00d2ff" : rango === "B" ? "#4CAF50" : rango === "C" ? "#f0ad4e" : "#d9534f";
 
             const card = document.createElement("div");
-            // ✨ FIX: Agregamos min-height y justify-content para que la tarjeta sea robusta
             card.style = "background: rgba(0,0,0,0.3); border: 1px solid rgba(76, 175, 80, 0.2); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; position: relative; overflow: hidden; padding: 12px 10px; box-sizing: border-box; min-height: 220px;";
             
             let overlayHtml = '';
