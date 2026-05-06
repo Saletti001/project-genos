@@ -1,5 +1,5 @@
 // =========================================
-// SanctuaryManager.js - LÓGICA DEL SANTUARIO V10.0 (NEÓN Y SCROLL PERFECTOS)
+// SanctuaryManager.js - LÓGICA DEL SANTUARIO V10.1 (UI ORIGINAL Y SCROLL)
 // =========================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
             border-radius: 16px !important;
             box-shadow: 0 10px 25px rgba(0,0,0,0.4) !important;
             padding: 25px 20px 0 20px !important; 
-            margin-bottom: 5px !important;
+            margin-bottom: 20px !important;
             display: flex !important;
             flex-direction: column !important;
             flex: 1 1 0 !important; 
@@ -96,28 +96,12 @@ document.addEventListener("DOMContentLoaded", () => {
             display: none !important;
         }
 
-        /* ✨ FIX MAESTRO DEL BOTÓN: Forzamos la purga de estilos nativos */
-        #sanctuary-screen .sanctuary-btn {
-            display: block !important;
+        /* Dejamos que el botón use las reglas nativas de ui.css, solo lo posicionamos */
+        #sanctuary-screen .btn-go-home {
             position: relative !important;
-            margin-top: 15px !important;
-            margin-bottom: 0 !important;
-            margin-left: auto !important;
-            margin-right: auto !important;
-            width: 70% !important;
-            max-width: 300px !important;
+            margin-top: auto !important;
             flex-shrink: 0 !important;
             z-index: 10 !important;
-            transform: none !important;
-            
-            /* Eliminadores de estilo de navegador */
-            appearance: none !important;
-            -webkit-appearance: none !important;
-            border: none !important;
-            outline: none !important;
-            background: transparent !important;
-            padding: 0 !important;
-            box-shadow: none !important;
         }
     `;
     document.head.appendChild(style);
@@ -127,18 +111,22 @@ document.addEventListener("DOMContentLoaded", () => {
         const sanctuaryScreen = document.getElementById("sanctuary-screen");
         
         if (sanctuaryScreen) {
-            // 1. Construir el panel negro (sólo si no existe)
             if (!sanctuaryScreen.querySelector('.sanctuary-panel-wrapper')) {
                 const wrapper = document.createElement("div");
                 wrapper.className = "sanctuary-panel-wrapper";
                 
                 Array.from(sanctuaryScreen.children).forEach(child => {
-                    // Ignoramos el botón para que quede fuera del panel negro
+                    // Mantenemos el botón back-btn AFUERA del contenedor oscuro
                     if (!child.classList.contains('btn-go-home') && child !== wrapper) {
-                        if (child.tagName === 'P') child.className = "sanctuary-desc";
+                        
+                        if (child.tagName === 'P') {
+                            child.className = "sanctuary-desc";
+                        }
+
                         if (child.tagName === 'DIV' && child.innerText.includes('Límite diario')) {
                             child.style.display = 'none'; 
                         }
+
                         wrapper.appendChild(child);
                     }
                 });
@@ -161,15 +149,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 `;
                 wrapper.insertBefore(limitHud, gridEl);
-            }
-
-            // ✨ 2. EL TRANSFORMADOR DEL BOTÓN
-            const btnSanctuary = sanctuaryScreen.querySelector('.btn-go-home');
-            if (btnSanctuary && !btnSanctuary.classList.contains('sanctuary-btn')) {
-                // Le asignamos las clases premium
-                btnSanctuary.className = "fab-btn btn-go-home sanctuary-btn";
-                // Le inyectamos el HTML interior exacto del botón Crianza/Reactor
-                btnSanctuary.innerHTML = '<div class="fab-content" style="font-size: 13px; cursor: pointer; padding: 12px 0; font-weight: bold; width: 100%; text-align: center; letter-spacing: 1px;">VOLVER AL LABORATORIO</div>';
             }
         }
     }, 50);
