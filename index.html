@@ -364,8 +364,21 @@
             
             <button id="btn-start-battle" class="btn-fuse" style="background: linear-gradient(90deg, #d9534f, #ff5252); color: #fff; font-weight: 900; border: none; padding: 16px; border-radius: 10px; width: 100%; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; flex-shrink: 0; margin-bottom: 90px; box-shadow: 0 4px 15px rgba(217, 83, 79, 0.4);">Entrar a la Arena</button>
             
-            <div id="btn-leave-battle" class="fab-btn btn-go-home" style="position: absolute !important; bottom: 30px !important; left: 50% !important; transform: translateX(-50%) !important; width: 70% !important; max-width: 300px !important; z-index: 100 !important;">
-                <div class="fab-content" style="font-size: 13px; cursor: pointer; padding: 12px 0; font-weight: bold; text-align: center; letter-spacing: 1px;">RETIRARSE</div>
+            <style>
+                #btn-leave-battle.fab-btn {
+                    position: absolute !important;
+                    bottom: 30px !important;
+                    left: 50% !important;
+                    transform: translateX(-50%) !important;
+                    width: 70% !important;
+                    max-width: 300px !important;
+                    z-index: 100 !important;
+                    margin: 0 !important;
+                    height: auto !important;
+                }
+            </style>
+            <div id="btn-leave-battle" class="fab-btn btn-go-home">
+                <div class="fab-content" style="font-size: 13px; cursor: pointer; padding: 12px 0; font-weight: bold; text-align: center; letter-spacing: 1px; width: 100%; box-sizing: border-box;">RETIRARSE</div>
             </div>
         </div>
         <!-- Pega esto justo encima del div id="market-screen" -->
