@@ -1,64 +1,70 @@
-/* ArcadeUI.css - Estilos independientes para el Salón Arcade */
+/* ArcadeUI.css - Estilos independientes y blindados para el Salón Arcade */
 
-/* 🔥 EL ARREGLO: Añadimos :not(.hidden) para que permita ocultarse 🔥 */
+/* 1. EL FONDO CIAN (Solo cuando no está oculto) */
 #arcade-menu.app-screen:not(.hidden) {
     background-color: #4dd0e1 !important; 
     background-image: repeating-linear-gradient(to bottom, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 6px) !important;
     height: 100dvh !important;
     max-height: 100dvh !important;
     overflow: hidden !important;
-    padding: 20px !important;
+    padding: 15px !important; /* Un poco menos de padding para el contenedor general */
     box-sizing: border-box !important;
     display: flex !important;
     flex-direction: column !important;
 }
 
-#arcade-menu .screen-title {
-    color: #4dd0e1 !important; 
-    text-shadow: none !important;
-    text-transform: uppercase !important;
-    letter-spacing: 2px !important;
-    margin: 0 0 15px 0 !important;
-    font-weight: bold !important;
-    text-align: center !important;
-    font-size: 16px !important;
-    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
-    padding-bottom: 15px !important;
-    flex-shrink: 0 !important;
-}
-
-.arcade-card-container {
-    flex-grow: 1 !important; 
-    overflow-y: hidden !important; 
+/* 2. LA CAJA OSCURA (Blindada y elástica) */
+#arcade-menu .arcade-card-container {
+    flex-grow: 1 !important; /* Se estira hacia abajo */
+    overflow-y: hidden !important; /* Esconde el scroll de la caja general */
     background: #1a2a36 !important;
     border-radius: 16px !important;
     box-shadow: 0 10px 25px rgba(0,0,0,0.4) !important;
-    padding: 20px !important;
-    margin-bottom: 55px !important; 
+    padding: 15px !important;
+    margin-bottom: 55px !important; /* Margen blindado para separar el botón */
     display: flex !important;
     flex-direction: column !important;
 }
 
-.arcade-games-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important; 
-    gap: 12px !important;
-    overflow-y: auto !important; 
+/* 3. EL TÍTULO ( Cyan sobre oscuro ) */
+#arcade-menu .arcade-card-container .screen-title {
+    color: #4dd0e1 !important; 
+    text-shadow: none !important;
+    text-transform: uppercase !important;
+    letter-spacing: 2px !important;
+    margin: 0 0 10px 0 !important;
+    font-weight: bold !important;
+    text-align: center !important;
+    font-size: 14px !important; /* Un poco más compacto */
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
     padding-bottom: 10px !important;
+    flex-shrink: 0 !important;
+}
+
+/* 4. LA CUADRÍCULA DE JUEGOS (Blindada de 2 columnas y con SCROLL ACTIVO) */
+#arcade-menu .arcade-card-container .arcade-games-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important; /* FORZAMOS 2 COLUMNAS PERFECTAS */
+    gap: 8px !important; /* Espacio más compacto */
+    overflow-y: auto !important; /* 🔥 AQUÍ VIVE EL SCROLL ACTIVO 🔥 */
+    padding-bottom: 5px !important;
     flex-grow: 1 !important; 
-    min-height: 0 !important; 
+    min-height: 0 !important; /* <--- CLAVE PARA EL SCROLL INTERNO */
+    
+    /* Estilos para ocultar la barra de scroll visualmente pero permitir el tacto */
     -ms-overflow-style: none !important; 
     scrollbar-width: none !important; 
 }
-.arcade-games-grid::-webkit-scrollbar {
+#arcade-menu .arcade-card-container .arcade-games-grid::-webkit-scrollbar {
     display: none !important; 
 }
 
-.arcade-card {
+/* 5. LAS TARJETAS COMPACTAS (Rediseño de tamaño compacto blindado) */
+#arcade-menu .arcade-card-container .arcade-games-grid .arcade-card {
     background: rgba(0,0,0,0.3) !important;
     border: 1px solid #4dd0e1 !important;
-    border-radius: 12px !important;
-    padding: 15px 10px !important; 
+    border-radius: 10px !important;
+    padding: 8px 5px !important; /* Padding extremadamente compacto */
     text-align: center !important;
     color: white !important;
     cursor: pointer !important;
@@ -67,56 +73,60 @@
     flex-direction: column !important;
     align-items: center !important;
     justify-content: flex-start !important;
+    box-sizing: border-box !important;
 }
 
-.arcade-card:active {
+#arcade-menu .arcade-card-container .arcade-games-grid .arcade-card:active {
     transform: scale(0.95) !important;
 }
 
-.arcade-card .card-icon {
-    font-size: 28px !important;
-    margin-bottom: 8px !important;
+#arcade-menu .arcade-card-container .arcade-games-grid .arcade-card .card-icon {
+    font-size: 24px !important; /* Icono más compacto */
+    margin-bottom: 5px !important;
 }
 
-.arcade-card h3 {
-    margin: 0 0 5px 0 !important;
-    font-size: 12px !important; 
+#arcade-menu .arcade-card-container .arcade-games-grid .arcade-card h3 {
+    margin: 0 0 3px 0 !important;
+    font-size: 11px !important; /* Texto de título compacto */
     text-transform: uppercase !important;
     color: #4dd0e1 !important;
+    line-height: 1.1 !important;
+    font-weight: bold !important;
+}
+
+#arcade-menu .arcade-card-container .arcade-games-grid .arcade-card p {
+    margin: 0 !important;
+    font-size: 9px !important; /* Descripción compacta */
+    color: #aaa !important;
     line-height: 1.2 !important;
 }
 
-.arcade-card p {
-    margin: 0 !important;
-    font-size: 10px !important; 
-    color: #aaa !important;
-    line-height: 1.3 !important;
-}
-
-.arcade-card.locked {
+#arcade-menu .arcade-card-container .arcade-games-grid .arcade-card.locked {
     background: rgba(0,0,0,0.2) !important;
     border: 1px dashed #555 !important;
     color: #777 !important;
     cursor: default !important;
 }
 
-.arcade-card.locked .card-icon {
+#arcade-menu .arcade-card-container .arcade-games-grid .arcade-card.locked .card-icon {
     filter: grayscale(1) !important;
 }
 
-.arcade-card.locked h3 {
+#arcade-menu .arcade-card-container .arcade-games-grid .arcade-card.locked h3 {
     color: #777 !important;
 }
 
-.arcade-footer-anchor {
+/* 6. EL BOTÓN INFERIOR (Separado y centrado) */
+#arcade-menu .arcade-footer-anchor {
     display: block !important;
-    margin: 0 auto 20px auto !important; 
+    margin: 0 auto 15px auto !important; /* Respetando el empuje de la caja oscura */
     width: 100% !important;
     text-align: center !important;
     flex-shrink: 0 !important;
 }
 
-.arcade-footer-anchor .fab-btn {
+/* Solo modificamos el tamaño y centrado del botón original */
+#arcade-menu .arcade-footer-anchor .fab-btn {
     display: inline-block !important;
     width: 70% !important;
     max-width: 300px !important;
