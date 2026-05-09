@@ -12,8 +12,9 @@
     flex-direction: column !important;
 }
 
+/* Título ahora es Cyan porque está sobre fondo negro */
 #arcade-menu .screen-title {
-    color: #1a2a36 !important; 
+    color: #4dd0e1 !important; 
     text-shadow: none !important;
     text-transform: uppercase !important;
     letter-spacing: 2px !important;
@@ -21,19 +22,19 @@
     font-weight: bold !important;
     text-align: center !important;
     font-size: 16px !important;
-    border-bottom: 1px solid rgba(0,0,0,0.1) !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
     padding-bottom: 15px !important;
     flex-shrink: 0 !important;
 }
 
 .arcade-card-container {
-    flex-grow: 1 !important;
+    /* flex-grow eliminado para que no se estire hasta abajo */
     overflow-y: auto !important;
     background: #1a2a36 !important;
     border-radius: 16px !important;
     box-shadow: 0 10px 25px rgba(0,0,0,0.4) !important;
     padding: 20px !important;
-    margin-bottom: 15px !important;
+    margin-bottom: auto !important; /* Deja espacio vacío entre la caja y el botón */
     display: flex !important;
     flex-direction: column !important;
     gap: 15px !important;
@@ -69,7 +70,7 @@
     flex-shrink: 0 !important;
 }
 
-/* Solo modificamos el tamaño y centrado, DEJAMOS EL DISEÑO ORIGINAL INTACTO */
+/* Solo modificamos el tamaño y centrado, dejamos el botón original intacto */
 .arcade-footer-anchor .fab-btn {
     display: inline-block !important;
     width: 70% !important;
