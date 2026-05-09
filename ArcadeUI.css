@@ -12,7 +12,6 @@
     flex-direction: column !important;
 }
 
-/* Título ahora es Cyan porque está sobre fondo negro */
 #arcade-menu .screen-title {
     color: #4dd0e1 !important; 
     text-shadow: none !important;
@@ -28,13 +27,13 @@
 }
 
 .arcade-card-container {
-    /* flex-grow eliminado para que no se estire hasta abajo */
+    flex-grow: 1 !important; /* Vuelve a estirar la caja hacia abajo */
     overflow-y: auto !important;
     background: #1a2a36 !important;
     border-radius: 16px !important;
     box-shadow: 0 10px 25px rgba(0,0,0,0.4) !important;
     padding: 20px !important;
-    margin-bottom: auto !important; /* Deja espacio vacío entre la caja y el botón */
+    margin-bottom: 30px !important; /* Este es el margen exacto que la separa del botón */
     display: flex !important;
     flex-direction: column !important;
     gap: 15px !important;
@@ -64,13 +63,12 @@
 
 .arcade-footer-anchor {
     display: block !important;
-    margin: auto auto 15px auto !important;
+    margin: 0 auto 15px auto !important; /* Se ajustó para respetar el empuje de la caja */
     width: 100% !important;
     text-align: center !important;
     flex-shrink: 0 !important;
 }
 
-/* Solo modificamos el tamaño y centrado, dejamos el botón original intacto */
 .arcade-footer-anchor .fab-btn {
     display: inline-block !important;
     width: 70% !important;
