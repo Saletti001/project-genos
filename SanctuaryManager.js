@@ -112,7 +112,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 Array.from(sanctuaryScreen.children).forEach(child => {
                     // Ignoramos el botón de volver para que flote libremente abajo
                     if (!child.classList.contains('btn-go-home') && child !== wrapper) {
-                        if (child.tagName === 'P') child.className = "sanctuary-desc";
+                        if (child.tagName === 'P') {
+                            child.className = "sanctuary-desc";
+                            // Inyectamos el SVG dinámico en la descripción
+                            child.innerHTML = `Libera Genos en la naturaleza para obtener ${window.iconoEV || '✨'} EV.`;
+                            child.style.display = "flex";
+                            child.style.justifyContent = "center";
+                            child.style.alignItems = "center";
+                            child.style.gap = "4px";
+                        }
                         if (child.tagName === 'DIV' && child.innerText.includes('Límite diario')) {
                             child.style.display = 'none'; 
                         }
@@ -255,8 +263,7 @@ document.addEventListener("DOMContentLoaded", () => {
             } else if (dailyReleases >= maxDailyReleases) {
                 btnHtml = `<button disabled style="margin-top: auto; width: 100%; padding: 12px; border-radius: 8px; border: none; background: #2a323d; color: #888; font-weight: bold; cursor: not-allowed; text-transform: uppercase; font-size: 11px; letter-spacing: 1px;">LÍMITE ALCANZADO</button>`;
             } else {
-                // AQUÍ ESTÁ LA CORRECCIÓN: Le quitamos el ✨ viejo y le ponemos tu nuevo iconoEV
-                btnHtml = `<button class="btn-liberar-geno" data-id="${geno.id}" style="margin-top: auto; width: 100%; padding: 12px; border-radius: 8px; background: transparent; border: 1px solid #4CAF50; color: #4CAF50; font-weight: 900; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; display: flex; justify-content: center; align-items: center; gap: 5px;">LIBERAR ${window.iconoEV || ''}</button>`;
+                btnHtml = `<button class="btn-liberar-geno" data-id="${geno.id}" style="margin-top: auto; width: 100%; padding: 12px; border-radius: 8px; background: transparent; border: 1px solid #4CAF50; color: #4CAF50; font-weight: 900; cursor: pointer; transition: all 0.3s ease; text-transform: uppercase; font-size: 11px; letter-spacing: 1px; text-align: center;">LIBERAR</button>`;
             }
 
             const extraBadge = (typeof window.getMultiplicadorEsencia === 'function' && window.getMultiplicadorEsencia(geno) > 1) 
