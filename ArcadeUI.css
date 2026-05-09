@@ -1,8 +1,9 @@
 /* ArcadeUI.css - Estilos independientes para el Salón Arcade */
 
 #arcade-menu.app-screen {
-    background-color: #4dd0e1 !important;
-    background-image: repeating-linear-gradient(to bottom, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 6px) !important;
+    background-color: #31c4d8 !important; /* Mismo tono exacto del Coliseo */
+    background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.06) 2px, rgba(0, 0, 0, 0.06) 4px) !important; /* Líneas originales corregidas */
+    background-size: auto !important;
     height: 100dvh !important;
     max-height: 100dvh !important;
     overflow: hidden !important;
@@ -61,7 +62,13 @@
     cursor: default !important;
 }
 
-/* El botón neón blindado para el Arcade */
+/* Animación de Neón para el botón */
+@keyframes neonArcade {
+    0% { box-shadow: 0 0 5px #00e5ff, inset 0 0 5px #00e5ff; border-color: #00e5ff; }
+    50% { box-shadow: 0 0 15px #00e5ff, 0 0 5px #fff, inset 0 0 10px #00e5ff; border-color: #e0ffff; }
+    100% { box-shadow: 0 0 5px #00e5ff, inset 0 0 5px #00e5ff; border-color: #00e5ff; }
+}
+
 .arcade-footer-anchor {
     display: block !important;
     margin: auto auto 15px auto !important;
@@ -70,9 +77,21 @@
     flex-shrink: 0 !important;
 }
 
+/* Estructura blindada del botón neón */
 .arcade-footer-anchor .fab-btn {
     display: inline-block !important;
     width: 70% !important;
     max-width: 300px !important;
     margin: 0 auto !important;
+    background: #0d1a24 !important;
+    border: 2px solid #00e5ff !important;
+    border-radius: 20px !important;
+    animation: neonArcade 1.5s infinite alternate !important;
+    box-sizing: border-box !important;
+}
+
+.arcade-footer-anchor .fab-btn .fab-content {
+    color: #ffffff !important;
+    text-transform: uppercase !important;
+    text-shadow: 0 0 8px #00e5ff !important;
 }
