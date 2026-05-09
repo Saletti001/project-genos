@@ -27,13 +27,13 @@
 }
 
 .arcade-card-container {
-    flex-grow: 1 !important; /* Vuelve a estirar la caja hacia abajo */
+    flex-grow: 1 !important; 
     overflow-y: auto !important;
     background: #1a2a36 !important;
     border-radius: 16px !important;
     box-shadow: 0 10px 25px rgba(0,0,0,0.4) !important;
     padding: 20px !important;
-    margin-bottom: 30px !important; /* Este es el margen exacto que la separa del botón */
+    margin-bottom: 45px !important; /* 🔥 Aumentado de 30px a 45px para encoger la caja y escapar del neón 🔥 */
     display: flex !important;
     flex-direction: column !important;
     gap: 15px !important;
@@ -63,7 +63,7 @@
 
 .arcade-footer-anchor {
     display: block !important;
-    margin: 0 auto 15px auto !important; /* Se ajustó para respetar el empuje de la caja */
+    margin: 0 auto 20px auto !important; /* Ajustado para dar buen respiro también por abajo */
     width: 100% !important;
     text-align: center !important;
     flex-shrink: 0 !important;
