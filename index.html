@@ -357,9 +357,48 @@
             
             <button id="btn-start-battle" class="btn-primary">Entrar a la Arena</button>
             
-            <div id="btn-leave-battle" style="background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; width: 70% !important; max-width: 300px !important; cursor: pointer !important; position: absolute !important; bottom: 25px !important; left: 50% !important; transform: translateX(-50%) !important; z-index: 100 !important;">
-                <div class="fab-btn btn-go-home" style="margin: 0 !important; width: 100% !important; position: relative !important;">
-                    <div class="fab-content" style="font-size: 13px; padding: 12px 0; width: 100%; text-align: center; font-weight: bold; letter-spacing: 1px;">RETIRARSE</div>
+            <style>
+                @keyframes pulsoNeonCyan {
+                    0% { box-shadow: 0 0 5px #00e5ff, inset 0 0 5px #00e5ff; border-color: #00e5ff; }
+                    50% { box-shadow: 0 0 15px #00e5ff, 0 0 5px #fff, inset 0 0 10px #00e5ff; border-color: #e0ffff; }
+                    100% { box-shadow: 0 0 5px #00e5ff, inset 0 0 5px #00e5ff; border-color: #00e5ff; }
+                }
+                #btn-leave-battle-wrapper {
+                    position: absolute !important; 
+                    bottom: 15px !important; /* MÁS PEGADO AL BORDE INFERIOR */
+                    left: 50% !important; 
+                    transform: translateX(-50%) !important; 
+                    width: 70% !important; 
+                    max-width: 300px !important; 
+                    z-index: 100 !important;
+                }
+                #btn-leave-battle {
+                    width: 100% !important;
+                    background: #0d1a24 !important;
+                    border: 2px solid #00e5ff !important;
+                    border-radius: 20px !important;
+                    animation: pulsoNeonCyan 1.5s infinite alternate !important;
+                    cursor: pointer !important;
+                    margin: 0 !important;
+                    padding: 0 !important;
+                }
+                #btn-leave-battle .btn-text-content {
+                    font-size: 14px !important; 
+                    padding: 14px 0 !important; 
+                    display: block !important;
+                    width: 100% !important; 
+                    text-align: center !important; 
+                    font-weight: 900 !important; 
+                    letter-spacing: 2px !important;
+                    color: #ffffff !important;
+                    text-transform: uppercase !important;
+                    text-shadow: 0 0 8px #00e5ff !important;
+                }
+            </style>
+            
+            <div id="btn-leave-battle-wrapper">
+                <div id="btn-leave-battle" class="btn-go-home">
+                    <span class="btn-text-content">RETIRARSE</span>
                 </div>
             </div>
             
