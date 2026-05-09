@@ -1,6 +1,7 @@
 /* ArcadeUI.css - Estilos independientes para el Salón Arcade */
 
-#arcade-menu.app-screen {
+/* 🔥 EL ARREGLO: Añadimos :not(.hidden) para que permita ocultarse 🔥 */
+#arcade-menu.app-screen:not(.hidden) {
     background-color: #4dd0e1 !important; 
     background-image: repeating-linear-gradient(to bottom, rgba(0,0,0,0.04) 0px, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 6px) !important;
     height: 100dvh !important;
@@ -28,24 +29,24 @@
 
 .arcade-card-container {
     flex-grow: 1 !important; 
-    overflow-y: hidden !important; /* Escondemos el scroll de la caja general */
+    overflow-y: hidden !important; 
     background: #1a2a36 !important;
     border-radius: 16px !important;
     box-shadow: 0 10px 25px rgba(0,0,0,0.4) !important;
     padding: 20px !important;
-    margin-bottom: 55px !important; /* 🔥 Margen ampliado para separar más el botón */
+    margin-bottom: 55px !important; 
     display: flex !important;
     flex-direction: column !important;
 }
 
-/* 🔥 Nuevo layout en cuadrícula para muchos juegos 🔥 */
 .arcade-games-grid {
     display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important; /* Dos columnas iguales */
+    grid-template-columns: repeat(2, 1fr) !important; 
     gap: 12px !important;
-    overflow-y: auto !important; /* El scroll ahora vive aquí adentro de los juegos */
+    overflow-y: auto !important; 
     padding-bottom: 10px !important;
-    /* Estilos para ocultar la barra de scroll visualmente pero permitir el tacto */
+    flex-grow: 1 !important; 
+    min-height: 0 !important; 
     -ms-overflow-style: none !important; 
     scrollbar-width: none !important; 
 }
@@ -53,12 +54,11 @@
     display: none !important; 
 }
 
-/* Tarjetas rediseñadas para ser compactas */
 .arcade-card {
     background: rgba(0,0,0,0.3) !important;
     border: 1px solid #4dd0e1 !important;
     border-radius: 12px !important;
-    padding: 15px 10px !important; /* Un poco menos de padding lateral */
+    padding: 15px 10px !important; 
     text-align: center !important;
     color: white !important;
     cursor: pointer !important;
@@ -80,7 +80,7 @@
 
 .arcade-card h3 {
     margin: 0 0 5px 0 !important;
-    font-size: 12px !important; /* Letra un poco más pequeña para encajar en la mitad */
+    font-size: 12px !important; 
     text-transform: uppercase !important;
     color: #4dd0e1 !important;
     line-height: 1.2 !important;
@@ -88,7 +88,7 @@
 
 .arcade-card p {
     margin: 0 !important;
-    font-size: 10px !important; /* Descripción más compacta */
+    font-size: 10px !important; 
     color: #aaa !important;
     line-height: 1.3 !important;
 }
@@ -108,7 +108,6 @@
     color: #777 !important;
 }
 
-/* Contenedor del botón inferior */
 .arcade-footer-anchor {
     display: block !important;
     margin: 0 auto 20px auto !important; 
