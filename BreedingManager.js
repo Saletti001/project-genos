@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if(btnBreeding) {
             btnBreeding.disabled = !(padre1 && padre2);
             if(!btnBreeding.disabled) {
-                if (reqDiv) reqDiv.innerHTML = `COSTE: ✨ 500 Esencia Vital`;
+                if (reqDiv) reqDiv.innerHTML = `COSTE: <span style="display: inline-block; width: 1.2em; height: 1.2em; vertical-align: middle; margin-right: 4px; transform: translateY(-2px);">${window.iconoEV || ''}</span> 500 Esencia Vital`;
                 btnBreeding.innerText = "SINTETIZAR BIO-NÚCLEO";
                 btnBreeding.style.background = "linear-gradient(90deg, #4dd0e1, #8A2BE2)";
                 btnBreeding.style.opacity = "1"; btnBreeding.style.cursor = "pointer";
