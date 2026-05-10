@@ -121,7 +121,8 @@ class InventoryManager {
         
         const essenceDisplay = document.getElementById("vital-essence-amount");
         if (essenceDisplay) {
-            essenceDisplay.innerText = `✨ ${this.vitalEssence}`;
+            // Inyectamos solo el número, el SVG ya vive en el index.html
+            essenceDisplay.innerText = this.vitalEssence;
         }
     }
 
