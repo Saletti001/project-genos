@@ -114,12 +114,15 @@ document.addEventListener("DOMContentLoaded", () => {
                     if (!child.classList.contains('btn-go-home') && child !== wrapper) {
                         if (child.tagName === 'P') {
                             child.className = "sanctuary-desc";
-                            // Inyectamos el SVG dinámico en la descripción
-                            child.innerHTML = `Libera Genos en la naturaleza para obtener ${window.iconoEV || '✨'} EV.`;
-                            child.style.display = "flex";
-                            child.style.justifyContent = "center";
-                            child.style.alignItems = "center";
-                            child.style.gap = "4px";
+                            
+                            // CORRECCIÓN: Envolvemos el SVG en un span "inline-block" para que no rompa el texto
+                            child.innerHTML = `Libera Genos en la naturaleza para obtener <span style="display: inline-block; width: 1.4em; height: 1.4em; vertical-align: middle; margin: 0 2px; transform: translateY(-2px);">${window.iconoEV || '✨'}</span> EV.`;
+                            
+                            // Limpiamos los estilos flex anteriores que rompían el párrafo
+                            child.style.display = "block";
+                            child.style.justifyContent = "";
+                            child.style.alignItems = "";
+                            child.style.gap = "";
                         }
                         if (child.tagName === 'DIV' && child.innerText.includes('Límite diario')) {
                             child.style.display = 'none'; 
