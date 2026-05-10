@@ -100,7 +100,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const polText = document.getElementById("pol-amount");
         if(polText && window.miWallet) polText.innerText = `🔷 ${window.miWallet.pol.toFixed(1)} POL`;
         const essenceText = document.getElementById("vital-essence-amount");
-        if(essenceText && window.miInventario) essenceText.innerText = `✨ ${window.miInventario.vitalEssence || 0}`;
+        // ¡Aquí le quitamos el ✨ viejo para que deje brillar a tu SVG!
+        if(essenceText && window.miInventario) essenceText.innerText = window.miInventario.vitalEssence || 0;
     }
 
     function normalizarGenos() {
