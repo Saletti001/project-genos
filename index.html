@@ -445,20 +445,22 @@
             <div class="drawer-content">
                 <div class="drawer-header"><h3>Red Nexo</h3><button id="close-drawer" style="background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #ff4b4b; padding: 0;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div>
                 <div class="drawer-grid">
-                    <div class="drawer-item" id="btn-toggle-music"><div class="drawer-icon" id="music-icon">🎵</div><span id="music-text">Música: OFF</span></div>
                     <div class="drawer-item" id="btn-feed"><div class="drawer-icon">🍎</div><span>Alimentar</span></div>
-                    <div class="drawer-item" id="btn-sanctuary"><div class="drawer-icon">🏛️</div><span>Santuario</span></div>
-                    <div class="drawer-item" id="btn-alchemy"><div class="drawer-icon">⚛️</div><span>Reactor</span></div>
                     <div class="drawer-item" id="btn-breeding"><div class="drawer-icon">🧬</div><span>Crianza</span></div>
                     <div class="drawer-item" id="btn-arcade"><div class="drawer-icon">🕹️</div><span>Arcade</span></div>
                     <div class="drawer-item" id="btn-coliseum"><div class="drawer-icon">⚔️</div><span>Coliseo</span></div>
-                    <div class="drawer-item" id="btn-market"><div class="drawer-icon">🛒</div><span>Mercado</span></div>
-                    <div class="drawer-item" id="btn-shop" onclick="document.getElementById('drawer-menu').classList.add('hidden'); if(window.ShopManager) window.ShopManager.init(); navegarA('shop-screen');">
-                        <div class="drawer-icon">🏪</div><span>Tienda Nexo</span>
-                    </div>
+                    
+                    <div class="drawer-item" id="btn-alchemy"><div class="drawer-icon">⚛️</div><span>Reactor</span></div>
                     <div class="drawer-item" id="btn-implants" onclick="document.getElementById('drawer-menu').classList.add('hidden'); ImplantsManager.init(); navegarA('implants-area');">
                         <div class="drawer-icon">💾</div><span>Implantes</span>
                     </div>
+                    <div class="drawer-item" id="btn-sanctuary"><div class="drawer-icon">🏛️</div><span>Santuario</span></div>
+                    <div class="drawer-item" id="btn-market"><div class="drawer-icon">🛒</div><span>Mercado</span></div>
+                    
+                    <div class="drawer-item" id="btn-shop" onclick="document.getElementById('drawer-menu').classList.add('hidden'); if(window.ShopManager) window.ShopManager.init(); navegarA('shop-screen');">
+                        <div class="drawer-icon">🏪</div><span>Tienda Nexo</span>
+                    </div>
+                    <div class="drawer-item" id="btn-toggle-music"><div class="drawer-icon" id="music-icon">🎵</div><span id="music-text">Música: OFF</span></div>
                 </div>
             </div>
         </div>
