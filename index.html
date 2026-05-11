@@ -14,6 +14,8 @@
         .modal-content { -ms-overflow-style: none !important; scrollbar-width: none !important; }
         /* Estilo para que los iconos SVG inyectados se adapten al texto */
         .ev-icon-wrapper svg, .ev-icon-injector svg { width: 100%; height: 100%; display: block; }
+        /* Animación para el núcleo de crianza */
+        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
@@ -262,11 +264,12 @@
                     <div class="drawer-header" style="justify-content: center; border-bottom: 1px solid #333; padding-bottom: 15px; margin-bottom: 15px;">
                         <h3 style="font-size: 16px !important; color: #80deea !important; text-transform: uppercase !important; letter-spacing: 1px !important; margin: 0 !important; font-weight: bold !important; text-shadow: none !important;">CENTRO DE CRIANZA</h3>
                     </div>
+                    
                     <p style="text-align: center; color: #aaa !important; font-size: 10px !important; text-transform: uppercase !important; letter-spacing: 1px !important; padding: 0 15px !important; margin-bottom: 25px !important; text-shadow: none !important; display: block; line-height: 1.5;">
-                        Combina el ADN de dos especímenes (Nv. 10+) para iniciar la secuencia. Costo: 500 EV. <span class="ev-icon-injector" style="display: inline-block; width: 1.4em; height: 1.4em; vertical-align: middle; margin: 0 2px; transform: translateY(-2px);"></span>
+                        Combina el ADN de dos especímenes (Nv. 10+) para iniciar la secuencia. Costo: 500 <span class="ev-icon-injector" style="display: inline-block; width: 1.4em; height: 1.4em; vertical-align: middle; margin: 0 2px; transform: translateY(-2px);"></span>
                     </p>
+
                     <div style="display: flex; justify-content: space-around; width: 100%; margin-bottom: 20px; position: relative; align-items: center;">
-                        
                         <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
                             <div id="slot-parent-1" style="width: 75px; height: 75px; border: 2px dashed #4dd0e1; border-radius: 12px; display: flex; justify-content: center; align-items: center; background: #0d1a24; cursor: pointer; transition: 0.2s;">
                                 <span style="color: #4dd0e1; font-size: 28px;">+</span>
@@ -274,11 +277,11 @@
                             <span style="font-size: 11px; font-weight: bold; color: #4dd0e1; letter-spacing: 1px;">MUESTRA ALFA</span>
                         </div>
                         
-                        <div style="color: #8A2BE2; filter: drop-shadow(0 0 10px rgba(138, 43, 226, 1)); display: flex; justify-content: center; align-items: center; width: 40px; height: 40px;">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="width: 100%; height: 100%;">
-                                <path d="M 4 8 C 10 8, 14 12, 20 12"></path>
-                                <path d="M 4 16 C 10 16, 14 12, 20 12"></path>
-                                <circle cx="20" cy="12" r="2.5" fill="currentColor"></circle>
+                        <div style="color: #8A2BE2; filter: drop-shadow(0 0 10px rgba(138, 43, 226, 0.8)); display: flex; justify-content: center; align-items: center; width: 35px; height: 35px;">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width: 100%; height: 100%; animation: spin 10s linear infinite;">
+                                <circle cx="12" cy="12" r="3" fill="currentColor"></circle>
+                                <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(45 12 12)"></ellipse>
+                                <ellipse cx="12" cy="12" rx="10" ry="4" transform="rotate(-45 12 12)"></ellipse>
                             </svg>
                         </div>
                         
@@ -288,8 +291,8 @@
                             </div>
                             <span style="font-size: 11px; font-weight: bold; color: #4dd0e1; letter-spacing: 1px;">MUESTRA OMEGA</span>
                         </div>
-
                     </div>
+                    
                     <button id="btn-start-breeding" class="btn-fuse" style="background: linear-gradient(90deg, #4dd0e1, #8A2BE2); color: #fff; font-weight: bold; border: none; padding: 14px; border-radius: 10px; width: 100%; cursor: pointer; text-transform: uppercase; letter-spacing: 1px;" disabled>
                         INICIAR SECUENCIA
                     </button>
@@ -472,20 +475,16 @@
             const inyectarIconos = () => {
                 if(!window.iconoEV) return;
                 
-                // Inyectar en el HUD Superior
                 const hudIcon = document.getElementById('hud-ev-icon-container');
                 if(hudIcon && !hudIcon.innerHTML.includes('svg')) hudIcon.innerHTML = window.iconoEV;
                 
-                // Inyectar en todos los contenedores con la clase injector
                 document.querySelectorAll('.ev-icon-injector').forEach(el => {
                     if(!el.innerHTML.includes('svg')) el.innerHTML = window.iconoEV;
                 });
             };
 
-            // Ejecutamos con un pequeño retraso para asegurar que SVGEngine cargó window.iconoEV
             setTimeout(inyectarIconos, 150);
             
-            // Re-inyectar cuando se abren pantallas que podrían resetear el DOM
             const observer = new MutationObserver(inyectarIconos);
             observer.observe(document.body, { childList: true, subtree: true });
         });
