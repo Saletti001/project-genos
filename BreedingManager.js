@@ -264,12 +264,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 };
 
                 statsContainer.innerHTML = `
-                    ${buildStatRow("❤️", "Vit", "hp")}
-                    ${buildStatRow("⚔️", "Fue", "atk")}
-                    ${buildStatRow("🛡️", "Def", "def")}
-                    ${buildStatRow("⚡", "Agi", "spd")}
-                    ${buildStatRow("🍀", "Sue", "luk")}
-                `;
+                        ${buildStatRow("<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='#ff4b4b' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z'></path></svg>", "Vit", "hp")}
+                        ${buildStatRow("<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='#ff8c00' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M14.5 17.5L3 6V3h3l11.5 11.5'></path><path d='M13 19l6-6'></path><path d='M16 16l4 4'></path><path d='M19 21l2-2'></path></svg>", "Fue", "atk")}
+                        ${buildStatRow("<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='#3b82f6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'></path></svg>", "Def", "def")}
+                        ${buildStatRow("<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='#facc15' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polygon points='13 2 3 14 12 14 11 22 21 10 12 10 13 2'></polygon></svg>", "Agi", "spd")}
+                        ${buildStatRow("<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='#10b981' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'></polygon></svg>", "Sue", "luk")}
+                    `;
             }
         }
 
