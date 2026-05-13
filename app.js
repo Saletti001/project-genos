@@ -321,7 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // === GESTIÓN DEL BOTÓN DE MÚSICA (CORREGIDO SIN FONDOS ACTIVOS) ===
+    // === GESTIÓN DEL BOTÓN DE MÚSICA (TEXTO ON UNIFICADO) ===
     const btnMusic = document.getElementById("btn-toggle-music");
     const musicIcon = document.getElementById("music-icon");
     const musicText = document.getElementById("music-text");
@@ -335,8 +335,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     // === ESTADO: MÚSICA ACTIVADA (ON) ===
                     musicIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e0b0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`;
                     musicText.innerText = "Música: ON"; 
-                    musicText.style.color = "#e0b0ff"; 
-                    // Mantenemos el botón transparente igual que los demás
+                    // Al dejar esto vacío, hereda automáticamente el mismo color gris/blanco que los demás botones
+                    musicText.style.color = ""; 
                     btnMusic.style.background = "transparent"; 
                     btnMusic.style.borderLeft = "none"; 
                 } else {
@@ -347,8 +347,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <line x1="20" y1="2" x2="4" y2="22"></line>
                         </svg>`;
                     musicText.innerText = "Música: OFF"; 
-                    musicText.style.color = "#ff4b4b"; 
-                    // Mantenemos el botón transparente igual que los demás
+                    musicText.style.color = "#ff4b4b"; // Se mantiene en rojo
                     btnMusic.style.background = "transparent"; 
                     btnMusic.style.borderLeft = "none"; 
                 }
