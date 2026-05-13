@@ -321,7 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // === GESTIÓN DEL BOTÓN DE MÚSICA (ACTUALIZADO CON SVG TACHADO ROJO) ===
+    // === GESTIÓN DEL BOTÓN DE MÚSICA (CORREGIDO SIN FONDOS ACTIVOS) ===
     const btnMusic = document.getElementById("btn-toggle-music");
     const musicIcon = document.getElementById("music-icon");
     const musicText = document.getElementById("music-text");
@@ -333,24 +333,24 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 if(estaSonando) {
                     // === ESTADO: MÚSICA ACTIVADA (ON) ===
-                    // Mantenemos el color lila/cian original y el icono limpio
                     musicIcon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e0b0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>`;
                     musicText.innerText = "Música: ON"; 
-                    musicText.style.color = "#e0b0ff"; // Texto lila
-                    btnMusic.style.background = "rgba(224, 176, 255, 0.05)"; // Fondo muy sutil
-                    btnMusic.style.borderLeft = "2px solid #e0b0ff"; // Acento lateral
+                    musicText.style.color = "#e0b0ff"; 
+                    // Mantenemos el botón transparente igual que los demás
+                    btnMusic.style.background = "transparent"; 
+                    btnMusic.style.borderLeft = "none"; 
                 } else {
-                    // === ESTADO: MÚSICA APAGADA (OFF) - NUEVO DISEÑO ===
-                    // Cambiamos el color a ROJO NEÓN (#ff4b4b) y añadimos la línea que tacha la nota
+                    // === ESTADO: MÚSICA APAGADA (OFF) ===
                     musicIcon.innerHTML = `
                         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff4b4b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
                             <line x1="20" y1="2" x2="4" y2="22"></line>
                         </svg>`;
                     musicText.innerText = "Música: OFF"; 
-                    musicText.style.color = "#ff4b4b"; // Texto rojo
-                    btnMusic.style.background = "transparent"; // Reset fondo
-                    btnMusic.style.borderLeft = "none"; // Reset acento
+                    musicText.style.color = "#ff4b4b"; 
+                    // Mantenemos el botón transparente igual que los demás
+                    btnMusic.style.background = "transparent"; 
+                    btnMusic.style.borderLeft = "none"; 
                 }
             }
         });
