@@ -32,7 +32,7 @@ window.ShopManager = {
         this.renderBazar();
         this.cambiarPestana('bazar');
     },
-
+////
     inyectarEstructura: function() {
         const contenedor = document.getElementById("shop-screen");
         if (!contenedor) return;
@@ -42,6 +42,14 @@ window.ShopManager = {
             .tienda-scroll-area::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
             .tienda-scroll-area { -ms-overflow-style: none !important; scrollbar-width: none !important; }
             
+            /* NUEVA GRILLA ESPECÍFICA PARA LA TIENDA */
+            .shop-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+                width: 100%;
+            }
+
             .shop-tab-neon {
                 flex: 1; padding: 12px 5px; font-weight: 900; cursor: pointer; font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
                 background: rgba(26, 42, 54, 0.6); border: 1px solid #384a5e; color: #a0aec0; transition: all 0.3s ease;
@@ -61,6 +69,7 @@ window.ShopManager = {
                 display: flex; flex-direction: column; align-items: center; text-align: center;
                 box-shadow: 0 4px 10px rgba(0,0,0,0.2), inset 0 1px 1px rgba(255,255,255,0.05);
                 cursor: pointer;
+                width: 100%; box-sizing: border-box; /* Asegura que ocupen todo el ancho de su columna */
             }
             .shop-card-neon::before {
                 content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px;
@@ -79,6 +88,7 @@ window.ShopManager = {
                 background: linear-gradient(90deg, var(--card-color-dark), var(--card-color));
                 box-shadow: 0 4px 10px rgba(0,0,0,0.4), inset 0 2px 5px rgba(255,255,255,0.2);
                 transition: filter 0.2s, transform 0.1s; text-shadow: 0 1px 2px rgba(0,0,0,0.8);
+                box-sizing: border-box;
             }
             .shop-btn-neon:hover { filter: brightness(1.2) contrast(1.1); }
             .shop-btn-neon:active { transform: scale(0.97); }
@@ -86,7 +96,7 @@ window.ShopManager = {
         document.head.appendChild(style);
 
         // Fondo cian estilo Santuario
-        contenedor.style.background = "#4dd0e1";
+        contenedor.style.background = "#4dd0e1"; 
 
         contenedor.innerHTML = `
             <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; padding-top: 15px; position: relative;">
@@ -103,21 +113,21 @@ window.ShopManager = {
                         </div>
                     </div>
                     
-                    <div class="tienda-scroll-area" style="flex: 1; overflow-y: auto; padding: 0 15px 20px 15px;">
+                    <div class="tienda-scroll-area" style="flex: 1; overflow-y: auto; padding: 0 10px 20px 10px;">
                         
                         <div id="shop-bazar-view" class="shop-view">
-                            <p style="text-align: center; color: #80deea; font-size: 10px; font-weight: bold; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">Consumibles y herramientas de supervivencia</p>
-                            <div id="shop-bazar-grid" class="sanctuary-grid"></div>
+                            <p style="text-align: center; color: #80deea; font-size: 10px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">Consumibles y herramientas de supervivencia</p>
+                            <div id="shop-bazar-grid" class="shop-grid"></div>
                         </div>
                         
                         <div id="shop-dojo-view" class="shop-view hidden">
-                            <p style="text-align: center; color: #80deea; font-size: 10px; font-weight: bold; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">Módulos de Técnica. Límite: 1 en mochila.</p>
-                            <div id="shop-dojo-grid" class="sanctuary-grid"></div>
+                            <p style="text-align: center; color: #80deea; font-size: 10px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">Módulos de Técnica. Límite: 1 en mochila.</p>
+                            <div id="shop-dojo-grid" class="shop-grid"></div>
                         </div>
                         
                         <div id="shop-premium-view" class="shop-view hidden">
-                            <p style="text-align: center; color: #80deea; font-size: 10px; font-weight: bold; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;">Mejoras de infraestructura permanentes</p>
-                            <div id="shop-premium-grid" class="sanctuary-grid"></div>
+                            <p style="text-align: center; color: #80deea; font-size: 10px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">Mejoras de infraestructura permanentes</p>
+                            <div id="shop-premium-grid" class="shop-grid"></div>
                         </div>
                         
                     </div>
@@ -130,7 +140,7 @@ window.ShopManager = {
             </div>
 
             <div id="shop-detail-modal" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 20, 30, 0.90); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
-                <div id="shop-detail-content" style="background: linear-gradient(180deg, #1A2A36 0%, #0F172A 100%); border: 2px solid #00d2ff; border-radius: 16px; padding: 30px 20px; width: 85%; max-width: 350px; position: relative; text-align: center;">
+                <div id="shop-detail-content" style="background: linear-gradient(180deg, #1A2A36 0%, #0F172A 100%); border: 2px solid #4dd0e1; border-radius: 16px; padding: 30px 20px; width: 85%; max-width: 350px; position: relative; text-align: center;">
                     <button id="close-shop-detail" style="position: absolute; top: 10px; right: 15px; background: transparent; border: none; color: #aaa; font-size: 24px; font-weight: bold; cursor: pointer;">&times;</button>
                     <div id="shop-detail-icon" style="font-size: 5rem; margin-bottom: 15px; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));"></div>
                     <h3 id="shop-detail-name" style="color: #fff; margin: 0 0 10px 0; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;"></h3>
