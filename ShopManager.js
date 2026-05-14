@@ -37,9 +37,20 @@ window.ShopManager = {
         const contenedor = document.getElementById("shop-screen");
         if (!contenedor) return;
 
+        // Limpiamos cualquier estilo en línea previo para que no estorbe
+        contenedor.style.background = "";
+        contenedor.style.backgroundColor = "";
+        contenedor.style.backgroundImage = "";
+
         const style = document.createElement('style');
         style.innerHTML = `
-            .tienda-scroll-area::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
+            /* === OVERRIDE DEFINITIVO DEL FONDO DE LA TIENDA === */
+            #shop-screen {
+                background-color: #4dd0e1 !important;
+                background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px) !important;
+            }
+            
+            .tienda-scroll-area::-webkit-scrollbar { display: none !important;
             .tienda-scroll-area { -ms-overflow-style: none !important; scrollbar-width: none !important; }
             
             /* NUEVA GRILLA ESPECÍFICA PARA LA TIENDA */
