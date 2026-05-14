@@ -1,11 +1,11 @@
 // =========================================
-// MarketManager.js - RED DE CRIADORES (WEB3) - CON STATS COMPLETOS
+// MarketManager.js - RED DE CRIADORES (WEB3) - STATS COMPLETOS
 // =========================================
 
 window.mercadoNPC = window.mercadoNPC || [];
 window.misVentas = window.misVentas || [];
 
-// Función para generar Genos aleatorios en el mercado CON STATS
+// Función para generar Genos aleatorios en el mercado (AHORA CON STATS REALISTAS)
 function generarGenoNPC() {
     const rarities = ["Común", "Raro", "Épico"];
     const elements = ["🔥 Ígneo", "💧 Acuático", "🧪 Tóxico", "⚙️ Cibernético"];
@@ -15,15 +15,16 @@ function generarGenoNPC() {
     
     // Generar Stats base según rareza
     let objBase = window.generarStatsPorRareza ? window.generarStatsPorRareza(r) : { hp: 50, atk: 15, def: 10, spd: 15, luk: 15 };
-    let statsBase = JSON.parse(JSON.stringify(objBase)); // Copia segura
+    let statsBase = JSON.parse(JSON.stringify(objBase));
     
     // Simular escalado de stats por nivel
+    let addedStatsBase = { hp: 0, atk: 0, def: 0, spd: 0, luk: 0 };
     if (level > 1) {
-        statsBase.hp += (level - 1) * 2;
-        statsBase.atk += (level - 1);
-        statsBase.def += (level - 1);
-        statsBase.spd += (level - 1);
-        statsBase.luk += (level - 1);
+        addedStatsBase.hp = (level - 1) * 2;
+        addedStatsBase.atk = (level - 1);
+        addedStatsBase.def = (level - 1);
+        addedStatsBase.spd = (level - 1);
+        addedStatsBase.luk = (level - 1);
     }
 
     return {
@@ -36,7 +37,11 @@ function generarGenoNPC() {
         pricePol: price.toFixed(1),
         level: level,
         reward: 100,
-        stats: statsBase
+        stats: statsBase,
+        addedStats: addedStatsBase,
+        quality: "Estándar",
+        scanned: false,
+        hidden_genes: { A: null, B: null, C: null }
     };
 }
 
@@ -62,8 +67,8 @@ window.iniciarMercado = function() {
                 background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px) !important;
             }
 
-            .market-scroll-area::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
-            .market-scroll-area { -ms-overflow-style: none !important; scrollbar-width: none !important; }
+            .market-scroll-area::-webkit-scrollbar, .market-detail-scroll::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
+            .market-scroll-area, .market-detail-scroll { -ms-overflow-style: none !important; scrollbar-width: none !important; }
             
             .market-grid {
                 display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%;
@@ -154,16 +159,16 @@ window.iniciarMercado = function() {
                 <div class="fab-content" style="font-size: 13px; cursor: pointer; padding: 12px 0; text-align: center;">VOLVER AL LABORATORIO</div>
             </div>
 
-            <div id="market-detail-modal" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 20, 30, 0.90); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
-                <div id="market-detail-content" style="background: linear-gradient(180deg, #1A2A36 0%, #0F172A 100%); border: 2px solid #D500F9; border-radius: 16px; padding: 30px 20px; width: 85%; max-width: 350px; position: relative; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(213,0,249,0.2);">
+            <div id="market-detail-modal" class="hidden" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 20, 30, 0.90); z-index: 9999; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
+                <div class="market-detail-scroll" style="background: linear-gradient(180deg, #1A2A36 0%, #0F172A 100%); border: 2px solid #D500F9; border-radius: 16px; padding: 25px 20px; width: 85%; max-width: 350px; max-height: 90vh; overflow-y: auto; position: relative; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(213,0,249,0.2);">
                     <button id="close-market-detail" style="position: absolute; top: 10px; right: 15px; background: transparent; border: none; color: #aaa; font-size: 24px; font-weight: bold; cursor: pointer;">&times;</button>
-                    <div id="market-detail-icon" style="width: 80px; height: 80px; margin: 0 auto 15px auto; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));"></div>
+                    <div id="market-detail-icon" style="width: 80px; height: 80px; margin: 0 auto 10px auto; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));"></div>
                     <h3 id="market-detail-name" style="color: #fff; margin: 0 0 10px 0; font-size: 18px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 2px 5px rgba(213,0,249,0.5);"></h3>
                     <div id="market-detail-tags" style="display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; flex-wrap: wrap;"></div>
                     
                     <div id="market-detail-stats"></div>
 
-                    <p id="market-detail-desc" style="color: #cbd5e1; font-size: 12px; line-height: 1.5; margin-bottom: 15px; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 8px; border: 1px solid #384a5e;"></p>
+                    <p id="market-detail-desc" style="color: #cbd5e1; font-size: 12px; line-height: 1.5; margin-top: 15px; margin-bottom: 15px; padding: 10px; background: rgba(0,0,0,0.4); border-radius: 8px; border: 1px solid #384a5e;"></p>
                     <div id="market-detail-price" style="font-size: 18px; font-weight: 900; letter-spacing: 1px; margin-bottom: 15px;"></div>
                     <div id="market-detail-action"></div>
                 </div>
@@ -171,6 +176,8 @@ window.iniciarMercado = function() {
             
         </div>
     `;
+
+    document.getElementById("market-detail-modal").style.display = "none";
 
     const tabBuy = document.getElementById("tab-market-buy");
     const tabSell = document.getElementById("tab-market-sell");
@@ -211,7 +218,6 @@ window.abrirDetalleMercado = function(geno, tipoAccion) {
     iconContainer.innerHTML = svgIcon;
     nameEl.innerText = geno.name;
 
-    // Etiquetas (Nivel, Rareza, Elemento)
     let tagsHTML = "";
     const createTag = (text, color) => `<span style="background: ${color}20; color: ${color}; border: 1px solid ${color}; padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: bold; text-transform: uppercase;">${text}</span>`;
     tagsHTML += createTag(`Nivel ${geno.level}`, "#fff");
@@ -219,17 +225,53 @@ window.abrirDetalleMercado = function(geno, tipoAccion) {
     if(geno.element) tagsHTML += createTag(geno.element, "#4dd0e1");
     tagsContainer.innerHTML = tagsHTML;
 
-    // Cuadrícula de Stats idéntica al laboratorio
-    const st = geno.stats || { hp: '?', atk: '?', def: '?', spd: '?', luk: '?' };
+    // --- RECONSTRUCCIÓN EXACTA DE LOS STATS ---
+    const stBase = geno.stats || { hp: 0, atk: 0, def: 0, spd: 0, luk: 0 };
+    const stAdded = geno.addedStats || { hp: 0, atk: 0, def: 0, spd: 0, luk: 0 };
+    
+    const iconHp = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff4b4b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
+    const iconAtk = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"></path><path d="M13 19l6-6"></path><path d="M16 16l4 4"></path><path d="M19 21l2-2"></path></svg>`;
+    const iconDef = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`;
+    const iconSpd = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#facc15" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`;
+    const iconLuk = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
+
+    const renderStatRow = (label, icon, base, added) => {
+        const total = base + added;
+        const addedStr = added > 0 ? `+${added}` : '';
+        return `
+        <div style="display: grid; grid-template-columns: 60px 1fr 40px 30px; gap: 4px; align-items: center; background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 6px; margin-bottom: 5px; font-size: 13px; border: 1px solid #2a1b3d;">
+            <span style="text-align: left; display: flex; align-items: center; gap: 4px; color: #fff;">${icon} ${label}:</span>
+            <span style="font-weight: bold; color: #fff; text-align: right;">${base}</span>
+            <span style="color: #4CAF50; font-size: 11px; font-weight: bold; text-align: right;">${addedStr}</span>
+            <span style="color: #ffcc00; font-weight: bold; font-size: 15px; text-align: right;">${total}</span>
+        </div>`;
+    };
+
+    let geneHtml = `<div style="color: #aaa; font-size: 12px; margin-bottom: 5px;">🔒 Secuencia Bloqueada</div>`;
+    if (geno.scanned && geno.hidden_genes) {
+        geneHtml = `
+            <div style="font-size: 11px; margin-bottom: 5px; text-align: left; padding: 6px; background: rgba(0,0,0,0.4); border-radius: 4px; border-left: 3px solid #80deea; color: #fff;">DOM: ${geno.hidden_genes.A || '???'}</div>
+            <div style="font-size: 11px; text-align: left; padding: 6px; background: rgba(0,0,0,0.4); border-radius: 4px; border-left: 3px solid #8A2BE2; color: #fff;">REC: ${geno.hidden_genes.B || '???'}</div>
+        `;
+    }
+
     statsContainer.innerHTML = `
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 12px; margin-bottom: 15px;">
-            <div style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; border: 1px solid #4A148C; color: #fff;">❤️ Vit: <span style="float: right; font-weight: bold;">${st.hp}</span></div>
-            <div style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; border: 1px solid #4A148C; color: #fff;">⚔️ Fue: <span style="float: right; font-weight: bold;">${st.atk}</span></div>
-            <div style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; border: 1px solid #4A148C; grid-column: span 2; text-align: center; color: #fff;">🛡️ Defensa: <span style="font-weight: bold; margin-left: 10px;">${st.def}</span></div>
-            <div style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; border: 1px solid #4A148C; color: #fff;">⚡ Agi: <span style="float: right; font-weight: bold;">${st.spd}</span></div>
-            <div style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; border: 1px solid #4A148C; color: #fff;">🍀 Sue: <span style="float: right; font-weight: bold;">${st.luk}</span></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px dashed rgba(255,255,255,0.1);">
+            <span style="color: #cbd5e1;">Calidad (Pura):</span> 
+            <span style="font-weight: 900; font-size: 14px; color: #fff; text-shadow: 0 0 5px rgba(255,255,255,0.5);">${geno.quality || 'Estándar'}</span>
+        </div>
+        ${renderStatRow('Vit', iconHp, stBase.hp, stAdded.hp)}
+        ${renderStatRow('Fue', iconAtk, stBase.atk, stAdded.atk)}
+        ${renderStatRow('Def', iconDef, stBase.def, stAdded.def)}
+        ${renderStatRow('Agi', iconSpd, stBase.spd, stAdded.spd)}
+        ${renderStatRow('Sue', iconLuk, stBase.luk, stAdded.luk)}
+        
+        <div style="background: rgba(138, 43, 226, 0.15); border-radius: 8px; padding: 12px; text-align: center; border: 1px dashed #8A2BE2; margin-top: 15px;">
+            <div style="font-size: 10px; color: #e0b0ff; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 1px; font-weight: bold;">Gen Oculto</div>
+            ${geneHtml}
         </div>
     `;
+    // --- FIN RECONSTRUCCIÓN ---
 
     if (tipoAccion === 'comprar') {
         descEl.innerHTML = `Espécimen listado en la red global.<br>Recompensa estimada al liberar: <b>${geno.reward} ✨</b>`;
@@ -275,9 +317,7 @@ window.procesarCompraMercado = function(geno) {
     if (window.miWallet && window.miWallet.pol >= precio) {
         window.miWallet.pol -= precio;
         const polText = document.getElementById("pol-amount");
-        
-        // FIX BUG: Se actualiza el número limpio sin el emoji
-        if(polText) polText.innerText = `${window.miWallet.pol.toFixed(1)} POL`;
+        if(polText) polText.innerText = `${window.miWallet.pol.toFixed(1)} POL`; // FIX ICONO DOBLE
         
         delete geno.pricePol;
         if(!window.misGenos) window.misGenos = [];
@@ -434,9 +474,7 @@ if(!window.simuladorMercadoActivo) {
                 if (window.miWallet) {
                     window.miWallet.pol += ganancia;
                     const polText = document.getElementById("pol-amount");
-                    
-                    // FIX BUG: Actualización sin inyectar el emoji doble
-                    if(polText) polText.innerText = `${window.miWallet.pol.toFixed(1)} POL`;
+                    if(polText) polText.innerText = `${window.miWallet.pol.toFixed(1)} POL`; // FIX ICONO DOBLE
                 }
 
                 alert(`💰 ¡VENTA EXITOSA!\nUn comprador anónimo adquirió tu [${genoVendido.name}].\nHas recibido +${ganancia} POL.`);
