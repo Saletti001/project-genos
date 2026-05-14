@@ -45,9 +45,9 @@ window.iniciarMercado = function() {
         const style = document.createElement('style');
         style.id = styleId;
         style.innerHTML = `
-            /* OVERRIDE DEFINITIVO FONDO MERCADO (Morado Retro) */
+            /* OVERRIDE DEFINITIVO FONDO MERCADO (Cian Unificado) */
             #market-screen {
-                background-color: #5E35B1 !important; 
+                background-color: #4dd0e1 !important; 
                 background-image: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.05) 2px, rgba(0,0,0,0.05) 4px) !important;
             }
 
