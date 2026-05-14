@@ -244,7 +244,7 @@ window.procesarCompraMercado = function(geno) {
     if (window.miWallet && window.miWallet.pol >= precio) {
         window.miWallet.pol -= precio;
         const polText = document.getElementById("pol-amount");
-        if(polText) polText.innerText = `🔷 ${window.miWallet.pol.toFixed(1)} POL`;
+        if(polText) polText.innerText = `${window.miWallet.pol.toFixed(1)} POL`;
         
         delete geno.pricePol;
         if(!window.misGenos) window.misGenos = [];
