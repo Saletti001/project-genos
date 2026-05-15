@@ -1,5 +1,5 @@
 // =========================================
-// MarketManager.js - RED DE CRIADORES (WEB3) - COMPLETO CON INSPECCIÓN DE VENTAS
+// MarketManager.js - RED DE CRIADORES (WEB3) - ADN EXACTO Y CALIDAD CORREGIDA
 // =========================================
 
 window.mercadoNPC = window.mercadoNPC || [];
@@ -27,13 +27,19 @@ function generarGenoNPC() {
         addedStatsBase.luk = (level - 1);
     }
 
+    const colorRandom = `#${Math.floor(Math.random()*16777215).toString(16)}`;
+
     return {
         id: Date.now() + Math.floor(Math.random() * 1000),
         name: `Geno ${r} (NPC)`,
         rarity: r,
         element: elements[Math.floor(Math.random() * elements.length)],
-        shape: Math.random() > 0.5 ? "gota" : "frijol",
-        color: `#${Math.floor(Math.random()*16777215).toString(16)}`, 
+        // FIX: Propiedades estándar completas para que los SVGs funcionen bien
+        body_shape: Math.random() > 0.5 ? "gota" : "frijol",
+        base_color: colorRandom,
+        color: colorRandom,
+        eye_type: "estandar",
+        mouth_type: "estandar",
         pricePol: price.toFixed(1),
         level: level,
         reward: 100,
@@ -70,7 +76,6 @@ window.iniciarMercado = function() {
             .market-scroll-area::-webkit-scrollbar, .market-detail-scroll::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
             .market-scroll-area, .market-detail-scroll { -ms-overflow-style: none !important; scrollbar-width: none !important; }
             
-            /* CSS NUCLEAR PARA ELIMINAR LAS FLECHITAS DEL INPUT NUMBER */
             .hide-spinners { -moz-appearance: textfield !important; }
             .hide-spinners::-webkit-outer-spin-button,
             .hide-spinners::-webkit-inner-spin-button {
@@ -122,7 +127,6 @@ window.iniciarMercado = function() {
             .market-btn-neon:hover { filter: brightness(1.2) contrast(1.1); }
             .market-btn-neon:active { transform: scale(0.97); }
             
-            /* FIX: Hacemos la fila interactiva para poder inspeccionar */
             .listed-item-row {
                 display: flex; justify-content: space-between; align-items: center; 
                 background: rgba(0,0,0,0.4); padding: 10px 15px; border-radius: 8px; 
@@ -213,9 +217,13 @@ window.abrirDetalleMercado = function(geno, tipoAccion) {
 
     if(!modal) return;
 
+    // FIX SVG: Pasamos todas las propiedades del Geno al motor para que respete ojos, boca y forma
     let svgIcon = '🧬';
-    if (typeof generarSvgGeno === 'function') {
-        let tempSvg = generarSvgGeno({ body_shape: geno.shape, base_color: geno.color, color: geno.color });
+    if (typeof window.generarSvgGeno === 'function') {
+        let propGeno = { ...geno };
+        if (!propGeno.body_shape && propGeno.shape) propGeno.body_shape = propGeno.shape;
+        if (!propGeno.base_color && propGeno.color) propGeno.base_color = propGeno.color;
+        let tempSvg = window.generarSvgGeno(propGeno);
         if (tempSvg) svgIcon = tempSvg.replace(/width="[^"]+"/, 'width="100%"').replace(/height="[^"]+"/, 'height="100%"');
     }
     iconContainer.innerHTML = svgIcon;
@@ -225,7 +233,6 @@ window.abrirDetalleMercado = function(geno, tipoAccion) {
     const stBase = geno.stats || { hp: 0, atk: 0, def: 0, spd: 0, luk: 0 };
     const stAdded = geno.addedStats || { hp: 0, atk: 0, def: 0, spd: 0, luk: 0 };
     
-    // SVGs originales 
     const iconHp = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff4b4b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
     const iconAtk = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"></path><path d="M13 19l6-6"></path><path d="M16 16l4 4"></path><path d="M19 21l2-2"></path></svg>`;
     const iconDef = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`;
@@ -259,8 +266,13 @@ window.abrirDetalleMercado = function(geno, tipoAccion) {
         `;
     }
 
-    // LIMPIADOR DE EMOJIS: Extrae SOLO letras de la variable element
     const elementoLimpio = (geno.element || "Desconocido").replace(/[^A-Za-záéíóúÁÉÍÓÚñÑ ]/g, '').trim();
+
+    // FIX CALIDAD: Calculamos la calidad visual correcta si está vacía
+    let calidadFinal = geno.quality || geno.calidad;
+    if (!calidadFinal) {
+        calidadFinal = geno.rarity === "Común" ? "C (46%)" : geno.rarity === "Raro" ? "B (68%)" : geno.rarity === "Épico" ? "A (85%)" : "Estándar";
+    }
 
     statsContainer.innerHTML = `
         <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;">
@@ -277,7 +289,7 @@ window.abrirDetalleMercado = function(geno, tipoAccion) {
 
         <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 20px;">
             <span style="color: #cbd5e1;">Calidad (Pura):</span> 
-            <span style="font-weight: 900; font-size: 14px; color: #ffcc00;">${geno.quality || 'Estándar'}</span>
+            <span style="font-weight: 900; font-size: 14px; color: #ffcc00;">${calidadFinal}</span>
         </div>
 
         <div style="display: flex; justify-content: space-between; font-weight: bold; color: #4dd0e1; margin-bottom: 10px; font-size: 14px; text-align: left;">
@@ -328,7 +340,6 @@ window.abrirDetalleMercado = function(geno, tipoAccion) {
             }
         };
     } else if (tipoAccion === 'listado') {
-        // NUEVO ESTADO: Inspeccionar un Geno que ya está a la venta
         actionContainer.innerHTML = `
             <div style="background: rgba(0,0,0,0.4); border-radius: 8px; padding: 10px; border: 1px solid #384a5e; margin-bottom: 15px;">
                 <div style="color: #cbd5e1; font-size: 12px; line-height: 1.5; margin-bottom: 5px;">Espécimen listado en la red global.</div>
@@ -412,9 +423,13 @@ window.renderizarMercado = function() {
         const card = document.createElement("div");
         card.className = "market-card-neon";
         
+        // FIX SVG: Copiamos todo el ADN para que dibuje caras correctas
         let svgIcon = '🧬';
-        if (typeof generarSvgGeno === 'function') {
-            let tempSvg = generarSvgGeno({ body_shape: geno.shape, base_color: geno.color, color: geno.color });
+        if (typeof window.generarSvgGeno === 'function') {
+            let propGeno = { ...geno };
+            if (!propGeno.body_shape && propGeno.shape) propGeno.body_shape = propGeno.shape;
+            if (!propGeno.base_color && propGeno.color) propGeno.base_color = propGeno.color;
+            let tempSvg = window.generarSvgGeno(propGeno);
             if (tempSvg) svgIcon = tempSvg.replace(/width="[^"]+"/, 'width="100%"').replace(/height="[^"]+"/, 'height="100%"');
         }
 
@@ -453,9 +468,13 @@ window.renderizarMisVentas = function() {
             const card = document.createElement("div");
             card.className = "market-card-neon";
             
+            // FIX SVG
             let svgIcon = '🧬';
-            if (typeof generarSvgGeno === 'function') {
-                let tempSvg = generarSvgGeno({ body_shape: geno.shape, base_color: geno.color, color: geno.color });
+            if (typeof window.generarSvgGeno === 'function') {
+                let propGeno = { ...geno };
+                if (!propGeno.body_shape && propGeno.shape) propGeno.body_shape = propGeno.shape;
+                if (!propGeno.base_color && propGeno.color) propGeno.base_color = propGeno.color;
+                let tempSvg = window.generarSvgGeno(propGeno);
                 if (tempSvg) svgIcon = tempSvg.replace(/width="[^"]+"/, 'width="100%"').replace(/height="[^"]+"/, 'height="100%"');
             }
 
@@ -485,7 +504,6 @@ window.renderizarMisVentas = function() {
         window.misVentas.forEach(geno => {
             const item = document.createElement("div");
             item.className = "listed-item-row";
-            // SE AÑADIÓ EL ÍCONO DE LUPA PARA INDICAR QUE ES CLICKABLE
             item.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 8px; pointer-events: none;">
                     <span style="font-size: 14px;">🔍</span>
@@ -497,16 +515,13 @@ window.renderizarMisVentas = function() {
                 </div>
             `;
             
-            // EVENTO PARA ABRIR EL MODAL DE INSPECCIÓN
             item.addEventListener("click", (e) => {
-                // Si hizo clic en el botón de cancelar, no abrir el modal
                 if(e.target.classList.contains('btn-cancel-sale')) return;
                 window.abrirDetalleMercado(geno, 'listado');
             });
             
-            // EVENTO DEL BOTÓN CANCELAR
             item.querySelector(".btn-cancel-sale").addEventListener("click", (e) => {
-                e.stopPropagation(); // Evitar que también se abra el modal
+                e.stopPropagation();
                 window.misVentas = window.misVentas.filter(g => g.id !== geno.id);
                 delete geno.pricePol;
                 window.misGenos.push(geno);
