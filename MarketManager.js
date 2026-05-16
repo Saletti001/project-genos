@@ -1,19 +1,9 @@
 // =========================================
-// MarketManager.js - RED DE CRIADORES (WEB3) - VISUALMENTE IDÉNTICO A STATS
+// MarketManager.js - RED DE CRIADORES (WEB3) - CLON EXACTO DE STATS
 // =========================================
 
 window.mercadoNPC = window.mercadoNPC || [];
 window.misVentas = window.misVentas || [];
-
-// Utilidad para buscar el nombre real (Temporal hasta ver tu app.js)
-function obtenerNombreGeno(g) {
-    return g.customName || g.nickname || g.apodo || g.name || "Desconocido";
-}
-
-// Utilidad para buscar los stats añadidos (Temporal hasta ver tu app.js)
-function obtenerStatsAnadidos(g) {
-    return g.statsAdded || g.addedStats || g.bonusStats || g.puntosNivel || g.stats_added || { hp: 0, atk: 0, def: 0, spd: 0, luk: 0 };
-}
 
 // Función para generar Genos aleatorios en el mercado
 function generarGenoNPC() {
@@ -23,16 +13,18 @@ function generarGenoNPC() {
     let price = r === "Común" ? (Math.random() * 2 + 1) : r === "Raro" ? (Math.random() * 5 + 5) : (Math.random() * 15 + 15);
     let level = Math.floor(Math.random() * 10) + 1;
     
+    // Generar Stats base
     let objBase = window.generarStatsPorRareza ? window.generarStatsPorRareza(r) : { hp: 50, atk: 15, def: 10, spd: 15, luk: 15 };
-    let statsBase = JSON.parse(JSON.stringify(objBase));
+    let baseStats = JSON.parse(JSON.stringify(objBase));
+    let totalStats = JSON.parse(JSON.stringify(objBase));
     
-    let addedStatsBase = { hp: 0, atk: 0, def: 0, spd: 0, luk: 0 };
+    // Simular escalado de stats por nivel directamente en totalStats (igual que tu motor)
     if (level > 1) {
-        addedStatsBase.hp = (level - 1) * 2;
-        addedStatsBase.atk = (level - 1);
-        addedStatsBase.def = (level - 1);
-        addedStatsBase.spd = (level - 1);
-        addedStatsBase.luk = (level - 1);
+        totalStats.hp += (level - 1) * 2;
+        totalStats.atk += (level - 1);
+        totalStats.def += (level - 1);
+        totalStats.spd += (level - 1);
+        totalStats.luk += (level - 1);
     }
 
     const colorRandom = `#${Math.floor(Math.random()*16777215).toString(16)}`;
@@ -50,8 +42,8 @@ function generarGenoNPC() {
         pricePol: price.toFixed(1),
         level: level,
         reward: 100,
-        stats: statsBase,
-        addedStats: addedStatsBase, 
+        stats: totalStats,
+        baseStats: baseStats,
         quality: r === "Común" ? "C (46%)" : r === "Raro" ? "B (68%)" : "A (85%)",
         scanned: false,
         hidden_genes: { A: null, B: null, C: null }
@@ -179,26 +171,48 @@ window.iniciarMercado = function() {
                 <div class="fab-content" style="font-size: 13px; cursor: pointer; padding: 12px 0; text-align: center;">VOLVER AL LABORATORIO</div>
             </div>
 
-            <div id="market-detail-modal" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10, 20, 30, 0.90); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(4px);">
-                <div class="market-detail-scroll" style="background: linear-gradient(180deg, #1A2A36 0%, #0F172A 100%); border: 2px solid #D500F9; border-radius: 16px; padding: 25px 20px; width: 85%; max-width: 350px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.8), inset 0 0 20px rgba(213,0,249,0.2);">
+            <div id="market-detail-modal" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 26, 46, 0.85); z-index: 9999; display: none; align-items: center; justify-content: center; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);">
+                <div class="market-detail-scroll modal-content" style="max-height: 85vh; overflow-y: auto; width: 85%; max-width: 350px; background: #111e28; border-radius: 12px; padding: 20px; box-sizing: border-box; position: relative;">
                     
-                    <button id="close-market-detail" style="position: absolute; top: 10px; right: 15px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #ff4b4b; padding: 0; z-index: 10;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="18" y1="6" x2="6" y2="18"></line>
-                            <line x1="6" y1="6" x2="18" y2="18"></line>
-                        </svg>
-                    </button>
-                    
-                    <h3 id="market-detail-name-text" style="margin: 0 0 15px 0; color: #80deea; text-transform: uppercase; font-size: 16px; text-align: center; font-weight: bold; letter-spacing: 1px;"></h3>
-                    
-                    <div style="text-align: center; margin-bottom: 15px;">
+                    <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding-bottom: 10px; margin-bottom: 15px;">
+                        <h3 class="stats-title" style="margin: 0; color: #80deea; text-transform: uppercase; font-size: 16px; display: flex; align-items: center; gap: 10px;">
+                            <span id="market-detail-name-text">--</span>
+                        </h3>
+                        <button id="close-market-detail" style="background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #ff4b4b; padding: 0;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="6" x2="6" y2="18"></line>
+                                <line x1="6" y1="6" x2="18" y2="18"></line>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="stats-level-badge" style="text-align: center; margin-bottom: 15px;">
                         <span id="market-detail-level-badge" style="background: #4dd0e1; color: #000; padding: 3px 8px; border-radius: 4px; font-weight: bold; font-size: 12px;"></span>
                     </div>
 
-                    <div id="market-detail-icon" style="width: 80px; height: 80px; margin: 0 auto 10px auto; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));"></div>
-                    <div id="market-detail-id-text" style="color: #4dd0e1; font-size: 16px; font-weight: 900; margin-bottom: 20px; letter-spacing: 1px; text-align: center;"></div>
+                    <div id="market-detail-element-icon" style="text-align: center; margin-bottom: 8px;"></div>
+                    <div id="market-detail-id-text" style="text-align: center; margin-bottom: 15px; font-weight: bold; color: #00d2ff; font-family: monospace; letter-spacing: 2px; font-size: 15px;"></div>
                     
+                    <div class="stat-info" style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px;">
+                        <span>Rareza:</span> <span id="market-detail-rarity" style="color: #fff; font-weight: bold;">--</span>
+                    </div>
+                    <div class="stat-info" style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px;">
+                        <span>Elem:</span> <span id="market-detail-elem" style="color: #fff; font-weight: bold;">--</span>
+                    </div>
+                    
+                    <div class="stat-info" style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1);">
+                        <span>Calidad (Pura):</span> 
+                        <span id="market-detail-quality" style="font-weight: 900; font-size: 14px; color: #ffcc00; text-shadow: 0 0 5px rgba(255,255,255,0.5);">--</span>
+                    </div>
+
+                    <hr class="stats-divider" style="border: none; border-top: 1px solid #333; margin: 15px 0;">
+                    
+                    <div class="stat-header" style="display: flex; justify-content: space-between; font-weight: bold; color: #4dd0e1; margin-bottom: 10px; font-size: 14px;">
+                        <span>Atributos Activos</span>
+                    </div>
+
                     <div id="market-detail-stats"></div>
+                    <div id="market-detail-genes" style="margin-top: 15px;"></div>
                     <div id="market-detail-action" style="margin-top: 20px; text-align: center;"></div>
                 </div>
             </div>
@@ -240,44 +254,61 @@ window.abrirDetalleMercado = function(idGenoBuscar, tipoAccion) {
     
     if(!geno) return; 
 
-    const iconContainer = document.getElementById("market-detail-icon");
+    // Referencias al DOM
     const nameEl = document.getElementById("market-detail-name-text");
     const lvlEl = document.getElementById("market-detail-level-badge");
+    const iconContainer = document.getElementById("market-detail-element-icon");
     const idEl = document.getElementById("market-detail-id-text");
+    const rarityEl = document.getElementById("market-detail-rarity");
+    const elemEl = document.getElementById("market-detail-elem");
+    const qualityEl = document.getElementById("market-detail-quality");
     const statsContainer = document.getElementById("market-detail-stats");
+    const genesContainer = document.getElementById("market-detail-genes");
     const actionContainer = document.getElementById("market-detail-action");
 
-    let svgIcon = '🧬';
-    if (typeof window.generarSvgGeno === 'function') {
-        let propGeno = { ...geno };
-        if (!propGeno.body_shape && propGeno.shape) propGeno.body_shape = propGeno.shape;
-        if (!propGeno.base_color && propGeno.color) propGeno.base_color = propGeno.color;
-        let tempSvg = window.generarSvgGeno(propGeno);
-        if (tempSvg) svgIcon = tempSvg.replace(/width="[^"]+"/, 'width="100%"').replace(/height="[^"]+"/, 'height="100%"');
-    }
-    iconContainer.innerHTML = svgIcon;
-    
-    nameEl.innerText = obtenerNombreGeno(geno);
+    // Inyectar Nombre y Nivel usando la misma variable del RPGManager
+    nameEl.innerText = geno.name || "Geno";
     lvlEl.innerText = `Nv. ${geno.level || 1}`;
-    idEl.innerText = geno.id ? `#${geno.id.toString().padStart(6, '0')}` : "#000000";
+    idEl.innerText = geno.id ? `#${geno.id}` : "#000000";
 
-    const stBase = geno.stats || { hp: 0, atk: 0, def: 0, spd: 0, luk: 0 };
-    const stAdded = obtenerStatsAnadidos(geno);
+    // Inyectar Elemento e Icono SVG del elemento usando tu motor base
+    const elementoActual = (geno.genes && geno.genes.afinidad) ? geno.genes.afinidad.dom : (geno.element || "Normal");
+    const nombreElementoLimpio = elementoActual.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ]/g, '').trim();
     
+    rarityEl.innerText = geno.rarity || "Común";
+    elemEl.innerText = nombreElementoLimpio;
+
+    let iconoElementoHTML = "";
+    if(typeof window.getIconoElemento === 'function') {
+        iconoElementoHTML = window.getIconoElemento(elementoActual).replace('margin-right: 6px;', 'margin-right: 0;');
+    }
+    iconContainer.innerHTML = `<div style="font-size: 45px; margin-bottom: 8px; display: flex; justify-content: center; filter: drop-shadow(0 4px 10px rgba(0,0,0,0.8));">${iconoElementoHTML}</div>`;
+
+    // Inyectar Calidad
+    let calidadFinal = geno.quality || geno.calidad;
+    if (!calidadFinal) {
+        calidadFinal = geno.rarity === "Común" ? "C (46%)" : geno.rarity === "Raro" ? "B (68%)" : geno.rarity === "Épico" ? "A (85%)" : "Estándar";
+    }
+    qualityEl.innerText = calidadFinal;
+
+    // --- REPLICAMOS TU LÓGICA DE STATS EXACTA ---
+    const stBase = geno.baseStats || geno.stats || { hp: 0, atk: 0, def: 0, spd: 0, luk: 0 };
+    const stTotal = geno.stats || { hp: 0, atk: 0, def: 0, spd: 0, luk: 0 };
+
     const iconHp = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff4b4b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>`;
     const iconAtk = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ff8c00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 17.5L3 6V3h3l11.5 11.5"></path><path d="M13 19l6-6"></path><path d="M16 16l4 4"></path><path d="M19 21l2-2"></path></svg>`;
     const iconDef = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`;
     const iconSpd = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#facc15" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`;
     const iconLuk = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>`;
 
-    // FIX STATS VISUALES: Si el valor añadido es 0, las columnas quedan en blanco como en tu imagen.
-    const renderRow = (label, icon, base, added) => {
-        const numBase = parseInt(base) || 0;
-        const numAdded = parseInt(added) || 0;
-        const total = numBase + numAdded;
+    const renderRow = (label, icon, base, total) => {
+        const numBase = Math.floor(base) || 0;
+        const numTotal = Math.floor(total) || 0;
+        const diff = numTotal - numBase;
         
-        const addedStr = numAdded > 0 ? `(+${numAdded})` : '';
-        const totalStr = numAdded > 0 ? `${total}` : '';
+        // Exactamente tu lógica de RPGManager.js: Si diff > 0 dibuja, si no, lo deja vacío
+        const addedStr = diff > 0 ? `(+${diff})` : '';
+        const totalStr = diff > 0 ? `${numTotal}` : '';
         
         return `
         <div style="display: grid; grid-template-columns: 55px 25px 40px 30px 1fr; gap: 4px; align-items: center; background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 6px; margin-bottom: 5px; font-size: 13px;">
@@ -289,58 +320,42 @@ window.abrirDetalleMercado = function(idGenoBuscar, tipoAccion) {
         </div>`;
     };
 
+    statsContainer.innerHTML = `
+        ${renderRow('Vit', iconHp, stBase.hp, stTotal.hp)}
+        ${renderRow('Fue', iconAtk, stBase.atk, stTotal.atk)}
+        ${renderRow('Def', iconDef, stBase.def, stTotal.def)}
+        ${renderRow('Agi', iconSpd, stBase.spd, stTotal.spd)}
+        ${renderRow('Sue', iconLuk, stBase.luk, stTotal.luk)}
+    `;
+
+    // Estructura Genética
     let geneHtml = `
-        <div style="background: rgba(0,0,0,0.4); border-radius: 8px; padding: 15px; border: 1px dashed #555;">
-            <div style="color: #f0ad4e; font-size: 14px; margin-bottom: 5px;">🔒 ADN Bloqueado</div>
-            <div style="color: #888; font-size: 11px;">Usa un escáner para revelar la secuencia.</div>
-        </div>`;
+        <div style="font-size: 12px; color: #4dd0e1; text-transform: uppercase; margin-bottom: 5px; font-weight: bold; letter-spacing: 1px; text-align: center;">Estructura Genética</div>
+        <div style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 8px; border: 1px dashed #555; text-align: center; color: #666; font-size: 12px;">
+            🔒 ADN Bloqueado<br>
+            <span style="font-size: 10px; color: #444; margin-top: 6px; display: inline-block;">Usa un escáner para revelar la secuencia.</span>
+        </div>
+    `;
         
     if (geno.scanned && geno.hidden_genes) {
         geneHtml = `
-            <div style="font-size: 11px; margin-bottom: 5px; text-align: left; padding: 6px; background: rgba(0,0,0,0.4); border-radius: 4px; border-left: 3px solid #80deea; color: #fff;">DOM: ${geno.hidden_genes.A || '???'}</div>
-            <div style="font-size: 11px; text-align: left; padding: 6px; background: rgba(0,0,0,0.4); border-radius: 4px; border-left: 3px solid #8A2BE2; color: #fff;">REC: ${geno.hidden_genes.B || '???'}</div>
+            <div style="font-size: 12px; color: #4dd0e1; text-transform: uppercase; margin-bottom: 5px; font-weight: bold; letter-spacing: 1px; text-align: center;">Estructura Genética</div>
+            <div style="background: rgba(0,0,0,0.4); padding: 8px 12px; border-radius: 6px; font-size: 11px; color: #fff; border-left: 3px solid #ffcc00; display: flex; flex-direction: column; gap: 4px; margin-bottom: 4px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #ffcc00; font-weight: bold; font-size: 10px; text-transform: uppercase;">Gen A (Cosmético)</span>
+                    <span style="font-weight: bold;">${geno.hidden_genes.A ? geno.hidden_genes.A.name : 'Desconocido'}</span>
+                </div>
+            </div>
+            <div style="background: rgba(0,0,0,0.4); padding: 8px 12px; border-radius: 6px; font-size: 11px; color: #fff; border-left: 3px solid #80deea; display: flex; flex-direction: column; gap: 4px; margin-bottom: 4px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="color: #80deea; font-weight: bold; font-size: 10px; text-transform: uppercase;">Gen B (Funcional)</span>
+                    <span style="font-weight: bold;">${geno.hidden_genes.B ? geno.hidden_genes.B.name : 'Desconocido'}</span>
+                </div>
+            </div>
         `;
     }
 
-    const elementoLimpio = (geno.element || "Desconocido").replace(/[^A-Za-záéíóúÁÉÍÓÚñÑ ]/g, '').trim();
-
-    let calidadFinal = geno.quality || geno.calidad;
-    if (!calidadFinal) {
-        calidadFinal = geno.rarity === "Común" ? "C (46%)" : geno.rarity === "Raro" ? "B (68%)" : geno.rarity === "Épico" ? "A (85%)" : "Estándar";
-    }
-
-    statsContainer.innerHTML = `
-        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;">
-            <span style="color: #cbd5e1;">Rareza:</span> <span style="color: #fff; font-weight: bold;">${geno.rarity}</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px;">
-            <span style="color: #cbd5e1;">Elem:</span> <span style="color: #fff; font-weight: bold;">${elementoLimpio}</span>
-        </div>
-        
-        <div style="border-bottom: 1px dashed rgba(255,255,255,0.1); margin: 15px 0;"></div>
-
-        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px; margin-bottom: 20px;">
-            <span style="color: #cbd5e1;">Calidad (Pura):</span> 
-            <span style="font-weight: 900; font-size: 14px; color: #ffcc00;">${calidadFinal}</span>
-        </div>
-
-        <div style="border-bottom: 1px dashed rgba(255,255,255,0.1); margin: 15px 0;"></div>
-
-        <div style="display: flex; justify-content: space-between; font-weight: bold; color: #4dd0e1; margin-bottom: 10px; font-size: 14px; text-align: left;">
-            <span>Atributos Activos</span>
-        </div>
-
-        ${renderRow('Vit', iconHp, stBase.hp, stAdded.hp)}
-        ${renderRow('Fue', iconAtk, stBase.atk, stAdded.atk)}
-        ${renderRow('Def', iconDef, stBase.def, stAdded.def)}
-        ${renderRow('Agi', iconSpd, stBase.spd, stAdded.spd)}
-        ${renderRow('Sue', iconLuk, stBase.luk, stAdded.luk)}
-        
-        <div style="margin-top: 20px; text-align: center;">
-            <h4 style="color: #4dd0e1; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">ESTRUCTURA GENÉTICA</h4>
-            ${geneHtml}
-        </div>
-    `;
+    genesContainer.innerHTML = geneHtml;
 
     if (tipoAccion === 'comprar') {
         actionContainer.innerHTML = `
@@ -353,7 +368,6 @@ window.abrirDetalleMercado = function(idGenoBuscar, tipoAccion) {
             </div>
             <button id="modal-btn-action" class="market-btn-neon" style="width: 100%; font-size: 14px; padding: 12px;">Confirmar Compra</button>
         `;
-        
         document.getElementById("modal-btn-action").onclick = () => {
             window.procesarCompraMercado(geno);
             modal.style.display = "none";
@@ -366,7 +380,6 @@ window.abrirDetalleMercado = function(idGenoBuscar, tipoAccion) {
             <input type="number" id="modal-input-price" class="hide-spinners" placeholder="Precio en POL" style="width: 100%; box-sizing: border-box; padding: 12px; margin-bottom: 15px; background: rgba(0,0,0,0.4); border: 1px solid #D500F9; border-radius: 8px; text-align: center; color: #fff; font-weight: bold; outline: none; font-size: 16px;" step="0.1" min="0.1">
             <button id="modal-btn-action" class="market-btn-neon green" style="width: 100%; font-size: 14px; padding: 12px;">Publicar en la Red</button>
         `;
-        
         document.getElementById("modal-btn-action").onclick = () => {
             const val = document.getElementById("modal-input-price").value;
             if(window.procesarVentaMercado(geno, val)) {
@@ -384,7 +397,6 @@ window.abrirDetalleMercado = function(idGenoBuscar, tipoAccion) {
             </div>
             <button id="modal-btn-action" class="market-btn-neon" style="width: 100%; font-size: 14px; padding: 12px; background: #384a5e; box-shadow: none;">Cerrar Inspección</button>
         `;
-        
         document.getElementById("modal-btn-action").onclick = () => {
             modal.style.display = "none";
         };
@@ -392,7 +404,7 @@ window.abrirDetalleMercado = function(idGenoBuscar, tipoAccion) {
 
     modal.style.display = "flex";
 
-    // FIX CERRAR X: Ahora hace match perfecto
+    // Manejo correcto de la X usando .closest()
     const btnClose = document.getElementById("close-market-detail");
     const cerrarModal = (e) => {
         if(e.target === modal || e.target.closest('#close-market-detail')) {
@@ -417,7 +429,7 @@ window.procesarCompraMercado = function(geno) {
         window.mercadoNPC = window.mercadoNPC.filter(g => g.id !== geno.id);
         window.mercadoNPC.push(generarGenoNPC());
         
-        alert(`✅ ¡Compra exitosa! Adquiriste a [${obtenerNombreGeno(geno)}] por ${precio} POL.`);
+        alert(`✅ ¡Compra exitosa! Adquiriste a [${geno.name}] por ${precio} POL.`);
         window.renderizarMercado();
         
         if(window.guardarJuego) window.guardarJuego();
@@ -438,7 +450,7 @@ window.procesarVentaMercado = function(geno, inputPrecio) {
     geno.pricePol = precio.toFixed(1);
     window.misVentas.push(geno);
     
-    alert(`✅ Has publicado a [${obtenerNombreGeno(geno)}] en la red por ${geno.pricePol} POL.`);
+    alert(`✅ Has publicado a [${geno.name}] en la red por ${geno.pricePol} POL.`);
     window.renderizarMisVentas();
     
     if(window.guardarJuego) window.guardarJuego();
@@ -465,13 +477,11 @@ window.renderizarMercado = function() {
             if (tempSvg) svgIcon = tempSvg.replace(/width="[^"]+"/, 'width="100%"').replace(/height="[^"]+"/, 'height="100%"');
         }
 
-        const nombreMostrado = obtenerNombreGeno(geno);
-
         card.innerHTML = `
             <div style="width: 55px; height: 55px; margin-bottom: 10px; filter: drop-shadow(0px 5px 8px rgba(0,0,0,0.6)); pointer-events: none;">
                 ${svgIcon}
             </div>
-            <h4 style="margin: 0 0 5px 0; font-size: 13px; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); pointer-events: none;">${nombreMostrado}</h4>
+            <h4 style="margin: 0 0 5px 0; font-size: 13px; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); pointer-events: none;">${geno.name || "Geno"}</h4>
             <p style="font-size: 11px; color: #cbd5e1; margin: 0 0 10px 0; pointer-events: none;">Nv. ${geno.level || 1} | ${geno.rarity}</p>
             <div style="font-weight: 900; color: #D500F9; margin-bottom: 15px; font-size: 14px; text-shadow: 0 0 8px rgba(213,0,249,0.8); pointer-events: none;">🔷 ${geno.pricePol} POL</div>
             <button class="market-btn-neon">Inspeccionar</button>
@@ -511,13 +521,11 @@ window.renderizarMisVentas = function() {
                 if (tempSvg) svgIcon = tempSvg.replace(/width="[^"]+"/, 'width="100%"').replace(/height="[^"]+"/, 'height="100%"');
             }
 
-            const nombreMostrado = obtenerNombreGeno(geno);
-
             card.innerHTML = `
                 <div style="width: 55px; height: 55px; margin-bottom: 10px; filter: drop-shadow(0px 5px 8px rgba(0,0,0,0.6)); pointer-events: none;">
                     ${svgIcon}
                 </div>
-                <h4 style="margin: 0 0 5px 0; font-size: 13px; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); pointer-events: none;">${nombreMostrado}</h4>
+                <h4 style="margin: 0 0 5px 0; font-size: 13px; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); pointer-events: none;">${geno.name || "Geno"}</h4>
                 <p style="font-size: 11px; color: #cbd5e1; margin: 0 0 10px 0; pointer-events: none;">Nv. ${geno.level || 1} | ${geno.rarity}</p>
                 <div style="font-weight: 900; color: #69F0AE; margin-bottom: 15px; font-size: 10px; text-transform: uppercase; letter-spacing: 1px; pointer-events: none;">Disponible</div>
                 <button class="market-btn-neon green">Vender</button>
@@ -540,12 +548,10 @@ window.renderizarMisVentas = function() {
             const item = document.createElement("div");
             item.className = "listed-item-row";
             
-            const nombreVenta = obtenerNombreGeno(geno);
-            
             item.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 8px; pointer-events: none;">
                     <span style="font-size: 14px;">🔍</span>
-                    <span style="font-weight: bold; font-size: 13px;">${nombreVenta}</span>
+                    <span style="font-weight: bold; font-size: 13px;">${geno.name || "Geno"}</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
                     <span style="color: #D500F9; font-weight: 900; pointer-events: none;">🔷 ${geno.pricePol}</span>
@@ -589,7 +595,7 @@ if(!window.simuladorMercadoActivo) {
                     if(polText) polText.innerText = `${window.miWallet.pol.toFixed(1)} POL`;
                 }
 
-                alert(`💰 ¡VENTA EXITOSA!\nUn comprador anónimo adquirió tu [${obtenerNombreGeno(genoVendido)}].\nHas recibido +${ganancia} POL.`);
+                alert(`💰 ¡VENTA EXITOSA!\nUn comprador anónimo adquirió tu [${genoVendido.name}].\nHas recibido +${ganancia} POL.`);
                 
                 const grid = document.getElementById("market-sell-grid");
                 if(grid) window.renderizarMisVentas();
