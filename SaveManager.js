@@ -18,9 +18,7 @@ window.cargarProgreso = function() {
         if (data.esencia !== undefined) window.miInventario.vitalEssence = data.esencia;
 
         document.addEventListener("DOMContentLoaded", () => {
-            // ✨ CORRECCIÓN: Esperamos 150ms para asegurarnos de que la función de dibujo SVG ya exista
             setTimeout(() => {
-                // Generamos los dibujos ahora que es seguro
                 if (window.misGenos) {
                     window.misGenos.forEach(geno => {
                         if (typeof generarSvgGeno === 'function') geno.svg = generarSvgGeno(geno);
@@ -36,7 +34,6 @@ window.cargarProgreso = function() {
                     if(polText) polText.innerText = `🔷 ${window.miWallet.pol.toFixed(1)} POL`;
                 }
 
-                // ✨ CORRECCIÓN: Ahora el SVG sí existe y ya no saldrá "undefined"
                 const pedestal = document.getElementById("geno-container");
                 if (pedestal && window.miMascota && window.miMascota.id && window.miMascota.id !== "temp") {
                     pedestal.style.display = "block";
@@ -54,7 +51,14 @@ window.cargarProgreso = function() {
 };
 
 window.guardarProgreso = function() {
-    if (!window.miMascota || !window.miMascota.id || window.miMascota.id === "temp") return;
+    // 💡 RASTREADOR 1
+    console.log("💾 Intentando guardado local...");
+
+    if (!window.miMascota || !window.miMascota.id || window.miMascota.id === "temp") {
+        console.log("⚠️ Guardado cancelado: Tu mascota actual es 'temp' o no existe.");
+        return;
+    }
+
     const dataToSave = {
         misGenos: window.misGenos || [],
         miMascota: window.miMascota || null,
@@ -63,16 +67,17 @@ window.guardarProgreso = function() {
         pol: window.miWallet ? window.miWallet.pol : 10.0,
         inventarioItems: window.miInventario ? (window.miInventario.items || window.miInventario.slots || []) : []
     };
-    localStorage.setItem(SAVE_KEY, JSON.stringify(dataToSave)); // [cite: 57]
+    localStorage.setItem(SAVE_KEY, JSON.stringify(dataToSave));
 
-    // ✨ NUEVO: Gatillo invisible para la nube
+    // 💡 RASTREADOR 2
     if (typeof window.autoGuardar === 'function') {
         window.autoGuardar();
+    } else {
+        console.log("⚠️ Error: La función autoGuardar no existe. Revisa CloudManager.js");
     }
 };
 
 window.cargarProgreso();
-
 document.addEventListener("DOMContentLoaded", () => {
     setInterval(() => {
         window.guardarProgreso();
