@@ -175,3 +175,22 @@ window.autoGuardar = function() {
         window.respaldarEnNube();
     }, 3000); // 3000 milisegundos = 3 segundos
 };
+// ========================================================
+// AUTO-GUARDADO INVISIBLE EN LA RED NEXO (DEBOUNCE)
+// ========================================================
+let timeoutGuardado = null;
+
+window.autoGuardar = function() {
+    // Si el jugador no ha iniciado sesión, no hacemos nada
+    if (!window.miUsuarioCloud) return; 
+    
+    // Si ya había un guardado en cola, lo reiniciamos
+    if (timeoutGuardado) {
+        clearTimeout(timeoutGuardado);
+    }
+    
+    // Esperamos 3 segundos de inactividad antes de enviar el paquete a Alemania
+    timeoutGuardado = setTimeout(() => {
+        window.respaldarEnNube();
+    }, 3000); 
+};

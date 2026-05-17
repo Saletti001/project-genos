@@ -55,7 +55,6 @@ window.cargarProgreso = function() {
 
 window.guardarProgreso = function() {
     if (!window.miMascota || !window.miMascota.id || window.miMascota.id === "temp") return;
-
     const dataToSave = {
         misGenos: window.misGenos || [],
         miMascota: window.miMascota || null,
@@ -64,7 +63,12 @@ window.guardarProgreso = function() {
         pol: window.miWallet ? window.miWallet.pol : 10.0,
         inventarioItems: window.miInventario ? (window.miInventario.items || window.miInventario.slots || []) : []
     };
-    localStorage.setItem(SAVE_KEY, JSON.stringify(dataToSave));
+    localStorage.setItem(SAVE_KEY, JSON.stringify(dataToSave)); // [cite: 57]
+
+    // ✨ NUEVO: Gatillo invisible para la nube
+    if (typeof window.autoGuardar === 'function') {
+        window.autoGuardar();
+    }
 };
 
 window.cargarProgreso();
