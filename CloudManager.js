@@ -1,68 +1,82 @@
 // =========================================
-// CloudManager.js - PUENTE CON SUPABASE
+// CloudManager.js - LÓGICA DE NUBE Y LOGIN
 // =========================================
 
-// TUS CLAVES DE SUPABASE
 const supabaseUrl = 'https://xoxkapvondvtlftecwcv.supabase.co';
 const supabaseKey = 'sb_publishable_FBCAFJCwTr9xtSgbcZC6rQ_oudcDLza';
 
-// CAMBIO APLICADO: Renombramos a 'supabaseClient' para evitar chocar con el código del servidor
 const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 window.miUsuarioCloud = null;
 
-// Botón de prueba flotante para conectar a la nube sin romper la UI actual
-document.addEventListener("DOMContentLoaded", () => {
-    const btnNube = document.createElement("button");
-    btnNube.innerHTML = "☁️ Conectar Nube";
-    btnNube.style = "position: absolute; top: 15px; left: 15px; z-index: 9999; background: linear-gradient(90deg, #8A2BE2, #00d2ff); color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 10px rgba(0,210,255,0.4); text-transform: uppercase; font-size: 11px;";
+document.addEventListener("DOMContentLoaded", async () => {
+    // 1. Inyectamos la interfaz visual desde nuestro nuevo archivo
+    window.LoginUI.inyectar();
+
+    const btnIniciar = document.getElementById("btn-iniciar");
+    const btnRegistro = document.getElementById("btn-registro");
+    const inputEmail = document.getElementById("login-email");
+    const inputPass = document.getElementById("login-pass");
+
+    // 2. REVISAR SI YA ESTÁ CONECTADO (Memoria Automática)
+    const { data: { session } } = await supabaseClient.auth.getSession();
     
-    btnNube.onclick = async () => {
-        const email = prompt("Registro en la Nube\nIngresa un email de prueba (ej: test@genos.com):", "test@genos.com");
-        if(!email) return;
-        const password = prompt("Ingresa una contraseña (mínimo 6 caracteres):", "123456");
-        if(!password) return;
+    if (session) {
+        window.miUsuarioCloud = session.user;
+        window.LoginUI.ocultar(); // Ocultamos la UI si ya tiene el token guardado
+        cargarDatosDeLaNube();
+    }
 
-        btnNube.innerHTML = "⏳ Conectando...";
+    // 3. INICIAR SESIÓN MANUALMENTE
+    btnIniciar.onclick = async () => {
+        const email = inputEmail.value;
+        const password = inputPass.value;
+        if(!email || !password) return window.LoginUI.mostrarMensaje("Completa todos los campos");
 
-        // Intentar iniciar sesión usando supabaseClient
-        let { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+        btnIniciar.innerText = "CONECTANDO...";
+        const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
-        // Si da error (el usuario no existe), lo creamos
         if (error) {
-            console.log("Usuario no existe. Creando nueva cuenta...");
-            const res = await supabaseClient.auth.signUp({ email, password });
-            data = res.data;
-            error = res.error;
-            if(!error) alert("✅ ¡Cuenta en la nube creada con éxito!");
+            window.LoginUI.mostrarMensaje("Error: " + error.message);
+            btnIniciar.innerText = "INICIAR SESIÓN";
         } else {
-            alert("✅ ¡Sesión iniciada correctamente en la nube!");
+            window.miUsuarioCloud = data.user;
+            window.LoginUI.mostrarMensaje("¡Conexión exitosa!", "#4CAF50");
+            setTimeout(() => {
+                window.LoginUI.ocultar();
+                cargarDatosDeLaNube();
+            }, 1000);
         }
+    };
+
+    // 4. REGISTRAR CUENTA NUEVA
+    btnRegistro.onclick = async () => {
+        const email = inputEmail.value;
+        const password = inputPass.value;
+        if(!email || !password) return window.LoginUI.mostrarMensaje("Completa campos para registrarte");
+
+        btnRegistro.innerText = "CREANDO...";
+        const { data, error } = await supabaseClient.auth.signUp({ email, password });
 
         if (error) {
-            alert("❌ Error: " + error.message);
-            btnNube.innerHTML = "☁️ Conectar Nube";
-            return;
+            window.LoginUI.mostrarMensaje("Error: " + error.message);
+            btnRegistro.innerText = "CREAR CUENTA NUEVA";
+        } else {
+            window.miUsuarioCloud = data.user;
+            window.LoginUI.mostrarMensaje("¡Cuenta creada!", "#00d2ff");
+            setTimeout(() => {
+                window.LoginUI.ocultar();
+                window.respaldarEnNube(); // Creamos su primer perfil vacío en la DB
+            }, 1000);
         }
-
-        window.miUsuarioCloud = data.user;
-        btnNube.innerHTML = "☁️ Respaldar Datos";
-        btnNube.style.background = "linear-gradient(90deg, #4CAF50, #8bc34a)";
-        
-        // Sobreescribimos temporalmente tu botón de test para que ahora sea el de "Guardar"
-        btnNube.onclick = window.respaldarEnNube;
-        
-        // Hacemos el primer respaldo automático
-        window.respaldarEnNube();
     };
-    
-    document.body.appendChild(btnNube);
 });
 
-// Función para agarrar los datos del juego y mandarlos a Supabase
+// ========================================================
+// FUNCIONES DE GUARDADO Y CARGA
+// ========================================================
 window.respaldarEnNube = async function() {
     if (!window.miUsuarioCloud) return;
 
-    // Empaquetamos todo tu progreso local
     const datosJuego = {
         mascotaActiva: window.miMascota || null,
         inventario: window.miInventario ? {
@@ -75,24 +89,40 @@ window.respaldarEnNube = async function() {
         ventasActivas: window.misVentas || []
     };
 
-    // Subimos a la "Caja Fuerte" usando supabaseClient
     const { error } = await supabaseClient
         .from('jugadores')
-        .upsert({
-            id: window.miUsuarioCloud.id,
-            email: window.miUsuarioCloud.email,
-            datos_juego: datosJuego
-        });
+        .upsert({ id: window.miUsuarioCloud.id, email: window.miUsuarioCloud.email, datos_juego: datosJuego });
 
-    if (error) {
-        console.error("Error al guardar en la nube:", error);
-        alert("❌ Error guardando datos en la nube.");
-    } else {
-        console.log("☁️ ¡Datos guardados en Supabase!");
-        const btn = document.querySelector("button[style*='8bc34a']");
-        if(btn) {
-            btn.innerHTML = "✅ Guardado en Nube";
-            setTimeout(() => btn.innerHTML = "☁️ Respaldar Datos", 2000);
-        }
-    }
+    if (error) console.error("Error al guardar en la nube:", error);
+    else console.log("☁️ Progreso guardado en la Nube.");
 };
+
+async function cargarDatosDeLaNube() {
+    if (!window.miUsuarioCloud) return;
+
+    const { data, error } = await supabaseClient
+        .from('jugadores')
+        .select('datos_juego')
+        .eq('id', window.miUsuarioCloud.id)
+        .single();
+
+    if (error) return console.log("Perfil nuevo o error. Iniciando partida fresca.");
+
+    if (data && data.datos_juego) {
+        console.log("☁️ Descargando progreso del jugador...");
+        const dj = data.datos_juego;
+        
+        if (dj.mascotaActiva) window.miMascota = dj.mascotaActiva;
+        if (dj.inventario && window.miInventario) {
+            window.miInventario.slots = dj.inventario.slots || 10;
+            window.miInventario.items = dj.inventario.items || [];
+            window.miInventario.vitalEssence = dj.inventario.vitalEssence || 0;
+        }
+        if (dj.wallet) window.miWallet = dj.wallet;
+        if (dj.genosGuardados) window.misGenos = dj.genosGuardados;
+        if (dj.ventasActivas) window.misVentas = dj.ventasActivas;
+
+        if(typeof window.actualizarHUD === 'function') window.actualizarHUD();
+        if(typeof window.actualizarInventarioUI === 'function') window.actualizarInventarioUI();
+    }
+}
