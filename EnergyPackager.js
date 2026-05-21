@@ -6,12 +6,26 @@ window.EnergyPackager = {
     comision: 0.10, // 10% de impuesto anti-bot
 
     inyectarUI: function() {
-        // 1. Inyectar el Modal del Laboratorio (Diseño actualizado con Input)
+        // ✨ Inyectamos CSS para matar las flechas de los campos numéricos
+        const style = document.createElement('style');
+        style.innerHTML = `
+            #input-ev-capsula::-webkit-outer-spin-button,
+            #input-ev-capsula::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+            #input-ev-capsula {
+                -moz-appearance: textfield;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Interfaz ultra-limpia sin títulos ni emojis innecesarios
         const modalHTML = `
             <div id="packager-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:10000; justify-content:center; align-items:center;">
                 <div style="background:#1a1a2e; border: 2px solid #00d2ff; border-radius: 15px; padding: 25px; width: 85%; max-width: 320px; text-align: center; color: white; font-family: sans-serif; box-shadow: 0 0 20px rgba(0, 210, 255, 0.2);">
-                    <h2 style="color: #00d2ff; margin-top:0; font-size: 20px;">🔋 Laboratorio</h2>
-                    <p style="font-size: 12px; color: #aaa; margin-bottom: 20px; line-height: 1.4;">
+                    
+                    <p style="font-size: 13px; color: #aaa; margin-top: 0; margin-bottom: 20px; line-height: 1.4;">
                         Introduce la cantidad de EV que deseas encapsular. Se aplicará un impuesto de red del 10%.
                     </p>
                     
@@ -41,7 +55,6 @@ window.EnergyPackager = {
         `;
         document.body.insertAdjacentHTML('beforeend', modalHTML);
 
-        // 2. Evento para abrir el modal desde el HUD
         const btnAbrir = document.getElementById('btn-abrir-empaquetador');
         if(btnAbrir) {
             btnAbrir.onclick = () => {
@@ -52,7 +65,6 @@ window.EnergyPackager = {
             };
         }
 
-        // 3. Lógica matemática en tiempo real al escribir
         const inputEv = document.getElementById('input-ev-capsula');
         inputEv.addEventListener('input', (e) => {
             let val = parseInt(e.target.value) || 0;
@@ -65,7 +77,6 @@ window.EnergyPackager = {
             document.getElementById('txt-total-ev').innerText = total;
         });
 
-        // 4. Botón de creación
         document.getElementById('btn-crear-capsula').onclick = () => {
             let val = parseInt(document.getElementById('input-ev-capsula').value);
             this.fabricarCapsula(val);
@@ -78,8 +89,7 @@ window.EnergyPackager = {
             return;
         }
 
-        if (!window.miInventario) window.miInventario = { items: [], slots: 10, vitalEssence: 0 };
-        if (!window.miInventario.items) window.miInventario.items = [];
+        if (!window.miInventario) return;
 
         let comision = Math.ceil(valorDeseado * this.comision);
         let costoTotal = valorDeseado + comision;
@@ -89,54 +99,32 @@ window.EnergyPackager = {
             return;
         }
 
-        // Generamos un ID dinámico. Así, una cápsula de 500 no se mezclará con una de 1000.
         let capsulaId = "capsula_ev_" + valorDeseado;
         
-        let slotExistente = window.miInventario.items.find(item => item.id === capsulaId && item.cantidad < 20);
-        let maxSlots = window.miInventario.slots || 10;
-        
-        if (!slotExistente && window.miInventario.items.length >= maxSlots) {
-            alert("🎒 ¡Inventario lleno! Debes descartar objetos o mejorar tu mochila.");
-            return;
+        // Un ícono SVG con un diseño de celda de energía futurista
+        const iconSVG = `<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" viewBox="0 0 24 24" fill="none" stroke="#4dd0e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="4" width="10" height="16" rx="2" ry="2" fill="rgba(77,208,225,0.1)"></rect><line x1="10" y1="2" x2="14" y2="2"></line><line x1="7" y1="10" x2="17" y2="10"></line><line x1="7" y1="14" x2="17" y2="14"></line><circle cx="12" cy="18" r="1" fill="#4dd0e1"></circle></svg>`;
+
+        // ✨ DEJAMOS QUE TU INVENTORY MANAGER HAGA EL TRABAJO
+        let exito = window.miInventario.addItem({
+            id: capsulaId,
+            name: `Cápsula EV (${valorDeseado})`,
+            type: "consumable", // <-- Esto coincide con tu regla "this.stackLimits.consumable"
+            description: `Contiene ${valorDeseado} EV condensada.`,
+            icon: iconSVG,
+            count: 1, // <-- Usando count en lugar de cantidad
+            evContenido: valorDeseado,
+            valorMercado: valorDeseado
+        });
+
+        // Si se añadió con éxito (había espacio en la mochila)
+        if (exito) {
+            window.miInventario.addEssence(-costoTotal);
+            document.getElementById('packager-modal').style.display = 'none';
+            alert(`✨ ¡Cápsula creada y guardada en tu mochila!`);
         }
-
-        // Ejecutar transacción
-        window.miInventario.vitalEssence -= costoTotal;
-
-        if (slotExistente) {
-            slotExistente.cantidad += 1;
-        } else {
-            window.miInventario.items.push({
-                id: capsulaId,
-                name: `Cápsula EV (${valorDeseado})`,
-                type: "consumible",
-                description: `Contiene ${valorDeseado} EV condensada.`,
-                icon: "🔋",
-                cantidad: 1,
-                evContenido: valorDeseado, // Guardamos la pureza interna de la cápsula
-                valorMercado: valorDeseado // Ayuda para listados en el mercado Web3
-            });
-        }
-
-        // Actualizar visuales y guardar
-        if (typeof window.actualizarHUD === 'function') window.actualizarHUD();
-        
-        const evText = document.getElementById("vital-essence-amount");
-        if (evText) evText.innerText = Math.floor(window.miInventario.vitalEssence);
-
-        if (window.miInventario && typeof window.miInventario.updateUI === 'function') {
-            window.miInventario.updateUI();
-            window.miInventario.renderGrid();
-        }
-
-        if (typeof window.guardarProgreso === 'function') window.guardarProgreso();
-
-        alert(`✨ ¡Cápsula de ${valorDeseado} EV creada! Se te descontaron ${costoTotal} EV.`);
-        document.getElementById('packager-modal').style.display = 'none';
     }
 };
 
-// Iniciar al cargar
 document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
         window.EnergyPackager.inyectarUI();
