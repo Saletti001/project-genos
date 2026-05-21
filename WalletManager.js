@@ -4,7 +4,6 @@
 
 window.WalletManager = {
     inyectarModal: function() {
-        // Creamos la ventana emergente amigable para F2P con medidas responsivas
         const modalHTML = `
             <div id="wallet-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:9999; justify-content:center; align-items:center;">
                 <div style="background:#1a1a2e; border: 2px solid #00d2ff; border-radius: 10px; padding: 20px; width: 85%; max-width: 320px; box-sizing: border-box; text-align: center; color: white; font-family: sans-serif; box-shadow: 0 4px 15px rgba(0,0,0,0.5);">
@@ -54,16 +53,25 @@ window.WalletManager = {
         const polText = document.getElementById("pol-amount");
         if (!polText) return;
 
+        // ✨ NUEVO: Propiedades elásticas para evitar que el texto se desborde
         polText.style.cursor = "pointer";
         polText.style.transition = "0.2s";
+        polText.style.width = "max-content"; 
+        polText.style.padding = "0 8px"; 
+        polText.style.whiteSpace = "nowrap"; 
+        polText.style.display = "inline-block";
+
         polText.onmouseover = () => polText.style.filter = "brightness(1.5)";
         polText.onmouseout = () => polText.style.filter = "brightness(1)";
 
-        const saldo = window.miWallet && window.miWallet.pol !== undefined ? window.miWallet.pol.toFixed(1) : "0.0";
+        // ✨ NUEVO: Lógica inteligente de decimales
+        let polNum = window.miWallet && window.miWallet.pol !== undefined ? window.miWallet.pol : 0.0;
+        const saldo = polNum >= 1000 ? Math.floor(polNum) : polNum.toFixed(1);
 
         if (window.miWallet && window.miWallet.address) {
             const address = window.miWallet.address;
-            const shortAddress = address.substring(0, 4) + "..." + address.substring(address.length - 4);
+            // Acortamos la dirección un poco más (ej. 0x1..aB) para ahorrar espacio
+            const shortAddress = address.substring(0, 3) + ".." + address.substring(address.length - 2);
             polText.innerText = `${saldo} POL | ✅ ${shortAddress}`;
             
             polText.onclick = () => {
