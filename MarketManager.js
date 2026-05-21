@@ -8,10 +8,6 @@ function obtenerNombreGeno(g) {
     return g.customName || g.nickname || g.apodo || g.name || "Desconocido";
 }
 
-function obtenerStatsAnadidos(g) {
-    return g.statsAdded || g.addedStats || g.bonusStats || g.puntosNivel || g.stats_added || { hp: 0, atk: 0, def: 0, spd: 0, luk: 0 };
-}
-
 window.iniciarMercado = function() {
     const contenedor = document.getElementById("market-screen");
     if (!contenedor) return;
@@ -47,6 +43,11 @@ window.iniciarMercado = function() {
             .listed-item-row:hover { background: rgba(138, 43, 226, 0.2); }
             #close-market-detail:hover svg { stroke: #ff8a80; transform: scale(1.1); }
             #close-market-detail svg { transition: all 0.2s; }
+            
+            /* Estilos del Filtro */
+            .market-filter-select { flex: 1; background: #0f0f1a; color: #4dd0e1; border: 1px solid #384a5e; border-radius: 6px; padding: 8px; outline: none; font-size: 11px; text-transform: uppercase; font-weight: bold; cursor: pointer; transition: border-color 0.2s; }
+            .market-filter-select:hover { border-color: #00d2ff; }
+            .market-filter-select:focus { border-color: #D500F9; box-shadow: 0 0 8px rgba(213,0,249,0.3); }
         `;
         document.head.appendChild(style);
     }
@@ -62,15 +63,30 @@ window.iniciarMercado = function() {
                     </div>
                 </div>
                 <div class="market-scroll-area" style="flex: 1; overflow-y: auto; padding: 0 10px 20px 10px;">
+                    
                     <div id="market-buy-view">
-                        <p style="text-align: center; color: #b39ddb; font-size: 10px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">Conectando con la Red Nexo...</p>
+                        <div style="display: flex; gap: 8px; margin-bottom: 15px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid #384a5e;">
+                            <select id="filter-type" class="market-filter-select">
+                                <option value="all">Todo el Mercado</option>
+                                <option value="genos">Solo Genos</option>
+                                <option value="items">Solo Objetos / EV</option>
+                            </select>
+                            <select id="filter-element" class="market-filter-select">
+                                <option value="all">Cualquier Elemento</option>
+                                <option value="Igneo">🔥 Ígneo</option>
+                                <option value="Acuatico">💧 Acuático</option>
+                                <option value="Sintetico">⚙️ Sintético</option>
+                            </select>
+                        </div>
+                        
                         <div id="market-buy-grid" class="market-grid">
                             <div style="grid-column: span 2; text-align: center; padding: 30px;">
                                 <div style="color: #00d2ff; font-size: 30px; margin-bottom: 15px; animation: spin 2s linear infinite;">🌐</div>
-                                <div style="color: #aaa; font-size: 12px; line-height: 1.5;">Buscando listados de otros jugadores en la blockchain...</div>
+                                <div style="color: #aaa; font-size: 12px; line-height: 1.5;">Conectando a la Red Nexo...<br>Buscando listados de jugadores.</div>
                             </div>
                         </div>
                     </div>
+
                     <div id="market-sell-view" class="hidden">
                         <p style="text-align: center; color: #b39ddb; font-size: 10px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">Lista tus Objetos y Genos</p>
                         <div id="market-my-listed" style="margin-bottom: 15px; width: 100%;"></div>
@@ -94,9 +110,7 @@ window.iniciarMercado = function() {
                             </svg>
                         </button>
                     </div>
-                    
                     <div id="market-detail-dynamic-content"></div>
-                    
                     <div id="market-detail-action" style="margin-top: 20px; text-align: center;"></div>
                 </div>
             </div>
@@ -143,7 +157,6 @@ window.abrirDetalleItem = function(itemBase) {
             ${itemBase.description}
         </div>
         <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 5px;">
-            <span style="background: #1e293b; padding: 5px 10px; border-radius: 5px; font-size: 11px; color: #4CAF50; font-weight: bold; border: 1px solid #333;">Consumible</span>
             <span style="background: #1e293b; padding: 5px 10px; border-radius: 5px; font-size: 11px; color: #ffcc00; font-weight: bold; border: 1px solid #333;">Tienes: ${itemBase.count}</span>
         </div>
     `;
@@ -160,18 +173,20 @@ window.abrirDetalleItem = function(itemBase) {
         const precio = parseFloat(document.getElementById("modal-input-price-item").value);
         if (isNaN(precio) || precio <= 0) { alert("⚠️ Introduce un precio válido mayor a 0."); return; }
 
-        // Extraer 1 unidad del inventario
         itemBase.count -= 1;
+        
+        // Si usamos el sistema de slots, vaciamos el slot correctamente
         if (itemBase.count <= 0) {
-            window.miInventario.items = window.miInventario.items.filter(i => i !== itemBase);
+            let invArray = window.miInventario.slots || window.miInventario.items;
+            let index = invArray.indexOf(itemBase);
+            if (index > -1) invArray[index] = null; // Liberamos el slot!
         }
 
-        // Crear el listado de venta
         const ventaObjeto = {
             saleId: "venta_" + Date.now(),
             isItem: true,
             pricePol: precio.toFixed(1),
-            itemData: { ...itemBase, count: 1 } // Clonamos para que la venta sea solo de 1 unidad
+            itemData: { ...itemBase, count: 1 } 
         };
 
         window.misVentas.push(ventaObjeto);
@@ -179,7 +194,10 @@ window.abrirDetalleItem = function(itemBase) {
         alert(`✅ Has publicado [1x ${itemBase.name}] en la red por ${ventaObjeto.pricePol} POL.`);
         modal.style.display = "none";
         
-        if (window.miInventario && typeof window.miInventario.updateUI === 'function') window.miInventario.updateUI();
+        if (window.miInventario && typeof window.miInventario.updateUI === 'function') {
+            window.miInventario.updateUI();
+            window.miInventario.renderGrid();
+        }
         window.renderizarMisVentas();
         if(window.guardarProgreso) window.guardarProgreso();
     };
@@ -195,7 +213,7 @@ window.abrirDetalleItem = function(itemBase) {
 };
 
 // ==========================================
-// FUNCIÓN PARA PUBLICAR GENOS (EXISTENTE)
+// FUNCIÓN PARA PUBLICAR GENOS 
 // ==========================================
 window.abrirDetalleMercado = function(idGenoBuscar, tipoAccion) {
     const modal = document.getElementById("market-detail-modal");
@@ -215,7 +233,6 @@ window.abrirDetalleMercado = function(idGenoBuscar, tipoAccion) {
 
     nameEl.innerText = obtenerNombreGeno(geno);
 
-    // Reconstruimos el panel visual del Geno que tenías
     const elementoActual = (geno.genes && geno.genes.afinidad) ? geno.genes.afinidad.dom : (geno.element || "Normal");
     const nombreElementoLimpio = elementoActual.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ]/g, '').trim();
     let iconoElementoHTML = "";
@@ -297,11 +314,21 @@ window.renderizarMisVentas = function() {
     if(!grid || !listContainer) return;
     
     grid.innerHTML = "";
+    let hayCosasParaVender = false;
     
-    // 1. Mostrar Genos disponibles para vender
+    // 1. Mostrar Genos (Ignoramos al Activo para protegerlo)
     const genosVendibles = (window.misGenos || []).filter(g => !g.isEgg && (!window.miMascota || g.id !== window.miMascota.id));
     
+    // ✨ AVISO: Si no hay Genos para vender porque solo tiene el Activo, se lo explicamos al jugador
+    if (genosVendibles.length === 0 && window.miMascota) {
+        const avisoGeno = document.createElement("div");
+        avisoGeno.style.gridColumn = "span 2";
+        avisoGeno.innerHTML = `<div style="text-align: center; color: #888; font-size: 11px; margin-bottom: 10px; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; border-left: 3px solid #ffcc00;">Tu Geno principal <b>(${obtenerNombreGeno(window.miMascota)})</b> está protegido y no se puede vender.</div>`;
+        grid.appendChild(avisoGeno);
+    }
+    
     genosVendibles.forEach(geno => {
+        hayCosasParaVender = true;
         let svgIcon = '🧬';
         if (typeof window.generarSvgGeno === 'function') {
             let tempSvg = window.generarSvgGeno({ ...geno, body_shape: geno.shape || geno.body_shape, base_color: geno.color || geno.base_color });
@@ -320,27 +347,36 @@ window.renderizarMisVentas = function() {
         grid.appendChild(card);
     });
 
-    // 2. Mostrar OBJETOS de la mochila disponibles para vender
-    if (window.miInventario && window.miInventario.items) {
-        const itemsVendibles = window.miInventario.items.filter(item => item.valorMercado);
-        
-        itemsVendibles.forEach(item => {
-            const card = document.createElement("div");
-            card.className = "market-card-neon";
-            card.style.border = "1px solid #4dd0e1"; // Borde diferenciador para objetos
-            card.innerHTML = `
-                <div style="width: 50px; height: 50px; margin-bottom: 10px; filter: drop-shadow(0px 5px 8px rgba(0,210,255,0.4)); pointer-events: none;">${item.icon}</div>
-                <h4 style="margin: 0 0 5px 0; font-size: 13px; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); pointer-events: none;">${item.name}</h4>
-                <p style="font-size: 11px; color: #cbd5e1; margin: 0 0 10px 0; pointer-events: none;">En mochila: x${item.count}</p>
-                <button class="market-btn-neon green" style="background: linear-gradient(90deg, #0097a7, #4dd0e1);">Vender</button>
-            `;
-            card.querySelector("button").addEventListener("click", (e) => { e.stopPropagation(); window.abrirDetalleItem(item); });
-            grid.appendChild(card);
-        });
+    // 2. Mostrar OBJETOS de la mochila (✨ CORRECCIÓN DE BUGS NULOS APLICADA ✨)
+    let inventarioArray = [];
+    if (window.miInventario) {
+        if (Array.isArray(window.miInventario.slots)) inventarioArray = window.miInventario.slots;
+        else if (Array.isArray(window.miInventario.items)) inventarioArray = window.miInventario.items;
     }
 
-    if (grid.innerHTML === "") {
-        grid.innerHTML = '<p style="grid-column: span 2; text-align: center; color: #888; font-size: 12px; padding: 20px;">No tienes Genos ni objetos valiosos para vender.</p>';
+    // Filtramos ignorando los slots nulos
+    const itemsVendibles = inventarioArray.filter(item => item !== null && typeof item === 'object' && item.valorMercado);
+    
+    itemsVendibles.forEach(item => {
+        hayCosasParaVender = true;
+        const card = document.createElement("div");
+        card.className = "market-card-neon";
+        card.style.border = "1px solid #4dd0e1"; 
+        card.innerHTML = `
+            <div style="width: 50px; height: 50px; margin-bottom: 10px; filter: drop-shadow(0px 5px 8px rgba(0,210,255,0.4)); pointer-events: none;">${item.icon}</div>
+            <h4 style="margin: 0 0 5px 0; font-size: 13px; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); pointer-events: none;">${item.name}</h4>
+            <p style="font-size: 11px; color: #cbd5e1; margin: 0 0 10px 0; pointer-events: none;">En mochila: x${item.count}</p>
+            <button class="market-btn-neon green" style="background: linear-gradient(90deg, #0097a7, #4dd0e1);">Vender</button>
+        `;
+        card.querySelector("button").addEventListener("click", (e) => { e.stopPropagation(); window.abrirDetalleItem(item); });
+        grid.appendChild(card);
+    });
+
+    if (!hayCosasParaVender) {
+        const msj = document.createElement("p");
+        msj.style = "grid-column: span 2; text-align: center; color: #888; font-size: 12px; padding: 20px;";
+        msj.innerText = "No tienes objetos valiosos en tu mochila para vender.";
+        grid.appendChild(msj);
     }
 
     // 3. Renderizar listados activos
@@ -370,22 +406,21 @@ window.renderizarMisVentas = function() {
                 e.stopPropagation();
                 
                 if (isItem) {
-                    // Si es un objeto, intentar devolverlo a la mochila (comprueba si hay espacio)
                     const exito = window.miInventario.addItem(venta.itemData);
                     if (!exito) {
                         alert("🎒 ¡Mochila llena! No puedes cancelar esta venta hasta liberar un espacio.");
                         return;
                     }
-                    if (window.miInventario && typeof window.miInventario.updateUI === 'function') window.miInventario.updateUI();
+                    if (window.miInventario && typeof window.miInventario.updateUI === 'function') {
+                        window.miInventario.updateUI();
+                        window.miInventario.renderGrid();
+                    }
                 } else {
-                    // Si es un Geno, vuelve al Santuario normal
                     delete venta.pricePol;
                     window.misGenos.push(venta);
                 }
 
-                // Remover de ventas
                 window.misVentas = window.misVentas.filter(v => v.saleId !== venta.saleId);
-                
                 window.renderizarMisVentas();
                 if(window.guardarProgreso) window.guardarProgreso();
             });
