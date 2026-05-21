@@ -130,7 +130,6 @@ async function cargarDatosDeLaNube() {
         
         if (dj.mascotaActiva) window.miMascota = dj.mascotaActiva;
         if (dj.inventario && window.miInventario) {
-            // ✨ CORRECCIÓN DE SEGURIDAD: Garantizar que leamos los items correctamente
             window.miInventario.slots = Array.isArray(dj.inventario.slots) ? dj.inventario.slots : (dj.inventario.items || []);
             window.miInventario.vitalEssence = dj.inventario.vitalEssence || 0;
         }
@@ -154,15 +153,15 @@ async function cargarDatosDeLaNube() {
         if (typeof window.actualizarPanelRPG === 'function') window.actualizarPanelRPG();
         if (typeof window.renderizarIncubadora === 'function') window.renderizarIncubadora();
 
-        // ✨ NUEVO: Forzar a la mochila a actualizar sus números al cargar de la Nube
+        // Forzar a la mochila a actualizar sus números al cargar de la Nube
         if (window.miInventario && typeof window.miInventario.updateUI === 'function') {
             window.miInventario.updateUI();
             window.miInventario.renderGrid();
         }
 
-        if (window.miWallet && window.miWallet.pol !== undefined) {
-            const polText = document.getElementById("pol-amount");
-            if(polText) polText.innerText = `${window.miWallet.pol.toFixed(1)} POL`;
+        // ✨ PASO 3 APLICADO: Avisamos al WalletManager en lugar de pintar texto estático
+        if (typeof window.WalletManager !== 'undefined') {
+            window.WalletManager.actualizarBoton();
         }
 
         const pedestal = document.getElementById("geno-container");
@@ -176,10 +175,10 @@ async function cargarDatosDeLaNube() {
 let timeoutGuardado = null;
 
 window.autoGuardar = function() {
-    if (!window.miUsuarioCloud) return; 
+    if (!window.miUsuarioCloud) return;
     if (timeoutGuardado) clearTimeout(timeoutGuardado);
     
     timeoutGuardado = setTimeout(() => {
         window.respaldarEnNube();
-    }, 3000); 
+    }, 3000);
 };

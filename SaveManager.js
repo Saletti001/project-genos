@@ -37,8 +37,10 @@ window.cargarProgreso = function() {
 
                 if (window.miWallet && data.pol !== undefined) {
                     window.miWallet.pol = data.pol;
-                    const polText = document.getElementById("pol-amount");
-                    if(polText) polText.innerText = `${window.miWallet.pol.toFixed(1)} POL`;
+                    // ✨ PASO 3 APLICADO: Avisamos al WalletManager en lugar de pintar texto estático
+                    if (typeof window.WalletManager !== 'undefined') {
+                        window.WalletManager.actualizarBoton();
+                    }
                 }
 
                 const pedestal = document.getElementById("geno-container");
@@ -50,7 +52,7 @@ window.cargarProgreso = function() {
                 if(window.actualizarPanelRPG) window.actualizarPanelRPG();
                 if(window.renderizarIncubadora) window.renderizarIncubadora();
                 
-                // ✨ NUEVO: Forzar a la mochila a actualizar sus números al cargar la partida local
+                // ✨ Forzar a la mochila a actualizar sus números al cargar la partida local
                 if (window.miInventario && typeof window.miInventario.updateUI === 'function') {
                     window.miInventario.updateUI();
                     window.miInventario.renderGrid();
@@ -84,7 +86,7 @@ window.guardarLocalSilencioso = function() {
 
 // 2. GUARDADO DE ACCIÓN (Local + Nube)
 window.guardarProgreso = function() {
-    window.guardarLocalSilencioso(); 
+    window.guardarLocalSilencioso();
     if (typeof window.autoGuardar === 'function') window.autoGuardar();
 };
 
