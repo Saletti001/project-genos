@@ -75,7 +75,12 @@ window.iniciarMercado = function() {
                                 <option value="all">Cualquier Elemento</option>
                                 <option value="Igneo">🔥 Ígneo</option>
                                 <option value="Acuatico">💧 Acuático</option>
-                                <option value="Sintetico">⚙️ Sintético</option>
+                                <option value="Toxico">☣️ Tóxico</option>
+                                <option value="Cibernetico">⚙️ Cibernético</option>
+                                <option value="Biomutante">🧬 Biomutante</option>
+                                <option value="Viral">🦠 Viral</option>
+                                <option value="Radiactivo">☢️ Radiactivo</option>
+                                <option value="Sintetico">🤖 Sintético</option>
                             </select>
                         </div>
                         
@@ -174,12 +179,10 @@ window.abrirDetalleItem = function(itemBase) {
         if (isNaN(precio) || precio <= 0) { alert("⚠️ Introduce un precio válido mayor a 0."); return; }
 
         itemBase.count -= 1;
-        
-        // Si usamos el sistema de slots, vaciamos el slot correctamente
         if (itemBase.count <= 0) {
             let invArray = window.miInventario.slots || window.miInventario.items;
             let index = invArray.indexOf(itemBase);
-            if (index > -1) invArray[index] = null; // Liberamos el slot!
+            if (index > -1) invArray[index] = null;
         }
 
         const ventaObjeto = {
@@ -196,7 +199,7 @@ window.abrirDetalleItem = function(itemBase) {
         
         if (window.miInventario && typeof window.miInventario.updateUI === 'function') {
             window.miInventario.updateUI();
-            window.miInventario.renderGrid();
+            if(typeof window.miInventario.renderGrid === 'function') window.miInventario.renderGrid();
         }
         window.renderizarMisVentas();
         if(window.guardarProgreso) window.guardarProgreso();
@@ -316,10 +319,8 @@ window.renderizarMisVentas = function() {
     grid.innerHTML = "";
     let hayCosasParaVender = false;
     
-    // 1. Mostrar Genos (Ignoramos al Activo para protegerlo)
     const genosVendibles = (window.misGenos || []).filter(g => !g.isEgg && (!window.miMascota || g.id !== window.miMascota.id));
     
-    // ✨ AVISO: Si no hay Genos para vender porque solo tiene el Activo, se lo explicamos al jugador
     if (genosVendibles.length === 0 && window.miMascota) {
         const avisoGeno = document.createElement("div");
         avisoGeno.style.gridColumn = "span 2";
@@ -347,14 +348,12 @@ window.renderizarMisVentas = function() {
         grid.appendChild(card);
     });
 
-    // 2. Mostrar OBJETOS de la mochila (✨ CORRECCIÓN DE BUGS NULOS APLICADA ✨)
     let inventarioArray = [];
     if (window.miInventario) {
         if (Array.isArray(window.miInventario.slots)) inventarioArray = window.miInventario.slots;
         else if (Array.isArray(window.miInventario.items)) inventarioArray = window.miInventario.items;
     }
 
-    // Filtramos ignorando los slots nulos
     const itemsVendibles = inventarioArray.filter(item => item !== null && typeof item === 'object' && item.valorMercado);
     
     itemsVendibles.forEach(item => {
@@ -402,25 +401,49 @@ window.renderizarMisVentas = function() {
                 </div>
             `;
             
+            // ✨ LÓGICA DE CANCELACIÓN ANTIBALAS ✨
             row.querySelector(".btn-cancel-sale").addEventListener("click", (e) => {
                 e.stopPropagation();
                 
                 if (isItem) {
-                    const exito = window.miInventario.addItem(venta.itemData);
-                    if (!exito) {
+                    let devolucionExitosa = false;
+                    
+                    // 1. Intentamos usar la función nativa del inventario
+                    try {
+                        if (window.miInventario && typeof window.miInventario.addItem === 'function') {
+                            devolucionExitosa = window.miInventario.addItem(venta.itemData);
+                        }
+                    } catch(err) { console.warn("Fallback de inventario activado.", err); }
+
+                    // 2. Si falla o devuelve false, forzamos la entrada manualmente buscando un hueco libre
+                    if (!devolucionExitosa) {
+                        let invArray = window.miInventario.slots || window.miInventario.items;
+                        let emptyIndex = invArray.findIndex(s => s === null || s === undefined);
+                        if (emptyIndex !== -1) {
+                            invArray[emptyIndex] = venta.itemData;
+                            devolucionExitosa = true;
+                        }
+                    }
+
+                    // 3. Si definitivamente no hay espacio, lo bloqueamos
+                    if (!devolucionExitosa) {
                         alert("🎒 ¡Mochila llena! No puedes cancelar esta venta hasta liberar un espacio.");
                         return;
                     }
+
+                    // 4. Actualizamos la interfaz de la mochila
                     if (window.miInventario && typeof window.miInventario.updateUI === 'function') {
                         window.miInventario.updateUI();
-                        window.miInventario.renderGrid();
+                        if(typeof window.miInventario.renderGrid === 'function') window.miInventario.renderGrid();
                     }
                 } else {
                     delete venta.pricePol;
+                    if(!window.misGenos) window.misGenos = [];
                     window.misGenos.push(venta);
                 }
 
-                window.misVentas = window.misVentas.filter(v => v.saleId !== venta.saleId);
+                // Eliminación estricta por referencia
+                window.misVentas = window.misVentas.filter(v => v !== venta);
                 window.renderizarMisVentas();
                 if(window.guardarProgreso) window.guardarProgreso();
             });
