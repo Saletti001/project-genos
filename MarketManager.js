@@ -8,7 +8,7 @@ function obtenerNombreGeno(g) {
     return g.customName || g.nickname || g.apodo || g.name || "Desconocido";
 }
 
-// ✨ PARCHE: Fuerza la actualización del texto del inventario
+// ✨ PARCHE ACTUALIZADO: Restaura "SLOTS" y protege el botón de la Wallet
 window.forzarActualizacionMochila = function() {
     if (window.miInventario && typeof window.miInventario.updateUI === 'function') {
         window.miInventario.updateUI();
@@ -18,8 +18,13 @@ window.forzarActualizacionMochila = function() {
             let ocupados = window.miInventario.slots.filter(s => s !== null && s !== undefined).length;
             let max = window.miInventario.maxSlots || window.maxSlots || 10;
             const counter = document.getElementById("slot-counter");
-            if (counter) counter.innerHTML = `${ocupados}/${max}<br>CAP`;
+            // CORRECCIÓN: Vuelve a decir "SLOTS"
+            if (counter) counter.innerHTML = `${ocupados}/${max}<br>SLOTS`;
         }
+    }
+    // CORRECCIÓN: Le avisamos al WalletManager que redibuje el botón Web3
+    if (typeof window.WalletManager !== 'undefined') {
+        window.WalletManager.actualizarBoton();
     }
 };
 
@@ -59,10 +64,11 @@ window.iniciarMercado = function() {
             #close-market-detail:hover svg { stroke: #ff8a80; transform: scale(1.1); }
             #close-market-detail svg { transition: all 0.2s; }
             
-            /* ✨ Estilos del Select Personalizado (Soporta SVGs) */
+            /* Estilos del Select Personalizado Corregido */
             .custom-select-wrapper { position: relative; flex: 1; user-select: none; }
             .custom-select-trigger { background: #0f0f1a; color: #4dd0e1; border: 1px solid #384a5e; border-radius: 6px; padding: 10px 12px; font-size: 10px; text-transform: uppercase; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
             .custom-select-trigger:hover { border-color: #00d2ff; }
+            .trigger-text { display: flex; align-items: center; gap: 6px; }
             .custom-select-options { position: absolute; display: none; top: 100%; left: 0; right: 0; background: #0f0f1a; border: 1px solid #00d2ff; border-radius: 6px; z-index: 999; margin-top: 4px; max-height: 250px; overflow-y: auto; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
             .custom-select-options.open { display: block; }
             .custom-option { padding: 10px 12px; display: flex; align-items: center; gap: 8px; font-size: 10px; text-transform: uppercase; font-weight: bold; color: #cbd5e1; cursor: pointer; transition: background 0.2s; border-bottom: 1px solid #1a2a36; }
@@ -88,7 +94,10 @@ window.iniciarMercado = function() {
                         <div style="display: flex; gap: 8px; margin-bottom: 15px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid #384a5e;">
                             
                             <div class="custom-select-wrapper" id="filter-type-wrapper" data-value="all">
-                                <div class="custom-select-trigger"><span>TODO EL MERCADO</span> <span>▼</span></div>
+                                <div class="custom-select-trigger">
+                                    <div class="trigger-text">TODO EL MERCADO</div> 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                </div>
                                 <div class="custom-select-options">
                                     <div class="custom-option" data-value="all">TODO EL MERCADO</div>
                                     <div class="custom-option" data-value="genos">SOLO GENOS</div>
@@ -97,10 +106,13 @@ window.iniciarMercado = function() {
                             </div>
 
                             <div class="custom-select-wrapper" id="filter-element-wrapper" data-value="all">
-                                <div class="custom-select-trigger"><span>CUALQUIER ELEMENTO</span> <span>▼</span></div>
+                                <div class="custom-select-trigger">
+                                    <div class="trigger-text">CUALQUIER ELEMENTO</div> 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                                </div>
                                 <div class="custom-select-options" id="filter-element-options">
                                     <div class="custom-option" data-value="all">CUALQUIER ELEMENTO</div>
-                                    </div>
+                                </div>
                             </div>
 
                         </div>
@@ -145,7 +157,6 @@ window.iniciarMercado = function() {
 
     document.getElementById("market-detail-modal").style.display = "none";
 
-    // ✨ INYECTAR ELEMENTOS REALES AL FILTRO ✨
     const elementOptionsContainer = document.getElementById("filter-element-options");
     const tusElementos = ["Tóxico", "Cibernético", "Biomutante", "Viral", "Radiactivo", "Sintético"];
     
@@ -163,11 +174,10 @@ window.iniciarMercado = function() {
         elementOptionsContainer.appendChild(opt);
     });
 
-    // ✨ LÓGICA DE LOS MENÚS DESPLEGABLES PERSONALIZADOS ✨
     document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
         const trigger = wrapper.querySelector('.custom-select-trigger');
         const options = wrapper.querySelector('.custom-select-options');
-        const triggerText = trigger.querySelector('span'); // El primer span es el texto principal
+        const triggerText = trigger.querySelector('.trigger-text'); // Selecciona solo la parte del texto/icono, sin tocar la flecha
 
         trigger.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -180,21 +190,17 @@ window.iniciarMercado = function() {
         options.querySelectorAll('.custom-option').forEach(option => {
             option.addEventListener('click', (e) => {
                 e.stopPropagation();
-                // Copia el contenido visual (SVG incluido) al botón principal
                 triggerText.innerHTML = option.innerHTML; 
                 wrapper.dataset.value = option.dataset.value;
                 options.classList.remove('open');
-                // En la Fase 2 aquí dispararemos la búsqueda en Supabase
             });
         });
     });
 
-    // Cerrar al hacer clic fuera
     document.addEventListener('click', () => {
         document.querySelectorAll('.custom-select-options').forEach(opt => opt.classList.remove('open'));
     });
 
-    // Pestañas
     const tabBuy = document.getElementById("tab-market-buy");
     const tabSell = document.getElementById("tab-market-sell");
     const viewBuy = document.getElementById("market-buy-view");
@@ -215,9 +221,10 @@ window.iniciarMercado = function() {
 };
 
 // ==========================================
-// FUNCIÓN PARA PUBLICAR OBJETOS (CÁPSULAS)
+// FUNCIÓN PARA DETALLES DE OBJETOS (CÁPSULAS)
+// ✨ CORRECCIÓN: Soporta modo 'publicar' o 'listado' (Lectura)
 // ==========================================
-window.abrirDetalleItem = function(itemBase) {
+window.abrirDetalleItem = function(itemBase, tipoAccion = 'publicar') {
     const modal = document.getElementById("market-detail-modal");
     const nameEl = document.getElementById("market-detail-name-text");
     const dynamicContent = document.getElementById("market-detail-dynamic-content");
@@ -227,51 +234,62 @@ window.abrirDetalleItem = function(itemBase) {
 
     dynamicContent.innerHTML = `
         <div style="text-align: center; margin-bottom: 20px; font-size: 60px; filter: drop-shadow(0 0 15px rgba(0,210,255,0.4));">
-            ${itemBase.icon}
+            ${itemBase.icon || '🔋'}
         </div>
         <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px solid #333; color: #cbd5e1; font-size: 13px; line-height: 1.5; text-align: center; margin-bottom: 15px;">
             ${itemBase.description}
         </div>
         <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 5px;">
-            <span style="background: #1e293b; padding: 5px 10px; border-radius: 5px; font-size: 11px; color: #ffcc00; font-weight: bold; border: 1px solid #333;">Tienes: ${itemBase.count}</span>
+            <span style="background: #1e293b; padding: 5px 10px; border-radius: 5px; font-size: 11px; color: #ffcc00; font-weight: bold; border: 1px solid #333;">Tienes: ${itemBase.count || 1}</span>
         </div>
     `;
 
-    actionContainer.innerHTML = `
-        <div style="background: rgba(0,0,0,0.4); border-radius: 8px; padding: 10px; border: 1px solid #384a5e; margin-bottom: 15px;">
-            <div style="color: #cbd5e1; font-size: 12px; line-height: 1.5;">Precio en $POL para vender <b>1x unidad</b> de este objeto.</div>
-        </div>
-        <input type="number" id="modal-input-price-item" class="hide-spinners" placeholder="Precio en POL" style="width: 100%; box-sizing: border-box; padding: 12px; margin-bottom: 15px; background: rgba(0,0,0,0.4); border: 1px solid #D500F9; border-radius: 8px; text-align: center; color: #fff; font-weight: bold; outline: none; font-size: 16px;" step="0.1" min="0.1">
-        <button id="modal-btn-action-item" class="market-btn-neon green" style="width: 100%; font-size: 14px; padding: 12px;">Publicar 1x Unidad</button>
-    `;
+    if (tipoAccion === 'publicar') {
+        actionContainer.innerHTML = `
+            <div style="background: rgba(0,0,0,0.4); border-radius: 8px; padding: 10px; border: 1px solid #384a5e; margin-bottom: 15px;">
+                <div style="color: #cbd5e1; font-size: 12px; line-height: 1.5;">Precio en $POL para vender <b>1x unidad</b> de este objeto.</div>
+            </div>
+            <input type="number" id="modal-input-price-item" class="hide-spinners" placeholder="Precio en POL" style="width: 100%; box-sizing: border-box; padding: 12px; margin-bottom: 15px; background: rgba(0,0,0,0.4); border: 1px solid #D500F9; border-radius: 8px; text-align: center; color: #fff; font-weight: bold; outline: none; font-size: 16px;" step="0.1" min="0.1">
+            <button id="modal-btn-action-item" class="market-btn-neon green" style="width: 100%; font-size: 14px; padding: 12px;">Publicar 1x Unidad</button>
+        `;
 
-    document.getElementById("modal-btn-action-item").onclick = () => {
-        const precio = parseFloat(document.getElementById("modal-input-price-item").value);
-        if (isNaN(precio) || precio <= 0) { alert("⚠️ Introduce un precio válido mayor a 0."); return; }
+        document.getElementById("modal-btn-action-item").onclick = () => {
+            const precio = parseFloat(document.getElementById("modal-input-price-item").value);
+            if (isNaN(precio) || precio <= 0) { alert("⚠️ Introduce un precio válido mayor a 0."); return; }
 
-        itemBase.count -= 1;
-        if (itemBase.count <= 0) {
-            let invArray = window.miInventario.slots || window.miInventario.items;
-            let index = invArray.indexOf(itemBase);
-            if (index > -1) invArray[index] = null;
-        }
+            itemBase.count -= 1;
+            if (itemBase.count <= 0) {
+                let invArray = window.miInventario.slots || window.miInventario.items;
+                let index = invArray.indexOf(itemBase);
+                if (index > -1) invArray[index] = null;
+            }
 
-        const ventaObjeto = {
-            saleId: "venta_" + Date.now(),
-            isItem: true,
-            pricePol: precio.toFixed(1),
-            itemData: { ...itemBase, count: 1 } 
+            const ventaObjeto = {
+                saleId: "venta_" + Date.now(),
+                isItem: true,
+                pricePol: precio.toFixed(1),
+                itemData: { ...itemBase, count: 1 } 
+            };
+
+            window.misVentas.push(ventaObjeto);
+            
+            alert(`✅ Has publicado [1x ${itemBase.name}] en la red por ${ventaObjeto.pricePol} POL.`);
+            modal.style.display = "none";
+            
+            window.forzarActualizacionMochila(); 
+            window.renderizarMisVentas();
+            if(window.guardarProgreso) window.guardarProgreso();
         };
-
-        window.misVentas.push(ventaObjeto);
-        
-        alert(`✅ Has publicado [1x ${itemBase.name}] en la red por ${ventaObjeto.pricePol} POL.`);
-        modal.style.display = "none";
-        
-        window.forzarActualizacionMochila(); // Actualiza visuales y contador
-        window.renderizarMisVentas();
-        if(window.guardarProgreso) window.guardarProgreso();
-    };
+    } else if (tipoAccion === 'listado') {
+        actionContainer.innerHTML = `
+            <div style="background: rgba(0,0,0,0.4); border-radius: 8px; padding: 10px; border: 1px solid #384a5e; margin-bottom: 15px;">
+                <div style="color: #cbd5e1; font-size: 12px; line-height: 1.5; margin-bottom: 5px;">Objeto listado en la red global.</div>
+                <div style="color: #4CAF50; font-size: 12px; font-weight: bold;">Esperando a un comprador...</div>
+            </div>
+            <button id="modal-btn-action-item" class="market-btn-neon" style="width: 100%; font-size: 14px; padding: 12px; background: #384a5e; box-shadow: none;">Cerrar Inspección</button>
+        `;
+        document.getElementById("modal-btn-action-item").onclick = () => { modal.style.display = "none"; };
+    }
 
     modal.style.display = "flex";
 
@@ -284,7 +302,7 @@ window.abrirDetalleItem = function(itemBase) {
 };
 
 // ==========================================
-// FUNCIÓN PARA PUBLICAR GENOS 
+// FUNCIÓN PARA PUBLICAR O INSPECCIONAR GENOS
 // ==========================================
 window.abrirDetalleMercado = function(idGenoBuscar, tipoAccion) {
     const modal = document.getElementById("market-detail-modal");
@@ -364,6 +382,15 @@ window.abrirDetalleMercado = function(idGenoBuscar, tipoAccion) {
             window.renderizarMisVentas();
             if(window.guardarProgreso) window.guardarProgreso();
         };
+    } else if (tipoAccion === 'listado') {
+        actionContainer.innerHTML = `
+            <div style="background: rgba(0,0,0,0.4); border-radius: 8px; padding: 10px; border: 1px solid #384a5e; margin-bottom: 15px;">
+                <div style="color: #cbd5e1; font-size: 12px; line-height: 1.5; margin-bottom: 5px;">Espécimen listado en la red global.</div>
+                <div style="color: #4CAF50; font-size: 12px; font-weight: bold;">Esperando a un comprador...</div>
+            </div>
+            <button id="modal-btn-action" class="market-btn-neon" style="width: 100%; font-size: 14px; padding: 12px; background: #384a5e; box-shadow: none;">Cerrar Inspección</button>
+        `;
+        document.getElementById("modal-btn-action").onclick = () => { modal.style.display = "none"; };
     }
 
     modal.style.display = "flex";
@@ -430,12 +457,12 @@ window.renderizarMisVentas = function() {
         card.className = "market-card-neon";
         card.style.border = "1px solid #4dd0e1"; 
         card.innerHTML = `
-            <div style="width: 50px; height: 50px; margin-bottom: 10px; filter: drop-shadow(0px 5px 8px rgba(0,210,255,0.4)); pointer-events: none;">${item.icon}</div>
+            <div style="width: 50px; height: 50px; margin-bottom: 10px; filter: drop-shadow(0px 5px 8px rgba(0,210,255,0.4)); pointer-events: none;">${item.icon || '🔋'}</div>
             <h4 style="margin: 0 0 5px 0; font-size: 13px; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); pointer-events: none;">${item.name}</h4>
             <p style="font-size: 11px; color: #cbd5e1; margin: 0 0 10px 0; pointer-events: none;">En mochila: x${item.count}</p>
             <button class="market-btn-neon green" style="background: linear-gradient(90deg, #0097a7, #4dd0e1);">Vender</button>
         `;
-        card.querySelector("button").addEventListener("click", (e) => { e.stopPropagation(); window.abrirDetalleItem(item); });
+        card.querySelector("button").addEventListener("click", (e) => { e.stopPropagation(); window.abrirDetalleItem(item, 'publicar'); });
         grid.appendChild(card);
     });
 
@@ -454,13 +481,13 @@ window.renderizarMisVentas = function() {
             
             const isItem = venta.isItem;
             const nombreMostrar = isItem ? venta.itemData.name : obtenerNombreGeno(venta);
-            const iconoListado = isItem ? "🔋" : "🧬";
+            const iconoListado = isItem ? (venta.itemData.icon || "🔋") : "🧬";
             
             const row = document.createElement("div");
             row.className = "listed-item-row";
             row.innerHTML = `
                 <div style="display: flex; align-items: center; gap: 8px; pointer-events: none;">
-                    <span style="font-size: 16px;">${iconoListado}</span>
+                    <span style="font-size: 16px; display: flex; align-items: center; justify-content: center; width: 20px; height: 20px;">${iconoListado}</span>
                     <span style="font-weight: bold; font-size: 13px;">${nombreMostrar} ${isItem ? '(x1)' : ''}</span>
                 </div>
                 <div style="display: flex; align-items: center; gap: 10px;">
@@ -468,13 +495,23 @@ window.renderizarMisVentas = function() {
                     <button class="market-btn-neon red btn-cancel-sale" style="padding: 5px 10px; width: auto; font-size: 10px; margin: 0; position: relative; z-index: 2;">Cancelar</button>
                 </div>
             `;
+
+            // ✨ CORRECCIÓN: Evento de clic en la fila para inspeccionar el listado
+            row.addEventListener("click", (e) => {
+                if (e.target.closest('.btn-cancel-sale')) return; 
+                
+                if (isItem) {
+                    window.abrirDetalleItem(venta.itemData, 'listado');
+                } else {
+                    window.abrirDetalleMercado(venta.id || venta.saleId, 'listado');
+                }
+            });
             
             row.querySelector(".btn-cancel-sale").addEventListener("click", (e) => {
                 e.stopPropagation();
                 
                 if (isItem) {
                     let devolucionExitosa = false;
-                    
                     try {
                         if (window.miInventario && typeof window.miInventario.addItem === 'function') {
                             devolucionExitosa = window.miInventario.addItem(venta.itemData);
@@ -495,7 +532,7 @@ window.renderizarMisVentas = function() {
                         return;
                     }
 
-                    window.forzarActualizacionMochila(); // Actualiza visuales y contador
+                    window.forzarActualizacionMochila(); 
                 } else {
                     delete venta.pricePol;
                     if(!window.misGenos) window.misGenos = [];
