@@ -185,6 +185,7 @@ window.iniciarMercado = function() {
                 triggerText.innerHTML = option.innerHTML; 
                 wrapper.dataset.value = option.dataset.value;
                 options.classList.remove('open');
+                if (typeof window.cargarMercadoGlobal === 'function') window.cargarMercadoGlobal();
             });
         });
     });
@@ -568,7 +569,32 @@ window.cargarMercadoGlobal = async function() {
             return;
         }
 
-        listings.forEach(listing => {
+        const filterType = document.getElementById("filter-type-wrapper")?.dataset.value || "all";
+        const filterElement = document.getElementById("filter-element-wrapper")?.dataset.value || "all";
+
+        let filteredListings = listings;
+
+        if (filterType === "genos") {
+            filteredListings = filteredListings.filter(l => !l.isItem);
+        } else if (filterType === "items") {
+            filteredListings = filteredListings.filter(l => l.isItem);
+        }
+
+        if (filterElement !== "all") {
+            filteredListings = filteredListings.filter(l => {
+                if (l.isItem) return false; 
+                const data = l.itemData || {};
+                const affinity = (data.genes && data.genes.afinidad) ? data.genes.afinidad.dom : (data.element || "Normal");
+                return affinity.toLowerCase() === filterElement.toLowerCase();
+            });
+        }
+
+        if (filteredListings.length === 0) {
+            grid.innerHTML = `<div style="grid-column: span 2; text-align: center; padding: 30px; color: #888; font-size: 12px;">No hay resultados para estos filtros.</div>`;
+            return;
+        }
+
+        filteredListings.forEach(listing => {
             const data = listing.itemData || {};
             const esObjeto = listing.isItem;
             
