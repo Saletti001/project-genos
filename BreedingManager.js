@@ -385,7 +385,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             newBtn.style.color = "#000";
                             setTimeout(() => mostrarTarjetaGeno(g), 800);
                         } else { 
-                            alert("No tienes ningún escáner en tu mochila. Consíguelos en Suministros."); 
+                            alert("No tienes ningún escáner en tu almacén. Consíguelos en Suministros."); 
                         }
                     });
                 }

@@ -449,7 +449,7 @@ window.renderizarMisVentas = function() {
         card.innerHTML = `
             <div style="width: 50px; height: 50px; margin-bottom: 10px; filter: drop-shadow(0px 5px 8px rgba(0,210,255,0.4)); pointer-events: none;">${item.icon || '🔋'}</div>
             <h4 style="margin: 0 0 5px 0; font-size: 13px; color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); pointer-events: none;">${item.name}</h4>
-            <p style="font-size: 11px; color: #cbd5e1; margin: 0 0 10px 0; pointer-events: none;">En mochila: x${item.count}</p>
+            <p style="font-size: 11px; color: #cbd5e1; margin: 0 0 10px 0; pointer-events: none;">En el Almacén: x${item.count}</p>
             <button class="market-btn-neon green" style="background: linear-gradient(90deg, #0097a7, #4dd0e1);">Vender</button>
         `;
         
@@ -461,7 +461,7 @@ window.renderizarMisVentas = function() {
     if (!hayCosasParaVender) {
         const msj = document.createElement("p");
         msj.style = "grid-column: span 2; text-align: center; color: #888; font-size: 12px; padding: 20px;";
-        msj.innerText = "No tienes objetos valiosos en tu mochila para vender.";
+        msj.innerText = "No tienes objetos valiosos en tu almacén para vender.";
         grid.appendChild(msj);
     }
 
@@ -500,12 +500,23 @@ window.renderizarMisVentas = function() {
                     let devolucionExitosa = false;
                     try {
                         if (window.miInventario && typeof window.miInventario.addItem === 'function') {
-                            devolucionExitosa = window.miInventario.addItem(venta.itemData);
+                            // Parche Legacy: Reconstruir itemData si se publicó antes de la migración
+                            let datosItem = venta.itemData;
+                            if (!datosItem) {
+                                datosItem = {
+                                    id: venta.itemId || venta.id || "legacy_item",
+                                    name: venta.name || "Objeto Recuperado",
+                                    icon: venta.icon || "📦",
+                                    type: venta.type || "basic",
+                                    count: 1
+                                };
+                            }
+                            devolucionExitosa = window.miInventario.addItem(datosItem);
                         }
                     } catch(err) {}
 
                     if (!devolucionExitosa) {
-                        alert("🎒 ¡Mochila llena! No puedes cancelar esta venta hasta liberar un espacio.");
+                        alert("🎒 ¡Almacén lleno! No puedes cancelar esta venta hasta liberar un espacio.");
                         return;
                     }
                     window.forzarActualizacionMochila(); 

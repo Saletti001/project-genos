@@ -276,14 +276,14 @@ class InventoryManager {
                 this.addEssence(1000);
             });
 
-            // ✨ BOTÓN 3: LA TIENDA DEV (Expande Mochila y lee TODO el catálogo dinámicamente)
+            // ✨ BOTÓN 3: LA TIENDA DEV (Expande el Almacén y lee TODO el catálogo dinámicamente)
             const btnDevStore = document.createElement("button");
             btnDevStore.id = "btn-debug-devstore";
             btnDevStore.innerText = "🛒 Tienda Dev";
             btnDevStore.style = "background: #e91e63; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; color: white; font-weight: bold;";
             btnDevStore.addEventListener("click", () => {
                 
-                // 1. Expandir mochila brutalmente para que todo quepa
+                // 1. Expandir almacén brutalmente para que todo quepa
                 if (this.maxSlots < 100) {
                     this.maxSlots = 100;
                     this.overflowSlots = 10;
@@ -333,7 +333,7 @@ class InventoryManager {
                     }
                 });
                 
-                if(added > 0) alert(`🛒 ¡Mochila expandida a 100 slots! Se inyectaron ${added} objetos únicos. Ve al Laboratorio a ver tu arsenal completo.`);
+                if(added > 0) alert(`🛒 ¡Almacén expandido a 100 slots! Se inyectaron ${added} objetos únicos. Ve al Laboratorio a ver tu arsenal completo.`);
                 else alert("Ya tienes todos los objetos de la Tienda Dev en tu inventario.");
                 
                 this.updateUI();
