@@ -504,9 +504,38 @@ window.abrirDetalleMercado = function(idGenoBuscar, tipoAccion) {
     modal.addEventListener("click", cerrarModal);
 };
 
-window.renderizarMisVentas = function() {
+window.renderizarMisVentas = async function() {
     const grid = document.getElementById("market-sell-grid");
-    const listContainer = document.getElementById("market-my-listed");
+    const listContainer = document.getElementById("market-sell-list") || document.getElementById("market-my-listed");
+    if (!listContainer) return;
+
+    // ----- Sincronización Fantasma -----
+    if (window.supabaseClient && window.miUsuarioCloud && window.misVentas && window.misVentas.length > 0) {
+        try {
+            const { data: activeListings, error } = await window.supabaseClient
+                .from('market_listings')
+                .select('saleId, id')
+                .eq('sellerId', window.miUsuarioCloud.id)
+                .eq('status', 'active');
+            
+            if (!error && activeListings) {
+                const activeSaleIds = new Set(activeListings.map(l => l.saleId || l.id));
+                const originalLength = window.misVentas.length;
+                
+                // Conservar solo lo que sea realmente 'active' en la BD
+                window.misVentas = window.misVentas.filter(v => activeSaleIds.has(v.saleId) || activeSaleIds.has(v.id));
+                
+                if (window.misVentas.length !== originalLength) {
+                    console.log("👻 Fantasmas limpiados de Mis Ventas");
+                    if (typeof window.guardarLocalSilencioso === 'function') window.guardarLocalSilencioso();
+                }
+            }
+        } catch(e) {
+            console.error("Error sincronizando fantasmas:", e);
+        }
+    }
+    // -----------------------------------
+
     if(!grid || !listContainer) return;
     
     grid.innerHTML = "";
@@ -939,7 +968,7 @@ window.revisarVentasCompletadas = async function() {
                 
             // Limpiar listado local fantasma
             if (window.misVentas) {
-                window.misVentas = window.misVentas.filter(v => (v.saleId || v.id) !== venta.id);
+                window.misVentas = window.misVentas.filter(v => (v.saleId || v.id) !== (venta.saleId || venta.id));
             }
         }
 
