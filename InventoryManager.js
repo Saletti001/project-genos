@@ -47,7 +47,7 @@ class InventoryManager {
         }
 
         let limit = this.stackLimits[newItem.type] || 1;
-        let existingSlot = this.slots.find(slot => slot.id === newItem.id && slot.count < limit && !slot.isOverflow);
+        let existingSlot = this.slots.find(slot => slot && slot.id === newItem.id && slot.count < limit && !slot.isOverflow);
         
         if (existingSlot) {
             existingSlot.count += (newItem.count || 1);
