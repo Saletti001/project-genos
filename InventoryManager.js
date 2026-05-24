@@ -100,6 +100,7 @@ class InventoryManager {
     }
 
     reorganize() {
+        this.slots = this.slots.filter(s => s !== null && s !== undefined);
         for(let i = 0; i < this.slots.length; i++) {
             if (i < this.maxSlots && this.slots[i].isOverflow) {
                 delete this.slots[i].isOverflow;
@@ -348,6 +349,7 @@ class InventoryManager {
     }
 
     init() {
+        if (this.slots) this.slots = this.slots.filter(s => s !== null && s !== undefined);
         this.updateUI();
         this.setupEvents();
         this.injectDebugButton(); 
