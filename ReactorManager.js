@@ -453,7 +453,15 @@ document.addEventListener("DOMContentLoaded", () => {
         const btnFuse = document.getElementById("btn-fuse-genos");
         if(btnFuse) {
             const tieneEsencia = window.miInventario && window.miInventario.vitalEssence >= reglas.cost;
-            const estanLos5 = window.genosEnReactor.length === 5;
+            let totalPeso = 0;
+            window.genosEnReactor.forEach(g => {
+                if (window.tieneGenActivoV9 && window.tieneGenActivoV9(g, "alquimista_natural")) {
+                    totalPeso += 1.5;
+                } else {
+                    totalPeso += 1.0;
+                }
+            });
+            const estanLos5 = totalPeso >= 4.5;
             btnFuse.disabled = !(estanLos5 && tieneEsencia);
             
             if(!btnFuse.disabled) {
@@ -480,7 +488,17 @@ document.addEventListener("DOMContentLoaded", () => {
             const nivel = selectNivel.value;
             const reglas = reactorRules[nivel];
             
-            if (window.genosEnReactor.length === 5 && window.miInventario && window.miInventario.vitalEssence >= reglas.cost) {
+            let totalPeso = 0;
+            window.genosEnReactor.forEach(g => {
+                if (window.tieneGenActivoV9 && window.tieneGenActivoV9(g, "alquimista_natural")) {
+                    totalPeso += 1.5;
+                } else {
+                    totalPeso += 1.0;
+                }
+            });
+            const esValido = totalPeso >= 4.5;
+
+            if (esValido && window.miInventario && window.miInventario.vitalEssence >= reglas.cost) {
                 const btnFuse = document.getElementById("btn-fuse-genos");
                 const containerSlots = document.getElementById("reactor-slots-container");
                 
