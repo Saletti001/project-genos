@@ -115,6 +115,8 @@ window.ImplantsUI = {
                             </div>
                         </div>
 
+                        <div id="ifttt-panel" style="margin-top: 15px;"></div>
+
                         <div id="cosmetic-slots" class="slot-grid" style="display:none;">
                             <div class="implant-slot" onclick="ImplantsManager.openSelector('head')">
                                 <label>Cabeza</label>

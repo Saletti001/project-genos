@@ -88,40 +88,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const p = ColiseumLogic.player;
         const e = ColiseumLogic.enemy;
 
-        // ✨ NUEVA IA ESTRATÉGICA (Reactiva al estado de la pelea)
-        let accionEnemigo = "ataque"; // Acción por defecto (Básico)
-        let acts = Object.keys(e.ataquesEquipados).filter(k => e.ataquesEquipados[k] !== null);
-        
-        let canEspecial = acts.includes("especial") && e.cooldowns.especial === 0;
-        let canTactica = acts.includes("tactica") && e.cooldowns.tactica === 0;
-        let canDefinitivo = acts.includes("definitivo") && e.cooldowns.definitivo === 0;
-
-        let pHP_pct = p.hp / p.maxHp;
-        let eHP_pct = e.hp / e.maxHp;
-
-        // 1. Instinto de Supervivencia (Prioriza curas/escudos si está muriendo)
-        if (canTactica && eHP_pct <= 0.35 && Math.random() < 0.85) {
-            accionEnemigo = "tactica";
-        }
-        // 2. Oportunidad de Ejecución (Lanza todo si el jugador está débil)
-        else if (canDefinitivo && pHP_pct <= 0.40) {
-            accionEnemigo = "definitivo";
-        }
-        else if (canEspecial && pHP_pct <= 0.25 && Math.random() < 0.80) {
-            accionEnemigo = "especial";
-        }
-        // 3. Uso Óptimo de Definitivo (Marcar presión si lo tiene listo)
-        else if (canDefinitivo && Math.random() < 0.60) {
-            accionEnemigo = "definitivo";
-        }
-        // 4. Apertura Estratégica (Usa tácticas/debuffs cuando el jugador está sano)
-        else if (canTactica && pHP_pct > 0.60 && Math.random() < 0.60) {
-            accionEnemigo = "tactica";
-        }
-        // 5. Presión Constante (Prioriza Especial sobre el Básico)
-        else if (canEspecial && Math.random() < 0.70) {
-            accionEnemigo = "especial";
-        }
+        // ✨ IA ESTRATÉGICA BASADA EN REGLAS IFTTT O PRIORIDAD DE RESERVA (FALLBACK)
+        let accionEnemigo = ColiseumLogic.resolverAccionIFTTT(e, p);
 
         let playerGoesFirst = p.spd >= e.spd;
         if (p.spd === e.spd) playerGoesFirst = Math.random() > 0.5;

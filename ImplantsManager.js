@@ -13,6 +13,8 @@ window.ImplantsManager = {
         }
         this.refreshPreview();
         this.updateSlotLabels();
+        const iftttPanel = document.getElementById('ifttt-panel');
+        if(iftttPanel) iftttPanel.style.display = this.currentTab === 'combat' ? 'block' : 'none';
     },
 
     setTab: function(tab) {
@@ -22,8 +24,10 @@ window.ImplantsManager = {
 
         const combatSlots = document.getElementById('combat-slots');
         const cosmeticSlots = document.getElementById('cosmetic-slots');
+        const iftttPanel = document.getElementById('ifttt-panel');
         if(combatSlots) combatSlots.style.display = tab === 'combat' ? 'grid' : 'none';
         if(cosmeticSlots) cosmeticSlots.style.display = tab === 'cosmetic' ? 'grid' : 'none';
+        if(iftttPanel) iftttPanel.style.display = tab === 'combat' ? 'block' : 'none';
     },
 
     refreshPreview: function() {
@@ -96,6 +100,8 @@ window.ImplantsManager = {
         
         const auraEl = document.getElementById('slot-aura');
         if(auraEl) auraEl.innerText = m.aura_type && m.aura_type !== "ninguno" ? m.aura_type.replace(/_/g, ' ').toUpperCase() : "VACÍO";
+
+        this.renderIftttRules();
     },
 
     // ✨ FIX V22: Busca qué hay equipado para devolverlo a la mochila
@@ -324,6 +330,141 @@ window.ImplantsManager = {
     closeSelector: function() {
         let sel = document.getElementById('lab-inventory-selector');
         if(sel) sel.style.display = 'none';
+    },
+
+    renderIftttRules: function() {
+        const panel = document.getElementById("ifttt-panel");
+        if (!panel || !window.miMascota) return;
+
+        const m = window.miMascota;
+        if (!m.iftttRules) {
+            m.iftttRules = [];
+        }
+
+        const maxRules = 5;
+        const currentRulesCount = m.iftttRules.length;
+
+        const ataquesBasicos = {
+            "Biomutante": "PULSO VITAL", "Viral": "DESCARGA VIRAL", "Cibernético": "LÁSER DE PRECISIÓN",
+            "Radiactivo": "PROYECTIL RADIACTIVO", "Tóxico": "COLMILLO VENENOSO", "Sintético": "RÁFAGA SINTÉTICA"
+        };
+        const basName = m.element ? (ataquesBasicos[m.element] || "GOLPE BÁSICO") : "GOLPE BÁSICO";
+        const espName = m.ataques?.atk_2?.nombre || "";
+        const tacName = m.ataques?.atk_3?.nombre || "";
+        const defName = (m.level >= 25 && m.ataques?.atk_4) ? m.ataques.atk_4.nombre : "";
+
+        const hasEspecial = !!espName;
+        const hasTactica = !!tacName;
+        const hasDefinitivo = !!defName;
+
+        let rulesListHtml = "";
+        if (currentRulesCount === 0) {
+            rulesListHtml = `
+                <div style="text-align: center; color: #888; font-size: 11px; padding: 15px; border: 1px dashed #334; border-radius: 8px;">
+                    No hay tácticas configuradas. El Geno atacará usando el comportamiento defensivo automático de reserva (priorizar Especiales y dejar el Básico para cuando todos estén en cooldown).
+                </div>
+            `;
+        } else {
+            m.iftttRules.forEach((rule, index) => {
+                rulesListHtml += `
+                <div class="ifttt-rule-row" style="display: flex; align-items: center; gap: 8px; background: rgba(13, 22, 28, 0.8); border: 1px solid #334; border-radius: 8px; padding: 8px; margin-bottom: 6px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);">
+                    <span style="color: #00acc1; font-weight: bold; font-size: 12px; min-width: 20px; text-align: center;">#${index + 1}</span>
+                    
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                        <div style="display: flex; align-items: center; gap: 4px; font-size: 11px;">
+                            <span style="color: #ffd700; width: 65px; font-weight: bold;">SI:</span>
+                            <select onchange="ImplantsManager.updateRule(${index}, 'condition', this.value)" style="background: #1a2a36; border: 1px solid #334; color: #fff; border-radius: 4px; padding: 3px 6px; flex: 1; font-size: 11px; font-family: inherit;">
+                                <option value="always" ${rule.condition === 'always' ? 'selected' : ''}>Siempre</option>
+                                <option value="hp_under_50" ${rule.condition === 'hp_under_50' ? 'selected' : ''}>Mi HP < 50%</option>
+                                <option value="hp_under_30" ${rule.condition === 'hp_under_30' ? 'selected' : ''}>Mi HP < 30%</option>
+                                <option value="turn_1" ${rule.condition === 'turn_1' ? 'selected' : ''}>En el Turno 1</option>
+                                <option value="rival_infected" ${rule.condition === 'rival_infected' ? 'selected' : ''}>Rival Infectado</option>
+                                <option value="rival_buffed_atk" ${rule.condition === 'rival_buffed_atk' ? 'selected' : ''}>Rival con Buff de Daño</option>
+                                <option value="self_buffed_spd" ${rule.condition === 'self_buffed_spd' ? 'selected' : ''}>Tengo Buff de Velocidad</option>
+                                <option value="rival_element_biomutante" ${rule.condition === 'rival_element_biomutante' ? 'selected' : ''}>Rival es Biomutante</option>
+                                <option value="rival_element_viral" ${rule.condition === 'rival_element_viral' ? 'selected' : ''}>Rival es Viral</option>
+                                <option value="rival_element_cibernetico" ${rule.condition === 'rival_element_cibernetico' ? 'selected' : ''}>Rival es Cibernético</option>
+                                <option value="rival_element_radiactivo" ${rule.condition === 'rival_element_radiactivo' ? 'selected' : ''}>Rival es Radiactivo</option>
+                                <option value="rival_element_toxico" ${rule.condition === 'rival_element_toxico' ? 'selected' : ''}>Rival es Tóxico</option>
+                                <option value="rival_element_sintetico" ${rule.condition === 'rival_element_sintetico' ? 'selected' : ''}>Rival es Sintético</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 4px; font-size: 11px;">
+                            <span style="color: #4dd0e1; width: 65px; font-weight: bold;">ENTONCES:</span>
+                            <select onchange="ImplantsManager.updateRule(${index}, 'action', this.value)" style="background: #1a2a36; border: 1px solid #334; color: #fff; border-radius: 4px; padding: 3px 6px; flex: 1; font-size: 11px; font-family: inherit;">
+                                <option value="definitivo" ${rule.action === 'definitivo' ? 'selected' : ''} ${!hasDefinitivo ? 'disabled' : ''}>Usar Definitivo ${defName ? `[${defName}]` : '(Bloqueado)'}</option>
+                                <option value="tactica" ${rule.action === 'tactica' ? 'selected' : ''} ${!hasTactica ? 'disabled' : ''}>Usar Soporte ${tacName ? `[${tacName}]` : '(Vacío)'}</option>
+                                <option value="especial" ${rule.action === 'especial' ? 'selected' : ''} ${!hasEspecial ? 'disabled' : ''}>Usar Especial ${espName ? `[${espName}]` : '(Vacío)'}</option>
+                                <option value="ataque" ${rule.action === 'ataque' ? 'selected' : ''}>Usar Básico [${basName}]</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <button onclick="ImplantsManager.moveRule(${index}, -1)" style="background: transparent; border: none; color: #4dd0e1; cursor: pointer; padding: 2px; font-size: 12px; line-height: 1; transition: transform 0.1s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">🔼</button>
+                        <button onclick="ImplantsManager.moveRule(${index}, 1)" style="background: transparent; border: none; color: #4dd0e1; cursor: pointer; padding: 2px; font-size: 12px; line-height: 1; transition: transform 0.1s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">🔽</button>
+                    </div>
+                    
+                    <button onclick="ImplantsManager.deleteRule(${index})" style="background: transparent; border: none; color: #ff6b6b; cursor: pointer; padding: 6px; font-size: 14px; font-weight: bold; margin-left: 2px; transition: transform 0.1s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">❌</button>
+                </div>
+                `;
+            });
+        }
+
+        const isAddDisabled = currentRulesCount >= maxRules;
+
+        panel.innerHTML = `
+            <div class="ifttt-container" style="background: rgba(0, 0, 0, 0.4); border: 2px solid #00acc1; border-radius: 16px; padding: 15px; box-shadow: 0 0 20px rgba(0, 172, 193, 0.2); color: #fff; display: flex; flex-direction: column; gap: 10px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="color: #4dd0e1; margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">🤖 Tácticas Defensivas (IFTTT)</h3>
+                    <button id="btn-add-rule" onclick="ImplantsManager.addIftttRule()" style="background: ${isAddDisabled ? '#334' : '#00acc1'}; border: none; color: ${isAddDisabled ? '#888' : 'white'}; padding: 5px 10px; border-radius: 6px; font-size: 10px; cursor: ${isAddDisabled ? 'not-allowed' : 'pointer'}; font-weight: bold; transition: 0.2s;" ${isAddDisabled ? 'disabled' : ''}>+ AÑADIR</button>
+                </div>
+                <p style="font-size: 10px; color: #888; margin: 0; line-height: 1.3;">
+                    Configura las reglas para cuando tu Geno combata automáticamente. Las reglas se evalúan de arriba a abajo. Si ninguna coincide o el ataque está en cooldown, se utilizará la prioridad de reserva (Definitivo > Soporte > Especial > Básico).
+                </p>
+                <div id="ifttt-rules-list" style="margin-top: 5px; display: flex; flex-direction: column; gap: 2px;">
+                    ${rulesListHtml}
+                </div>
+            </div>
+        `;
+    },
+
+    addIftttRule: function() {
+        if (!window.miMascota) return;
+        if (!window.miMascota.iftttRules) window.miMascota.iftttRules = [];
+        if (window.miMascota.iftttRules.length >= 5) return;
+
+        window.miMascota.iftttRules.push({ condition: 'always', action: 'ataque' });
+        this.renderIftttRules();
+        this.syncAndSave();
+    },
+
+    updateRule: function(index, field, value) {
+        if (!window.miMascota || !window.miMascota.iftttRules) return;
+        if (window.miMascota.iftttRules[index]) {
+            window.miMascota.iftttRules[index][field] = value;
+            this.syncAndSave();
+        }
+    },
+
+    deleteRule: function(index) {
+        if (!window.miMascota || !window.miMascota.iftttRules) return;
+        window.miMascota.iftttRules.splice(index, 1);
+        this.renderIftttRules();
+        this.syncAndSave();
+    },
+
+    moveRule: function(index, direction) {
+        if (!window.miMascota || !window.miMascota.iftttRules) return;
+        const targetIndex = index + direction;
+        if (targetIndex < 0 || targetIndex >= window.miMascota.iftttRules.length) return;
+
+        const temp = window.miMascota.iftttRules[index];
+        window.miMascota.iftttRules[index] = window.miMascota.iftttRules[targetIndex];
+        window.miMascota.iftttRules[targetIndex] = temp;
+
+        this.renderIftttRules();
+        this.syncAndSave();
     },
 
     closeLab: function() {

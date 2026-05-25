@@ -721,5 +721,64 @@ window.ColiseumLogic = {
         }
         
         return { logs, anims };
+    },
+
+    evaluarCondicionIFTTT: function(entidad, rival, condicion) {
+        if (!condicion) return false;
+        switch (condicion) {
+            case 'always':
+                return true;
+            case 'turn_1':
+                return this.turno === 1;
+            case 'hp_under_50':
+                return (entidad.hp / entidad.maxHp) < 0.50;
+            case 'hp_under_30':
+                return (entidad.hp / entidad.maxHp) < 0.30;
+            case 'rival_infected':
+                return rival.estados && (rival.estados.includes("Infección") || rival.estados.includes("Infeccion"));
+            case 'rival_buffed_atk':
+                return rival.efectosActivos && rival.efectosActivos.some(ef => ef.stat === "atk" && ef.valor > 0);
+            case 'self_buffed_spd':
+                return entidad.efectosActivos && entidad.efectosActivos.some(ef => ef.stat === "spd" && ef.valor > 0);
+            default:
+                if (condicion.startsWith("rival_element_")) {
+                    const targetElement = condicion.replace("rival_element_", "").toLowerCase();
+                    return rival.element && rival.element.toLowerCase() === targetElement;
+                }
+                return false;
+        }
+    },
+
+    resolverAccionIFTTT: function(entidad, rival) {
+        const rules = (entidad.adn && entidad.adn.iftttRules) ? entidad.adn.iftttRules : [];
+
+        // 1. Procesamos las reglas IFTTT configuradas
+        for (let i = 0; i < rules.length; i++) {
+            const rule = rules[i];
+            if (this.evaluarCondicionIFTTT(entidad, rival, rule.condition)) {
+                const action = rule.action;
+                const atk = entidad.ataquesEquipados[action];
+                if (atk) {
+                    const cooldown = (action === "ataque") ? 0 : (entidad.cooldowns[action] || 0);
+                    if (cooldown === 0) {
+                        return action;
+                    }
+                }
+            }
+        }
+
+        // 2. Prioridad de Reserva por defecto (Fallback)
+        const order = ["definitivo", "tactica", "especial"];
+        for (const action of order) {
+            const atk = entidad.ataquesEquipados[action];
+            if (atk) {
+                const cooldown = entidad.cooldowns[action] || 0;
+                if (cooldown === 0) {
+                    return action;
+                }
+            }
+        }
+
+        return "ataque";
     }
 };

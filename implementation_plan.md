@@ -1,57 +1,78 @@
-# Hito A: Activación Genética y Ajustes de Progresión
+# Hito B: Panel IFTTT Individual para Combate Offline
 
-Activación y programación de los genes ocultos inactivos en el juego según las especificaciones de las hojas de ruta **V10.1 (Maestro)** y **V10.2 (Coliseo)**, permitiendo cerrar las brechas del sistema RPG, de cría (Breeding) y fusión (Reactor).
-
-## User Review Required
-
-> [!IMPORTANT]
-> **Fórmula de Daño Mínimo (Confirmada)**
-> De acuerdo con las instrucciones explícitas del usuario, la fórmula de daño mínimo actual en [ColiseumLogic.js](file:///c:/Users/STT/Documents/GitHub/Mascotas/ColiseumLogic.js) **no se modificará** y permanecerá en `0.25` (25% del ATK por defecto) y `0.35` (35% del ATK con el gen `min_dmg`). Esto permite que los combates se prolonguen más para favorecer el juego táctico.
+Implementación de la inteligencia artificial programable (sistema IFTTT: *If This Then That*) para la defensa offline de los Genos de acuerdo con el documento maestro **V10.2 (Coliseo)**. Esto permite a los jugadores programar de forma táctica cómo actuará su Geno en combates asíncronos y probar sus configuraciones en un simulador integrado.
 
 ## Proposed Changes
 
 ---
 
-### RPG y Progresión de Niveles
+### 1. Estructura de Datos (Esquema de Reglas)
+Cada Geno guardará sus reglas en una propiedad persistente `iftttRules` dentro de su objeto principal. De esta forma, el progreso se almacena localmente y en la nube de forma transparente sin modificar la base de datos externa.
 
-Activación de genes ocultos relacionados con la progresión del Geno.
+#### Esquema de regla individual:
+```json
+{
+  "condition": "hp_under_30",
+  "action": "use_definitivo"
+}
+```
 
-#### [MODIFY] [RPGManager.js](file:///c:/Users/STT/Documents/GitHub/Mascotas/RPGManager.js)
-- **Gen `especialista_elite`**: Modificar la validación de nivel máximo de XP (actualmente limitada rígidamente a 50) para permitir subir hasta el nivel 55 si el Geno posee este gen de combate.
-- **Gen `resonancia_nivel`**: Implementar la lógica para que el Geno obtenga un aumento de +1 en su estadística líder cada 10 niveles alcanzados.
-- **Gen `aceleracion_final`**: Modificar la curva de XP en la función de subida de nivel de forma que los últimos 10 niveles (del 40 al 50, o del 45 al 55 con `especialista_elite`) requieran un 40% menos de XP.
-
----
-
-### Reactor y Fusión
-
-Activación de genes ocultos que afectan el proceso de fusión en el reactor.
-
-#### [MODIFY] [ReactorManager.js](file:///c:/Users/STT/Documents/GitHub/Mascotas/ReactorManager.js)
-- **Gen `resistencia_colapso` (ANTI_C)**: Integrar en la lógica de fusión para mitigar o anular las posibilidades de colapso destructivo del Reactor.
-- **Genes `catalizador_rareza` y `catalizador_critico`**: Sumar un +2% de probabilidad de éxito crítico al proceso de fusión de reactor respectivamente si los especímenes involucrados poseen estos genes.
-- **Gen `alquimista_natural`**: Implementar para que el Geno que posea este gen cuente como `1.5` Genos de cara al peso de la mezcla de fusión en el reactor.
+*Por defecto, si un Geno no tiene reglas configuradas, se inicializará con:*
+`[ { "condition": "always", "action": "use_ataque" } ]` (Usar ataque básico siempre).
 
 ---
 
-### Laboratorio de Crianza (Breeding)
+### 2. Motor de Resolución IFTTT
+Modificaremos [ColiseumLogic.js](file:///c:/Users/STT/Documents/GitHub/Mascotas/ColiseumLogic.js) y [ColiseumManager.js](file:///c:/Users/STT/Documents/GitHub/Mascotas/ColiseumManager.js) para integrar el motor de evaluación de reglas.
 
-Activación de genes de crianza inactivos en el laboratorio.
+#### Condiciones Disponibles:
+1. `always`: Siempre (Por defecto)
+2. `turn_1`: En el Turno 1
+3. `hp_under_30`: Mi HP < 30%
+4. `hp_under_50`: Mi HP < 50%
+5. `hp_under_80`: Mi HP < 80%
+6. `rival_element_[Elemento]`: El elemento del rival es `Biomutante`, `Viral`, `Cibernético`, `Radiactivo`, `Tóxico` o `Sintético`.
+7. `rival_infected`: El rival tiene el estado *Infección* activo.
+8. `rival_buffed_atk`: El rival tiene un aumento de daño (ATK) activo.
+9. `self_buffed_spd`: Tengo un aumento de velocidad (SPD) activo.
 
-#### [MODIFY] [BreedingManager.js](file:///c:/Users/STT/Documents/GitHub/Mascotas/BreedingManager.js)
-- **Gen `gen_dominante_puro`**: Asegurar que, si el padre posee este gen, se garantice la herencia del 100% de los genes asociados a la cría.
-- **Gen `memoria_genetica`**: Incrementar la probabilidad de que la cría herede genes ocultos raros de sus ancestros.
-- **Gen `cooldown_acelerado`**: Modificar el cálculo de incubación/cooldown de cría para reducir a la mitad el tiempo de espera por defecto del espécimen.
+#### Acciones Disponibles:
+- `use_ataque`: Usar Ataque Básico (Slot 1)
+- `use_especial`: Usar Ataque Especial (Slot 2)
+- `use_tactica`: Usar Ataque Táctico (Slot 3)
+- `use_definitivo`: Usar Ataque Definitivo (Slot 4)
+
+#### Flujo de Resolución del Turno:
+El motor evalúa las reglas en orden de prioridad (1 a 5). Ejecuta la **primera regla** cuya condición sea verdadera **y cuyo ataque no esté en cooldown**. Si la acción está en cooldown, pasa a la siguiente regla. Si ninguna regla se cumple o todas sus acciones están bloqueadas por cooldown, ejecuta el ataque básico por defecto.
+
+---
+
+### 3. Interfaz de Configuración IFTTT (UI sin código)
+Crearemos un panel de programación visual neon-cyberpunk dentro de la vista de estadísticas de los Genos ([RPGManager.js](file:///c:/Users/STT/Documents/GitHub/Mascotas/RPGManager.js)).
+
+- **Botón de Acceso:** Añadir `🤖 CONFIGURAR TÁCTICA IFTTT` en el modal de estadísticas.
+- **Formulario Dinámico:**
+  - Selector de condiciones con nombres explicativos en español.
+  - Selector de acciones que muestra dinámicamente los ataques equipados en ese slot (ej. *Usar Especial [Espinas Óseas]*).
+  - Controles para ordenar la prioridad de las reglas (flechas 🔼 y 🔽).
+  - Botón de guardado rápido con feedback visual.
+
+---
+
+### 4. Integración y Pruebas en el Coliseo (Simulador de Práctica)
+Para verificar la efectividad estratégica del IFTTT, añadiremos una nueva sección en el Coliseo Nexo:
+
+- **Modo Práctica:** Permitirá simular un combate contra:
+  1. **Tu propio clon:** Un clon de tu Geno controlado por las reglas IFTTT que acabas de configurar (ideal para depurar tu propia estrategia).
+  2. **Rival Pre-configurado (IFTTT):** NPCs con tácticas preprogramadas (ej. un cyborg defensivo que cura bajo 35% o un atacante radiactivo que inicia con veneno).
 
 ---
 
 ## Verification Plan
 
 ### Automated Tests
-- Ejecutar pruebas automatizadas locales de subida de nivel para comprobar que un Geno con `especialista_elite` puede superar el nivel 50.
-- Ejecutar scripts de simulación de herencia de cría y probabilidad de reactor para validar la correcta aplicación matemática de los genes de crianza y reactor.
+- Crear un script `test_ifttt.js` para simular turnos de combate e inyectar configuraciones IFTTT específicas (ej: asegurar que si se cumple `hp_under_30` se ejecuta `use_definitivo` en lugar del básico, y que respeta el cooldown de 5 turnos).
 
 ### Manual Verification
-- Realizar fusiones en el Reactor con un Geno que tenga el gen `resistencia_colapso` y verificar que el porcentaje de colapso disminuye en la UI.
-- Realizar cruces en el Laboratorio de Crianza con Genos que posean `cooldown_acelerado` y confirmar que el tiempo de incubación se reduce al 50%.
-- Subir de nivel a un Geno mediante el entrenamiento en el panel de juego y validar que las estadísticas se calculan con el bonus de `resonancia_nivel`.
+- Configurar una regla en el nuevo panel visual del Geno.
+- Iniciar un combate de práctica contra tu Clon en el Coliseo y comprobar mediante el Log de combate que el oponente ejecuta los ataques siguiendo al pie de la letra las reglas lógicas programadas.
