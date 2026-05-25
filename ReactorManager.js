@@ -512,12 +512,18 @@ document.addEventListener("DOMContentLoaded", () => {
                     containerSlots.style.transform = "scale(1)";
                     containerSlots.style.filter = "none";
                     
-                    const tirada = Math.random() * 100;
+                    let tirada = Math.random() * 100;
                     let mensaje = "";
                     
                     const limiteCritico = reglas.probCrit;
                     const limiteNormal = limiteCritico + reglas.probNorm;
                     const limiteEstancada = limiteNormal + reglas.probStag;
+
+                    const tieneResistenciaColapso = window.genosEnReactor.some(g => window.tieneGenActivoV9 && window.tieneGenActivoV9(g, "resistencia_colapso"));
+                    const colapsoEvitado = tieneResistenciaColapso && (tirada >= limiteEstancada);
+                    if (colapsoEvitado) {
+                        tirada = limiteNormal + (reglas.probStag > 0 ? (reglas.probStag / 2) : 0);
+                    }
 
                     const inyectarNuevoMutante = (resultado) => {
                         const baseRarity = resultado.rarity.replace("+", "");
@@ -627,7 +633,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         mensaje = `¡FUSIÓN ESTABLE! ✨\nHas obtenido un [Geno ${reglas.resNorm.rarity}].`;
                     } else if (tirada < limiteEstancada) { 
                         inyectarNuevoMutante(reglas.resStag);
-                        mensaje = `MUTACIÓN ESTANCADA ⚠️\nLa inestabilidad destruyó a 4, pero lograste recuperar 1 [Geno ${reglas.resStag.rarity}]. ¡Sus genes han mutado!`;
+                        if (colapsoEvitado) {
+                            mensaje = `🧬 [Gen Oculto: Resistencia al Colapso] ¡Evitaste la destrucción total del Reactor!\n\nMUTACIÓN ESTANCADA ⚠️\nLa inestabilidad destruyó a 4, pero lograste recuperar 1 [Geno ${reglas.resStag.rarity}]. ¡Sus genes han mutado!`;
+                        } else {
+                            mensaje = `MUTACIÓN ESTANCADA ⚠️\nLa inestabilidad destruyó a 4, pero lograste recuperar 1 [Geno ${reglas.resStag.rarity}]. ¡Sus genes han mutado!`;
+                        }
                     } else {
                         const compensacion = reglas.cost * 1.5; 
                         if(typeof window.miInventario.addEssence === 'function') {
