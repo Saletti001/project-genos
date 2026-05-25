@@ -90,7 +90,7 @@ window.ImplantsUI = {
         if (screen.innerHTML.includes("LABORATORIO DE IMPLANTES")) return;
 
         screen.innerHTML = `
-            <div style="width: 100%; height: 100%; overflow-y: auto; padding-bottom: 100px; padding-top: 15px; -ms-overflow-style: none; scrollbar-width: none;">
+            <div style="width: 100%; height: 100%; overflow-y: auto; padding-bottom: 25px; padding-top: 15px; -ms-overflow-style: none; scrollbar-width: none;">
                 
                 <h2 class="screen-title" style="color: #4dd0e1; margin-bottom: 5px;">Laboratorio de Implantes</h2>
                 <p style="text-align: center; color: #888; font-size: 12px; margin-bottom: 15px; padding: 0 15px;">Instala Módulos de Combate y Equipo Nexo.</p>
