@@ -379,9 +379,9 @@
             </div>
         </div>
 
-        <div id="coliseum-lobby-screen" class="app-screen hidden" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; box-sizing: border-box; background: #0d1a24; background-image: radial-gradient(circle at 15% 15%, rgba(255, 140, 0, 0.18) 0%, transparent 45%), radial-gradient(circle at 85% 85%, rgba(0, 172, 193, 0.18) 0%, transparent 45%), linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px); background-size: 100% 100%, 100% 100%, 25px 25px, 25px 25px;">
-            <!-- Capa de scanlines para efecto holográfico del Coliseo -->
-            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.12), rgba(0, 0, 0, 0.12) 2px, transparent 2px, transparent 4px); pointer-events: none; z-index: 2;"></div>
+        <div id="coliseum-lobby-screen" class="app-screen hidden" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; box-sizing: border-box; background: linear-gradient(180deg, #4dd0e1 0%, #26c6da 100%) !important;">
+            <!-- Capa de scanlines (mismo que room-area y breeding) -->
+            <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 2px, transparent 2px, transparent 8px); pointer-events: none; z-index: 2;"></div>
             
             <style>
                 .lobby-card {
@@ -399,8 +399,8 @@
 
             <!-- Contenedor scrollable interno -->
             <div class="lobby-scroll-container" style="width: 100%; height: 100%; overflow-y: auto; padding: 25px 20px 110px; box-sizing: border-box; -ms-overflow-style: none; scrollbar-width: none; position: relative; z-index: 3;">
-                <h2 class="screen-title" style="color: #ff8c00; margin-bottom: 5px;">Modos de Combate</h2>
-                <p style="text-align: center; color: #888; font-size: 12px; margin-bottom: 20px; padding: 0 15px;">Selecciona la modalidad para entrar a la arena del Coliseo.</p>
+                <h2 class="screen-title" style="color: #0d1a24 !important; margin-bottom: 5px; text-shadow: 0 1px 2px rgba(255,255,255,0.6); border-bottom-color: rgba(13, 26, 36, 0.2) !important;">Modos de Combate</h2>
+                <p style="text-align: center; color: #1a2a36 !important; font-weight: bold; font-size: 12px; margin-bottom: 20px; padding: 0 15px; text-shadow: 0 1px 1px rgba(255,255,255,0.4);">Selecciona la modalidad para entrar a la arena del Coliseo.</p>
 
                 <div style="display: flex; flex-direction: column; gap: 14px; max-width: 400px; margin: 0 auto; width: 100%;">
                     
