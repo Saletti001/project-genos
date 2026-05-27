@@ -453,13 +453,67 @@
                 .lobby-scroll-list::-webkit-scrollbar {
                     display: none !important;
                 }
-                #lobby-npc-select:focus, #lobby-npc-level-select:focus {
-                    border-color: #ba55d3 !important;
-                    box-shadow: 0 0 8px rgba(138, 43, 226, 0.5);
+                
+                /* Estilo premium para las cajas de selección (select) */
+                .lobby-card select {
+                    -webkit-appearance: none !important;
+                    -moz-appearance: none !important;
+                    appearance: none !important;
+                    background-color: #0c1620 !important;
+                    color: #fff !important;
+                    border-radius: 6px !important;
+                    padding: 4px 28px 4px 8px !important;
+                    font-size: 11px !important;
+                    font-family: inherit !important;
+                    outline: none !important;
+                    cursor: pointer !important;
+                    flex: 1 !important;
+                    max-width: 160px !important;
+                    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease !important;
+                    background-repeat: no-repeat !important;
+                    background-position: right 8px center !important;
+                    background-size: 10px !important;
                 }
+
+                /* Opciones de la lista desplegable */
+                .lobby-card select option {
+                    background-color: #0c1620 !important;
+                    color: #fff !important;
+                    padding: 8px !important;
+                }
+
+                /* Custom styles for clone element select (cyan) */
+                #lobby-clone-element-select {
+                    border: 1px solid rgba(0, 172, 193, 0.6) !important;
+                    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2300e5ff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+                }
+
+                #lobby-clone-element-select:hover {
+                    border-color: #00e5ff !important;
+                    background-color: #12222f !important;
+                    box-shadow: 0 0 8px rgba(0, 172, 193, 0.3) !important;
+                }
+
                 #lobby-clone-element-select:focus {
                     border-color: #00e5ff !important;
-                    box-shadow: 0 0 8px rgba(0, 172, 193, 0.5);
+                    box-shadow: 0 0 12px rgba(0, 172, 193, 0.6) !important;
+                }
+
+                /* Custom styles for NPC/difficulty select (purple) */
+                #lobby-npc-select, #lobby-npc-level-select {
+                    border: 1px solid rgba(138, 43, 226, 0.6) !important;
+                    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b85cff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+                }
+
+                #lobby-npc-select:hover, #lobby-npc-level-select:hover {
+                    border-color: #ba55d3 !important;
+                    background-color: #12222f !important;
+                    box-shadow: 0 0 8px rgba(138, 43, 226, 0.3) !important;
+                }
+
+                #lobby-npc-select:focus, #lobby-npc-level-select:focus {
+                    border-color: #ba55d3 !important;
+                    box-shadow: 0 0 12px rgba(138, 43, 226, 0.6) !important;
                 }
             </style>
 
@@ -506,7 +560,7 @@
                         
                         <div style="border-top: 1px solid rgba(0, 172, 193, 0.2); padding-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%;">
                             <span style="color: #00e5ff; font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Afinidad Elemento:</span>
-                            <select id="lobby-clone-element-select" style="background: #12222f; border: 1px solid #00acc1; color: #fff; border-radius: 6px; padding: 4px 6px; font-size: 11px; font-family: inherit; outline: none; cursor: pointer; flex: 1; max-width: 160px; transition: border-color 0.2s, box-shadow 0.2s;">
+                            <select id="lobby-clone-element-select">
                                 <option value="mismo" selected>Mismo que tu Geno</option>
                                 <option value="Biomutante">Biomutante</option>
                                 <option value="Viral">Viral</option>
@@ -537,7 +591,7 @@
                         
                         <div style="border-top: 1px solid rgba(138, 43, 226, 0.2); padding-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%;">
                             <span style="color: #b85cff; font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Oponente:</span>
-                            <select id="lobby-npc-select" style="background: #12222f; border: 1px solid #8A2BE2; color: #fff; border-radius: 6px; padding: 4px 6px; font-size: 11px; font-family: inherit; outline: none; cursor: pointer; flex: 1; max-width: 160px; transition: border-color 0.2s, box-shadow 0.2s;">
+                            <select id="lobby-npc-select">
                                 <option value="cyborg" selected>Cyborg Defensivo (Cibernético)</option>
                                 <option value="viral">Infeccioso Viral (Viral)</option>
                                 <option value="sintetico">Rápido Sintético (Sintético)</option>
@@ -549,7 +603,7 @@
 
                         <div style="border-top: 1px solid rgba(138, 43, 226, 0.1); padding-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%;">
                             <span style="color: #b85cff; font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Dificultad:</span>
-                            <select id="lobby-npc-level-select" style="background: #12222f; border: 1px solid #8A2BE2; color: #fff; border-radius: 6px; padding: 4px 6px; font-size: 11px; font-family: inherit; outline: none; cursor: pointer; flex: 1; max-width: 160px; transition: border-color 0.2s, box-shadow 0.2s;">
+                            <select id="lobby-npc-level-select">
                                 <option value="10">Nivel 10 (Fácil)</option>
                                 <option value="25" selected>Nivel 25 (Normal)</option>
                                 <option value="40">Nivel 40 (Difícil)</option>
