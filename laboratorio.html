@@ -133,6 +133,34 @@
         
         .btn-secundario { background: #1e3a5f; color: #aaa; border: 1px solid #334; padding: 8px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .btn-secundario:hover { background: #334; color: #fff; }
+
+        /* Media Query para pantallas pequeñas (Celulares) */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            h1 { font-size: 20px; text-align: center; }
+            .tabs-container { flex-direction: column; width: 100%; gap: 8px; }
+            .tab-btn { width: 100%; padding: 10px; font-size: 13px; text-align: center; }
+            .tab-content.active { flex-direction: column; gap: 15px; }
+            .controls { max-height: none; padding-right: 0; }
+            .viewer { min-height: 300px; }
+            .pedestal-container { top: 60%; }
+            .pedestal-ring { width: 160px; top: -80px; }
+            .pedestal-light { width: 100px; height: 100px; top: -70px; }
+            .pedestal-shadow { width: 120px; top: 15px; }
+            .geno-display-box { width: 220px; height: 220px; margin-bottom: 40px; }
+            .arena-screen { flex-direction: column; min-height: auto; gap: 20px; }
+            .vs-badge { position: static; transform: none; text-align: center; margin: 10px 0; font-size: 28px; }
+            .fighter-side { width: 100%; }
+            .fighter-svg { width: 150px; height: 150px; }
+            .fighter-stats { width: 100%; box-sizing: border-box; }
+            .stats-panel { width: 100%; box-sizing: border-box; }
+            .slot-grid { grid-template-columns: 1fr; }
+            .ataques-container { grid-template-columns: 1fr; }
+            .action-bar { flex-direction: column; align-items: stretch; gap: 10px; }
+            .action-bar select, .action-bar button { width: 100%; flex: none !important; }
+            .implants-panel-container { width: 100%; max-width: 100%; }
+            .lab-container { padding: 15px; }
+        }
     </style>
 </head>
 <body>
@@ -183,6 +211,17 @@
                     <label class="switch"><input type="checkbox" id="chk-escaneado" checked><span class="slider"></span></label>
                 </div>
                 <button class="btn-secundario" onclick="document.getElementById('geno-display-1').classList.toggle('flipped')" title="Invierte visualmente al Geno">🔄 VOLTEAR</button>
+            </div>
+
+            <div class="control-group" style="border-left: 3px solid #ff5722; background: rgba(255, 87, 34, 0.05); padding: 12px; border-radius: 12px; display: flex; flex-direction: column; gap: 8px;">
+                <label style="color:#ff7043">Visualización y Exportar</label>
+                <div style="display: flex; gap: 8px; width: 100%;">
+                    <button class="btn-secundario" style="flex: 1; padding: 8px; font-size: 11px;" onclick="cambiarFondoVis('cian')">🩵 Fondo Cian</button>
+                    <button class="btn-secundario" style="flex: 1; padding: 8px; font-size: 11px;" onclick="cambiarFondoVis('blanco')">🤍 Fondo Blanco</button>
+                </div>
+                <button class="btn-secundario" style="background: linear-gradient(90deg, #4CAF50, #2E7D32); color: white; font-weight: bold; padding: 10px; width: 100%; border: none; border-radius: 6px; box-shadow: 0 4px 6px rgba(0,0,0,0.2);" onclick="descargarGenoPNG()">
+                    📥 DESCARGAR PNG SIN FONDO
+                </button>
             </div>
 
             <div class="control-group"><label>Forma Base</label><select id="sel-forma"></select></div>
@@ -287,6 +326,7 @@
                 <div class="lab-subtabs">
                     <div class="lab-subtab active" id="st-atk" onclick="toggleSubTab('atk')">ATAQUES</div>
                     <div class="lab-subtab" id="st-eq" onclick="toggleSubTab('eq')">EQUIPO</div>
+                    <div class="lab-subtab" id="st-ifttt" onclick="toggleSubTab('ifttt')">TÁCTICAS IFTTT</div>
                 </div>
 
                 <div id="view-atk" style="display: flex; gap: 10px; margin-top: 10px;">
@@ -335,6 +375,10 @@
                         <select id="sel-aura" class="lab-select"></select>
                     </div>
                 </div>
+
+                <div id="view-ifttt" style="display:none; flex-direction:column; gap:10px; margin-top:10px; width:100%;">
+                    <div id="ifttt-panel"></div>
+                </div>
             </div>
             
         </div>
@@ -342,16 +386,51 @@
 
     <!-- PESTAÑA 3: SIMULACIÓN DE COMBATE -->
     <div id="tab-combat" class="tab-content combat-arena lab-container">
-        <div class="action-bar">
-            <select id="sel-enemy-nivel" style="flex: 0.2; padding: 15px; background: #0d1a24; color: #4CAF50; border: 1px solid #4CAF50; border-radius: 8px; font-weight: bold; outline: none; cursor: pointer; text-transform: uppercase;">
-                <option value="1">Rival Nivel 1</option><option value="5">Rival Nivel 5</option>
-                <option value="15">Rival Nivel 15</option><option value="25" selected>Rival Nivel 25</option>
+        <div class="action-bar" style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <select id="sel-combat-mode" style="flex: 1; min-width: 150px; padding: 12px; background: #0d1a24; border: 1px solid #4dd0e1; color: #4dd0e1; border-radius: 8px; font-weight: bold; outline: none; cursor: pointer; text-transform: uppercase;">
+                <option value="estandar" selected>Modo: Estándar</option>
+                <option value="clon">Modo: Simulador de Clon</option>
+                <option value="desafio">Modo: Desafío Táctico</option>
             </select>
-            <select id="sel-enemy-rareza" style="flex: 0.3; padding: 15px; background: #0d1a24; color: #ff6b6b; border: 1px solid #ff6b6b; border-radius: 8px; font-weight: bold; outline: none; cursor: pointer; text-transform: uppercase;">
-                <option value="auto">Rival: Generación Auto</option><option value="Común">Forzado: Común</option><option value="Raro">Forzado: Raro</option>
-                <option value="Épico">Forzado: Épico</option><option value="Legendario">Forzado: Legendario</option><option value="Mítico">Forzado: Mítico</option>
+            
+            <select id="sel-clon-element-override" style="display: none; flex: 1; min-width: 150px; padding: 12px; background: #0d1a24; border: 1px solid #00acc1; color: #00e5ff; border-radius: 8px; font-weight: bold; outline: none; cursor: pointer;">
+                <option value="mismo" selected>Clon: Mismo Elemento</option>
+                <option value="Biomutante">Clon: Biomutante</option>
+                <option value="Viral">Clon: Viral</option>
+                <option value="Cibernético">Clon: Cibernético</option>
+                <option value="Radiactivo">Clon: Radiactivo</option>
+                <option value="Tóxico">Clon: Tóxico</option>
+                <option value="Sintético">Clon: Sintético</option>
             </select>
-            <button id="btn-generar-combate" class="btn-fight">⚔️ GENERAR ARENA</button>
+
+            <select id="sel-desafio-npc" style="display: none; flex: 1; min-width: 150px; padding: 12px; background: #0d1a24; border: 1px solid #8A2BE2; color: #b85cff; border-radius: 8px; font-weight: bold; outline: none; cursor: pointer;">
+                <option value="cyborg" selected>NPC: Cyborg Defensivo</option>
+                <option value="viral">NPC: Infeccioso Viral</option>
+                <option value="sintetico">NPC: Rápido Sintético</option>
+                <option value="biomutante">NPC: Titán Biomutante</option>
+                <option value="radiactivo">NPC: Radiador Mutado</option>
+                <option value="toxico">NPC: Tóxico Mutante</option>
+            </select>
+
+            <select id="sel-enemy-nivel" style="flex: 1; min-width: 120px; padding: 12px; background: #0d1a24; color: #4CAF50; border: 1px solid #4CAF50; border-radius: 8px; font-weight: bold; outline: none; cursor: pointer; text-transform: uppercase;">
+                <option value="1">Rival Nivel 1</option>
+                <option value="5">Rival Nivel 5</option>
+                <option value="15">Rival Nivel 15</option>
+                <option value="25" selected>Rival Nivel 25</option>
+                <option value="40">Rival Nivel 40</option>
+                <option value="50">Rival Nivel 50</option>
+            </select>
+            
+            <select id="sel-enemy-rareza" style="flex: 1; min-width: 150px; padding: 12px; background: #0d1a24; color: #ff6b6b; border: 1px solid #ff6b6b; border-radius: 8px; font-weight: bold; outline: none; cursor: pointer; text-transform: uppercase;">
+                <option value="auto">Rival: Generación Auto</option>
+                <option value="Común">Forzado: Común</option>
+                <option value="Raro">Forzado: Raro</option>
+                <option value="Épico">Forzado: Épico</option>
+                <option value="Legendario">Forzado: Legendario</option>
+                <option value="Mítico">Forzado: Mítico</option>
+            </select>
+            
+            <button id="btn-generar-combate" class="btn-fight" style="flex: 1.5; min-width: 180px; padding: 12px;">⚔️ GENERAR ARENA</button>
         </div>
         
         <div class="arena-screen">
@@ -391,6 +470,7 @@
                 <button id="btn-atk-3" class="btn-action" style="background: linear-gradient(90deg, #00897B, #00ACC1);">Táctica</button>
                 <button id="btn-atk-4" class="btn-action" style="background: linear-gradient(90deg, #E53935, #C62828);">Definitivo</button>
             </div>
+            <button id="btn-auto-combat" class="btn-fight" style="margin-top: 12px; width: 100%; padding: 10px; background: linear-gradient(90deg, #00acc1, #8A2BE2);">🤖 Auto Combate (Evaluar Tácticas IFTTT)</button>
         </div>
 
         <div id="combat-log" class="terminal" style="height: 200px;"><div class="term-title">/// REGISTRO DE BATALLA ///</div><div id="combat-log-content">> Esperando combatientes...</div></div>
@@ -410,9 +490,16 @@
         function toggleSubTab(tab) {
             document.getElementById('st-atk').classList.remove('active');
             document.getElementById('st-eq').classList.remove('active');
+            document.getElementById('st-ifttt').classList.remove('active');
             document.getElementById(`st-${tab}`).classList.add('active');
+            
             document.getElementById('view-atk').style.display = tab === 'atk' ? 'flex' : 'none';
             document.getElementById('grid-eq').style.display = tab === 'eq' ? 'grid' : 'none';
+            document.getElementById('view-ifttt').style.display = tab === 'ifttt' ? 'flex' : 'none';
+            
+            if (tab === 'ifttt') {
+                renderIftttRules();
+            }
         }
 
         function buscarAtaqueInfo(nombre) {
@@ -561,15 +648,270 @@
             badge.style.color = restantes === 0 ? "#888" : "#ffcc00";
             badge.style.borderColor = restantes === 0 ? "#555" : "#ffcc00";
 
+            // Cálculo de resonancia_nivel
+            let hasResonancia = false;
+            const bEl = document.getElementById("sel-gen-b");
+            const cEl = document.getElementById("sel-gen-c");
+            if (bEl && cEl) {
+                hasResonancia = bEl.value === "resonancia_nivel" || cEl.value === "resonancia_nivel";
+            }
+            
+            let resonanciaBonus = { hp: 0, atk: 0, def: 0, spd: 0, luk: 0 };
+            if (hasResonancia) {
+                let numResonancias = Math.floor(nivel / 10);
+                let tempStats = {
+                    hp: baseStatsCache.hp + investedStats.hp * 5,
+                    atk: baseStatsCache.atk + investedStats.atk,
+                    def: baseStatsCache.def + investedStats.def,
+                    spd: baseStatsCache.spd + investedStats.spd,
+                    luk: baseStatsCache.luk + investedStats.luk
+                };
+                for (let step = 1; step <= numResonancias; step++) {
+                    let keys = ["hp", "atk", "def", "spd", "luk"];
+                    let highestKey = keys[0];
+                    let highestVal = tempStats[highestKey];
+                    for (let i = 1; i < keys.length; i++) {
+                        if (tempStats[keys[i]] > highestVal) {
+                            highestVal = tempStats[keys[i]];
+                            highestKey = keys[i];
+                        }
+                    }
+                    tempStats[highestKey] += 1;
+                    resonanciaBonus[highestKey] += 1;
+                }
+            }
+
             ['hp', 'atk', 'def', 'spd', 'luk'].forEach(s => {
                 let addTxt = document.getElementById(`add-${s}-txt`);
                 let totalEl = document.getElementById(`tot-${s}`);
                 let valInvertido = investedStats[s];
                 let mathVal = s === 'hp' ? valInvertido * 5 : valInvertido; 
-                addTxt.innerText = `(+${mathVal})`;
-                addTxt.style.color = valInvertido > 0 ? "#4CAF50" : "#555";
-                totalEl.innerText = baseStatsCache[s] + mathVal;
+                
+                let bonusVal = resonanciaBonus[s];
+                let totalBonusText = "";
+                if (bonusVal > 0) {
+                    totalBonusText = `(+${mathVal} + ${bonusVal}🧬)`;
+                    totalEl.innerText = baseStatsCache[s] + mathVal + bonusVal;
+                } else {
+                    totalBonusText = `(+${mathVal})`;
+                    totalEl.innerText = baseStatsCache[s] + mathVal;
+                }
+                
+                addTxt.innerText = totalBonusText;
+                addTxt.style.color = (valInvertido > 0 || bonusVal > 0) ? "#4CAF50" : "#555";
             });
+        }
+
+        // --- FUNCIONES EXTRA: VISUALIZACIÓN Y DESCARGA ---
+        function cambiarFondoVis(tipo) {
+            const viewer = document.querySelector(".viewer");
+            const pedestalContainer = document.querySelector(".pedestal-container");
+            if (tipo === 'blanco') {
+                viewer.style.backgroundColor = '#ffffff';
+                viewer.style.backgroundImage = 'none';
+                viewer.style.borderColor = '#ccc';
+                if (pedestalContainer) pedestalContainer.style.display = 'none';
+            } else {
+                viewer.style.backgroundColor = '#31c4d8';
+                viewer.style.backgroundImage = 'repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.06) 2px, rgba(0, 0, 0, 0.06) 4px)';
+                viewer.style.borderColor = '#4dd0e1';
+                if (pedestalContainer) pedestalContainer.style.display = 'flex';
+            }
+        }
+
+        function descargarGenoPNG() {
+            const container = document.getElementById("geno-display-1");
+            const svgEl = container.querySelector("svg");
+            if (!svgEl) {
+                alert("No se encontró el SVG del Geno para descargar.");
+                return;
+            }
+            
+            const serializer = new XMLSerializer();
+            let svgString = serializer.serializeToString(svgEl);
+            
+            if (!svgString.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)) {
+                svgString = svgString.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
+            }
+            
+            const svgBlob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+            const URL = window.URL || window.webkitURL || window;
+            const blobURL = URL.createObjectURL(svgBlob);
+            
+            const image = new Image();
+            image.onload = function() {
+                const canvas = document.createElement("canvas");
+                canvas.width = 600;
+                canvas.height = 600;
+                const context = canvas.getContext("2d");
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                
+                const pngURL = canvas.toDataURL("image/png");
+                const downloadLink = document.createElement("a");
+                downloadLink.href = pngURL;
+                downloadLink.download = `geno_${document.getElementById("sel-forma").value || "mascota"}.png`;
+                document.body.appendChild(downloadLink);
+                downloadLink.click();
+                document.body.removeChild(downloadLink);
+                URL.revokeObjectURL(blobURL);
+            };
+            image.onerror = function(err) {
+                console.error("Error al cargar la imagen SVG:", err);
+                alert("Error al procesar el SVG para descarga.");
+            };
+            image.src = blobURL;
+        }
+
+        function validarLimitesNivel() {
+            const bEl = document.getElementById("sel-gen-b");
+            const cEl = document.getElementById("sel-gen-c");
+            let hasElite = false;
+            if (bEl && cEl) {
+                hasElite = bEl.value === "especialista_elite" || cEl.value === "especialista_elite";
+            }
+            const maxLvl = hasElite ? 55 : 50;
+            const inpNivel = document.getElementById("inp-nivel-player");
+            if (inpNivel) {
+                inpNivel.max = maxLvl;
+                let currentVal = parseInt(inpNivel.value) || 25;
+                if (currentVal > maxLvl) {
+                    inpNivel.value = maxLvl;
+                }
+            }
+        }
+
+        // --- FUNCIONES EXTRA: GESTIÓN DE TÁCTICAS IFTTT ---
+        let localIftttRules = [];
+
+        function renderIftttRules() {
+            const panel = document.getElementById("ifttt-panel");
+            if (!panel) return;
+
+            const maxRules = 5;
+            const currentRulesCount = localIftttRules.length;
+
+            const genoElem = document.getElementById("sel-elemento").value;
+            const level = parseInt(document.getElementById("inp-nivel-player").value) || 1;
+
+            const ataquesBasicos = {
+                "Biomutante": "PULSO VITAL", "Viral": "DESCARGA VIRAL", "Cibernético": "LÁSER DE PRECISIÓN",
+                "Radiactivo": "PROYECTIL RADIACTIVO", "Tóxico": "COLMILLO VENENOSO", "Sintético": "RÁFAGA SINTÉTICA"
+            };
+            const basName = ataquesBasicos[genoElem] || "GOLPE BÁSICO";
+            const espName = document.getElementById("sel-mt-especial").value;
+            const tacName = document.getElementById("sel-mt-tactica").value;
+            const defName = level >= 25 ? document.getElementById("sel-mt-definitivo").value : "";
+
+            const hasEspecial = espName && espName !== "ninguno";
+            const hasTactica = tacName && tacName !== "ninguno";
+            const hasDefinitivo = defName && defName !== "ninguno";
+
+            let rulesListHtml = "";
+            if (currentRulesCount === 0) {
+                rulesListHtml = `
+                    <div style="text-align: center; color: #888; font-size: 11px; padding: 15px; border: 1px dashed #334; border-radius: 8px;">
+                        No hay tácticas configuradas. El Geno atacará usando el comportamiento automático de reserva (priorizar Especiales y dejar el Básico para cuando todos estén en cooldown).
+                    </div>
+                `;
+            } else {
+                localIftttRules.forEach((rule, index) => {
+                    rulesListHtml += `
+                    <div class="ifttt-rule-row" style="display: flex; align-items: center; gap: 8px; background: rgba(13, 22, 28, 0.8); border: 1px solid #334; border-radius: 8px; padding: 8px; margin-bottom: 6px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);">
+                        <span style="color: #00acc1; font-weight: bold; font-size: 12px; min-width: 20px; text-align: center;">#${index + 1}</span>
+                        
+                        <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                            <div style="display: flex; align-items: center; gap: 4px; font-size: 11px;">
+                                <span style="color: #ffd700; width: 65px; font-weight: bold;">SI:</span>
+                                <select onchange="updateRule(${index}, 'condition', this.value)" style="background: #1a2a36; border: 1px solid #334; color: #fff; border-radius: 4px; padding: 3px 6px; flex: 1; font-size: 11px; font-family: inherit; outline: none; cursor: pointer;">
+                                    <option value="always" ${rule.condition === 'always' ? 'selected' : ''}>Siempre</option>
+                                    <option value="hp_under_50" ${rule.condition === 'hp_under_50' ? 'selected' : ''}>Mi HP < 50%</option>
+                                    <option value="hp_under_30" ${rule.condition === 'hp_under_30' ? 'selected' : ''}>Mi HP < 30%</option>
+                                    <option value="turn_1" ${rule.condition === 'turn_1' ? 'selected' : ''}>En el Turno 1</option>
+                                    <option value="rival_infected" ${rule.condition === 'rival_infected' ? 'selected' : ''}>Rival Infectado</option>
+                                    <option value="rival_buffed_atk" ${rule.condition === 'rival_buffed_atk' ? 'selected' : ''}>Rival con Buff de Daño</option>
+                                    <option value="self_buffed_spd" ${rule.condition === 'self_buffed_spd' ? 'selected' : ''}>Tengo Buff de Velocidad</option>
+                                    <option value="rival_element_biomutante" ${rule.condition === 'rival_element_biomutante' ? 'selected' : ''}>Rival es Biomutante</option>
+                                    <option value="rival_element_viral" ${rule.condition === 'rival_element_viral' ? 'selected' : ''}>Rival es Viral</option>
+                                    <option value="rival_element_cibernetico" ${rule.condition === 'rival_element_cibernetico' ? 'selected' : ''}>Rival es Cibernético</option>
+                                    <option value="rival_element_radiactivo" ${rule.condition === 'rival_element_radiactivo' ? 'selected' : ''}>Rival es Radiactivo</option>
+                                    <option value="rival_element_toxico" ${rule.condition === 'rival_element_toxico' ? 'selected' : ''}>Rival es Tóxico</option>
+                                    <option value="rival_element_sintetico" ${rule.condition === 'rival_element_sintetico' ? 'selected' : ''}>Rival es Sintético</option>
+                                </select>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 4px; font-size: 11px;">
+                                <span style="color: #4dd0e1; width: 65px; font-weight: bold;">ENTONCES:</span>
+                                <select onchange="updateRule(${index}, 'action', this.value)" style="background: #1a2a36; border: 1px solid #334; color: #fff; border-radius: 4px; padding: 3px 6px; flex: 1; font-size: 11px; font-family: inherit; outline: none; cursor: pointer;">
+                                    <option value="definitivo" ${rule.action === 'definitivo' ? 'selected' : ''} ${!hasDefinitivo ? 'disabled' : ''}>Usar Definitivo ${hasDefinitivo ? `[${defName}]` : '(Bloqueado)'}</option>
+                                    <option value="tactica" ${rule.action === 'tactica' ? 'selected' : ''} ${!hasTactica ? 'disabled' : ''}>Usar Soporte ${hasTactica ? `[${tacName}]` : '(Vacío)'}</option>
+                                    <option value="especial" ${rule.action === 'especial' ? 'selected' : ''} ${!hasEspecial ? 'disabled' : ''}>Usar Especial ${hasEspecial ? `[${espName}]` : '(Vacío)'}</option>
+                                    <option value="ataque" ${rule.action === 'ataque' ? 'selected' : ''}>Usar Básico [${basName}]</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <button onclick="moveRule(${index}, -1)" style="background: transparent; border: none; color: #4dd0e1; cursor: pointer; padding: 2px; font-size: 12px; line-height: 1;">🔼</button>
+                            <button onclick="moveRule(${index}, 1)" style="background: transparent; border: none; color: #4dd0e1; cursor: pointer; padding: 2px; font-size: 12px; line-height: 1;">🔽</button>
+                        </div>
+                        
+                        <button onclick="deleteRule(${index})" style="background: transparent; border: none; color: #ff6b6b; cursor: pointer; padding: 6px; font-size: 14px; font-weight: bold; margin-left: 2px;">❌</button>
+                    </div>
+                    `;
+                });
+            }
+
+            const isAddDisabled = currentRulesCount >= maxRules;
+
+            panel.innerHTML = `
+                <div class="ifttt-container" style="background: rgba(0, 0, 0, 0.4); border: 2px solid #00acc1; border-radius: 16px; padding: 15px; box-shadow: 0 0 20px rgba(0, 172, 193, 0.2); color: #fff; display: flex; flex-direction: column; gap: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h3 style="color: #4dd0e1; margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; display: flex; align-items: center;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4dd0e1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M20 9h3M20 15h3M1 9h3M1 15h3"/></svg>
+                            Tácticas Automáticas IFTTT
+                        </h3>
+                        <button id="btn-add-rule" onclick="addIftttRule()" style="background: ${isAddDisabled ? '#334' : '#00acc1'}; border: none; color: ${isAddDisabled ? '#888' : 'white'}; padding: 5px 10px; border-radius: 6px; font-size: 10px; cursor: ${isAddDisabled ? 'not-allowed' : 'pointer'}; font-weight: bold; transition: 0.2s;" ${isAddDisabled ? 'disabled' : ''}>+ AÑADIR</button>
+                    </div>
+                    <p style="font-size: 10px; color: #888; margin: 0; line-height: 1.3;">
+                        Configura las reglas para cuando tu Geno combata automáticamente. Las reglas se evalúan de arriba a abajo. Si ninguna coincide o el ataque está en cooldown, se utilizará la prioridad de reserva (Especial > Soporte > Definitivo > Básico).
+                    </p>
+                    <div id="ifttt-rules-list" style="margin-top: 5px; display: flex; flex-direction: column; gap: 2px;">
+                        ${rulesListHtml}
+                    </div>
+                </div>
+            `;
+        }
+
+        function addIftttRule() {
+            if (localIftttRules.length >= 5) return;
+            localIftttRules.push({ condition: 'always', action: 'ataque' });
+            renderIftttRules();
+            render();
+        }
+
+        function updateRule(index, field, value) {
+            if (localIftttRules[index]) {
+                localIftttRules[index][field] = value;
+                render();
+            }
+        }
+
+        function deleteRule(index) {
+            localIftttRules.splice(index, 1);
+            renderIftttRules();
+            render();
+        }
+
+        function moveRule(index, direction) {
+            const targetIndex = index + direction;
+            if (targetIndex < 0 || targetIndex >= localIftttRules.length) return;
+
+            const temp = localIftttRules[index];
+            localIftttRules[index] = localIftttRules[targetIndex];
+            localIftttRules[targetIndex] = temp;
+
+            renderIftttRules();
+            render();
         }
 
         function actualizarAtaquesDisponibles() {
@@ -676,11 +1018,13 @@
                 baseStatsCache = window.generarStatsPorRareza ? window.generarStatsPorRareza(e.target.value) : {hp: 100, atk: 25, def: 15, spd: 20, luk: 15};
                 ['hp','atk','def','spd','luk'].forEach(s => document.getElementById(`base-${s}`).innerText = baseStatsCache[s]);
                 investedStats = {hp: 0, atk: 0, def: 0, spd: 0, luk: 0}; 
+                validarLimitesNivel();
                 updateStatsUI();
                 render();
             });
 
             document.getElementById("inp-nivel-player").addEventListener("input", () => {
+                validarLimitesNivel();
                 investedStats = {hp: 0, atk: 0, def: 0, spd: 0, luk: 0};
                 updateStatsUI(); 
                 actualizarAtaquesDisponibles();
@@ -694,10 +1038,25 @@
 
             ['sel-forma','sel-color','sel-ojos','sel-boca','sel-espalda','sel-cabeza','sel-skin','sel-aura','sel-gen-a','sel-gen-b','sel-gen-c','chk-escaneado'].forEach(id => {
                 let el = document.getElementById(id);
-                if(el) el.addEventListener("change", render);
+                if(el) el.addEventListener("change", () => {
+                    if (id === 'sel-gen-b' || id === 'sel-gen-c') {
+                        validarLimitesNivel();
+                        updateStatsUI();
+                    }
+                    render();
+                });
             });
             document.getElementById("sel-color").addEventListener("input", render);
 
+            // Listener para el selector de modo de combate
+            document.getElementById("sel-combat-mode").addEventListener("change", (e) => {
+                const mode = e.target.value;
+                document.getElementById("sel-clon-element-override").style.display = mode === "clon" ? "block" : "none";
+                document.getElementById("sel-desafio-npc").style.display = mode === "desafio" ? "block" : "none";
+                document.getElementById("sel-enemy-rareza").style.display = mode === "estandar" ? "block" : "none";
+            });
+
+            validarLimitesNivel();
             baseStatsCache = window.generarStatsPorRareza ? window.generarStatsPorRareza("Común") : {hp: 50, atk: 20, def: 11, spd: 25, luk: 11};
             ['hp','atk','def','spd','luk'].forEach(s => document.getElementById(`base-${s}`).innerText = baseStatsCache[s]);
             updateStatsUI();
@@ -729,7 +1088,8 @@
                 skin_type: document.getElementById("sel-skin").value, aura_type: document.getElementById("sel-aura").value,
                 scanned: document.getElementById("chk-escaneado").checked, level: parseInt(document.getElementById("inp-nivel-player").value),
                 maxHp: finalStats.hp, hp: finalStats.hp,
-                hidden_genes: { A: genAVal !== "ninguno" ? { id: genAVal } : null, B: genBData, C: genCData }
+                hidden_genes: { A: genAVal !== "ninguno" ? { id: genAVal } : null, B: genBData, C: genCData },
+                iftttRules: localIftttRules
             };
         }
 
@@ -780,25 +1140,46 @@
                 atk_4: pAdn.level >= 25 ? (dVal !== "ninguno" ? {nombre: dVal} : engine.obtenerAtaqueAleatorio(pAdn.element, "definitivos")) : null
             };
 
+            // Cargamos la configuración del motor según modo elegido
+            const selectedMode = document.getElementById("sel-combat-mode").value;
+            engine.modoCombate = selectedMode;
+
+            // Prepara al jugador
+            window.miMascota = pAdn; // Para asegurar acceso global si el motor de simulación lo lee
             engine.prepararJugador(pAdn);
 
+            // Prepara al enemigo según el modo
             const nivelE = parseInt(document.getElementById("sel-enemy-nivel").value);
-            engine.generarRivalProcedural(nivelE);
-
-            const eRareza = document.getElementById("sel-enemy-rareza").value;
-            if (eRareza !== "auto") {
-                engine.enemy.rareza = eRareza;
-                let eStats = engine.enemy.maxHp; // Simplificado para forzar en pruebas, la lógica base ya lo ajustó
+            if (selectedMode === "clon") {
+                engine.clonElementoOverride = document.getElementById("sel-clon-element-override").value;
+                engine.generarRivalProcedural(nivelE);
+            } else if (selectedMode === "desafio") {
+                engine.npcDesafio = document.getElementById("sel-desafio-npc").value;
+                engine.npcNivelOverride = nivelE;
+                engine.generarRivalProcedural(nivelE);
+            } else {
+                engine.generarRivalProcedural(nivelE);
+                const eRareza = document.getElementById("sel-enemy-rareza").value;
+                if (eRareza !== "auto") {
+                    engine.enemy.rareza = eRareza;
+                    const baseStats = window.generarStatsPorRareza ? window.generarStatsPorRareza(eRareza) : {hp: 80, atk: 15, def: 5, spd: 15, luk: 10};
+                    engine.enemy.maxHp = baseStats.hp + (nivelE - 1) * 3;
+                    engine.enemy.hp = engine.enemy.maxHp;
+                    engine.enemy.atk = baseStats.atk + (nivelE - 1);
+                    engine.enemy.def = baseStats.def + (nivelE - 1);
+                    engine.enemy.spd = baseStats.spd + (nivelE - 1);
+                    engine.enemy.luk = baseStats.luk + (nivelE - 1);
+                }
             }
 
             document.getElementById("combat-player-svg").innerHTML = inyectarSvgSeguro(engine.player.adn);
             document.getElementById("combat-enemy-svg").innerHTML = inyectarSvgSeguro(engine.enemy.adn);
             
             document.getElementById("c-p-rareza").innerText = engine.player.rareza; document.getElementById("c-p-elem").innerText = engine.player.element; document.getElementById("c-p-lvl").innerText = pAdn.level;
-            document.getElementById("c-e-rareza").innerText = engine.enemy.rareza; document.getElementById("c-e-elem").innerText = engine.enemy.element; document.getElementById("c-e-lvl").innerText = nivelE;
+            document.getElementById("c-e-rareza").innerText = engine.enemy.rareza; document.getElementById("c-e-elem").innerText = engine.enemy.element; document.getElementById("c-e-lvl").innerText = engine.enemy.adn.level || nivelE;
 
-            document.getElementById("c-p-genb").innerText = engine.player.genesId[0]; document.getElementById("c-p-genc").innerText = engine.player.genesId[1];
-            document.getElementById("c-e-genb").innerText = engine.enemy.genesId[0]; document.getElementById("c-e-genc").innerText = engine.enemy.genesId[1];
+            document.getElementById("c-p-genb").innerText = engine.player.genesId[0] || "ninguno"; document.getElementById("c-p-genc").innerText = engine.player.genesId[1] || "ninguno";
+            document.getElementById("c-e-genb").innerText = engine.enemy.genesId[0] || "ninguno"; document.getElementById("c-e-genc").innerText = engine.enemy.genesId[1] || "ninguno";
 
             document.getElementById("side-player").style.filter = "none";
             document.getElementById("side-enemy").style.filter = "none";
@@ -807,6 +1188,13 @@
             actualizarUI(engine.enemy, false);
             document.getElementById("action-panel").style.display = "block";
             refrescarBotones();
+        };
+
+        // Event listener para el botón de auto combate IFTTT
+        document.getElementById("btn-auto-combat").onclick = () => {
+            if (engine.player.hp <= 0 || engine.enemy.hp <= 0) return;
+            const action = engine.resolverAccionIFTTT(engine.player, engine.enemy);
+            turno(action);
         };
 
         function actualizarUI(p, isP) {
@@ -855,23 +1243,8 @@
             const p = engine.player;
             const e = engine.enemy;
 
-            // IA Estratégica
-            let accionEnemigo = "ataque"; 
-            let acts = Object.keys(e.ataquesEquipados).filter(k => e.ataquesEquipados[k] !== null);
-            
-            let canEspecial = acts.includes("especial") && e.cooldowns.especial === 0;
-            let canTactica = acts.includes("tactica") && e.cooldowns.tactica === 0;
-            let canDefinitivo = acts.includes("definitivo") && e.cooldowns.definitivo === 0;
-
-            let pHP_pct = p.hp / p.maxHp;
-            let eHP_pct = e.hp / e.maxHp;
-
-            if (canTactica && eHP_pct <= 0.35 && Math.random() < 0.85) accionEnemigo = "tactica";
-            else if (canDefinitivo && pHP_pct <= 0.40) accionEnemigo = "definitivo";
-            else if (canEspecial && pHP_pct <= 0.25 && Math.random() < 0.80) accionEnemigo = "especial";
-            else if (canDefinitivo && Math.random() < 0.60) accionEnemigo = "definitivo";
-            else if (canTactica && pHP_pct > 0.60 && Math.random() < 0.60) accionEnemigo = "tactica";
-            else if (canEspecial && Math.random() < 0.70) accionEnemigo = "especial";
+            // IA Estratégica utilizando el motor oficial con soporte IFTTT y Fallbacks
+            let accionEnemigo = engine.resolverAccionIFTTT(e, p);
 
             let playerGoesFirst = p.spd >= e.spd;
             if (p.spd === e.spd) playerGoesFirst = Math.random() > 0.5;
