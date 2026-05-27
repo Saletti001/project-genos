@@ -45,7 +45,7 @@ window.ColiseumLogic = {
         return { ...lista[Math.floor(Math.random() * lista.length)], elemento: elemento };
     },
 
-    generarRivalProcedural: function(nivelJugador) {
+    generarRivalProcedural: function(nivelJugador, esJefeDeLiga = false) {
         if (this.modoCombate === "clon") {
             if (!window.miMascota) return;
             const mascota = window.miMascota;
@@ -303,21 +303,21 @@ window.ColiseumLogic = {
         }
 
         let roll = Math.random();
-        let eRareza = "Común"; 
         let pRareza = this.player ? (this.player.rareza || this.player.rarity || "Común") : "Común";
+        let eRareza = "Común";
 
-        if (nivelJugador <= 8) {
-            eRareza = "Común"; 
-        } else {
+        if (esJefeDeLiga) {
             if (pRareza === "Común") {
-                eRareza = roll < 0.60 ? "Raro" : "Común";
+                eRareza = "Raro";
             } else if (pRareza === "Raro") {
-                eRareza = roll < 0.40 ? "Épico" : (roll < 0.90 ? "Raro" : "Común");
+                eRareza = "Épico";
             } else if (pRareza === "Épico") {
-                eRareza = roll < 0.50 ? "Legendario" : (roll < 0.90 ? "Épico" : "Raro");
-            } else if (pRareza === "Legendario" || pRareza === "Mítico") {
-                eRareza = roll < 0.70 ? "Legendario" : "Épico";
+                eRareza = "Legendario";
+            } else {
+                eRareza = "Legendario";
             }
+        } else {
+            eRareza = pRareza;
         }
         
         const eStats = window.generarStatsPorRareza ? window.generarStatsPorRareza(eRareza) : {hp: 120, atk: 12, def: 8, spd: 10, luk: 5};
@@ -337,8 +337,13 @@ window.ColiseumLogic = {
 
         eStats.hp += bonoPureza * 3; eStats.atk += bonoPureza; eStats.def += bonoPureza; eStats.spd += bonoPureza; eStats.luk += bonoPureza;
 
-        let nivelEnemigo = nivelJugador;
-        if (nivelJugador > 10) { nivelEnemigo = nivelJugador + 3; }
+        let nivelEnemigo = nivelJugador + (esJefeDeLiga ? 5 : 3);
+
+        // Multiplicador +20% HP/ATK para Jefes de nivel Legendario/Mítico
+        if (esJefeDeLiga && (pRareza === "Legendario" || pRareza === "Mítico")) {
+            eStats.hp = Math.round(eStats.hp * 1.2);
+            eStats.atk = Math.round(eStats.atk * 1.2);
+        }
 
         const elementos = ["Biomutante", "Viral", "Cibernético", "Radiactivo", "Tóxico", "Sintético"];
         const eElemento = elementos[Math.floor(Math.random() * elementos.length)];
@@ -437,7 +442,7 @@ window.ColiseumLogic = {
         };
         
         this.enemy = {
-            nombre: this.generarNombreAleatorio(), isPlayer: false, adn: adn,
+            nombre: (esJefeDeLiga ? "[JEFE] " : "") + this.generarNombreAleatorio(), isPlayer: false, adn: adn,
             maxHp: eStats.hp, hp: eStats.hp, atk: eStats.atk, def: eStats.def || 5, spd: eStats.spd, luk: eStats.luk,
             baseAtk: eStats.atk, baseDef: eStats.def || 5, baseSpd: eStats.spd, baseLuk: eStats.luk,
             element: eElemento, rareza: eRareza, genesId: genesEnemigo,
@@ -446,7 +451,8 @@ window.ColiseumLogic = {
             crystalSkin: gB === "piel_cristal" || gC === "piel_cristal",
             decoyUsado: false, coreArUsado: false, rachaGolpes: 0, adaptativaStacks: 0, ultimoElementoRecibido: null,
             danoRecibidoEsteTurno: 0, danoRecibidoTurnoAnterior: 0, proxVenenoDoble: false,
-            ataquesEquipados: enemyAtaques
+            ataquesEquipados: enemyAtaques,
+            esJefeDeLiga: esJefeDeLiga
         };
     },
 
@@ -470,7 +476,7 @@ window.ColiseumLogic = {
             isPlayer: true, adn: mascota,
             maxHp: mascota.maxHp || pStats.hp, hp: mascota.hp || pStats.hp, atk: pStats.atk, def: pStats.def, spd: pStats.spd, luk: pStats.luk,
             baseAtk: pStats.atk, baseDef: pStats.def, baseSpd: pStats.spd, baseLuk: pStats.luk,
-            element: pElemento, rareza: mascota.rarity || "Común", genesId: [pGenB, pGenC], 
+            element: pElemento, rareza: mascota.rarity || mascota.rareza || "Común", genesId: [pGenB, pGenC], 
             estados: [], efectosActivos: [], cooldowns: { especial: 0, tactica: 0, definitivo: 0 },
             escudoCibernetico: pElemento === "Cibernético", 
             crystalSkin: pGenB === "piel_cristal" || pGenC === "piel_cristal",

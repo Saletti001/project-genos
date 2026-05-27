@@ -265,6 +265,65 @@ window.ColiseumUI = {
             height: 14px; stroke: #fff; }
             @keyframes status-pulse { 0% { transform: scale(1);
             } 100% { transform: scale(1.15); } }
+
+            /* Estilos de elección para la pantalla del Jefe de Liga */
+            .boss-choice-wrapper {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 12px !important;
+                width: 100% !important;
+                max-width: 320px !important;
+                margin: 20px auto 0 auto !important;
+                align-items: center !important;
+                position: relative;
+                z-index: 100 !important;
+            }
+            .boss-btn-challenge {
+                background: linear-gradient(90deg, #d500f9, #ff007f) !important;
+                box-shadow: 0 0 15px rgba(213, 0, 249, 0.6), inset 0 0 5px rgba(255, 255, 255, 0.3) !important;
+                border: 2px solid rgba(255, 255, 255, 0.4) !important;
+                color: white !important;
+                border-radius: 12px !important;
+                text-transform: uppercase;
+                letter-spacing: 1px !important;
+                transition: 0.2s !important;
+                padding: 12px 20px !important;
+                font-weight: bold !important;
+                font-size: 13px !important;
+                cursor: pointer !important;
+                width: 100% !important;
+                text-align: center !important;
+                animation: bossPulse 1.5s infinite ease-in-out !important;
+            }
+            .boss-btn-challenge:hover {
+                transform: translateY(-2px) scale(1.02) !important;
+                filter: brightness(1.2) !important;
+            }
+            .boss-btn-standard {
+                background: #111b24 !important;
+                border: 1px solid #1e3a5f !important;
+                color: #4dd0e1 !important;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
+                border-radius: 12px !important;
+                text-transform: uppercase;
+                letter-spacing: 1px !important;
+                transition: 0.2s !important;
+                padding: 12px 20px !important;
+                font-weight: bold !important;
+                font-size: 12px !important;
+                cursor: pointer !important;
+                width: 100% !important;
+                text-align: center !important;
+            }
+            .boss-btn-standard:hover {
+                background: #1e3a5f !important;
+                color: #fff !important;
+            }
+            @keyframes bossPulse {
+                0% { box-shadow: 0 0 12px rgba(213, 0, 249, 0.6); }
+                50% { box-shadow: 0 0 25px rgba(213, 0, 249, 0.9), 0 0 10px rgba(255, 0, 127, 0.5); }
+                100% { box-shadow: 0 0 12px rgba(213, 0, 249, 0.6); }
+            }
         `;
         document.head.appendChild(style);
     },

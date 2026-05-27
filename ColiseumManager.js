@@ -161,6 +161,53 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     function iniciarPelea() {
+        let oldChoice = document.getElementById("boss-choice-container");
+        if (oldChoice) oldChoice.remove();
+
+        if (ColiseumLogic.modoCombate === 'estandar') {
+            const rollBoss = Math.random() < 0.15;
+            if (rollBoss) {
+                let btnStart = document.getElementById("btn-start-battle");
+                let btnLeave = document.getElementById("btn-leave-battle");
+                if (btnStart) btnStart.style.setProperty("display", "none", "important");
+                if (btnLeave) btnLeave.style.setProperty("display", "none", "important");
+
+                ColiseumUI.limpiarLog();
+                ColiseumUI.agregarLog(`<span style="color:#d500f9; font-weight:bold; font-size:14px; text-shadow: 0 0 10px rgba(213,0,249,0.5);">⚠️ DETECTADA SEÑAL DE JEFE DE LIGA</span>`);
+                ColiseumUI.agregarLog(`<span style="color:#ce93d8;">> Un poderoso Jefe de Liga está rondando la arena. ¿Deseas desafiarlo por recompensas de experiencia adicionales (+15% XP) o prefieres buscar un rival estándar?</span>`);
+
+                let choiceContainer = document.createElement("div");
+                choiceContainer.id = "boss-choice-container";
+                choiceContainer.className = "boss-choice-wrapper";
+                choiceContainer.innerHTML = `
+                    <button id="btn-challenge-boss" class="boss-btn-challenge">⚔️ Desafiar al Jefe de Liga</button>
+                    <button id="btn-skip-boss" class="boss-btn-standard">Buscar Rival Estándar</button>
+                `;
+                
+                let battleArea = document.getElementById("battle-area");
+                if (battleArea) {
+                    battleArea.appendChild(choiceContainer);
+                } else {
+                    document.getElementById("coliseum-screen").appendChild(choiceContainer);
+                }
+
+                document.getElementById("btn-challenge-boss").onclick = () => {
+                    choiceContainer.remove();
+                    iniciarPeleaConfirmada(true);
+                };
+
+                document.getElementById("btn-skip-boss").onclick = () => {
+                    choiceContainer.remove();
+                    iniciarPeleaConfirmada(false);
+                };
+                return;
+            }
+        }
+        
+        iniciarPeleaConfirmada(false);
+    }
+
+    function iniciarPeleaConfirmada(quiereJefe) {
         let btnStart = document.getElementById("btn-start-battle");
         let btnLeave = document.getElementById("btn-leave-battle");
         let controls = document.getElementById("battle-controls");
@@ -174,7 +221,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ColiseumUI.agregarLog(`<br><span style="color:#ffcc00; font-weight:bold;">--- BATTLE START ---</span>`);
 
         ColiseumLogic.prepararJugador(window.miMascota);
-        ColiseumLogic.generarRivalProcedural(window.miMascota.level || 1);
+        ColiseumLogic.generarRivalProcedural(window.miMascota.level || 1, quiereJefe);
         
         const p = ColiseumLogic.player;
         const e = ColiseumLogic.enemy;
@@ -191,6 +238,9 @@ document.addEventListener("DOMContentLoaded", () => {
             else calidadEnemigo = prob > 0.7 ? "B" : (prob > 0.3 ? "C" : "D");
         }
 
+        if (e.esJefeDeLiga) {
+            ColiseumUI.agregarLog(`<span style="color:#d500f9; font-weight:bold; font-size:13px; text-shadow: 0 0 5px rgba(213,0,249,0.4);">⚔️ DETECTADO: ${ColiseumLogic.cName(e)} (Jefe de Liga)</span>`);
+        }
         ColiseumUI.agregarLog(`<span style="color:#b19cd9;">> 🧬 Escáner detecta Genética de ${ColiseumLogic.cName(e)}: Calidad [${calidadEnemigo}].</span>`);
         const ventajas = { "Biomutante": "Sintético", "Sintético": "Tóxico", "Tóxico": "Radiactivo", "Radiactivo": "Cibernético", "Cibernético": "Viral", "Viral": "Biomutante" };
         if (ventajas[p.element] === e.element) {
@@ -435,7 +485,15 @@ document.addEventListener("DOMContentLoaded", () => {
         ColiseumUI.agregarLog(`<br><span style="color:#ffcc00; font-size: 16px; font-weight: bold;">--- FIN DEL COMBATE ---</span>`);
         if (ColiseumLogic.player.hp > 0) {
             ColiseumUI.agregarLog(`<span style="color:#4CAF50">🏆 ¡VICTORIA!</span>`, "#ffd54f");
-            const xpGanada = 50 + (ColiseumLogic.player.adn.level * 10);
+            let xpGanada = 50 + (ColiseumLogic.player.adn.level * 10);
+            
+            const esJefe = ColiseumLogic.enemy && ColiseumLogic.enemy.esJefeDeLiga;
+            if (esJefe) {
+                const bonusXp = Math.round(xpGanada * 0.15);
+                xpGanada += bonusXp;
+                ColiseumUI.agregarLog(`<span style="color:#ffd700; font-weight:bold; text-shadow: 0 0 8px rgba(255,215,0,0.5);">🌟 ¡Bono de Jefe de Liga! Derrotaste al Jefe y obtuviste un +15% de XP adicional (+${bonusXp} XP).</span>`);
+            }
+
             ColiseumUI.agregarLog(`<span style="color:#aaa">Ganaste ${xpGanada} XP.</span>`);
             if (window.ganarXP) window.ganarXP(xpGanada);
         } else {
@@ -490,4 +548,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
+    // Exponer para testing
+    window.ColiseumManager.iniciarPelea = iniciarPelea;
+    window.ColiseumManager.iniciarPeleaConfirmada = iniciarPeleaConfirmada;
+    window.ColiseumManager.terminarCombate = terminarCombate;
 });
