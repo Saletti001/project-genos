@@ -49,7 +49,13 @@ window.ColiseumLogic = {
         if (this.modoCombate === "clon") {
             if (!window.miMascota) return;
             const mascota = window.miMascota;
-            const pElemento = (mascota.genes && mascota.genes.afinidad) ? mascota.genes.afinidad.dom : (mascota.element || "Normal");
+            
+            let pElemento = (mascota.genes && mascota.genes.afinidad) ? mascota.genes.afinidad.dom : (mascota.element || "Normal");
+            const overrideEl = this.clonElementoOverride || "mismo";
+            if (overrideEl !== "mismo") {
+                pElemento = overrideEl;
+            }
+            
             const pStats = {
                 hp: mascota.stats?.hp || 80,
                 atk: mascota.stats?.atk || 15,
@@ -61,17 +67,28 @@ window.ColiseumLogic = {
             let pGenB = (mascota.hidden_genes?.B?.id || "ninguno").toLowerCase(); 
             let pGenC = (mascota.hidden_genes?.C?.id || "ninguno").toLowerCase();
             
-            let pAtks = mascota.ataques || {};
-            let cloneAtaques = {
-                "ataque": this.obtenerAtaqueAleatorio(pElemento, "basicos"),
-                "especial": pAtks.atk_2 ? this.buscarAtaquePorNombre(pAtks.atk_2.nombre) : null,
-                "tactica": pAtks.atk_3 ? this.buscarAtaquePorNombre(pAtks.atk_3.nombre) : null,
-                "definitivo": pAtks.atk_4 ? this.buscarAtaquePorNombre(pAtks.atk_4.nombre) : null
-            };
+            let cloneAtaques = {};
+            if (overrideEl === "mismo") {
+                let pAtks = mascota.ataques || {};
+                cloneAtaques = {
+                    "ataque": this.obtenerAtaqueAleatorio(pElemento, "basicos"),
+                    "especial": pAtks.atk_2 ? this.buscarAtaquePorNombre(pAtks.atk_2.nombre) : null,
+                    "tactica": pAtks.atk_3 ? this.buscarAtaquePorNombre(pAtks.atk_3.nombre) : null,
+                    "definitivo": pAtks.atk_4 ? this.buscarAtaquePorNombre(pAtks.atk_4.nombre) : null
+                };
+            } else {
+                cloneAtaques = {
+                    "ataque": this.obtenerAtaqueAleatorio(pElemento, "basicos"),
+                    "especial": this.obtenerAtaqueAleatorio(pElemento, "especiales"),
+                    "tactica": this.obtenerAtaqueAleatorio(pElemento, "soportes"),
+                    "definitivo": this.obtenerAtaqueAleatorio(pElemento, "definitivos")
+                };
+            }
 
             const cloneAdn = JSON.parse(JSON.stringify(mascota));
             cloneAdn.id = mascota.id + "_clon";
             cloneAdn.name = "Clon de " + (mascota.name || "Geno");
+            cloneAdn.element = pElemento;
             cloneAdn.iftttRules = JSON.parse(JSON.stringify(mascota.iftttRules || []));
 
             this.enemy = {
@@ -111,10 +128,13 @@ window.ColiseumLogic = {
 
         if (this.modoCombate === "desafio") {
             const npc = this.npcDesafio || "cyborg";
+            const L = this.npcNivelOverride || 25;
+            const scale = L / 25;
+
             let npcName = "Cyborg Defensivo";
             let npcElement = "Cibernético";
             let npcRareza = "Épico";
-            let npcStats = { hp: 240, atk: 35, def: 45, spd: 25, luk: 20 };
+            let npcStats25 = { hp: 240, atk: 35, def: 45, spd: 25, luk: 20 };
             let npcAttacks = {};
             let npcRules = [];
             let npcGenB = "armadura_adaptativa";
@@ -123,8 +143,7 @@ window.ColiseumLogic = {
             if (npc === "cyborg") {
                 npcName = "Cyborg Defensivo";
                 npcElement = "Cibernético";
-                npcRareza = "Épico";
-                npcStats = { hp: 240, atk: 35, def: 45, spd: 25, luk: 20 };
+                npcStats25 = { hp: 240, atk: 35, def: 45, spd: 25, luk: 20 };
                 npcGenB = "armadura_adaptativa";
                 npcGenC = "nucleo_coraza";
                 npcAttacks = {
@@ -140,8 +159,7 @@ window.ColiseumLogic = {
             } else if (npc === "viral") {
                 npcName = "Infeccioso Viral";
                 npcElement = "Viral";
-                npcRareza = "Épico";
-                npcStats = { hp: 220, atk: 45, def: 30, spd: 40, luk: 20 };
+                npcStats25 = { hp: 220, atk: 45, def: 30, spd: 40, luk: 20 };
                 npcGenB = "vampirismo_genetico";
                 npcGenC = "esquiva_genetica";
                 npcAttacks = {
@@ -158,8 +176,7 @@ window.ColiseumLogic = {
             } else if (npc === "sintetico") {
                 npcName = "Rápido Sintético";
                 npcElement = "Sintético";
-                npcRareza = "Épico";
-                npcStats = { hp: 200, atk: 40, def: 25, spd: 55, luk: 35 };
+                npcStats25 = { hp: 200, atk: 40, def: 25, spd: 55, luk: 35 };
                 npcGenB = "velocidad_fantasma";
                 npcGenC = "reflejo_genetico";
                 npcAttacks = {
@@ -172,17 +189,77 @@ window.ColiseumLogic = {
                     { condition: "self_buffed_spd", action: "especial" },
                     { condition: "always", action: "tactica" }
                 ];
+            } else if (npc === "biomutante") {
+                npcName = "Titán Biomutante";
+                npcElement = "Biomutante";
+                npcStats25 = { hp: 260, atk: 30, def: 40, spd: 20, luk: 25 };
+                npcGenB = "postura_inquebrantable";
+                npcGenC = "resiliencia_ultima";
+                npcAttacks = {
+                    "ataque": this.buscarAtaquePorNombre("Pulso Vital"),
+                    "especial": this.buscarAtaquePorNombre("Espinas Óseas"),
+                    "tactica": this.buscarAtaquePorNombre("Espora Curativa"),
+                    "definitivo": this.buscarAtaquePorNombre("Ira de la Naturaleza")
+                };
+                npcRules = [
+                    { condition: "hp_under_50", action: "tactica" },
+                    { condition: "always", action: "definitivo" }
+                ];
+            } else if (npc === "radiactivo") {
+                npcName = "Radiador Mutado";
+                npcElement = "Radiactivo";
+                npcStats25 = { hp: 210, atk: 50, def: 25, spd: 30, luk: 20 };
+                npcGenB = "frenesi";
+                npcGenC = "vampirismo_genetico";
+                npcAttacks = {
+                    "ataque": this.buscarAtaquePorNombre("Proyectil Radiactivo"),
+                    "especial": this.buscarAtaquePorNombre("Explosión Nuclear"),
+                    "tactica": this.buscarAtaquePorNombre("Campo Radioactivo"),
+                    "definitivo": this.buscarAtaquePorNombre("Crítico Nuclear")
+                };
+                npcRules = [
+                    { condition: "turn_1", action: "tactica" },
+                    { condition: "always", action: "especial" }
+                ];
+            } else if (npc === "toxico") {
+                npcName = "Tóxico Mutante";
+                npcElement = "Tóxico";
+                npcStats25 = { hp: 230, atk: 30, def: 35, spd: 25, luk: 20 };
+                npcGenB = "piel_cristal";
+                npcGenC = "barrera_limite";
+                npcAttacks = {
+                    "ataque": this.buscarAtaquePorNombre("Colmillo Venenoso"),
+                    "especial": this.buscarAtaquePorNombre("Corrosión de Ácido"),
+                    "tactica": this.buscarAtaquePorNombre("Nube Tóxica"),
+                    "definitivo": this.buscarAtaquePorNombre("Plaga Final")
+                };
+                npcRules = [
+                    { condition: "rival_infected", action: "definitivo" },
+                    { condition: "always", action: "especial" }
+                ];
             }
+
+            const npcStats = {
+                hp: Math.max(10, Math.round(npcStats25.hp * scale)),
+                atk: Math.max(1, Math.round(npcStats25.atk * scale)),
+                def: Math.max(1, Math.round(npcStats25.def * scale)),
+                spd: Math.max(1, Math.round(npcStats25.spd * scale)),
+                luk: Math.max(1, Math.round(npcStats25.luk * scale))
+            };
 
             const npcAdn = {
                 id: "npc_" + npc + "_" + Date.now(),
                 name: npcName,
                 rarity: npcRareza,
                 element: npcElement,
-                level: 25,
+                level: L,
                 iftttRules: npcRules,
                 body_shape: "gota",
-                color: npc === "cyborg" ? "#ff8c00" : (npc === "viral" ? "#00acc1" : "#8A2BE2"),
+                color: npc === "cyborg" ? "#ff8c00" : 
+                       (npc === "viral" ? "#00acc1" : 
+                       (npc === "sintetico" ? "#8A2BE2" : 
+                       (npc === "biomutante" ? "#4CAF50" : 
+                       (npc === "radiactivo" ? "#E65100" : "#9C27B0")))),
                 eye_type: "cibernetico",
                 mouth_type: "colmillos",
                 wing_type: "ninguno",

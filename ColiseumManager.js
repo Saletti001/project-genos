@@ -8,9 +8,16 @@ window.ColiseumManager = {
 
         window.ColiseumLogic.modoCombate = modo;
         
+        if (modo === 'clon') {
+            const selectEl = document.getElementById('lobby-clone-element-select');
+            window.ColiseumLogic.clonElementoOverride = selectEl ? selectEl.value : 'mismo';
+        }
+        
         if (modo === 'desafio') {
             const selectEl = document.getElementById('lobby-npc-select');
             window.ColiseumLogic.npcDesafio = selectEl ? selectEl.value : 'cyborg';
+            const selectLvl = document.getElementById('lobby-npc-level-select');
+            window.ColiseumLogic.npcNivelOverride = selectLvl ? parseInt(selectLvl.value) : 25;
         }
 
         window.navegarA('coliseum-screen');

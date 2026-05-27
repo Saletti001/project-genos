@@ -427,6 +427,9 @@
                 .lobby-card.card-clon {
                     border: 2px solid #00acc1 !important;
                     box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.05), 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 12px rgba(0, 172, 193, 0.05);
+                    display: flex;
+                    flex-direction: column;
+                    gap: 10px;
                 }
                 .lobby-card.card-clon:hover {
                     transform: translateY(-3px);
@@ -450,16 +453,20 @@
                 .lobby-scroll-list::-webkit-scrollbar {
                     display: none !important;
                 }
-                #lobby-npc-select:focus {
+                #lobby-npc-select:focus, #lobby-npc-level-select:focus {
                     border-color: #ba55d3 !important;
                     box-shadow: 0 0 8px rgba(138, 43, 226, 0.5);
+                }
+                #lobby-clone-element-select:focus {
+                    border-color: #00e5ff !important;
+                    box-shadow: 0 0 8px rgba(0, 172, 193, 0.5);
                 }
             </style>
 
             <!-- Recuadro oscuro para respetar la interfaz de la app (mismo estilo que Salon Arcade) -->
             <div class="lobby-card-container">
                 <!-- Título idéntico en formato al de Arcade (Cyan sobre oscuro) -->
-                <h2 class="screen-title" style="color: #4dd0e1 !important; text-shadow: none !important; text-transform: uppercase !important; letter-spacing: 2px !important; margin: 0 0 10px 0 !important; font-weight: bold !important; text-align: center !important; font-size: 14px !important; border-bottom: 1px solid rgba(255,255,255,0.1) !important; padding-bottom: 10px !important; flex-shrink: 0 !important;">Modos de Combate</h2>
+                <h2 class="screen-title" style="color: #4dd0e1 !important; text-shadow: none !important; text-transform: uppercase !important; letter-spacing: 2px !important; margin: 0 0 10px 0 !important; font-weight: bold !important; text-align: center !important; font-size: 14px !important; border-bottom: 1px solid rgba(255,255,255,0.1) !important; padding-bottom: 10px !important; flex-shrink: 0 !important;">TERMINAL DE COMBATE</h2>
                 <p style="text-align: center; color: #cbd5e1 !important; font-size: 11px; margin: 0 0 15px 0 !important; padding: 0 10px; line-height: 1.4 !important; flex-shrink: 0 !important;">Selecciona la modalidad para entrar a la arena del Coliseo.</p>
 
                 <!-- Lista de tarjetas scrollable interna -->
@@ -483,16 +490,31 @@
                     </div>
 
                     <!-- CARD 2: CLON -->
-                    <div class="lobby-card card-clon" onclick="ColiseumManager.seleccionarModo('clon')">
-                        <div style="background: rgba(0, 172, 193, 0.1); border: 1px solid #00acc1; border-radius: 10px; width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; flex-shrink: 0;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00acc1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M4.5 16.5c-1.5 1.26-2.5 3.19-2.5 5.5h20c0-2.31-1-4.24-2.5-5.5"/>
-                                <path d="M12 2C9.24 2 7 4.24 7 7c0 2.04 1.22 3.79 3 4.54V14h4v-2.46c1.78-.75 3-2.5 3-4.54 0-2.76-2.24-5-5-5z"/>
-                            </svg>
+                    <div class="lobby-card card-clon">
+                        <div style="display: flex; align-items: center; gap: 12px; cursor: pointer; width: 100%;" onclick="ColiseumManager.seleccionarModo('clon')">
+                            <div style="background: rgba(0, 172, 193, 0.1); border: 1px solid #00acc1; border-radius: 10px; width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; flex-shrink: 0;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00acc1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4.5 16.5c-1.5 1.26-2.5 3.19-2.5 5.5h20c0-2.31-1-4.24-2.5-5.5"/>
+                                    <path d="M12 2C9.24 2 7 4.24 7 7c0 2.04 1.22 3.79 3 4.54V14h4v-2.46c1.78-.75 3-2.5 3-4.54 0-2.76-2.24-5-5-5z"/>
+                                </svg>
+                            </div>
+                            <div style="flex: 1;">
+                                <h3 style="color: #00e5ff; margin: 0 0 3px 0; font-size: 13px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Simulador de Clon</h3>
+                                <p style="color: #cbd5e1; margin: 0; font-size: 11px; line-height: 1.25;">Combate de práctica contra una réplica exacta de tu Geno. Evalúa tus Tácticas Automáticas en acción.</p>
+                            </div>
                         </div>
-                        <div style="flex: 1;">
-                            <h3 style="color: #00e5ff; margin: 0 0 3px 0; font-size: 13px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Simulador de Clon</h3>
-                            <p style="color: #cbd5e1; margin: 0; font-size: 11px; line-height: 1.25;">Combate de práctica contra una réplica exacta de tu Geno. Evalúa tus Tácticas Automáticas en acción.</p>
+                        
+                        <div style="border-top: 1px solid rgba(0, 172, 193, 0.2); padding-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%;">
+                            <span style="color: #00e5ff; font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Afinidad Elemento:</span>
+                            <select id="lobby-clone-element-select" style="background: #12222f; border: 1px solid #00acc1; color: #fff; border-radius: 6px; padding: 4px 6px; font-size: 11px; font-family: inherit; outline: none; cursor: pointer; flex: 1; max-width: 160px; transition: border-color 0.2s, box-shadow 0.2s;">
+                                <option value="mismo" selected>Mismo que tu Geno</option>
+                                <option value="Biomutante">Biomutante</option>
+                                <option value="Viral">Viral</option>
+                                <option value="Cibernético">Cibernético</option>
+                                <option value="Radiactivo">Radiactivo</option>
+                                <option value="Tóxico">Tóxico</option>
+                                <option value="Sintético">Sintético</option>
+                            </select>
                         </div>
                     </div>
 
@@ -514,11 +536,24 @@
                         </div>
                         
                         <div style="border-top: 1px solid rgba(138, 43, 226, 0.2); padding-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%;">
-                            <span style="color: #b85cff; font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Seleccionar Oponente:</span>
+                            <span style="color: #b85cff; font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Oponente:</span>
                             <select id="lobby-npc-select" style="background: #12222f; border: 1px solid #8A2BE2; color: #fff; border-radius: 6px; padding: 4px 6px; font-size: 11px; font-family: inherit; outline: none; cursor: pointer; flex: 1; max-width: 160px; transition: border-color 0.2s, box-shadow 0.2s;">
-                                <option value="cyborg">Cyborg Defensivo (Nv. 25)</option>
-                                <option value="viral">Infeccioso Viral (Nv. 25)</option>
-                                <option value="sintetico">Rápido Sintético (Nv. 25)</option>
+                                <option value="cyborg" selected>Cyborg Defensivo (Cibernético)</option>
+                                <option value="viral">Infeccioso Viral (Viral)</option>
+                                <option value="sintetico">Rápido Sintético (Sintético)</option>
+                                <option value="biomutante">Titán Biomutante (Biomutante)</option>
+                                <option value="radiactivo">Radiador Mutado (Radiactivo)</option>
+                                <option value="toxico">Tóxico Mutante (Tóxico)</option>
+                            </select>
+                        </div>
+
+                        <div style="border-top: 1px solid rgba(138, 43, 226, 0.1); padding-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 8px; width: 100%;">
+                            <span style="color: #b85cff; font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Dificultad:</span>
+                            <select id="lobby-npc-level-select" style="background: #12222f; border: 1px solid #8A2BE2; color: #fff; border-radius: 6px; padding: 4px 6px; font-size: 11px; font-family: inherit; outline: none; cursor: pointer; flex: 1; max-width: 160px; transition: border-color 0.2s, box-shadow 0.2s;">
+                                <option value="10">Nivel 10 (Fácil)</option>
+                                <option value="25" selected>Nivel 25 (Normal)</option>
+                                <option value="40">Nivel 40 (Difícil)</option>
+                                <option value="50">Nivel 50 (Élite)</option>
                             </select>
                         </div>
                     </div>
