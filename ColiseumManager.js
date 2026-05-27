@@ -28,6 +28,93 @@ window.ColiseumManager = {
 document.addEventListener("DOMContentLoaded", () => {
     ColiseumUI.inyectarCSS();
 
+    function initColiseumCustomSelects() {
+        const selects = [
+            { id: 'lobby-clone-element-select', theme: 'cyan-theme' },
+            { id: 'lobby-npc-select', theme: 'purple-theme' },
+            { id: 'lobby-npc-level-select', theme: 'purple-theme' }
+        ];
+
+        selects.forEach(({ id, theme }) => {
+            const selectEl = document.getElementById(id);
+            if (!selectEl) return;
+
+            // Evitar duplicaciones
+            if (selectEl.nextSibling && selectEl.nextSibling.classList && selectEl.nextSibling.classList.contains('coliseum-select-wrapper')) {
+                return;
+            }
+
+            const wrapper = document.createElement('div');
+            wrapper.className = `coliseum-select-wrapper ${theme}`;
+
+            const trigger = document.createElement('div');
+            trigger.className = 'coliseum-select-trigger';
+
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'coliseum-select-options';
+
+            Array.from(selectEl.options).forEach((opt, index) => {
+                const customOpt = document.createElement('div');
+                customOpt.className = 'coliseum-option' + (opt.selected ? ' selected' : '');
+                customOpt.innerText = opt.text;
+
+                customOpt.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    selectEl.selectedIndex = index;
+                    trigger.innerText = opt.text;
+                    
+                    Array.from(optionsContainer.children).forEach(c => c.classList.remove('selected'));
+                    customOpt.classList.add('selected');
+
+                    trigger.classList.remove('open');
+                    optionsContainer.classList.remove('open');
+
+                    selectEl.dispatchEvent(new Event('change'));
+                });
+
+                optionsContainer.appendChild(customOpt);
+            });
+
+            const selectedOpt = selectEl.options[selectEl.selectedIndex];
+            trigger.innerText = selectedOpt ? selectedOpt.text : '';
+
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                // Cerrar todos los demás selectores del coliseo
+                document.querySelectorAll('.coliseum-select-trigger').forEach(otherTrigger => {
+                    if (otherTrigger !== trigger) {
+                        otherTrigger.classList.remove('open');
+                        const otherContainer = otherTrigger.nextElementSibling;
+                        if (otherContainer) otherContainer.classList.remove('open');
+                    }
+                });
+
+                trigger.classList.toggle('open');
+                optionsContainer.classList.toggle('open');
+            });
+
+            wrapper.appendChild(trigger);
+            wrapper.appendChild(optionsContainer);
+            selectEl.parentNode.insertBefore(wrapper, selectEl.nextSibling);
+            selectEl.style.setProperty('display', 'none', 'important');
+        });
+
+        // Cerrar al hacer clic fuera
+        document.addEventListener('click', (e) => {
+            document.querySelectorAll('.coliseum-select-trigger').forEach(trigger => {
+                const wrapper = trigger.parentNode;
+                if (wrapper && !wrapper.contains(e.target)) {
+                    trigger.classList.remove('open');
+                    const options = trigger.nextElementSibling;
+                    if (options) options.classList.remove('open');
+                }
+            });
+        });
+    }
+
+    initColiseumCustomSelects();
+
     window.iniciarColiseo = function() {
         if (!window.miMascota || window.miMascota.id === "temp") {
             alert("No tienes un Geno activo para combatir.");
