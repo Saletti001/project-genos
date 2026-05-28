@@ -24,34 +24,39 @@
         
         <div id="room-area" class="app-screen">
             <div id="top-hud">
-                <div style="display: flex; justify-content: space-between; align-items: center; background-color: #1a1a2e; border: 2px solid #2a2a4a; border-radius: 25px; padding: 6px 16px; width: 100%; box-sizing: border-box; margin-bottom: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.3);">
-                    
-                    <div id="btn-abrir-empaquetador" style="display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 2px 8px; border-radius: 8px; transition: 0.2s;" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)'" onmouseout="this.style.backgroundColor='transparent'">
-                        <span id="hud-ev-icon-container" style="display: inline-block; width: 1.4em; height: 1.4em; display: flex; align-items: center;"></span>
-                        <span id="vital-essence-amount" style="color: white; font-weight: bold; font-family: sans-serif; font-size: 13.5px; letter-spacing: 0.5px;">0</span>
+                <div style="display: flex; flex-direction: column; background-color: #1a1a2e; border: 2px solid #2a2a4a; border-radius: 18px; padding: 10px 16px; width: 100%; box-sizing: border-box; margin-bottom: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.4); gap: 8px;">
+                    <!-- Fila de Recursos: EV y POL -->
+                    <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                        <div id="btn-abrir-empaquetador" style="display: flex; align-items: center; gap: 6px; cursor: pointer; padding: 2px 8px; border-radius: 8px; transition: 0.2s;" onmouseover="this.style.backgroundColor='rgba(255,255,255,0.1)'" onmouseout="this.style.backgroundColor='transparent'">
+                            <span id="hud-ev-icon-container" style="display: inline-block; width: 1.4em; height: 1.4em; display: flex; align-items: center;"></span>
+                            <span id="vital-essence-amount" style="color: white; font-weight: bold; font-family: sans-serif; font-size: 13.5px; letter-spacing: 0.5px;">0</span>
+                        </div>
+
+                        <div style="width: 2px; height: 18px; background-color: rgba(255, 255, 255, 0.1); border-radius: 2px;"></div>
+
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <span style="display: flex; align-items: center;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#8A2BE2" stroke="#8A2BE2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon></svg>
+                            </span> 
+                            <span id="pol-amount" style="color: #e9d5ff; font-weight: bold; font-family: sans-serif; font-size: 13.5px;">0.0 POL | 🦊 Vincular</span>
+                        </div>
                     </div>
 
-                    <div style="width: 2px; height: 18px; background-color: rgba(255, 255, 255, 0.1); border-radius: 2px;"></div>
+                    <!-- Divisor sutil -->
+                    <div style="width: 100%; height: 1px; background-color: rgba(255, 255, 255, 0.08);"></div>
 
-                    <div style="display: flex; align-items: center; gap: 6px;">
-                        <span style="display: flex; align-items: center;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="#8A2BE2" stroke="#8A2BE2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2"></polygon></svg>
-                        </span> 
-                        <span id="pol-amount" style="color: #e9d5ff; font-weight: bold; font-family: sans-serif; font-size: 13.5px;">0.0 POL | 🦊 Vincular</span>
-                    </div>
-                </div>
-
-                <!-- Barra de Energía Principal -->
-                <div id="hud-energy-container" style="display: flex; flex-direction: column; width: 100%; box-sizing: border-box; padding: 0 5px; margin-top: -4px; margin-bottom: 12px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                        <span style="color: #00e5ff; font-family: monospace; font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="#00e5ff" stroke="#00e5ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                            Energía Nexo
-                        </span>
-                        <span id="hud-energy-text" style="color: #fff; font-family: monospace; font-size: 10px; font-weight: bold;">100 / 100</span>
-                    </div>
-                    <div style="width: 100%; height: 6px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(77, 208, 225, 0.3); border-radius: 3px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);">
-                        <div id="hud-energy-fill" style="width: 100%; height: 100%; background: linear-gradient(90deg, #00d2ff, #4dd0e1); box-shadow: 0 0 8px rgba(77,208,225,0.7); transition: width 0.3s ease;"></div>
+                    <!-- Barra de Energía Nexo -->
+                    <div id="hud-energy-container" style="display: flex; flex-direction: column; width: 100%; box-sizing: border-box;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                            <span style="color: #00e5ff; font-family: monospace; font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="#00e5ff" stroke="#00e5ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                                Energía Nexo
+                            </span>
+                            <span id="hud-energy-text" style="color: #fff; font-family: monospace; font-size: 10px; font-weight: bold;">100 / 100</span>
+                        </div>
+                        <div style="width: 100%; height: 6px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(77, 208, 225, 0.3); border-radius: 3px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);">
+                            <div id="hud-energy-fill" style="width: 100%; height: 100%; background: linear-gradient(90deg, #00d2ff, #4dd0e1); box-shadow: 0 0 8px rgba(77,208,225,0.7); transition: width 0.3s ease;"></div>
+                        </div>
                     </div>
                 </div>
 

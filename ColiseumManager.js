@@ -303,11 +303,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const notificationBanner = document.getElementById("coliseum-battle-notification");
         if (notificationBanner) {
-            if (ColiseumLogic.trainingSupportActive) {
-                notificationBanner.classList.remove("hidden");
-            } else {
-                notificationBanner.classList.add("hidden");
-            }
+            notificationBanner.classList.add("hidden");
         }
 
         if (ColiseumLogic.trainingSupportActive) {
