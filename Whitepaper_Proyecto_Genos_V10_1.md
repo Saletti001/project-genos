@@ -189,6 +189,30 @@ La mochila del jugador está limitada físicamente para fomentar la gestión est
 - **Peg al Dólar (Precios Estables):** Todos los precios del juego Web3 se definen con base en el valor de cambio del dólar estadounidense (USD). Si el valor de $POL fluctúa, los costes en tokens se recalibran de forma automática para mantener el coste constante en dólares. Esto garantiza que las microtransacciones sigan siendo accesibles (permitiendo realizar múltiples acciones con un presupuesto de $10 USD).
 - **Becas (Scholarships) Automatizadas:** La PWA permite a los propietarios de Genos NFT alquilar sus criaturas a otros jugadores. Un smart contract gestiona de forma automática la división de ingresos (**70% para el propietario / 30% para el jugador**) y establece un periodo de prueba de 7 días cancelable en cualquier momento, protegiendo a ambas partes sin costes de intermediación humana.
 
+### 5.4 Sistema de Energía Nexo y Fatiga (Resistencia) del Geno
+
+Para estabilizar la velocidad de generación de activos, evitar el farmeo abusivo por parte de cuentas automatizadas (bots) e incentivar la coleccionabilidad de criaturas (evitando que un solo Geno sea sobreexplotado), se introduce un doble limitador físico de acciones:
+
+#### 1. Energía Nexo (Nivel de Jugador)
+Es una barra de energía global asociada a la cuenta del jugador (máximo 100 puntos). Cada acción activa del juego consume una cantidad específica de energía:
+- **Combates en el Coliseo (Liga Asíncrona):** consume **10 energía** (principal fuente de EV competitiva).
+- **Partida de Torre PvE (una oleada):** consume **5 energía** (recompensa moderada).
+- **Partida en el Arcade (Lluvia de Manzanas):** consume **5 energía** (actividad casual).
+- **Inscripción en Torneo Temático:** consume **20 energía** (alto coste, alta recompensa).
+- **Acciones Pasivas (Laboratorio, Crianza, Dojo, Tienda):** **Sin coste de energía** (no limita el juego estratégico o comercial).
+
+*Tasa de Recuperación:* Se recupera de forma pasiva a razón de **1 energía cada 12 minutos** (5 de energía por hora), con un cap máximo de 100 que actúa como limitador de acumulación.
+
+#### 2. Fatiga y Resistencia (Por Geno)
+Cada Geno cuenta con su propia barra individual de resistencia de **0 a 100 puntos**. Combatir gasta la resistencia física de la criatura:
+- **Combate en el Coliseo:** reduce **25 resistencia** del Geno.
+- **Batalla en la Torre PvE:** reduce **15 resistencia** del Geno.
+- **Estado de Descanso:** Cuando la resistencia de un Geno llega a 0, entra en estado de descanso y no puede ser seleccionado para combatir hasta que recupere energía.
+- **Tasa de Recuperación:** Recupera **25 de resistencia por hora** de descanso completo (requiere 4 horas para regenerarse tras agotarse por completo).
+- **Cuidado Diario Boost (+20%):** Acariciar o alimentar al Geno en su pedestal (cuidado diario que otorga +10 XP una vez al día) activa un multiplicador de bienestar que acelera la velocidad de recuperación de resistencia en un **+20%** durante el día (recuperando **30 de resistencia por hora**).
+
+*Efecto de Colección:* Un solo Geno puede hacer un máximo de 4 combates antes de requerir descanso. Para aprovechar al máximo las 20 acciones posibles con 100 de energía en el Coliseo, un jugador competitivo requerirá una rotación de al menos **3 a 5 Genos activos** en su cuenta. Esto incentiva de forma natural la crianza, la adquisición de nuevos especímenes en la Plaza de Comercio y la oferta de Scholarships.
+
 ---
 
 ## 6. Hoja de Ruta y Estado de Implementación V10.1
@@ -221,6 +245,7 @@ El estado actual del proyecto se encuentra estructurado en base a las siguientes
 - [x] Sistema de 4 slots de ataque implementado en la lógica de combate.
 - [x] Lógica de Matchmaking estricto y aparición de Jefes de Liga (15% de probabilidad) con bono de +15% XP.
 - [x] Implementación de la interfaz del **Laboratorio de Implantes** para equipar/desequipar Módulos de Técnica (MT) y cosméticos.
+- [x] Implementación de la barra de Energía Nexo (100 Max) y barra de Resistencia por Geno (100 Max) con recuperación pasiva, offline y aceleración (+20%) por cuidado diario.
 
 ### Fase 6: Expansión Web3 y Becas (PLANIFICADA)
 - [ ] Despliegue de contratos inteligentes de NFTs de Genos en la red Polygon.

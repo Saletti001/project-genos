@@ -310,6 +310,27 @@ document.addEventListener("DOMContentLoaded", () => {
                 contenedorGenoMain.classList.remove("happy-jump");
                 contenedorGenoMain.classList.add("geno-idle");
             }, 300);
+
+            // Cuidado Diario
+            const hoy = new Date().toDateString();
+            if (window.miMascota.ultimoCuidadoDiario !== hoy) {
+                window.miMascota.ultimoCuidadoDiario = hoy;
+                if (window.misGenos) {
+                    const idx = window.misGenos.findIndex(g => String(g.id) === String(window.miMascota.id));
+                    if (idx !== -1) {
+                        window.misGenos[idx].ultimoCuidadoDiario = hoy;
+                    }
+                }
+                if (window.ganarXP) {
+                    window.ganarXP(10);
+                }
+                alert(`¡Has acariciado a ${window.miMascota.name || 'tu Geno'}! Cuidado diario activado: +10 XP y +20% de velocidad de recuperación de resistencia para hoy.`);
+                if (window.NexoEnergyManager) {
+                    window.NexoEnergyManager.actualizarUI();
+                }
+                if (window.guardarProgreso) window.guardarProgreso();
+            }
+
             const heart = document.createElement("div");
             heart.className = "heart-particle";
             heart.innerText = "❤️";
@@ -417,14 +438,27 @@ document.addEventListener("DOMContentLoaded", () => {
             // El viewBox artificial (-20 0 200 160) se queda SÓLO en la tarjeta pequeña para que cuadre en la grilla
             svg = svg.replace(/<svg[^>]*>/, '<svg width="100%" height="100%" viewBox="-20 0 200 160" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="overflow: visible;">');
             
+            const resVal = Math.floor(geno.resistencia !== undefined ? geno.resistencia : 100);
+            const resColor = resVal > 50 ? "#4CAF50" : (resVal > 20 ? "#ff9800" : "#ff3333");
+            const esAgotado = resVal === 0;
+            const labelDescansando = esAgotado ? ' <span style="color:#ff3333; font-size:10px;">(DESCANSANDO)</span>' : '';
+
             card.innerHTML = `
                 <div style="width: 100px; height: 100px; color: ${pColor}; display: flex; justify-content: center; align-items: center;">${svg}</div>
-                <span style="color: white; font-weight: bold; font-size: 12px; margin-top: 10px; text-align: center;">${geno.name || 'Sujeto'}</span>
+                <span style="color: white; font-weight: bold; font-size: 12px; margin-top: 10px; text-align: center;">${geno.name || 'Sujeto'}${labelDescansando}</span>
+                <div style="width: 80px; height: 4px; background: rgba(0, 0, 0, 0.4); border-radius: 2px; overflow: hidden; margin-top: 5px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="width: ${resVal}%; height: 100%; background: ${resColor}; transition: width 0.3s;"></div>
+                </div>
+                <span style="color: #aaa; font-size: 9px; margin-top: 2px;">Res: ${resVal}/100</span>
             `;
             
             // ✨ FIX MAESTRO FINAL: Se elimina por completo el .replace() destructivo
             // Dejamos que el motor gráfico inyecte el SVG puro en el pedestal, tal y como lo hace el F5
             card.onclick = () => {
+                if (resVal === 0) {
+                    alert(`¡${geno.name || 'Este Geno'} está descansando! Su resistencia es 0. Espera a que recupere algo de resistencia antes de seleccionarlo.`);
+                    return;
+                }
                 window.miMascota = geno;
                 if (pedestal) {
                     const svgPedestal = typeof generarSvgGeno === 'function' ? generarSvgGeno(geno) : '';

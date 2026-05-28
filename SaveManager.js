@@ -24,6 +24,11 @@ window.cargarProgreso = function() {
         if (data.inventarioItems) window.miInventario.items = data.inventarioItems;
         if (data.esencia !== undefined) window.miInventario.vitalEssence = data.esencia;
 
+        if (data.nexoEnergy !== undefined) window.nexoEnergy = data.nexoEnergy;
+        if (window.NexoEnergyManager && data.lastActiveTime) {
+            window.NexoEnergyManager.aplicarRecuperacionPasiva(data.lastActiveTime);
+        }
+
         document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => {
                 if (window.misGenos) {
@@ -79,7 +84,9 @@ window.guardarLocalSilencioso = function() {
         maxGenoSlots: window.maxGenoSlots || 6,
         esencia: window.miInventario ? (window.miInventario.vitalEssence || 0) : 0,
         pol: window.miWallet ? window.miWallet.pol : 10.0,
-        inventarioItems: window.miInventario ? (window.miInventario.items || window.miInventario.slots || []) : []
+        inventarioItems: window.miInventario ? (window.miInventario.items || window.miInventario.slots || []) : [],
+        nexoEnergy: window.nexoEnergy !== undefined ? window.nexoEnergy : 100,
+        lastActiveTime: Date.now()
     };
     localStorage.setItem(SAVE_KEY, JSON.stringify(dataToSave));
 };
@@ -93,6 +100,9 @@ window.guardarProgreso = function() {
 window.cargarProgreso();
 
 document.addEventListener("DOMContentLoaded", () => {
+    if (window.NexoEnergyManager) {
+        window.NexoEnergyManager.iniciar();
+    }
     setInterval(() => {
         window.guardarLocalSilencioso();
     }, 5000);

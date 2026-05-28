@@ -77,6 +77,13 @@ class ArcadeManager {
     }
 
     launchMinigame(gameName) {
+        if (window.nexoEnergy < 5) {
+            alert("No tienes suficiente Energía Nexo para jugar en el Arcade. Se requieren 5 de Energía Nexo (Tienes: " + Math.floor(window.nexoEnergy || 100) + ").");
+            return;
+        }
+        if (window.NexoEnergyManager) {
+            window.NexoEnergyManager.descontarEnergia(5);
+        }
         this.menuScreen.classList.add("hidden");
         this.gameScreen.classList.remove("hidden");
         if (gameName === 'catch' && window.minigameCatch) {

@@ -328,6 +328,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         
         if (typeof window.guardarJuego === 'function') window.guardarJuego();
+        if (window.NexoEnergyManager && typeof window.NexoEnergyManager.actualizarUI === 'function') {
+            window.NexoEnergyManager.actualizarUI();
+        }
     };
 
     window.ganarXP = function(cantidad) {

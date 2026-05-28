@@ -211,6 +211,16 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     function iniciarPelea() {
+        if (window.nexoEnergy < 10) {
+            alert("No tienes suficiente Energía Nexo. Se requieren 10 de Energía Nexo para combatir (Tienes: " + Math.floor(window.nexoEnergy || 100) + ").");
+            return;
+        }
+        const activeGenoRes = window.miMascota ? (window.miMascota.resistencia !== undefined ? window.miMascota.resistencia : 100) : 100;
+        if (activeGenoRes < 25) {
+            alert("Tu Geno activo no tiene suficiente Resistencia. Se requieren 25 de Resistencia para combatir (Tiene: " + Math.floor(activeGenoRes) + ").");
+            return;
+        }
+
         let oldChoice = document.getElementById("boss-choice-container");
         if (oldChoice) oldChoice.remove();
 
@@ -258,6 +268,21 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function iniciarPeleaConfirmada(quiereJefe) {
+        if (window.nexoEnergy < 10) {
+            alert("No tienes suficiente Energía Nexo para combatir.");
+            return;
+        }
+        const activeGenoRes = window.miMascota ? (window.miMascota.resistencia !== undefined ? window.miMascota.resistencia : 100) : 100;
+        if (activeGenoRes < 25) {
+            alert("Tu Geno activo no tiene suficiente Resistencia.");
+            return;
+        }
+
+        if (window.NexoEnergyManager) {
+            window.NexoEnergyManager.descontarEnergia(10);
+            window.NexoEnergyManager.descontarResistenciaGeno(window.miMascota, 25);
+        }
+
         let btnStart = document.getElementById("btn-start-battle");
         let btnLeave = document.getElementById("btn-leave-battle");
         let controls = document.getElementById("battle-controls");
