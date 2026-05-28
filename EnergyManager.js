@@ -15,6 +15,37 @@ window.NexoEnergyManager = {
             this.recuperar(10); // Recuperar en base a 10 segundos transcurridos
         }, 10000);
 
+        // Click en la barra de energía para mostrar info
+        const hudEnergy = document.getElementById("hud-energy-container");
+        const infoModal = document.getElementById("hud-energy-info-modal");
+        const closeBtn = document.getElementById("close-energy-info");
+        const confirmBtn = document.getElementById("btn-close-energy-info-confirm");
+
+        if (hudEnergy && infoModal) {
+            hudEnergy.style.cursor = "pointer";
+            hudEnergy.addEventListener("click", () => {
+                infoModal.classList.remove("hidden");
+                if (window.Sonidos) window.Sonidos.play("click");
+            });
+        }
+
+        if (infoModal) {
+            if (closeBtn) {
+                closeBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    infoModal.classList.add("hidden");
+                    if (window.Sonidos) window.Sonidos.play("click");
+                });
+            }
+            if (confirmBtn) {
+                confirmBtn.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    infoModal.classList.add("hidden");
+                    if (window.Sonidos) window.Sonidos.play("click");
+                });
+            }
+        }
+
         this.actualizarUI();
     },
 
