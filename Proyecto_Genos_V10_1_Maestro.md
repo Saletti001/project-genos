@@ -136,9 +136,21 @@ Fase 2 — Economia Basica y Supervivencia ✅ Completada
 
 [V10.1 ACTUALIZADO] Inventario Bolsillos Rotos: 10 slots gratuitos. Expansion hasta 40 con $POL. Limite estricto por slot: 99 basicos / 20 consumibles / 1 equipo. El jugador debe descartar o consumir para liberar espacio.
 
-Modo Arcade Lluvia de Manzanas: 30 segundos, ratio 5:1. Limite diario de partidas.
+Modo Arcade Lluvia de Manzanas: 30 segundos, ratio 5:1. Consume 5 de Energía Nexo.
 
-Esencia Vital: off-chain. No vendible por $POL. Sin precio externo hasta Fase 6.
+Esencia Vital: off-chain. No vendible por $POL. Sin precio externo hasta Fase 6. Fuentes: victorias, minijuegos y cuidado diario pasivo.
+
+[V10.1 NUEVO] Sistema de Energía Nexo y Resistencia:
+- Energía Nexo (Cuenta global): Max 100. Consume 5 en Arcade y 10 en Coliseo. Recupera 1 cada 12 minutos (5/hora).
+- Resistencia del Geno (Individual): Max 100. Consume 25 en Coliseo. Recupera 25/hora (30/hora con Cuidado Diario).
+- Recuperación Offline: Calcula la regeneración de forma retrospectiva al reconectarse.
+
+[V10.1 NUEVO] Sistema de Cuidado (Estilo Pou/Tamagotchi):
+- Barras de Necesidades: Hambre (vacía en 12h), Diversión (vacía en 16h), Higiene (vacía en 24h) y Resistencia.
+- Cuidado Activo vs Reserva: Los Genos en reserva reducen sus necesidades 10x más despacio.
+- Bazar Consumibles: Ración Automática (🍱 costo: 2.00 EV, alimenta y congela Hambre de reservas por 24h) y Ducha de Plasma (🧼 costo: 1.00 EV, limpia Higiene al 100% de todos).
+- Interacciones y Cosecha: Caricias añaden Amistad. Manchas de suciedad en pedestal se limpian frotando (mouseenter/click). Moneda dorada flotante aparece si evAcumulada >= 0.10 para recolectar EV pasiva.
+- Impactos en Combate: "Estado Óptimo" (necesidades >80%) otorga +25 LUK (+5% crítico) y genera EV. "Huelga" (necesidades <20%) impide que el Geno luche en el Coliseo.
 
 Fase 3 — El Santuario y el Reactor Genetico
 
@@ -2530,6 +2542,31 @@ DECISION CRITICA: La EV nunca se convierte en $POL directamente. Error que hundi
 
 
 
+9.3 El Sistema de Necesidades Basicas y Energia (Tamagotchi/Pou)
+
+Para evitar la inflacion de Esencia Vital (EV), el juego integra barreras de actividad y cuidado:
+
+1. Barreras de Actividad (Gasto de Energia):
+- Jugar en el Arcade consume 5 de Energia Nexo (cuenta global).
+- Pelear en el Coliseo consume 10 de Energia Nexo y 25 de Resistencia del Geno activo.
+- Si un Geno tiene 0 de Resistencia, entra en estado (DESCANSANDO) y no puede ser seleccionado.
+
+2. Cuidado Diario e Incentivos:
+- Acariciar una vez al dia al Geno Compañero otorga +10 XP y un boost de +20% en la recuperacion de Resistencia para el resto del dia.
+- El "Estado Optimo" (todas las necesidades > 80%) otorga un bonus de +25 LUK (+5% probabilidad de golpe critico) en el Coliseo y genera EV pasiva en el pedestal.
+- El estado "Huelga" (cualquier necesidad < 20%) inhabilita al Geno para combatir.
+
+3. Sumideros de EV (Consumibles de Tienda):
+- Racion Automatica (🍱 - 2.00 EV): Alimenta y congela el Hambre de todos los Genos en reserva por 24 horas.
+- Ducha de Plasma (🧼 - 1.00 EV): Limpia a todo tu inventario al 100% de Higiene y otorga +5 de Amistad de un solo clic.
+
+4. Sinergias Geneticas:
+- Gen Reactor Instintivo: Reduce la velocidad de consumo de Hambre en un 30%.
+- Gen Conexion Empatica: Si hay 2 o mas Genos con este gen en el Laboratorio, su barra de Diversion nunca decae.
+- Gen Esencia Concentrada: Duplica la EV pasiva acumulada cuando el Geno esta feliz.
+
+
+
 9.2 Las 4 Formas de Ganar $POL Real
 
 Breeder: cria Genos S-D con genes ocultos valiosos. Los vende en Plaza de Comercio por $POL.
@@ -2888,9 +2925,15 @@ Capitulo 2 — Economia de Supervivencia
 
 Mochila e Inventario: slots, limites estrictos (99/20/1) y gestion del espacio.
 
-Modo Arcade: Lluvia de Manzanas. Ratio 5:1.
+Modo Arcade: Lluvia de Manzanas. Consume 5 de Energia Nexo.
 
-Esencia Vital y diferencia con el token $POL.
+Esencia Vital, diferencia con $POL y Cosecha de EV pasiva (Moneda Flotante).
+
+El Sistema de Energia Nexo y Resistencia Individual.
+
+Cuidado Diario (Estilo Pou): Hambre, Diversion, Higiene y Amistad. Cuidado en reserva.
+
+Consumibles del Bazar: Racion Automatica (🍱) y Ducha de Plasma (🧼).
 
 La Plaza de Comercio: comprar y vender Genos. Comision 2-5%.
 
