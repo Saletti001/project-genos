@@ -24,9 +24,13 @@ window.NexoEnergyManager = {
             window.nexoEnergy = 100;
         }
 
-        // Loop de recuperación activa cada 10 segundos
+        // Loop de recuperación activa cada 10 segundos (calculando delta real)
+        let ultimaVezTick = Date.now();
         setInterval(() => {
-            this.recuperar(10); // Recuperar en base a 10 segundos transcurridos
+            const ahora = Date.now();
+            const deltaSegundos = Math.max(0, (ahora - ultimaVezTick) / 1000);
+            ultimaVezTick = ahora;
+            this.recuperar(deltaSegundos);
         }, 10000);
 
         // Click en la barra de energía para mostrar info
@@ -46,14 +50,18 @@ window.NexoEnergyManager = {
         if (infoModal) {
             if (closeBtn) {
                 closeBtn.addEventListener("click", (e) => {
-                    e.stopPropagation();
+                    if (e && typeof e.stopPropagation === 'function') {
+                        e.stopPropagation();
+                    }
                     infoModal.classList.add("hidden");
                     if (window.Sonidos) window.Sonidos.play("click");
                 });
             }
             if (confirmBtn) {
                 confirmBtn.addEventListener("click", (e) => {
-                    e.stopPropagation();
+                    if (e && typeof e.stopPropagation === 'function') {
+                        e.stopPropagation();
+                    }
                     infoModal.classList.add("hidden");
                     if (window.Sonidos) window.Sonidos.play("click");
                 });

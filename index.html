@@ -397,29 +397,29 @@
                 <div style="background: rgba(0,0,0,0.4); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
                     <p id="arcade-info-desc" style="color: #cbd5e1; font-size: 13px; line-height: 1.5; margin: 0;">Descripción del juego.</p>
                 </div>
-                <button id="btn-play-from-info" style="background: linear-gradient(90deg, #4dd0e1, #8A2BE2); color: #fff; font-weight: bold; border: none; padding: 12px; border-radius: 10px; width: 100%; cursor: pointer; text-transform: uppercase; margin-top: 20px; display: none;">Jugar Ahora 🕹️</button>
+                <button id="btn-play-from-info" style="background: linear-gradient(90deg, #4dd0e1, #8A2BE2); color: #fff; font-weight: bold; border: none; padding: 12px; border-radius: 10px; width: 100%; cursor: pointer; text-transform: uppercase; margin-top: 20px; display: none;">Jugar Ahora</button>
             </div>
         </div>
 
         <!-- Modal de Información de Energía Nexo -->
         <div id="hud-energy-info-modal" class="hidden" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 26, 46, 0.85); z-index: 3000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
             <div class="modal-content" style="background: linear-gradient(180deg, #0d1e2d 0%, #07111c 100%); border: 2px solid #00e5ff; box-shadow: 0 0 25px rgba(0, 229, 255, 0.4), inset 0 0 15px rgba(0, 229, 255, 0.1); width: 85%; max-width: 320px; border-radius: 16px; padding: 25px 20px; box-sizing: border-box; position: relative; max-height: 85vh; display: flex; flex-direction: column;">
-                <button id="close-energy-info" style="position: absolute; top: 12px; right: 15px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #ff4b4b; padding: 0; transition: transform 0.2s;"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                <button id="close-energy-info" style="position: absolute; top: 12px; right: 15px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #ff4b4b; padding: 10px; z-index: 10; transition: transform 0.2s;"><svg style="pointer-events: none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
                 
-                <div style="font-size: 38px; text-align: center; margin-bottom: 5px; filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.5));">⚡</div>
+                <div style="display: flex; justify-content: center; margin-bottom: 5px;"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.6));"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></div>
                 <h3 style="color: #00e5ff; text-transform: uppercase; margin: 0 0 15px 0; font-size: 15px; letter-spacing: 1.5px; text-align: center; font-weight: bold;">Energía Nexo</h3>
                 
                 <div class="help-scroll-content" style="flex-grow: 1; overflow-y: auto; background: rgba(0,0,0,0.5); padding: 12px 14px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); font-size: 11px; line-height: 1.5; color: #cbd5e1; text-align: left; scrollbar-width: none; -ms-overflow-style: none;">
                     <div class="help-section-title" style="color: #00e5ff; font-weight: bold; text-transform: uppercase; font-size: 10px; margin-top: 0; margin-bottom: 4px;">¿Qué es la Energía Nexo?</div>
                     Es una energía global de tu cuenta que limita el número de acciones que puedes realizar diariamente para mantener la economía equilibrada y evitar la automatización.
                     
-                    <div class="help-section-title" style="color: #00e5ff; font-weight: bold; text-transform: uppercase; font-size: 10px; margin-top: 12px; margin-bottom: 4px;">🎮 Consumo de Energía</div>
+                    <div class="help-section-title" style="color: #00e5ff; font-weight: bold; text-transform: uppercase; font-size: 10px; margin-top: 12px; margin-bottom: 4px; display: inline-flex; align-items: center; gap: 5px;"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="3"></rect><path d="M6 12h4M8 10v4M15 11h.01M18 13h.01"></path></svg> Consumo de Energía</div>
                     <ul style="margin: 4px 0; padding-left: 15px;">
-                        <li><strong>Combates en el Coliseo:</strong> consume <strong>10 puntos</strong> por batalla (además de 25 de resistencia de tu Geno).</li>
+                        <li><strong>Combates en el Coliseo:</strong> consume <strong>10 puntos</strong> por batalla (además de 20% de resistencia de tu Geno).</li>
                         <li><strong>Minijuegos en el Arcade:</strong> consume <strong>5 puntos</strong> por partida (no consume resistencia del Geno).</li>
                     </ul>
                     
-                    <div class="help-section-title" style="color: #00e5ff; font-weight: bold; text-transform: uppercase; font-size: 10px; margin-top: 12px; margin-bottom: 4px;">📈 ¿Cómo se regenera?</div>
+                    <div class="help-section-title" style="color: #00e5ff; font-weight: bold; text-transform: uppercase; font-size: 10px; margin-top: 12px; margin-bottom: 4px; display: inline-flex; align-items: center; gap: 5px;"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg> ¿Cómo se regenera?</div>
                     <ul style="margin: 4px 0; padding-left: 15px;">
                         <li><strong>Regeneración Activa:</strong> recuperas automáticamente <strong>1 punto cada 12 minutos</strong> (5 puntos por hora), hasta un máximo de 100.</li>
                         <li><strong>Regeneración Offline:</strong> el juego calcula el tiempo transcurrido mientras estuviste desconectado y lo aplica retrospectivamente al volver a entrar.</li>
