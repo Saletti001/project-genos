@@ -413,12 +413,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function blurFab() {
         const fab = document.getElementById("fab-menu");
-        if(fab) { fab.style.pointerEvents = "none"; fab.style.filter = "blur(4px) opacity(0.6)"; }
+        if(fab) { 
+            fab.style.pointerEvents = "none"; 
+            fab.style.opacity = "0"; 
+            fab.style.transition = "transform 0.2s, opacity 0.2s";
+        }
     }
     
     function unblurFab() {
         const fab = document.getElementById("fab-menu");
-        if(fab) { fab.style.pointerEvents = "auto"; fab.style.filter = "none"; }
+        if(fab) { 
+            fab.style.pointerEvents = "auto"; 
+            fab.style.opacity = "1"; 
+            fab.style.transition = "transform 0.2s, opacity 0.2s";
+        }
     }
 
     if (btnStats && statsOverlay) {
