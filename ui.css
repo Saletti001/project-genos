@@ -204,11 +204,7 @@
     display: none !important; /* Para Chrome, Safari y Opera */
 }
 
-/* 2. SEPARAR EL CAJÓN DEL BOTÓN NEXO (Inventario principal) */
-#geno-swap-modal > div {
-    margin-bottom: 90px !important; 
-    max-height: 70vh !important;
-}
+/* 2. SEPARAR EL CAJÓN DEL BOTÓN NEXO (Inventario principal) - Removido para aprovechar mejor el espacio vertical */
 
 /* 3. Limpiar el padding del inventario */
 #geno-swap-grid {
