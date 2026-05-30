@@ -6,6 +6,27 @@
 window.misGenos = window.misGenos || []; 
 window.maxGenoSlots = window.maxGenoSlots || 6; 
 
+window.obtenerHashVisualGeno = function(geno) {
+    if (!geno) return "";
+    const dirtSpotsStr = geno.dirtSpots ? geno.dirtSpots.map(d => `${d.x},${d.y},${d.scrubbed}`).join("|") : "";
+    const soapySpotsStr = geno.soapySpots ? geno.soapySpots.map(s => `${s.x},${s.y}`).join("|") : "";
+    return [
+        geno.id,
+        geno.base_color,
+        geno.color,
+        geno.body_shape,
+        geno.eye_type,
+        geno.mouth_type,
+        geno.hat_type,
+        geno.wing_type,
+        geno.skin_type,
+        geno.aura_type,
+        geno.higiene,
+        dirtSpotsStr,
+        soapySpotsStr
+    ].join("_");
+}; 
+
 // =========================================
 // HELPER: ICONOS DE ELEMENTOS GLOBALES
 // =========================================
@@ -908,16 +929,23 @@ function iniciarSecuenciaBienvenida() {
 
         window.sincronizarDirtSpots(window.miMascota);
 
-        if (typeof generarSvgGeno === 'function') {
-            const nuevoSvg = generarSvgGeno(window.miMascota);
-            window.miMascota.svg = nuevoSvg;
-            const targetDiv = pedestal.querySelector(".geno-idle");
-            if (targetDiv) {
-                if (targetDiv.innerHTML !== nuevoSvg) {
+        const currentHash = window.obtenerHashVisualGeno(window.miMascota);
+        const targetDiv = pedestal.querySelector(".geno-idle");
+        
+        if (targetDiv) {
+            if (targetDiv.dataset.visualHash !== currentHash) {
+                if (typeof generarSvgGeno === 'function') {
+                    const nuevoSvg = generarSvgGeno(window.miMascota);
+                    window.miMascota.svg = nuevoSvg;
                     targetDiv.innerHTML = nuevoSvg;
+                    targetDiv.dataset.visualHash = currentHash;
                 }
-            } else {
-                pedestal.innerHTML = `<div class="geno-idle" style="color: ${window.miMascota.color}; top: 50%; left: 50%; display: flex; justify-content: center; align-items: center;">${nuevoSvg}</div>`;
+            }
+        } else {
+            if (typeof generarSvgGeno === 'function') {
+                const nuevoSvg = generarSvgGeno(window.miMascota);
+                window.miMascota.svg = nuevoSvg;
+                pedestal.innerHTML = `<div class="geno-idle" style="color: ${window.miMascota.color}; top: 50%; left: 50%; display: flex; justify-content: center; align-items: center;" data-visual-hash="${currentHash}">${nuevoSvg}</div>`;
             }
         }
     };
@@ -1000,26 +1028,31 @@ function iniciarSecuenciaBienvenida() {
 
         window.sincronizarDirtSpots(window.miMascota);
 
-        let nuevoSvg = "";
-        if (typeof generarSvgGeno === 'function') {
-            nuevoSvg = generarSvgGeno(window.miMascota);
-            window.miMascota.svg = nuevoSvg;
-        }
+        const currentHash = window.obtenerHashVisualGeno(window.miMascota);
 
         if (container) {
             const targetIdle = container.querySelector(".geno-idle");
             if (targetIdle) {
-                if (targetIdle.innerHTML !== nuevoSvg) {
-                    targetIdle.innerHTML = nuevoSvg;
+                if (targetIdle.dataset.visualHash !== currentHash) {
+                    if (typeof generarSvgGeno === 'function') {
+                        const nuevoSvg = generarSvgGeno(window.miMascota);
+                        window.miMascota.svg = nuevoSvg;
+                        targetIdle.innerHTML = nuevoSvg;
+                        targetIdle.dataset.visualHash = currentHash;
+                    }
                 }
             } else {
-                container.innerHTML = `
-                    <div class="geno-float-wrapper" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; justify-content: center; align-items: center; width: 140px; height: 140px; z-index: 10;">
-                        <div class="geno-idle" style="color: ${window.miMascota.color}; top: 50%; left: 50%; display: flex; justify-content: center; align-items: center;">
-                            ${nuevoSvg}
+                if (typeof generarSvgGeno === 'function') {
+                    const nuevoSvg = generarSvgGeno(window.miMascota);
+                    window.miMascota.svg = nuevoSvg;
+                    container.innerHTML = `
+                        <div class="geno-float-wrapper" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; justify-content: center; align-items: center; width: 140px; height: 140px; z-index: 10;">
+                            <div class="geno-idle" style="color: ${window.miMascota.color}; top: 50%; left: 50%; display: flex; justify-content: center; align-items: center;" data-visual-hash="${currentHash}">
+                                ${nuevoSvg}
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                }
             }
         }
 
