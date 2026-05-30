@@ -325,7 +325,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     setTimeout(() => contenedor.classList.remove("eating"), 1500);
                 }
                 const multiplicador = typeof window.getMultiplicadorXP === 'function' ? window.getMultiplicadorXP(window.miMascota) : 1.0;
-                if(window.ganarXP) window.ganarXP(Math.floor(25 * multiplicador));
+                if(window.ganarXP) window.ganarXP(Math.floor(15 * multiplicador));
             } else {
                 alert("No tienes manzanas en tu mochila.");
             }
@@ -934,7 +934,13 @@ function iniciarSecuenciaBienvenida() {
         }
 
         if (container) {
-            container.innerHTML = `<div class="geno-idle" style="color: ${window.miMascota.color}; top: 50%; left: 50%; display: flex; justify-content: center; align-items: center;">${window.miMascota.svg}</div>`;
+            container.innerHTML = `
+                <div class="geno-float-wrapper" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: flex; justify-content: center; align-items: center; width: 140px; height: 140px; z-index: 10;">
+                    <div class="geno-idle" style="color: ${window.miMascota.color}; top: 50%; left: 50%; display: flex; justify-content: center; align-items: center;">
+                        ${window.miMascota.svg}
+                    </div>
+                </div>
+            `;
         }
 
         // Actualizar barras de estado del Centro de Cuidado
@@ -1231,10 +1237,10 @@ function iniciarSecuenciaBienvenida() {
                                 }
 
                                 if (window.Sonidos) window.Sonidos.play("click");
-                                const targetGeno = bathContainer ? bathContainer.querySelector(".geno-idle") : null;
-                                if (targetGeno) {
-                                    targetGeno.classList.add("happy-jump");
-                                    setTimeout(() => targetGeno.classList.remove("happy-jump"), 500);
+                                const targetWrapper = bathContainer ? bathContainer.querySelector(".geno-float-wrapper") : null;
+                                if (targetWrapper) {
+                                     targetWrapper.classList.add("happy-jump");
+                                     setTimeout(() => targetWrapper.classList.remove("happy-jump"), 500);
                                 }
 
                                 if (window.guardarProgreso) window.guardarProgreso();
@@ -1267,17 +1273,9 @@ function iniciarSecuenciaBienvenida() {
         // --- Botón LIMPIAR: Toggle sub-panel de herramientas ---
         const btnCareClean = document.getElementById("btn-care-clean");
         const careCleanTools = document.getElementById("care-clean-tools");
-        const btnCareCleanClose = document.getElementById("btn-care-clean-close");
-
         if (btnCareClean && careCleanTools) {
             btnCareClean.addEventListener("click", () => {
                 careCleanTools.classList.toggle("hidden");
-                if (window.Sonidos) window.Sonidos.play("click");
-            });
-        }
-        if (btnCareCleanClose && careCleanTools) {
-            btnCareCleanClose.addEventListener("click", () => {
-                careCleanTools.classList.add("hidden");
                 if (window.Sonidos) window.Sonidos.play("click");
             });
         }
@@ -1301,19 +1299,27 @@ function iniciarSecuenciaBienvenida() {
                     // Animación happy-jump
                     const bathContainer = document.getElementById("geno-container-bathroom");
                     if (bathContainer) {
+                        const targetWrapper = bathContainer.querySelector(".geno-float-wrapper");
                         const targetGeno = bathContainer.querySelector(".geno-idle");
-                        if (targetGeno) {
-                            targetGeno.classList.add("happy-jump");
+                        if (targetWrapper && targetGeno) {
+                            targetWrapper.classList.add("happy-jump");
                             targetGeno.classList.add("eating");
-                            setTimeout(() => targetGeno.classList.remove("happy-jump"), 500);
+                            setTimeout(() => targetWrapper.classList.remove("happy-jump"), 500);
                             setTimeout(() => targetGeno.classList.remove("eating"), 1500);
                         }
                     }
                     // XP
                     const multiplicador = typeof window.getMultiplicadorXP === 'function' ? window.getMultiplicadorXP(window.miMascota) : 1.0;
-                    if (window.ganarXP) window.ganarXP(Math.floor(25 * multiplicador));
+                    if (window.ganarXP) window.ganarXP(Math.floor(15 * multiplicador));
                     if (window.Sonidos) window.Sonidos.play("click");
-                    window.actualizarGenoBaño();
+                    
+                    // Actualizar barra y texto de hambre directamente en el DOM para evitar re-renderizar todo el SVG
+                    const hambre = Math.floor(window.miMascota.hambre !== undefined ? window.miMascota.hambre : 100);
+                    const hungerText = document.getElementById("bath-hunger-text");
+                    const hungerFill = document.getElementById("bath-hunger-fill");
+                    if (hungerText) hungerText.innerText = `${hambre}%`;
+                    if (hungerFill) hungerFill.style.width = `${hambre}%`;
+
                     if (window.guardarLocalSilencioso) window.guardarLocalSilencioso();
                 } else {
                     alert("No tienes manzanas en tu inventario. Compra en el Bazar.");
