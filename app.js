@@ -495,15 +495,32 @@ document.addEventListener("DOMContentLoaded", () => {
         infoCard.innerHTML = `<span style="color: ${colorTexto}; font-size: 12px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Capacidad: ${slotsOcupados} / ${window.maxGenoSlots}</span>`;
         gridSwap.appendChild(infoCard);
 
+        const rarityColors = {
+            "Común": { border: "#ffffff", glow: "rgba(255, 255, 255, 0.4)", text: "#aaa" },
+            "Raro": { border: "#4CAF50", glow: "rgba(76, 175, 80, 0.4)", text: "#4CAF50" },
+            "Épico": { border: "#ab47bc", glow: "rgba(171, 71, 188, 0.5)", text: "#ab47bc" },
+            "Legendario": { border: "#ff9100", glow: "rgba(255, 145, 0, 0.5)", text: "#ff9100" },
+            "Mítico": { border: "#ff007f", glow: "rgba(255, 0, 127, 0.6)", text: "#ff007f" }
+        };
+
         todos.forEach(geno => {
             const card = document.createElement("div");
-            card.style = "background: #1a2a36; border: 1px solid #4dd0e1; border-radius: 12px; padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.3);";
+            const rColor = rarityColors[geno.rarity || "Común"] || rarityColors["Común"];
+            card.style.cssText = `background: #1a2a36; border: 1.5px solid ${rColor.border}; border-radius: 12px; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.4), 0 0 6px ${rColor.glow}, inset 0 0 8px ${rColor.glow}; position: relative; box-sizing: border-box; height: 165px;`;
             
             if (window.miMascota && String(window.miMascota.id) === String(geno.id)) {
-                card.style.border = "2px solid #ffcc00"; card.style.boxShadow = "0 0 15px rgba(255, 204, 0, 0.4)";
+                card.classList.add("selected-card-glow");
+                card.style.setProperty("--rarity-color", rColor.border);
+                card.style.setProperty("--rarity-color-glow", rColor.glow);
             } else {
-                card.onmouseover = () => card.style.boxShadow = "0 0 15px rgba(77, 208, 225, 0.4)";
-                card.onmouseout = () => card.style.boxShadow = "0 4px 10px rgba(0,0,0,0.3)";
+                card.onmouseover = () => {
+                    card.style.boxShadow = `0 0 15px ${rColor.border}`;
+                    card.style.borderColor = rColor.border;
+                };
+                card.onmouseout = () => {
+                    card.style.boxShadow = `0 4px 10px rgba(0,0,0,0.4), 0 0 6px ${rColor.glow}, inset 0 0 8px ${rColor.glow}`;
+                    card.style.borderColor = rColor.border;
+                };
             }
 
             const pColor = geno.color || geno.base_color || "#ccc";
@@ -514,15 +531,61 @@ document.addEventListener("DOMContentLoaded", () => {
             const resVal = Math.floor(geno.resistencia !== undefined ? geno.resistencia : 100);
             const resColor = resVal > 50 ? "#4CAF50" : (resVal > 20 ? "#ff9800" : "#ff3333");
             const esAgotado = resVal === 0;
-            const labelDescansando = esAgotado ? ' <span style="color:#ff3333; font-size:10px;">(DESCANSANDO)</span>' : '';
+            const labelDescansando = esAgotado ? ' <span style="color:#ff3333; font-size:9px;">(AGOTADO)</span>' : '';
+
+            // Obtener datos de calidad
+            let qualityRank = "D";
+            let qualityPct = 0;
+            let qualityColor = "#d9534f";
+            if (window.calcularCalidad && geno.stats) {
+                const qStats = window.calcularCalidad(geno.stats, geno.rarity || "Común", geno.level || 1);
+                qualityRank = qStats.rango || "D";
+                qualityPct = qStats.calidadPorcentaje || 0;
+                if (window.obtenerColorRango) {
+                    qualityColor = window.obtenerColorRango(qualityRank);
+                }
+            }
+
+            // Obtener elemento con afinidad genética y normalizar acentos
+            let elemRaw = (geno.genes && geno.genes.afinidad && geno.genes.afinidad.dom) ? geno.genes.afinidad.dom : (geno.element || "Biomutante");
+            let elemName = elemRaw;
+            if (elemRaw.toLowerCase() === "cibernetico") elemName = "Cibernético";
+            else if (elemRaw.toLowerCase() === "toxico") elemName = "Tóxico";
+            else if (elemRaw.toLowerCase() === "sintetico") elemName = "Sintético";
+            else if (elemRaw.toLowerCase() === "radiactivo") elemName = "Radiactivo";
+            else if (elemRaw.toLowerCase() === "biomutante") elemName = "Biomutante";
+            else if (elemRaw.toLowerCase() === "viral") elemName = "Viral";
+
+            if (!["Biomutante", "Viral", "Cibernético", "Radiactivo", "Tóxico", "Sintético"].includes(elemName)) {
+                elemName = "Biomutante";
+            }
+
+            // Obtener icono del elemento
+            const elementIcon = (window.ShopManager && window.ShopManager.iconosSVG && window.ShopManager.iconosSVG[elemName]) 
+                ? window.ShopManager.iconosSVG[elemName].replace('width="1em"', 'width="100%"').replace('height="1em"', 'height="100%"') 
+                : '🧬';
 
             card.innerHTML = `
-                <div style="width: 100px; height: 100px; color: ${pColor}; display: flex; justify-content: center; align-items: center;">${svg}</div>
-                <span style="color: white; font-weight: bold; font-size: 12px; margin-top: 10px; text-align: center;">${geno.name || 'Sujeto'}${labelDescansando}</span>
-                <div style="width: 80px; height: 4px; background: rgba(0, 0, 0, 0.4); border-radius: 2px; overflow: hidden; margin-top: 5px; border: 1px solid rgba(255,255,255,0.1);">
+                <!-- Fila Superior de Info -->
+                <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; font-size: 9px; font-family: monospace; flex-shrink: 0;">
+                    <span style="background: rgba(255,255,255,0.08); border-radius: 4px; padding: 1px 4px; color: #fff; font-weight: bold;">Nv. ${geno.level || 1}</span>
+                    <div style="display: flex; align-items: center; width: 14px; height: 14px;" title="${elemName}">
+                        ${elementIcon}
+                    </div>
+                    <span style="color: ${qualityColor}; font-weight: bold; text-shadow: ${qualityRank === 'S' ? '0 0 5px ' + qualityColor : 'none'}">${qualityRank} (${qualityPct}%)</span>
+                </div>
+
+                <!-- Geno SVG -->
+                <div style="width: 70px; height: 70px; color: ${pColor}; display: flex; justify-content: center; align-items: center; flex: 1;">${svg}</div>
+                
+                <!-- Nombre -->
+                <span style="color: white; font-weight: bold; font-size: 11px; margin-top: 5px; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; flex-shrink: 0;">${geno.name || 'Sujeto'}${labelDescansando}</span>
+                
+                <!-- Barra de Resistencia -->
+                <div style="width: 80px; height: 4px; background: rgba(0, 0, 0, 0.4); border-radius: 2px; overflow: hidden; margin-top: 4px; border: 1px solid rgba(255,255,255,0.1); flex-shrink: 0;">
                     <div style="width: ${resVal}%; height: 100%; background: ${resColor}; transition: width 0.3s;"></div>
                 </div>
-                <span style="color: #aaa; font-size: 9px; margin-top: 2px;">Res: ${resVal}/100</span>
+                <span style="color: #aaa; font-size: 9px; margin-top: 2px; flex-shrink: 0;">Res: ${resVal}/100</span>
             `;
             
             // ✨ FIX MAESTRO FINAL: Se elimina por completo el .replace() destructivo
@@ -555,8 +618,8 @@ document.addEventListener("DOMContentLoaded", () => {
         const slotsLibres = Math.max(0, window.maxGenoSlots - slotsOcupados);
         for (let i = 0; i < slotsLibres; i++) {
             const emptyCard = document.createElement("div");
-            emptyCard.style = "background: rgba(26, 42, 54, 0.5); border: 1px dashed #4dd0e1; border-radius: 12px; padding: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.5;";
-            emptyCard.innerHTML = `<div style="width: 100px; height: 100px; display: flex; justify-content: center; align-items: center; font-size: 32px; color: #4dd0e1;">🧬</div><span style="color: #4dd0e1; font-weight: bold; font-size: 12px; margin-top: 10px; text-align: center;">Vacío</span>`;
+            emptyCard.style = "background: rgba(26, 42, 54, 0.5); border: 1px dashed #4dd0e1; border-radius: 12px; padding: 10px; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0.5; height: 165px; box-sizing: border-box;";
+            emptyCard.innerHTML = `<div style="width: 70px; height: 70px; display: flex; justify-content: center; align-items: center; font-size: 32px; color: #4dd0e1; flex: 1;">🧬</div><span style="color: #4dd0e1; font-weight: bold; font-size: 11px; margin-top: 5px; text-align: center; flex-shrink: 0;">Vacío</span>`;
             gridSwap.appendChild(emptyCard);
         }
 

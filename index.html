@@ -16,6 +16,21 @@
         .ev-icon-wrapper svg, .ev-icon-injector svg { width: 100%; height: 100%; display: block; }
         /* Animación para el núcleo de crianza */
         @keyframes spin { 100% { transform: rotate(360deg); } }
+        /* Animación de brillo para la tarjeta del Geno seleccionado o principal */
+        @keyframes selectedGlow {
+            0%, 100% {
+                border-color: #ffcc00;
+                box-shadow: 0 0 15px rgba(255, 204, 0, 0.8), inset 0 0 8px rgba(255, 204, 0, 0.4);
+            }
+            50% {
+                border-color: var(--rarity-color);
+                box-shadow: 0 0 15px var(--rarity-color-glow), inset 0 0 8px var(--rarity-color-glow);
+            }
+        }
+        .selected-card-glow {
+            animation: selectedGlow 1.2s infinite ease-in-out;
+            border-width: 2.5px !important;
+        }
     </style>
 </head>
 <body>
