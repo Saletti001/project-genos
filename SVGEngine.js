@@ -262,6 +262,24 @@ function generarSvgGeno(genesVisuales) {
         }
     }
 
+    let dirtMarkup = "";
+    if (safeData.dirtSpots && safeData.dirtSpots.length > 0) {
+        dirtMarkup = `<g clip-path="url(#${maskId})">`;
+        safeData.dirtSpots.forEach(s => {
+            dirtMarkup += `<circle cx="${s.x}" cy="${s.y}" r="${s.r || 10}" fill="url(#grad-dirt-${rndId})" filter="url(#blur-dirt-${rndId})" />`;
+        });
+        dirtMarkup += `</g>`;
+    }
+
+    let soapMarkup = "";
+    if (safeData.soapySpots && safeData.soapySpots.length > 0) {
+        soapMarkup = `<g clip-path="url(#${maskId})">`;
+        safeData.soapySpots.forEach(s => {
+            soapMarkup += `<circle cx="${s.x}" cy="${s.y}" r="${s.r || 12}" fill="url(#grad-soap-${rndId})" filter="url(#blur-dirt-${rndId})" />`;
+        });
+        soapMarkup += `</g>`;
+    }
+
     return `
     <svg width="200" height="190" viewBox="-20 0 200 160" xmlns="http://www.w3.org/2000/svg" style="overflow: visible;">
         <defs>
@@ -270,6 +288,19 @@ function generarSvgGeno(genesVisuales) {
                 <stop offset="100%" stop-color="#000" stop-opacity="0.25"/>
             </linearGradient>
             <clipPath id="${maskId}"><path d="${pathD}" /></clipPath>
+            <radialGradient id="grad-dirt-${rndId}" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#795548" stop-opacity="0.95"/>
+                <stop offset="70%" stop-color="#5d4037" stop-opacity="0.8"/>
+                <stop offset="100%" stop-color="#5d4037" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="grad-soap-${rndId}" cx="35%" cy="35%" r="65%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+                <stop offset="70%" stop-color="#e0f7fa" stop-opacity="0.8"/>
+                <stop offset="100%" stop-color="#b2ebf2" stop-opacity="0.3"/>
+            </radialGradient>
+            <filter id="blur-dirt-${rndId}">
+                <feGaussianBlur stdDeviation="0.8"/>
+            </filter>
         </defs>
         <style>
             @keyframes respirar { 0%, 100% { transform: scale(1); } 50% { transform: scaleY(0.97) scaleX(1.02); } }
@@ -299,6 +330,8 @@ function generarSvgGeno(genesVisuales) {
             <path d="${pathD}" fill="${color}" stroke="#1a2a36" stroke-width="5"/>
             <path d="${pathD}" fill="url(#${gradId})"/>
             ${detallesFrente}
+            ${dirtMarkup}
+            ${soapMarkup}
             <path d="${shineD}" fill="#fff" opacity="0.4"/>
             ${capaCosmeticaFrente}
             ${dronRaw} 

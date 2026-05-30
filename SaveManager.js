@@ -108,7 +108,9 @@ window.cargarProgreso = function() {
                 }
 
                 const pedestal = document.getElementById("geno-container");
-                if (pedestal && window.miMascota && window.miMascota.id && window.miMascota.id !== "temp") {
+                if (typeof window.actualizarSuciedadVisual === 'function') {
+                    window.actualizarSuciedadVisual();
+                } else if (pedestal && window.miMascota && window.miMascota.id && window.miMascota.id !== "temp") {
                     pedestal.style.display = "block";
                     pedestal.innerHTML = `<div class="geno-idle" style="color: ${window.miMascota.color}; top: 50%; left: 50%; display: flex; justify-content: center; align-items: center;">${window.miMascota.svg}</div>`;
                 }

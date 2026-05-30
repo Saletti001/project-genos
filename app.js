@@ -239,19 +239,50 @@ document.addEventListener("DOMContentLoaded", () => {
     if(fabMenu) fabMenu.addEventListener("click", () => drawerMenu.classList.remove("hidden"));
     if(closeDrawer) closeDrawer.addEventListener("click", () => drawerMenu.classList.add("hidden"));
 
+    window.currentSlide = "room-area";
+
     window.navegarA = function(idPantalla) {
+        let actualTarget = idPantalla;
+        let slidePos = null;
+
+        if (idPantalla === "room-area") {
+            actualTarget = "main-slider-screen";
+            slidePos = "0%";
+            window.currentSlide = "room-area";
+        } else if (idPantalla === "bathroom-screen") {
+            actualTarget = "main-slider-screen";
+            slidePos = "-50%";
+            window.currentSlide = "bathroom-screen";
+        }
+
         document.querySelectorAll('.app-screen').forEach(s => s.classList.add("hidden"));
         
-        const destino = document.getElementById(idPantalla);
+        const destino = document.getElementById(actualTarget);
         if(destino) destino.classList.remove("hidden");
+
+        if (slidePos !== null) {
+            const slider = document.getElementById("desktop-slider");
+            if (slider) slider.style.transform = `translateX(${slidePos})`;
+            
+            if (window.currentSlide === "bathroom-screen") {
+                if (typeof window.actualizarGenoBaño === 'function') {
+                    window.actualizarGenoBaño();
+                }
+            } else {
+                if (typeof window.actualizarSuciedadVisual === 'function') {
+                    window.actualizarSuciedadVisual();
+                }
+            }
+        }
         
         if(drawerMenu) drawerMenu.classList.add("hidden"); 
         
         const panelStats = document.getElementById("geno-stats-panel");
         if(panelStats) panelStats.classList.add("hidden");
         
-        const screenRoom = document.getElementById("room-area");
-        if(fabMenu) fabMenu.classList.toggle("hidden", destino !== screenRoom); 
+        if(fabMenu) {
+            fabMenu.classList.toggle("hidden", window.currentSlide !== "room-area" || actualTarget !== "main-slider-screen");
+        }
     };
 
     document.querySelectorAll(".btn-go-home").forEach(btn => {
@@ -500,7 +531,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     return;
                 }
                 window.miMascota = geno;
-                if (pedestal) {
+                if (typeof window.actualizarSuciedadVisual === 'function') {
+                    window.actualizarSuciedadVisual();
+                } else if (pedestal) {
                     const svgPedestal = typeof generarSvgGeno === 'function' ? generarSvgGeno(geno) : '';
                     pedestal.innerHTML = `<div class="geno-idle" style="position: absolute; top: 35%; left: 50%; transform: translate(-50%, -50%); display: flex; justify-content: center; align-items: center; color: ${pColor};">${svgPedestal}</div>`;
                 }
@@ -775,87 +808,41 @@ function iniciarSecuenciaBienvenida() {
         }
     }
 
-    window.actualizarSuciedadVisual = function() {
-        const pedestal = document.getElementById("geno-container");
-        if (!pedestal || !window.miMascota || window.miMascota.id === "temp") return;
-
-        const higiene = window.miMascota.higiene !== undefined ? window.miMascota.higiene : 100;
-        
+    window.sincronizarDirtSpots = function(geno) {
+        if (!geno || geno.id === "temp") return;
+        const higiene = geno.higiene !== undefined ? geno.higiene : 100;
         let targetSpots = 0;
         if (higiene < 20) targetSpots = 4;
         else if (higiene < 40) targetSpots = 3;
         else if (higiene < 60) targetSpots = 2;
         else if (higiene < 80) targetSpots = 1;
 
-        let currentSpots = pedestal.querySelectorAll(".dirt-spot");
-        
-        if (currentSpots.length > targetSpots) {
-            for (let i = targetSpots; i < currentSpots.length; i++) {
-                currentSpots[i].remove();
-            }
-            currentSpots = pedestal.querySelectorAll(".dirt-spot");
+        if (!geno.dirtSpots) geno.dirtSpots = [];
+
+        // If we have more than target, truncate
+        if (geno.dirtSpots.length > targetSpots) {
+            geno.dirtSpots = geno.dirtSpots.slice(0, targetSpots);
         }
-
-        const needed = targetSpots - currentSpots.length;
+        
+        // If we need more, generate them
+        const needed = targetSpots - geno.dirtSpots.length;
         for (let i = 0; i < needed; i++) {
-            const spot = document.createElement("div");
-            spot.className = "dirt-spot";
-            
-            const randomTop = 15 + Math.random() * 45;
-            const randomLeft = 20 + Math.random() * 60;
-            
-            spot.style.top = `${randomTop}%`;
-            spot.style.left = `${randomLeft}%`;
+            const cx = Math.floor(50 + Math.random() * 60);
+            const cy = Math.floor(55 + Math.random() * 65);
+            const r = Math.floor(8 + Math.random() * 6);
+            geno.dirtSpots.push({ x: cx, y: cy, r: r, scrubbed: 0 });
+        }
+    };
 
-            const limpiarHandler = (e) => {
-                e.stopPropagation();
-                const rect = spot.getBoundingClientRect();
-                const parentRect = pedestal.getBoundingClientRect();
-                const posX = rect.left + rect.width / 2 - parentRect.left;
-                const posY = rect.top + rect.height / 2 - parentRect.top;
-                
-                crearChispasLimpieza(posX, posY, pedestal);
-                spot.remove();
-                
-                window.miMascota.higiene = Math.min(100, (window.miMascota.higiene || 0) + 15);
-                
-                const hoy = new Date().toDateString();
-                if (!window.miMascota.registroAmistadDiaria) window.miMascota.registroAmistadDiaria = {};
-                
-                let gananciaExplicita = 0;
-                if (window.miMascota.registroAmistadDiaria.limpieza !== hoy) {
-                    window.miMascota.registroAmistadDiaria.limpieza = hoy;
-                    gananciaExplicita = Math.floor(Math.random() * 3) + 1;
-                    window.miMascota.amistad = Math.min(100, (window.miMascota.amistad || 0) + gananciaExplicita);
-                    alert(`🧼 Limpiaste la suciedad de ${window.miMascota.name}. Higiene +15%, ¡Amistad +${gananciaExplicita}!`);
-                } else {
-                    alert(`🧼 Limpiaste la suciedad de ${window.miMascota.name}. Higiene +15%. (Amistad ya obtenida hoy)`);
-                }
-                
-                if (window.misGenos) {
-                    const idx = window.misGenos.findIndex(g => String(g.id) === String(window.miMascota.id));
-                    if (idx !== -1) {
-                        window.misGenos[idx].higiene = window.miMascota.higiene;
-                        window.misGenos[idx].amistad = window.miMascota.amistad;
-                        window.misGenos[idx].registroAmistadDiaria = window.miMascota.registroAmistadDiaria;
-                    }
-                }
-                
-                if (window.NexoEnergyManager) {
-                    window.NexoEnergyManager.actualizarUI();
-                }
-                
-                if (window.guardarProgreso) window.guardarProgreso();
-                else if (window.guardarJuego) window.guardarJuego();
-                
-                if (window.Sonidos) window.Sonidos.play("click");
-            };
+    window.actualizarSuciedadVisual = function() {
+        const pedestal = document.getElementById("geno-container");
+        if (!pedestal || !window.miMascota || window.miMascota.id === "temp") return;
 
-            spot.addEventListener("mouseenter", limpiarHandler);
-            spot.addEventListener("click", limpiarHandler);
-            spot.addEventListener("touchstart", limpiarHandler);
+        window.sincronizarDirtSpots(window.miMascota);
 
-            pedestal.appendChild(spot);
+        if (typeof generarSvgGeno === 'function') {
+            window.miMascota.svg = generarSvgGeno(window.miMascota);
+            pedestal.innerHTML = `<div class="geno-idle" style="color: ${window.miMascota.color}; top: 50%; left: 50%; display: flex; justify-content: center; align-items: center;">${window.miMascota.svg}</div>`;
         }
     };
 
@@ -927,9 +914,33 @@ function iniciarSecuenciaBienvenida() {
         }
     };
 
-    // Registrar eventos para el manual de cuidado
+    // ========================================================
+    // CUIDADO DIARIO: MECÁNICA DEL BAÑO INTERACTIVO (ESTILO POU)
+    // ========================================================
+    window.actualizarGenoBaño = function() {
+        const container = document.getElementById("geno-container-bathroom");
+        const hygieneText = document.getElementById("bath-hygiene-text");
+        const hygieneFill = document.getElementById("bath-hygiene-fill");
+
+        if (!window.miMascota || window.miMascota.id === "temp") return;
+
+        window.sincronizarDirtSpots(window.miMascota);
+
+        if (typeof generarSvgGeno === 'function') {
+            window.miMascota.svg = generarSvgGeno(window.miMascota);
+        }
+
+        if (container) {
+            container.innerHTML = `<div class="geno-idle" style="color: ${window.miMascota.color}; display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;">${window.miMascota.svg}</div>`;
+        }
+
+        const higiene = Math.floor(window.miMascota.higiene !== undefined ? window.miMascota.higiene : 100);
+        if (hygieneText) hygieneText.innerText = `${higiene}%`;
+        if (hygieneFill) hygieneFill.style.width = `${higiene}%`;
+    };
+
+    // Registrar eventos para el manual de cuidado y el cuarto de baño
     document.addEventListener("DOMContentLoaded", () => {
-        const needsHud = document.getElementById("needs-hud");
         const needsInfoModal = document.getElementById("needs-info-modal");
         const closeBtn = document.getElementById("close-needs-info");
         const confirmBtn = document.getElementById("btn-close-needs-info-confirm");
@@ -955,6 +966,297 @@ function iniciarSecuenciaBienvenida() {
             };
             if (closeBtn) closeBtn.addEventListener("click", cerrarModal);
             if (confirmBtn) confirmBtn.addEventListener("click", cerrarModal);
+        }
+
+        // --- SISTEMA DE ARRASTRE DE HERRAMIENTAS Y FROTADO EN EL BAÑO ---
+        const bathScreen = document.getElementById("bathroom-screen");
+        const soapBtn = document.getElementById("btn-tool-soap");
+        const showerBtn = document.getElementById("btn-tool-shower");
+        const bathContainer = document.getElementById("geno-container-bathroom");
+
+        // Crear dinámicamente el seguidor del cursor si no existe
+        let follower = document.getElementById("tool-cursor-follower");
+        if (!follower) {
+            follower = document.createElement("div");
+            follower.id = "tool-cursor-follower";
+            follower.style.display = "none";
+            document.body.appendChild(follower);
+        }
+
+        window.activeTool = null;
+
+        const startDrag = (toolType, svgHtml, e) => {
+            e.preventDefault();
+            window.activeTool = toolType;
+            follower.innerHTML = svgHtml;
+            follower.style.display = "block";
+            follower.style.position = "fixed";
+            
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+            
+            follower.style.left = `${clientX}px`;
+            follower.style.top = `${clientY}px`;
+        };
+
+        if (soapBtn && showerBtn) {
+            soapBtn.addEventListener("mousedown", (e) => {
+                const svg = soapBtn.querySelector("svg").outerHTML;
+                startDrag("soap", svg, e);
+            });
+            soapBtn.addEventListener("touchstart", (e) => {
+                const svg = soapBtn.querySelector("svg").outerHTML;
+                startDrag("soap", svg, e);
+            }, { passive: false });
+
+            showerBtn.addEventListener("mousedown", (e) => {
+                const svg = showerBtn.querySelector("svg").outerHTML;
+                startDrag("shower", svg, e);
+            });
+            showerBtn.addEventListener("touchstart", (e) => {
+                const svg = showerBtn.querySelector("svg").outerHTML;
+                startDrag("shower", svg, e);
+            }, { passive: false });
+        }
+
+        const handleMove = (e) => {
+            if (!window.activeTool) return;
+            e.preventDefault();
+
+            const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+            follower.style.left = `${clientX}px`;
+            follower.style.top = `${clientY}px`;
+
+            if (!bathScreen || !bathContainer || !window.miMascota || window.miMascota.id === "temp") return;
+
+            const rectBath = bathScreen.getBoundingClientRect();
+            const rectContainer = bathContainer.getBoundingClientRect();
+
+            // Verificar si el cursor está sobre la cápsula/Geno para aplicar efectos
+            const isOverGeno = (
+                clientX >= rectContainer.left &&
+                clientX <= rectContainer.right &&
+                clientY >= rectContainer.top &&
+                clientY <= rectContainer.bottom
+            );
+
+            // Coordenadas relativas en la viewbox del SVG (-20 a 180, 0 a 160)
+            const relX = ((clientX - rectContainer.left) / rectContainer.width) * 200 - 20;
+            const relY = ((clientY - rectContainer.top) / rectContainer.height) * 160;
+
+            if (window.activeTool === "soap") {
+                // Spawn bubbles
+                if (Math.random() < 0.4) {
+                    const bubble = document.createElement("div");
+                    bubble.className = "soap-bubble";
+                    bubble.style.left = `${clientX - rectBath.left}px`;
+                    bubble.style.top = `${clientY - rectBath.top}px`;
+                    bubble.style.setProperty("--dx", `${-30 + Math.random() * 60}px`);
+                    bubble.style.setProperty("--dy", `${-60 - Math.random() * 60}px`);
+                    bathScreen.appendChild(bubble);
+                    setTimeout(() => bubble.remove(), 800);
+                }
+
+                if (isOverGeno) {
+                    if (!window.miMascota.soapySpots) window.miMascota.soapySpots = [];
+                    
+                    // Solo agregar espuma dentro de la bounding box del cuerpo
+                    if (relX >= 30 && relX <= 130 && relY >= 35 && relY <= 135) {
+                        const tooClose = window.miMascota.soapySpots.some(s => {
+                            const dx = s.x - relX;
+                            const dy = s.y - relY;
+                            return Math.sqrt(dx * dx + dy * dy) < 15;
+                        });
+
+                        if (!tooClose && window.miMascota.soapySpots.length < 18) {
+                            window.miMascota.soapySpots.push({ x: relX, y: relY, r: 10 + Math.random() * 6 });
+                            
+                            // Enjabonar manchas cercanas
+                            if (window.miMascota.dirtSpots) {
+                                window.miMascota.dirtSpots.forEach(ds => {
+                                    const dx = ds.x - relX;
+                                    const dy = ds.y - relY;
+                                    if (Math.sqrt(dx * dx + dy * dy) < 25) {
+                                        ds.scrubbed = Math.min(100, (ds.scrubbed || 0) + 20);
+                                    }
+                                });
+                            }
+                            window.actualizarGenoBaño();
+                        }
+                    }
+                }
+            } else if (window.activeTool === "shower") {
+                // Spawn water streams
+                if (Math.random() < 0.6) {
+                    const water = document.createElement("div");
+                    water.className = "water-stream";
+                    water.style.left = `${clientX - rectBath.left}px`;
+                    water.style.top = `${clientY - rectBath.top}px`;
+                    water.style.setProperty("--dx", `${-15 + Math.random() * 30}px`);
+                    water.style.setProperty("--dy", `${120 + Math.random() * 60}px`);
+                    bathScreen.appendChild(water);
+                    setTimeout(() => water.remove(), 600);
+                }
+
+                if (isOverGeno) {
+                    let cleanedAny = false;
+
+                    // Enjuagar espuma cercana
+                    if (window.miMascota.soapySpots) {
+                        const oldLength = window.miMascota.soapySpots.length;
+                        window.miMascota.soapySpots = window.miMascota.soapySpots.filter(s => {
+                            const dx = s.x - relX;
+                            const dy = s.y - relY;
+                            return Math.sqrt(dx * dx + dy * dy) > 28;
+                        });
+                        if (window.miMascota.soapySpots.length !== oldLength) cleanedAny = true;
+                    }
+
+                    // Enjuagar manchas enjabonadas cercanas
+                    if (window.miMascota.dirtSpots && window.miMascota.dirtSpots.length > 0) {
+                        const originalLength = window.miMascota.dirtSpots.length;
+                        
+                        window.miMascota.dirtSpots = window.miMascota.dirtSpots.filter(ds => {
+                            const dx = ds.x - relX;
+                            const dy = ds.y - relY;
+                            const dist = Math.sqrt(dx * dx + dy * dy);
+                            
+                            // Si está cerca del chorro de agua y tiene suficiente jabón (scrubbed >= 60)
+                            if (dist < 28 && (ds.scrubbed || 0) >= 60) {
+                                return false; // Eliminar mancha
+                            }
+                            return true;
+                        });
+
+                        const cleanedCount = originalLength - window.miMascota.dirtSpots.length;
+                        if (cleanedCount > 0) {
+                            cleanedAny = true;
+                            // Incrementar higiene
+                            window.miMascota.higiene = Math.min(100, (window.miMascota.higiene || 0) + (cleanedCount * 25));
+                            
+                            if (window.misGenos) {
+                                const idx = window.misGenos.findIndex(g => String(g.id) === String(window.miMascota.id));
+                                if (idx !== -1) {
+                                    window.misGenos[idx].higiene = window.miMascota.higiene;
+                                    window.misGenos[idx].dirtSpots = window.miMascota.dirtSpots;
+                                }
+                            }
+
+                            // Feedback de limpieza completa de todo el Geno
+                            if (window.miMascota.dirtSpots.length === 0) {
+                                window.miMascota.higiene = 100;
+                                if (window.misGenos) {
+                                    const idx = window.misGenos.findIndex(g => String(g.id) === String(window.miMascota.id));
+                                    if (idx !== -1) window.misGenos[idx].higiene = 100;
+                                }
+
+                                const hoy = new Date().toDateString();
+                                if (!window.miMascota.registroAmistadDiaria) window.miMascota.registroAmistadDiaria = {};
+                                
+                                let gananciaExplicita = 0;
+                                if (window.miMascota.registroAmistadDiaria.limpieza !== hoy) {
+                                    window.miMascota.registroAmistadDiaria.limpieza = hoy;
+                                    gananciaExplicita = Math.floor(Math.random() * 3) + 1;
+                                    window.miMascota.amistad = Math.min(100, (window.miMascota.amistad || 0) + gananciaExplicita);
+                                    if (window.misGenos) {
+                                        const idx = window.misGenos.findIndex(g => String(g.id) === String(window.miMascota.id));
+                                        if (idx !== -1) {
+                                            window.misGenos[idx].amistad = window.miMascota.amistad;
+                                            window.misGenos[idx].registroAmistadDiaria = window.miMascota.registroAmistadDiaria;
+                                        }
+                                    }
+                                    alert(`🧼 ¡Has bañado por completo a ${window.miMascota.name}! Higiene al 100% y ¡Amistad +${gananciaExplicita}!`);
+                                } else {
+                                    alert(`🧼 ¡Has bañado por completo a ${window.miMascota.name}! Higiene al 100%. (Amistad por limpieza ya obtenida hoy)`);
+                                }
+
+                                if (window.Sonidos) window.Sonidos.play("click");
+                                bathContainer.classList.add("happy-jump");
+                                setTimeout(() => bathContainer.classList.remove("happy-jump"), 500);
+
+                                if (window.guardarProgreso) window.guardarProgreso();
+                            }
+                        }
+                    }
+
+                    if (cleanedAny) {
+                        window.actualizarGenoBaño();
+                    }
+                }
+            }
+        };
+
+        const stopDrag = () => {
+            if (!window.activeTool) return;
+            window.activeTool = null;
+            follower.style.display = "none";
+        };
+
+        window.addEventListener("mousemove", handleMove);
+        window.addEventListener("touchmove", handleMove, { passive: false });
+        window.addEventListener("mouseup", stopDrag);
+        window.addEventListener("touchend", stopDrag);
+
+        // --- GESTOS DE DESLIZAMIENTO HASTA EL BAÑO ---
+        let swipeStartX = 0;
+        let swipeStartY = 0;
+
+        const mainSliderScreen = document.getElementById("main-slider-screen");
+        if (mainSliderScreen) {
+            const detectStart = (clientX, clientY, target) => {
+                if (window.activeTool) return;
+                // Ignorar el gesto si toca controles, pedestales, botones, etc.
+                if (
+                    target.closest("button") ||
+                    target.closest(".drawer-item") ||
+                    target.closest(".fab-btn") ||
+                    target.closest("#geno-container") ||
+                    target.closest("#geno-container-bathroom") ||
+                    target.closest(".need-card-clickable") ||
+                    target.closest(".tool-btn")
+                ) {
+                    return;
+                }
+                swipeStartX = clientX;
+                swipeStartY = clientY;
+            };
+
+            const detectEnd = (clientX, clientY) => {
+                if (window.activeTool) return;
+                const diffX = clientX - swipeStartX;
+                const diffY = clientY - swipeStartY;
+
+                // Solo cuenta si el movimiento es eminentemente horizontal y lo bastante largo
+                if (Math.abs(diffX) > 80 && Math.abs(diffY) < 50) {
+                    if (diffX < 0 && window.currentSlide === "room-area") {
+                        // Desliza a la izquierda -> Entrar al baño
+                        window.navegarA("bathroom-screen");
+                    } else if (diffX > 0 && window.currentSlide === "bathroom-screen") {
+                        // Desliza a la derecha -> Volver al laboratorio
+                        window.navegarA("room-area");
+                    }
+                }
+            };
+
+            mainSliderScreen.addEventListener("touchstart", (e) => {
+                const touch = e.touches[0];
+                detectStart(touch.clientX, touch.clientY, e.target);
+            }, { passive: true });
+
+            mainSliderScreen.addEventListener("touchend", (e) => {
+                const touch = e.changedTouches[0];
+                detectEnd(touch.clientX, touch.clientY);
+            }, { passive: true });
+
+            mainSliderScreen.addEventListener("mousedown", (e) => {
+                detectStart(e.clientX, e.clientY, e.target);
+            });
+
+            mainSliderScreen.addEventListener("mouseup", (e) => {
+                detectEnd(e.clientX, e.clientY);
+            });
         }
     });
 })();

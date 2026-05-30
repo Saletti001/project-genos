@@ -22,7 +22,9 @@
 
     <div id="game-container" style="position: relative; overflow: hidden;">
         
-        <div id="room-area" class="app-screen">
+        <div id="main-slider-screen" class="app-screen">
+            <div id="desktop-slider">
+                <div id="room-area">
             <div id="top-hud">
                 <div style="display: flex; flex-direction: column; background-color: #1a1a2e; border: 2px solid #2a2a4a; border-radius: 18px; padding: 10px 16px; width: 100%; box-sizing: border-box; margin-bottom: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.4); gap: 8px;">
                     <!-- Fila de Recursos: EV y POL -->
@@ -388,6 +390,65 @@
                 <div class="pedestal-bottom"><div class="pedestal-light"></div></div>
             </div>
         </div>
+
+        <div id="bathroom-screen" style="position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 20px; box-sizing: border-box; background: linear-gradient(180deg, #120c1f 0%, #0d1a24 100%);">
+            <div class="scanlines-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.05), rgba(0, 0, 0, 0.05) 2px, transparent 2px, transparent 8px); pointer-events: none; z-index: 1;"></div>
+            
+            <h2 class="screen-title" style="color: #ab47bc !important; text-shadow: 0 0 15px rgba(171, 71, 188, 0.4) !important; border-bottom: 1px solid rgba(171, 71, 188, 0.2); width: 100%; text-align: center; font-size: 20px; letter-spacing: 2px; font-weight: bold; text-transform: uppercase; margin-top: 15px; padding-bottom: 10px; z-index: 2;">Cápsula de Higiene</h2>
+            
+            <div style="width: 80%; max-width: 300px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(171, 71, 188, 0.3); border-radius: 8px; padding: 10px 15px; display: flex; flex-direction: column; gap: 6px; z-index: 2; margin-top: 15px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);">
+                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px;">
+                    <span style="color: #ab47bc; font-weight: bold; display: flex; align-items: center; gap: 5px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#ab47bc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-4.3-7-11-7-11S5 10.7 5 15a7 7 0 0 0 7 7z"></path></svg>
+                        Nivel de Limpieza
+                    </span>
+                    <span id="bath-hygiene-text" style="font-weight: bold; color: #fff;">100%</span>
+                </div>
+                <div style="background: rgba(255,255,255,0.05); border-radius: 4px; height: 8px; overflow: hidden; width: 100%;">
+                    <div id="bath-hygiene-fill" style="background: linear-gradient(90deg, #ab47bc, #d81b60); height: 100%; width: 100%; transition: width 0.3s;"></div>
+                </div>
+            </div>
+
+            <div id="bath-capsule" style="position: relative; width: 240px; height: 260px; margin-top: 25px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; z-index: 2;">
+                <div style="position: absolute; width: 100%; height: 100%; overflow: hidden; pointer-events: none; opacity: 0.2;">
+                    <span class="bg-bubble" style="left: 15%; width: 12px; height: 12px; animation-duration: 4s;"></span>
+                    <span class="bg-bubble" style="left: 45%; width: 8px; height: 8px; animation-duration: 6s; animation-delay: 2s;"></span>
+                    <span class="bg-bubble" style="left: 75%; width: 14px; height: 14px; animation-duration: 5s; animation-delay: 1s;"></span>
+                </div>
+                <div class="bath-capsule-glass" style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 220px; height: 210px; background: rgba(171, 71, 188, 0.03); border: 2.5px solid rgba(171, 71, 188, 0.35); border-radius: 110px 110px 30px 30px; box-shadow: inset 0 0 25px rgba(171, 71, 188, 0.15), 0 0 20px rgba(0, 0, 0, 0.5); backdrop-filter: blur(1px); -webkit-backdrop-filter: blur(1px); overflow: hidden;">
+                    <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 15px; background: rgba(171, 71, 188, 0.2); border-top: 1px solid rgba(171, 71, 188, 0.4);"></div>
+                </div>
+                <div id="geno-container-bathroom" style="position: absolute; bottom: 25px; width: 150px; height: 150px; display: flex; justify-content: center; align-items: center;"></div>
+            </div>
+
+            <div style="width: 85%; max-width: 320px; background: linear-gradient(180deg, #1b2838 0%, #111a24 100%); border: 1.5px solid rgba(171, 71, 188, 0.35); border-radius: 16px; padding: 15px; margin-top: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.6); display: flex; flex-direction: column; align-items: center; gap: 8px; z-index: 2;">
+                <span style="font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; color: #aaa; font-weight: bold;">Herramientas</span>
+                <div style="display: flex; justify-content: space-around; width: 100%; gap: 15px;">
+                    <div class="tool-btn" id="btn-tool-soap" style="flex: 1; aspect-ratio: 1; background: rgba(255,255,255,0.02); border: 2px solid rgba(255, 0, 127, 0.3); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='rgba(255, 0, 127, 0.05)'; this.style.borderColor='rgba(255, 0, 127, 0.6)';" onmouseout="this.style.background='rgba(255,255,255,0.02)'; this.style.borderColor='rgba(255, 0, 127, 0.3)';">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ff007f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 4px rgba(255, 0, 127, 0.4));">
+                            <rect x="2" y="7" width="20" height="10" rx="3"/>
+                            <path d="M6 10h1M16 14h2"/>
+                            <circle cx="12" cy="12" r="1"/>
+                        </svg>
+                        <span style="font-size: 9px; color: #ff007f; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Jabón</span>
+                    </div>
+                    <div class="tool-btn" id="btn-tool-shower" style="flex: 1; aspect-ratio: 1; background: rgba(255,255,255,0.02); border: 2px solid rgba(0, 229, 255, 0.3); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; cursor: pointer; transition: 0.2s;" onmouseover="this.style.background='rgba(0, 229, 255, 0.05)'; this.style.borderColor='rgba(0, 229, 255, 0.6)';" onmouseout="this.style.background='rgba(255,255,255,0.02)'; this.style.borderColor='rgba(0, 229, 255, 0.3)';">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.4));">
+                            <path d="M4 4h7a4 4 0 0 1 4 4v12a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V8a4 4 0 0 1-4-4Z"/>
+                            <path d="M15 12h5m-5 4h3"/>
+                            <circle cx="21" cy="12" r="0.5" fill="#00e5ff"/>
+                            <circle cx="19" cy="16" r="0.5" fill="#00e5ff"/>
+                        </svg>
+                        <span style="font-size: 9px; color: #00e5ff; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Ducha</span>
+                    </div>
+                </div>
+            </div>
+
+            <button class="back-btn btn-go-home" style="margin-top: 25px; margin-bottom: 10px; border-color: #ab47bc; color: #ab47bc; background: #0a0d16; z-index: 2;">Volver al Laboratorio</button>
+        </div>
+
+    </div>
+</div>
 
         <div id="arcade-info-modal" class="hidden" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 26, 46, 0.85); z-index: 3000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);">
             <div class="modal-content" style="background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%); border: 2px solid #4dd0e1; box-shadow: 0 10px 30px rgba(77, 208, 225, 0.3); width: 80%; max-width: 300px; border-radius: 12px; padding: 25px 20px; box-sizing: border-box; position: relative; text-align: center;">
@@ -1100,6 +1161,14 @@
                     <div class="drawer-item" id="btn-feed">
                         <div class="drawer-icon" style="display:flex; align-items:center; justify-content:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff4b4b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.94c1.5 0 2.75 1.06 4 1.06 3 0 6-8 6-12.22A4.91 4.91 0 0 0 17 5c-2.22 0-4 1.44-5 2-1-.56-2.78-2-5-2a4.9 4.9 0 0 0-5 4.78C2 14 5 22 8 22c1.25 0 2.5-1.06 4-1.06Z"/><path d="M10 2c1 .5 2 2 2 5"/></svg></div>
                         <span>Alimentar</span>
+                    </div>
+                    <div class="drawer-item" id="btn-bathroom" onclick="document.getElementById('drawer-menu').classList.add('hidden'); window.navegarA('bathroom-screen');">
+                        <div class="drawer-icon" style="display:flex; align-items:center; justify-content:center;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ab47bc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22a7 7 0 0 0 7-7c0-4.3-7-11-7-11S5 10.7 5 15a7 7 0 0 0 7 7z"/>
+                            </svg>
+                        </div>
+                        <span>Baño</span>
                     </div>
                     <div class="drawer-item" id="btn-arcade">
                         <div class="drawer-icon" style="display:flex; align-items:center; justify-content:center;"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#4dd0e1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h4"/><path d="M8 10v4"/><circle cx="15" cy="13" r="1"/><circle cx="18" cy="11" r="1"/></svg></div>
