@@ -1257,6 +1257,35 @@ function iniciarSecuenciaBienvenida() {
             mainSliderScreen.addEventListener("mouseup", (e) => {
                 detectEnd(e.clientX, e.clientY);
             });
+
+            // Deslizar con flechas del teclado en PC
+            document.addEventListener("keydown", (e) => {
+                if (mainSliderScreen.classList.contains("hidden")) return;
+                
+                // Evitar deslizamientos si el usuario está escribiendo en algún campo de entrada
+                if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA" || e.target.isContentEditable) return;
+                
+                // No deslizar si hay algún modal abierto
+                const statsModal = document.getElementById("stats-modal-overlay");
+                const coliseumHelp = document.getElementById("coliseum-help-modal");
+                const needsInfo = document.getElementById("needs-info-modal");
+                const energyInfo = document.getElementById("hud-energy-info-modal");
+                const drawerMenu = document.getElementById("drawer-menu");
+
+                const isModalOpen = (statsModal && !statsModal.classList.contains("hidden")) ||
+                                    (coliseumHelp && !coliseumHelp.classList.contains("hidden")) ||
+                                    (needsInfo && !needsInfo.classList.contains("hidden")) ||
+                                    (energyInfo && !energyInfo.classList.contains("hidden")) ||
+                                    (drawerMenu && !drawerMenu.classList.contains("hidden"));
+
+                if (isModalOpen) return;
+
+                if (e.key === "ArrowRight" && window.currentSlide === "room-area") {
+                    window.navegarA("bathroom-screen");
+                } else if (e.key === "ArrowLeft" && window.currentSlide === "bathroom-screen") {
+                    window.navegarA("room-area");
+                }
+            });
         }
     });
 })();
