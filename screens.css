@@ -78,6 +78,11 @@
     display: none !important;
 }
 #play-area { flex: 1; position: relative; overflow: hidden; background: #0a1118; }
+@keyframes pulse {
+    0%   { filter: drop-shadow(0 0 4px #FFD700) drop-shadow(0 0 8px rgba(255,215,0,0.5)); }
+    100% { filter: drop-shadow(0 0 10px #FFD700) drop-shadow(0 0 20px rgba(255,215,0,0.8)); }
+}
+
 #falling-object { position: absolute; font-size: 30px; transition: none !important; }
 #player-basket { position: absolute; font-size: 40px; bottom: 20px; transition: left 0.1s linear; }
 #touch-controls { position: absolute; top: 0; width: 100%; height: 100%; display: flex; z-index: 5; }
@@ -431,3 +436,45 @@
 #care-clean-tools.hidden {
     display: none !important;
 }
+
+/* ============================================= */
+/* ANIMACIÓN DE DESCANSO / RECUPERACIÓN DE GENO  */
+/* ============================================= */
+@keyframes restLineRise {
+    0%   { transform: translateY(0) scaleY(0); opacity: 0; }
+    12%  { opacity: 1; transform: translateY(0) scaleY(1); }
+    80%  { opacity: 0.6; }
+    100% { transform: translateY(-160px) scaleY(0.3); opacity: 0; }
+}
+@keyframes restBoltFloat {
+    0%   { transform: translateY(0) scale(0.6); opacity: 0; }
+    20%  { opacity: 1; transform: translateY(-18px) scale(1); }
+    75%  { opacity: 0.8; }
+    100% { transform: translateY(-120px) scale(0.7); opacity: 0; }
+}
+
+/* Contenedor del aura — se posiciona absolutamente sobre el Geno */
+.geno-resting-aura {
+    pointer-events: none;
+    overflow: visible;
+}
+
+/* Línea verde que sube */
+.rest-line {
+    position: absolute;
+    bottom: 0;
+    width: 3px;
+    border-radius: 4px;
+    background: linear-gradient(to top, #4CAF50 0%, #a5d6a7 60%, transparent 100%);
+    box-shadow: 0 0 8px #4CAF50, 0 0 18px rgba(76, 175, 80, 0.45);
+    animation: restLineRise ease-in infinite;
+    transform-origin: bottom center;
+}
+
+/* Rayo flotante pequeño */
+.rest-bolt {
+    position: absolute;
+    bottom: 0;
+    animation: restBoltFloat ease-in infinite;
+    filter: drop-shadow(0 0 5px #4CAF50);
+}

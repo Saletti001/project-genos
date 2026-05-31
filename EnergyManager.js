@@ -134,11 +134,22 @@ window.NexoEnergyManager = {
                 const hygieneRate = (100 / 86400) * drainMultiplier;
                 geno.higiene = Math.max(0, geno.higiene - hygieneRate * segundosTranscurridos);
 
-                // Recuperación de Resistencia
-                const tieneCuidado = geno.ultimoCuidadoDiario === hoy;
-                const tasaRecuperacion = tieneCuidado ? (25 * 1.20) : 25;
-                const recuperacionResistencia = (tasaRecuperacion / 3600) * segundosTranscurridos;
-                geno.resistencia = Math.min(100, geno.resistencia + recuperacionResistencia);
+                // Recuperación de Resistencia (solo cuando el descanso está activo)
+                if (geno.descansandoDesde) {
+                    const tasaRecuperacion = 25; // 25 puntos/hora
+                    const recuperacionResistencia = (tasaRecuperacion / 3600) * segundosTranscurridos;
+                    geno.resistencia = Math.min(100, geno.resistencia + recuperacionResistencia);
+                    // Si completa la recuperación, limpiar el estado
+                    if (geno.resistencia >= 100) {
+                        geno.resistencia = 100;
+                        geno.descansandoDesde = null;
+                        // Notificar en la UI si es el Geno activo
+                        if (window.miMascota && String(window.miMascota.id) === String(geno.id)) {
+                            if (typeof window.actualizarBotonDescansar === 'function') window.actualizarBotonDescansar();
+                            if (typeof window.actualizarAnimacionDescanso === 'function') window.actualizarAnimacionDescanso();
+                        }
+                    }
+                }
 
                 // Generación de Esencia Pasiva
                 if (window.isGenoHappy && window.isGenoHappy(geno)) {
@@ -340,5 +351,34 @@ window.NexoEnergyManager = {
 
         if (typeof window.actualizarSuciedadVisual === 'function') window.actualizarSuciedadVisual();
         if (typeof window.actualizarMonedaEvFlotante === 'function') window.actualizarMonedaEvFlotante();
+        if (typeof window.actualizarBotonDescansar === 'function') window.actualizarBotonDescansar();
+        if (typeof window.actualizarAnimacionDescanso === 'function') window.actualizarAnimacionDescanso();
+
+        // Actualizar indicador de Felicidad
+        if (window.miMascota && window.miMascota.id !== "temp") {
+            const hb = Math.floor(window.miMascota.hambre !== undefined ? window.miMascota.hambre : 100);
+            const db = Math.floor(window.miMascota.diversion !== undefined ? window.miMascota.diversion : 100);
+            const ib = Math.floor(window.miMascota.higiene !== undefined ? window.miMascota.higiene : 100);
+            const rb = Math.floor(window.miMascota.resistencia !== undefined ? window.miMascota.resistencia : 100);
+            const happiness = Math.floor((hb + db + ib + rb) / 4);
+
+            const hEmoji = document.getElementById("happiness-emoji");
+            const hText  = document.getElementById("happiness-text");
+            const hFill  = document.getElementById("happiness-fill");
+            const hPct   = document.getElementById("happiness-percent");
+
+            if (hEmoji) {
+                let emoji, text, color;
+                if (happiness >= 80)      { emoji = "😄"; text = "Muy Feliz"; color = "#4CAF50"; }
+                else if (happiness >= 60) { emoji = "🙂"; text = "Contento";  color = "#8BC34A"; }
+                else if (happiness >= 40) { emoji = "😐"; text = "Neutral";   color = "#FFC107"; }
+                else if (happiness >= 20) { emoji = "😟"; text = "Triste";    color = "#FF9800"; }
+                else                      { emoji = "😰"; text = "Muy Triste"; color = "#f44336"; }
+                hEmoji.innerText = emoji;
+                if (hText)  hText.innerText  = text;
+                if (hFill)  { hFill.style.width = `${happiness}%`; hFill.style.backgroundColor = color; }
+                if (hPct)   hPct.innerText   = `${happiness}%`;
+            }
+        }
     }
 };

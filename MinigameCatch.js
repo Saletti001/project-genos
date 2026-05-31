@@ -15,6 +15,7 @@ class MinigameCatch {
         this.touchRight = document.getElementById("touch-right");
 
         this.score = 0;
+        this.evGanada = 0;
         this.timeLeft = 30;
         this.basketX = 50; 
         this.gameInterval = null;
@@ -54,6 +55,7 @@ class MinigameCatch {
         this.screen.classList.remove("hidden");
         
         this.score = 0;
+        this.evGanada = 0;
         this.timeLeft = 30;
         this.basketX = 50;
         this.basket.style.left = this.basketX + "%";
@@ -80,26 +82,63 @@ class MinigameCatch {
     }
 
     updateUI() {
-        this.scoreDisplay.innerText = `Manzanas: ${this.score}`;
+        const evStr = this.evGanada > 0 ? ` | ⚡ +${this.evGanada.toFixed(2)} EV` : "";
+        this.scoreDisplay.innerText = `Manzanas: ${this.score}${evStr}`;
         this.timerDisplay.innerText = `⏱️ ${this.timeLeft}s`;
     }
 
     spawnItem() {
         if (!this.isPlaying) return;
-        
-        const isBomb = Math.random() < 0.25; 
+
+        const rand = Math.random();
+        let type, icon, speed;
+
+        if (rand < 0.15) {
+            // Gema de EV — siempre cae rápido
+            type  = "ev";
+            icon  = null; // usaremos SVG inline
+            speed = 9 + Math.random() * 2; // 9-11 px/tick
+        } else if (rand < 0.40) {
+            // Bomba
+            type  = "bomb";
+            icon  = "💣";
+            speed = 4 + Math.random() * 3;
+        } else {
+            // Manzana
+            type  = "apple";
+            icon  = "🍎";
+            speed = 4 + Math.random() * 3;
+        }
+
         const item = document.createElement("div");
-        item.innerText = isBomb ? "💣" : "🍎";
         item.style.position = "absolute";
-        item.style.fontSize = "30px";
-        item.style.left = (Math.random() * 85) + "%"; 
-        item.style.top = "-40px";
-        item.dataset.type = isBomb ? "bomb" : "apple";
-        
+        item.style.left     = (Math.random() * 85) + "%";
+        item.style.top      = "-40px";
+        item.dataset.type   = type;
+
+        if (type === "ev") {
+            item.style.fontSize = "0"; // sin emoji
+            item.style.width    = "22px";
+            item.style.height   = "22px";
+            item.style.display  = "flex";
+            item.style.alignItems = "center";
+            item.style.justifyContent = "center";
+            item.innerHTML = `<svg width="22" height="22" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="12,2 20,7 20,17 12,22 4,17 4,7" fill="#FFD700" stroke="#FFA000" stroke-width="1.5"/>
+                <text x="12" y="16" text-anchor="middle" font-size="9" fill="#0d1a24" font-weight="bold" font-family="monospace">EV</text>
+                <circle cx="12" cy="12" r="4" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="0.5"/>
+            </svg>`;
+            // Brillo pulsante
+            item.style.filter = "drop-shadow(0 0 5px #FFD700) drop-shadow(0 0 10px rgba(255,215,0,0.6))";
+            item.style.animation = "pulse 0.8s ease-in-out infinite alternate";
+        } else {
+            item.style.fontSize = "30px";
+            item.innerText = icon;
+        }
+
         this.playArea.appendChild(item);
         
         let posY = -40;
-        const speed = 4 + Math.random() * 3; 
         
         const fall = setInterval(() => {
             if (!this.isPlaying) {
@@ -111,20 +150,30 @@ class MinigameCatch {
             item.style.top = posY + "px";
             
             const basketRect = this.basket.getBoundingClientRect();
-            const itemRect = item.getBoundingClientRect();
+            const itemRect   = item.getBoundingClientRect();
             
             if (
                 itemRect.bottom >= basketRect.top &&
-                itemRect.top <= basketRect.bottom &&
-                itemRect.right >= basketRect.left &&
-                itemRect.left <= basketRect.right
+                itemRect.top    <= basketRect.bottom &&
+                itemRect.right  >= basketRect.left &&
+                itemRect.left   <= basketRect.right
             ) {
                 if (item.dataset.type === "apple") {
                     this.score++;
+                } else if (item.dataset.type === "ev") {
+                    this.evGanada = parseFloat((this.evGanada + 0.05).toFixed(2));
+                    // Acumular en el Geno activo inmediatamente
+                    if (window.miMascota && window.miMascota.id && window.miMascota.id !== "temp") {
+                        window.miMascota.evAcumulada = Math.min(10.0, (window.miMascota.evAcumulada || 0) + 0.05);
+                    }
+                    // Feedback visual rápido
+                    this.playArea.style.backgroundColor = "rgba(255, 215, 0, 0.15)";
+                    setTimeout(() => this.playArea.style.backgroundColor = "", 120);
                 } else {
-                    this.score = Math.max(0, this.score - 3); 
-                    this.playArea.style.backgroundColor = "#ffcccc"; 
-                    setTimeout(() => this.playArea.style.backgroundColor = "#87CEEB", 150);
+                    // Bomba
+                    this.score = Math.max(0, this.score - 3);
+                    this.playArea.style.backgroundColor = "#ffcccc";
+                    setTimeout(() => this.playArea.style.backgroundColor = "", 150);
                 }
                 
                 this.updateUI();
@@ -172,8 +221,14 @@ class MinigameCatch {
             // Afectar necesidades del Geno activo
             if (window.miMascota && window.miMascota.id && window.miMascota.id !== "temp") {
                 if (window.miMascota.diversion === undefined) window.miMascota.diversion = 100;
-                if (window.miMascota.amistad === undefined) window.miMascota.amistad = 0;
+                if (window.miMascota.amistad   === undefined) window.miMascota.amistad   = 0;
                 window.miMascota.diversion = Math.min(100, window.miMascota.diversion + 20);
+
+                // Sincronizar EV acumulada durante la partida
+                if (this.evGanada > 0) {
+                    if (window.miMascota.evAcumulada === undefined) window.miMascota.evAcumulada = 0;
+                    window.miMascota.evAcumulada = Math.min(10.0, window.miMascota.evAcumulada);
+                }
                 
                 const hoy = new Date().toDateString();
                 if (!window.miMascota.registroAmistadDiaria) window.miMascota.registroAmistadDiaria = {};
@@ -187,24 +242,23 @@ class MinigameCatch {
                 if (window.misGenos) {
                     const idx = window.misGenos.findIndex(g => String(g.id) === String(window.miMascota.id));
                     if (idx !== -1) {
-                        window.misGenos[idx].diversion = window.miMascota.diversion;
-                        window.misGenos[idx].amistad = window.miMascota.amistad;
+                        window.misGenos[idx].diversion          = window.miMascota.diversion;
+                        window.misGenos[idx].amistad            = window.miMascota.amistad;
+                        window.misGenos[idx].evAcumulada        = window.miMascota.evAcumulada;
                         window.misGenos[idx].registroAmistadDiaria = window.miMascota.registroAmistadDiaria;
                     }
                 }
-                if (window.NexoEnergyManager) {
-                    window.NexoEnergyManager.actualizarUI();
-                }
+                if (window.NexoEnergyManager) window.NexoEnergyManager.actualizarUI();
                 if (window.guardarJuego) window.guardarJuego();
                 else if (window.guardarProgreso) window.guardarProgreso();
 
-                if (gananciaExplicita > 0) {
-                    alert(`¡Tiempo terminado!\nAtrapaste ${this.score} manzanas.\nRatio 5:1 = Ganas ${reward} 🍎.\n¡Diversión +20% y Amistad +${gananciaExplicita}!`);
-                } else {
-                    alert(`¡Tiempo terminado!\nAtrapaste ${this.score} manzanas.\nRatio 5:1 = Ganas ${reward} 🍎.\n¡Diversión +20%! (Amistad por Arcade ya obtenida hoy)`);
-                }
+                let msg = `¡Tiempo terminado!\nAtrapaste ${this.score} manzana(s).\nRatio 5:1 = Ganas ${reward} 🍎.`;
+                if (this.evGanada > 0) msg += `\n⚡ +${this.evGanada.toFixed(2)} EV atrapada(s)!`;
+                if (gananciaExplicita > 0) msg += `\n¡Diversión +20% y Amistad +${gananciaExplicita}!`;
+                else                       msg += `\n¡Diversión +20%! (Amistad por Arcade ya obtenida hoy)`;
+                alert(msg);
             } else {
-                alert(`¡Tiempo terminado!\nAtrapaste ${this.score} manzanas.\nRatio 5:1 = Ganas ${reward} 🍎.`);
+                alert(`¡Tiempo terminado!\nAtrapaste ${this.score} manzana(s).\nRatio 5:1 = Ganas ${reward} 🍎.`);
             }
         }
         

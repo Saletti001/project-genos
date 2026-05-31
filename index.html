@@ -375,6 +375,8 @@
                     <div class="energy-particle" style="left: 35%; animation-duration: 3.5s; animation-delay: 0.5s;"></div>
                 </div>
                 <div id="geno-container"></div>
+                <!-- Aura de descanso - pantalla principal -->
+                <div id="geno-resting-aura-main" class="geno-resting-aura" style="display:none; position:absolute; bottom:55px; left:50%; transform:translateX(-50%); width:130px; height:210px; z-index:16;"></div>
                 <div class="pedestal-bottom"><div class="pedestal-light"></div></div>
             </div>
         </div>
@@ -459,8 +461,25 @@
                 </div>
             </div>
 
+            <!-- Indicador de Felicidad -->
+            <div id="happiness-indicator" style="width: 92%; max-width: 340px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 7px 14px; z-index: 2; display: flex; align-items: center; gap: 10px;">
+                <span id="happiness-emoji" style="font-size: 20px; line-height: 1;">😄</span>
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 9px; color: #80deea; font-weight: bold; text-transform: uppercase; letter-spacing: 1.2px;">Felicidad</span>
+                        <span id="happiness-text" style="font-size: 9px; color: #fff; font-weight: 700;">Muy Feliz</span>
+                    </div>
+                    <div style="background: rgba(0,0,0,0.45); border-radius: 4px; height: 5px; overflow: hidden;">
+                        <div id="happiness-fill" style="height: 100%; width: 100%; background: #4CAF50; transition: width 0.6s ease, background-color 0.6s ease; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                <span id="happiness-percent" style="font-size: 12px; color: #fff; font-weight: 800; min-width: 32px; text-align: right;">100%</span>
+            </div>
+
             <!-- Geno Container (sin cápsula, nítido) -->
             <div id="geno-container-bathroom" style="width: 200px; flex: 1; min-height: 180px; display: flex; justify-content: center; align-items: center; z-index: 2; position: relative;"></div>
+            <!-- Aura de descanso - Centro de Cuidado -->
+            <div id="geno-resting-aura-bathroom" class="geno-resting-aura" style="display:none; position:absolute; width:130px; height:210px; z-index:10; left:50%; transform:translateX(-50%); pointer-events:none;"></div>
 
             <!-- Contenedor unificado para empujar las acciones y herramientas abajo -->
             <div style="width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: auto; z-index: 2;">

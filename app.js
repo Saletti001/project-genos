@@ -1083,42 +1083,129 @@ function iniciarSecuenciaBienvenida() {
         if (funText) funText.innerText = `${diversion}%`;
         if (funFill) funFill.style.width = `${diversion}%`;
 
-        // Actualizar estado del botón Descansar (cooldown 4h)
+        // Actualizar estado del botón Descansar y animación de descanso
         window.actualizarBotonDescansar();
+        if (typeof window.actualizarAnimacionDescanso === 'function') window.actualizarAnimacionDescanso();
     };
 
-    // Función para actualizar el estado visual del botón Descansar
+
+    // Función para actualizar el estado visual del botón Descansar (3 estados)
     window.actualizarBotonDescansar = function() {
-        const btn = document.getElementById("btn-care-rest");
+        const btn   = document.getElementById("btn-care-rest");
         const label = document.getElementById("btn-care-rest-label");
         if (!btn || !label) return;
 
         const geno = window.miMascota;
-        if (!geno || geno.id === "temp") return;
+        if (!geno || geno.id === "temp") {
+            btn.disabled = true;
+            label.innerText = "Descansar";
+            return;
+        }
 
         const ahora = typeof window.obtenerTiempoSeguro === 'function' ? window.obtenerTiempoSeguro() : Date.now();
-        const ultimoDescanso = geno.ultimoDescanso || 0;
-        const cooldownMs = 4 * 60 * 60 * 1000; // 4 horas
-        const restante = Math.max(0, cooldownMs - (ahora - ultimoDescanso));
 
-        if (restante > 0) {
-            btn.disabled = true;
-            const mins = Math.ceil(restante / 60000);
-            const h = Math.floor(mins / 60);
-            const m = mins % 60;
-            label.innerText = h > 0 ? `${h}h ${m}m` : `${m}m`;
-        } else {
-            const wasDisabled = btn.disabled;
+        // ESTADO 1: descansando activamente (botón verde, muestra tiempo restante, click = cancelar)
+        if (geno.descansandoDesde) {
+            const msTranscurrido  = ahora - geno.descansandoDesde;
+            const msRestante      = Math.max(0, (4 * 60 * 60 * 1000) - msTranscurrido);
+            const h = Math.floor(msRestante / 3600000);
+            const m = Math.floor((msRestante % 3600000) / 60000);
             btn.disabled = false;
-            label.innerText = "Descansar";
-            if (wasDisabled && typeof window.actualizarGenoBaño === 'function') {
-                window.actualizarGenoBaño();
+            btn.style.background    = "rgba(76,175,80,0.35)";
+            btn.style.borderColor   = "#4CAF50";
+            btn.style.color         = "#a5d6a7";
+            btn.style.opacity       = "1";
+            label.innerText = msRestante > 0 ? `✓ ${h > 0 ? h + 'h ' : ''}${m}m` : "✓ Completo";
+            return;
+        }
+
+        // ESTADO 2: cooldown por cancelación (2 horas)
+        const msDescansoCancelado = geno.descansoCancelado || 0;
+        const msRestanteCooldown  = Math.max(0, (2 * 60 * 60 * 1000) - (ahora - msDescansoCancelado));
+        if (msRestanteCooldown > 0) {
+            const h = Math.floor(msRestanteCooldown / 3600000);
+            const m = Math.ceil((msRestanteCooldown % 3600000) / 60000);
+            btn.disabled = true;
+            btn.style.background  = "";
+            btn.style.borderColor = "";
+            btn.style.color       = "";
+            btn.style.opacity     = "0.45";
+            label.innerText = h > 0 ? `${h}h ${m}m` : `${m}m`;
+            return;
+        }
+
+        // ESTADO 3: disponible
+        btn.disabled = false;
+        btn.style.background  = "";
+        btn.style.borderColor = "";
+        btn.style.color       = "";
+        btn.style.opacity     = "1";
+        label.innerText = "Descansar";
+    };
+
+    // Función para generar los hijos del aura de descanso (líneas + rayos)
+    function _generarLineasDescanso(container) {
+        container.innerHTML = ""; // Limpiar si ya tenía hijos
+        const cols   = [8, 22, 38, 55, 70, 85];
+        const heights = [45, 60, 40, 55, 50, 42];
+        const durs   = [1.8, 2.1, 1.6, 2.3, 1.9, 2.0];
+        const dels   = [0, 0.35, 0.7, 0.15, 0.55, 0.9];
+
+        cols.forEach((left, i) => {
+            // Línea verde
+            const line = document.createElement("div");
+            line.className = "rest-line";
+            line.style.cssText = `left:${left}%; height:${heights[i]}px; animation-duration:${durs[i]}s; animation-delay:${dels[i]}s;`;
+            container.appendChild(line);
+
+            // Rayo SVG cada dos columnas
+            if (i % 2 === 0) {
+                const bolt = document.createElement("div");
+                bolt.className = "rest-bolt";
+                bolt.style.cssText = `left:${left + 6}%; animation-duration:${durs[i] + 0.5}s; animation-delay:${dels[i] + 0.25}s;`;
+                bolt.innerHTML = `<svg width="9" height="15" viewBox="0 0 10 18" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="10,0 3,10 9,10 8,18 18,8 11,8" fill="#81c784" stroke="#4CAF50" stroke-width="0.8"/></svg>`;
+                container.appendChild(bolt);
             }
+        });
+    }
+
+    // Función global para mostrar/ocultar la animación de descanso en ambas pantallas
+    window.actualizarAnimacionDescanso = function() {
+        const isResting = !!(window.miMascota && window.miMascota.descansandoDesde);
+
+        // — Pantalla principal (pedestal) —
+        const mainAura = document.getElementById("geno-resting-aura-main");
+        if (mainAura) {
+            if (isResting && mainAura.children.length === 0) {
+                _generarLineasDescanso(mainAura);
+            }
+            mainAura.style.display = isResting ? "block" : "none";
+        }
+
+        // — Centro de Cuidado (baño) — posicionar dinámicamente sobre el Geno
+        const bathAura = document.getElementById("geno-resting-aura-bathroom");
+        if (bathAura) {
+            if (isResting && bathAura.children.length === 0) {
+                _generarLineasDescanso(bathAura);
+            }
+            if (isResting) {
+                const genoEl   = document.getElementById("geno-container-bathroom");
+                const screenEl = document.getElementById("bathroom-screen");
+                if (genoEl && screenEl) {
+                    const genoRect   = genoEl.getBoundingClientRect();
+                    const screenRect = screenEl.getBoundingClientRect();
+                    const topOffset  = genoRect.top - screenRect.top;
+                    bathAura.style.top    = topOffset + "px";
+                    bathAura.style.height = genoRect.height + "px";
+                }
+            }
+            bathAura.style.display = isResting ? "block" : "none";
         }
     };
 
     // Registrar eventos para el manual de cuidado y el cuarto de baño
     document.addEventListener("DOMContentLoaded", () => {
+
         const needsInfoModal = document.getElementById("needs-info-modal");
         const closeBtn = document.getElementById("close-needs-info");
         const confirmBtn = document.getElementById("btn-close-needs-info-confirm");
@@ -1485,7 +1572,7 @@ function iniciarSecuenciaBienvenida() {
             });
         }
 
-        // --- Botón DESCANSAR: 100% Resistencia con cooldown de 4h ---
+        // --- Botón DESCANSAR: toggle ON/OFF — inicia recuperación progresiva de 4 horas ---
         const btnCareRest = document.getElementById("btn-care-rest");
         if (btnCareRest) {
             btnCareRest.addEventListener("click", () => {
@@ -1494,57 +1581,78 @@ function iniciarSecuenciaBienvenida() {
                     return;
                 }
 
+                const geno  = window.miMascota;
                 const ahora = typeof window.obtenerTiempoSeguro === 'function' ? window.obtenerTiempoSeguro() : Date.now();
-                const ultimoDescanso = window.miMascota.ultimoDescanso || 0;
-                const cooldownMs = 4 * 60 * 60 * 1000;
 
-                if (ahora - ultimoDescanso < cooldownMs) {
-                    alert("Tu Geno ya ha descansado recientemente. Espera a que se recupere.");
+                // ---- CANCELAR descanso activo ----
+                if (geno.descansandoDesde) {
+                    geno.descansandoDesde  = null;
+                    geno.descansoCancelado = ahora;
+                    // Sincronizar en misGenos
+                    if (window.misGenos) {
+                        const idx = window.misGenos.findIndex(g => String(g.id) === String(geno.id));
+                        if (idx !== -1) {
+                            window.misGenos[idx].descansandoDesde  = null;
+                            window.misGenos[idx].descansoCancelado = ahora;
+                        }
+                    }
+                    if (window.Sonidos) window.Sonidos.play("click");
+                    window.actualizarBotonDescansar();
+                    window.actualizarAnimacionDescanso();
+                    if (window.guardarLocalSilencioso) window.guardarLocalSilencioso();
                     return;
                 }
 
-                // Aplicar 100% Resistencia (Reestablecer toda la energía)
-                window.miMascota.resistencia = 100;
-                window.miMascota.ultimoDescanso = ahora;
+                // ---- Verificar cooldown de cancelación (2 horas) ----
+                const msDescansoCancelado = geno.descansoCancelado || 0;
+                const msRestanteCooldown  = Math.max(0, (2 * 60 * 60 * 1000) - (ahora - msDescansoCancelado));
+                if (msRestanteCooldown > 0) {
+                    const h = Math.floor(msRestanteCooldown / 3600000);
+                    const m = Math.ceil((msRestanteCooldown % 3600000) / 60000);
+                    alert(`Tu Geno necesita reposo. Cooldown restante: ${h > 0 ? h + 'h ' : ''}${m}m.`);
+                    return;
+                }
 
+                // ---- ACTIVAR descanso ----
+                geno.descansandoDesde  = ahora;
+                geno.descansoCancelado = null;
                 // Sincronizar en misGenos
                 if (window.misGenos) {
-                    const idx = window.misGenos.findIndex(g => String(g.id) === String(window.miMascota.id));
+                    const idx = window.misGenos.findIndex(g => String(g.id) === String(geno.id));
                     if (idx !== -1) {
-                        window.misGenos[idx].resistencia = window.miMascota.resistencia;
-                        window.misGenos[idx].ultimoDescanso = window.miMascota.ultimoDescanso;
+                        window.misGenos[idx].descansandoDesde  = ahora;
+                        window.misGenos[idx].descansoCancelado = null;
                     }
                 }
 
-                // Animación Zzz flotante sobre el Geno
+                // Animación Zzz flotante de inicio
                 const bathGeno = document.getElementById("geno-container-bathroom");
                 if (bathGeno) {
-                    for (let i = 0; i < 5; i++) {
+                    for (let i = 0; i < 4; i++) {
                         setTimeout(() => {
                             const zzz = document.createElement("div");
                             zzz.className = "zzz-particle";
                             zzz.innerText = "Z";
                             zzz.style.fontSize = `${14 + i * 4}px`;
-                            zzz.style.left = `${40 + Math.random() * 120}px`;
-                            zzz.style.top = `${20 + Math.random() * 40}px`;
+                            zzz.style.left     = `${40 + Math.random() * 90}px`;
+                            zzz.style.top      = `${20 + Math.random() * 40}px`;
                             bathGeno.appendChild(zzz);
                             setTimeout(() => zzz.remove(), 1500);
-                        }, i * 200);
+                        }, i * 250);
                     }
                 }
 
                 if (window.Sonidos) window.Sonidos.play("click");
-                window.actualizarGenoBaño();
+                window.actualizarBotonDescansar();
+                window.actualizarAnimacionDescanso();
                 if (window.guardarProgreso) window.guardarProgreso();
             });
         }
 
-        // Actualizar timer del botón Descansar cada minuto
+        // Actualizar timer del botón Descansar cada 30 segundos
         setInterval(() => {
-            if (typeof window.actualizarBotonDescansar === 'function') {
-                window.actualizarBotonDescansar();
-            }
-        }, 60000);
+            if (typeof window.actualizarBotonDescansar === 'function') window.actualizarBotonDescansar();
+        }, 30000);
 
         // --- GESTOS DE DESLIZAMIENTO HASTA EL BAÑO ---
         let swipeStartX = 0;
