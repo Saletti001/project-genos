@@ -463,10 +463,10 @@
 .rest-line {
     position: absolute;
     bottom: 0;
-    width: 3px;
-    border-radius: 4px;
+    width: 1px;
+    border-radius: 2px;
     background: linear-gradient(to top, #4CAF50 0%, #a5d6a7 60%, transparent 100%);
-    box-shadow: 0 0 8px #4CAF50, 0 0 18px rgba(76, 175, 80, 0.45);
+    box-shadow: 0 0 5px #4CAF50, 0 0 12px rgba(76, 175, 80, 0.3);
     animation: restLineRise ease-in infinite;
     transform-origin: bottom center;
 }

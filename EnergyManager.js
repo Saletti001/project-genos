@@ -362,22 +362,44 @@ window.NexoEnergyManager = {
             const rb = Math.floor(window.miMascota.resistencia !== undefined ? window.miMascota.resistencia : 100);
             const happiness = Math.floor((hb + db + ib + rb) / 4);
 
-            const hEmoji = document.getElementById("happiness-emoji");
             const hText  = document.getElementById("happiness-text");
             const hFill  = document.getElementById("happiness-fill");
             const hPct   = document.getElementById("happiness-percent");
+            const hIcon  = document.getElementById("happiness-icon");
 
-            if (hEmoji) {
-                let emoji, text, color;
-                if (happiness >= 80)      { emoji = "😄"; text = "Muy Feliz"; color = "#4CAF50"; }
-                else if (happiness >= 60) { emoji = "🙂"; text = "Contento";  color = "#8BC34A"; }
-                else if (happiness >= 40) { emoji = "😐"; text = "Neutral";   color = "#FFC107"; }
-                else if (happiness >= 20) { emoji = "😟"; text = "Triste";    color = "#FF9800"; }
-                else                      { emoji = "😰"; text = "Muy Triste"; color = "#f44336"; }
-                hEmoji.innerText = emoji;
-                if (hText)  hText.innerText  = text;
-                if (hFill)  { hFill.style.width = `${happiness}%`; hFill.style.backgroundColor = color; }
-                if (hPct)   hPct.innerText   = `${happiness}%`;
+            if (hText || hFill) {
+                let text, color, strokeColor;
+                if (happiness >= 80)      { text = "Muy Feliz"; color = "#81c784"; strokeColor = "#4CAF50"; }
+                else if (happiness >= 60) { text = "Contento";  color = "#a5d6a7"; strokeColor = "#81c784"; }
+                else if (happiness >= 40) { text = "Neutral";   color = "#ffeb3b"; strokeColor = "#fbc02d"; }
+                else if (happiness >= 20) { text = "Triste";    color = "#ffb74d"; strokeColor = "#ffa726"; }
+                else                      { text = "Muy Triste"; color = "#ef9a9a"; strokeColor = "#e57373"; }
+
+                if (hText) {
+                    hText.innerText = text;
+                    hText.style.color = color;
+                }
+                if (hPct) {
+                    hPct.innerText = `${happiness}%`;
+                    hPct.style.color = color;
+                }
+                if (hFill) {
+                    hFill.style.width = `${happiness}%`;
+                    hFill.style.background = `linear-gradient(90deg, ${strokeColor}, ${color})`;
+                    hFill.style.boxShadow = `0 0 6px ${color}80`;
+                    hFill.parentElement.style.borderColor = `${color}33`;
+                }
+                if (hIcon) {
+                    hIcon.setAttribute("fill", color);
+                    hIcon.setAttribute("stroke", strokeColor);
+                    hIcon.style.color = color;
+                    hIcon.style.filter = `drop-shadow(0 0 3px ${color}80)`;
+                    
+                    const parentLabel = hIcon.closest("span");
+                    if (parentLabel) {
+                        parentLabel.style.color = color;
+                    }
+                }
             }
         }
     }

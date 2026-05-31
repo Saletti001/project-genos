@@ -1051,6 +1051,7 @@ function iniciarSecuenciaBienvenida() {
                             <div class="geno-idle" style="color: ${window.miMascota.color}; top: 50%; left: 50%; display: flex; justify-content: center; align-items: center;" data-visual-hash="${currentHash}">
                                 ${nuevoSvg}
                             </div>
+                            <div id="geno-resting-aura-bathroom" class="geno-resting-aura" style="display:none; position:absolute; bottom: 0; left:50%; transform:translateX(-50%); width:130px; height:140px; z-index:5; pointer-events:none; overflow:visible;"></div>
                         </div>
                     `;
                 }
@@ -1086,6 +1087,11 @@ function iniciarSecuenciaBienvenida() {
         // Actualizar estado del botón Descansar y animación de descanso
         window.actualizarBotonDescansar();
         if (typeof window.actualizarAnimacionDescanso === 'function') window.actualizarAnimacionDescanso();
+
+        // Forzar actualización inmediata del panel de felicidad y demás HUD/stats
+        if (window.NexoEnergyManager && typeof window.NexoEnergyManager.actualizarUI === 'function') {
+            window.NexoEnergyManager.actualizarUI();
+        }
     };
 
 
@@ -1135,6 +1141,17 @@ function iniciarSecuenciaBienvenida() {
         }
 
         // ESTADO 3: disponible
+        const resistencia = Math.floor(geno.resistencia !== undefined ? geno.resistencia : 100);
+        if (resistencia >= 100) {
+            btn.disabled = true;
+            btn.style.background  = "";
+            btn.style.borderColor = "";
+            btn.style.color       = "";
+            btn.style.opacity     = "0.45";
+            label.innerText = "Descansar";
+            return;
+        }
+
         btn.disabled = false;
         btn.style.background  = "";
         btn.style.borderColor = "";
@@ -1162,8 +1179,8 @@ function iniciarSecuenciaBienvenida() {
             if (i % 2 === 0) {
                 const bolt = document.createElement("div");
                 bolt.className = "rest-bolt";
-                bolt.style.cssText = `left:${left + 6}%; animation-duration:${durs[i] + 0.5}s; animation-delay:${dels[i] + 0.25}s;`;
-                bolt.innerHTML = `<svg width="9" height="15" viewBox="0 0 10 18" fill="none" xmlns="http://www.w3.org/2000/svg"><polygon points="10,0 3,10 9,10 8,18 18,8 11,8" fill="#81c784" stroke="#4CAF50" stroke-width="0.8"/></svg>`;
+                bolt.style.cssText = `left:${left + 4}%; animation-duration:${durs[i] + 0.5}s; animation-delay:${dels[i] + 0.25}s;`;
+                bolt.innerHTML = `<svg width="12" height="18" viewBox="0 0 24 24" fill="#81c784" stroke="#4CAF50" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`;
                 container.appendChild(bolt);
             }
         });
@@ -1182,22 +1199,11 @@ function iniciarSecuenciaBienvenida() {
             mainAura.style.display = isResting ? "block" : "none";
         }
 
-        // — Centro de Cuidado (baño) — posicionar dinámicamente sobre el Geno
+        // — Centro de Cuidado (baño) —
         const bathAura = document.getElementById("geno-resting-aura-bathroom");
         if (bathAura) {
             if (isResting && bathAura.children.length === 0) {
                 _generarLineasDescanso(bathAura);
-            }
-            if (isResting) {
-                const genoEl   = document.getElementById("geno-container-bathroom");
-                const screenEl = document.getElementById("bathroom-screen");
-                if (genoEl && screenEl) {
-                    const genoRect   = genoEl.getBoundingClientRect();
-                    const screenRect = screenEl.getBoundingClientRect();
-                    const topOffset  = genoRect.top - screenRect.top;
-                    bathAura.style.top    = topOffset + "px";
-                    bathAura.style.height = genoRect.height + "px";
-                }
             }
             bathAura.style.display = isResting ? "block" : "none";
         }
@@ -1610,6 +1616,12 @@ function iniciarSecuenciaBienvenida() {
                     const h = Math.floor(msRestanteCooldown / 3600000);
                     const m = Math.ceil((msRestanteCooldown % 3600000) / 60000);
                     alert(`Tu Geno necesita reposo. Cooldown restante: ${h > 0 ? h + 'h ' : ''}${m}m.`);
+                    return;
+                }
+                // ---- Verificar si la resistencia ya está al 100% ----
+                const resistencia = Math.floor(geno.resistencia !== undefined ? geno.resistencia : 100);
+                if (resistencia >= 100) {
+                    alert("La resistencia de tu Geno ya está al 100%. No necesita descansar.");
                     return;
                 }
 
