@@ -1227,16 +1227,6 @@ function iniciarSecuenciaBienvenida() {
             });
         });
 
-        // Abrir el manual de cuidado al presionar las barras del Centro de Cuidado
-        const bathNeedClickables = document.querySelectorAll(".bath-need-clickable");
-        bathNeedClickables.forEach(item => {
-            item.addEventListener("click", () => {
-                if (needsInfoModal) {
-                    needsInfoModal.classList.remove("hidden");
-                    if (window.Sonidos) window.Sonidos.play("click");
-                }
-            });
-        });
 
         // Clic en el botón "i" al lado del título
         const btnBathroomInfo = document.getElementById("btn-bathroom-info");
