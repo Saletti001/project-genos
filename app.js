@@ -1227,6 +1227,53 @@ function iniciarSecuenciaBienvenida() {
             });
         });
 
+        // Abrir el manual de cuidado al presionar las barras del Centro de Cuidado
+        const bathNeedClickables = document.querySelectorAll(".bath-need-clickable");
+        bathNeedClickables.forEach(item => {
+            item.addEventListener("click", () => {
+                if (needsInfoModal) {
+                    needsInfoModal.classList.remove("hidden");
+                    if (window.Sonidos) window.Sonidos.play("click");
+                }
+            });
+        });
+
+        // Clic en el botón "i" al lado del título
+        const btnBathroomInfo = document.getElementById("btn-bathroom-info");
+        if (btnBathroomInfo) {
+            btnBathroomInfo.addEventListener("click", () => {
+                if (needsInfoModal) {
+                    needsInfoModal.classList.remove("hidden");
+                    if (window.Sonidos) window.Sonidos.play("click");
+                }
+            });
+        }
+
+        // --- GESTIÓN DEL MODAL DE INFORMACIÓN DE FELICIDAD ---
+        const happinessInfoModal = document.getElementById("happiness-info-modal");
+        const closeHappyBtn = document.getElementById("close-happiness-info");
+        const confirmHappyBtn = document.getElementById("btn-close-happiness-info-confirm");
+        const happinessTrigger = document.getElementById("bath-happiness-trigger");
+
+        if (happinessTrigger && happinessInfoModal) {
+            happinessTrigger.addEventListener("click", () => {
+                happinessInfoModal.classList.remove("hidden");
+                if (window.Sonidos) window.Sonidos.play("click");
+            });
+        }
+
+        if (happinessInfoModal) {
+            const cerrarHappyModal = (e) => {
+                if (e && typeof e.stopPropagation === 'function') {
+                    e.stopPropagation();
+                }
+                happinessInfoModal.classList.add("hidden");
+                if (window.Sonidos) window.Sonidos.play("click");
+            };
+            if (closeHappyBtn) closeHappyBtn.addEventListener("click", cerrarHappyModal);
+            if (confirmHappyBtn) confirmHappyBtn.addEventListener("click", cerrarHappyModal);
+        }
+
         if (needsInfoModal) {
             const cerrarModal = (e) => {
                 if (e && typeof e.stopPropagation === 'function') {
