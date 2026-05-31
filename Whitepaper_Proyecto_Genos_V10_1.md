@@ -209,7 +209,7 @@ Cada Geno cuenta con su propia barra individual de resistencia de **0 a 100 punt
 - **Batalla en la Torre PvE:** reduce **15 resistencia** del Geno.
 - **Estado de Descanso:** Cuando la resistencia de un Geno llega a 0, entra en estado de descanso y no puede ser seleccionado para combatir hasta que recupere energía.
 - **Tasa de Recuperación:** Recupera **25 de resistencia por hora** de descanso completo (requiere 4 horas para regenerarse tras agotarse por completo).
-- **Cuidado Diario Boost (+20%):** Acariciar o alimentar al Geno en su pedestal (cuidado diario que otorga +10 XP una vez al día) activa un multiplicador de bienestar que acelera la velocidad de recuperación de resistencia en un **+20%** durante el día (recuperando **30 de resistencia por hora**).
+- **Cuidado Diario:** Acariciar al Geno en su pedestal (cuidado diario que otorga +10 XP una vez al día) y ganar Amistad (de 1 a 3 puntos aleatorios, una vez al día). La resistencia se recupera únicamente descansando a un ritmo de 25 puntos por hora en el Centro de Cuidado.
 
 *Efecto de Colección:* Un solo Geno puede hacer un máximo de 4 combates antes de requerir descanso. Para aprovechar al máximo las 20 acciones posibles con 100 de energía en el Coliseo, un jugador competitivo requerirá una rotación de al menos **3 a 5 Genos activos** en su cuenta. Esto incentiva de forma natural la crianza, la adquisición de nuevos especímenes en la Plaza de Comercio y la oferta de Scholarships.
 
@@ -245,7 +245,7 @@ El estado actual del proyecto se encuentra estructurado en base a las siguientes
 - [x] Sistema de 4 slots de ataque implementado en la lógica de combate.
 - [x] Lógica de Matchmaking estricto y aparición de Jefes de Liga (15% de probabilidad) con bono de +15% XP.
 - [x] Implementación de la interfaz del **Laboratorio de Implantes** para equipar/desequipar Módulos de Técnica (MT) y cosméticos.
-- [x] Implementación de la barra de Energía Nexo (100 Max) y barra de Resistencia por Geno (100 Max) con recuperación pasiva, offline y aceleración (+20%) por cuidado diario.
+- [x] Implementación de la barra de Energía Nexo (100 Max) y barra de Resistencia por Geno (100 Max) con recuperación pasiva, offline y descanso en el Centro de Cuidado.
 
 ### Fase 6: Expansión Web3 y Becas (PLANIFICADA)
 - [ ] Despliegue de contratos inteligentes de NFTs de Genos en la red Polygon.

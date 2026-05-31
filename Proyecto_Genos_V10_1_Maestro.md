@@ -142,14 +142,14 @@ Esencia Vital: off-chain. No vendible por $POL. Sin precio externo hasta Fase 6.
 
 [V10.1 NUEVO] Sistema de Energía Nexo y Resistencia:
 - Energía Nexo (Cuenta global): Max 100. Consume 5 en Arcade y 10 en Coliseo. Recupera 1 cada 12 minutos (5/hora).
-- Resistencia del Geno (Individual): Max 100. Consume 20 en Coliseo. Recupera 25/hora (30/hora con Cuidado Diario).
+- Resistencia del Geno (Individual): Max 100. Consume 20 en Coliseo. Recupera 25/hora descansando en el Centro de Cuidado.
 - Recuperación Offline: Calcula la regeneración de forma retrospectiva al reconectarse.
 
 [V10.1 NUEVO] Sistema de Cuidado (Estilo Pou/Tamagotchi):
 - Barras de Necesidades: Hambre (vacía en 12h), Diversión (vacía en 16h), Higiene (vacía en 24h) y Resistencia.
 - Cuidado Activo vs Reserva: Los Genos en reserva reducen sus necesidades 5x más despacio.
 - Bazar Consumibles: Ración Automática (🍱 costo: 2.00 EV, alimenta y congela Hambre de reservas por 24h) y Ducha de Plasma (🧼 costo: 1.00 EV, limpia Higiene al 100% de todos).
-- Interacciones y Cosecha: Caricias (cada toque individual genera un pequeño corazón flotante como feedback visual, requiriendo 5 toques para registrar la caricia y añadir Amistad/Cuidado Diario - la ganancia de Amistad para cualquier acción ahora es de 1 a 3 puntos aleatorios y está limitada a una única vez al día por tipo de acción). Manchas de suciedad en pedestal se limpian frotando (mouseenter/click). Moneda dorada flotante aparece si evAcumulada >= 0.10 para recolectar EV pasiva. Si alguna necesidad cae bajo el 20%, una burbuja de diálogo flotante aparecerá sobre el Geno detallando la necesidad (ej. "Tengo Hambre", "Quiero Jugar") en color neón a juego. El manual de cuidado se abre al hacer clic sobre cualquiera de los 4 estados en la cuadrícula de necesidades del modal de estadísticas (eliminando el HUD de necesidades de la pantalla principal para evitar saturación visual).
+- Interacciones y Cosecha: Caricias (cada toque individual genera un pequeño corazón flotante como feedback visual, requiriendo 5 toques para registrar la caricia y añadir Amistad/Cuidado Diario - la ganancia de Amistad para cualquier acción ahora es de 1 a 3 puntos aleatorios y está limitada a una única vez al día por tipo de acción). Manchas de suciedad se limpian en el Centro de Cuidado (baño) usando la herramienta de jabón y enjuagando con la ducha (baño de 8 segundos). Moneda dorada flotante aparece si evAcumulada >= 0.10 para recolectar EV pasiva. Si alguna necesidad cae bajo el 20%, una burbuja de diálogo flotante aparecerá sobre el Geno detallando la necesidad (ej. "Tengo Hambre", "Quiero Jugar") en color neón a juego. El manual de cuidado se abre al hacer clic sobre cualquiera de los 4 estados en la cuadrícula de necesidades del modal de estadísticas (eliminando el HUD de necesidades de la pantalla principal para evitar saturación visual).
 - Decaimiento por Negligencia (Amistad): Si cualquier necesidad del Geno cae por debajo del 20% (estado de Huelga/desatendido) durante más de 24 horas continuas, la Amistad disminuirá a razón de 1 punto por hora. Subir las necesidades sobre el 20% detiene el decaimiento y restablece el contador.
 - Impactos en Combate: "Estado Óptimo" (necesidades >80%) otorga +25 LUK (+5% crítico) y genera EV. "Huelga" (necesidades <20%) impide que el Geno luche en el Coliseo.
 
@@ -2554,7 +2554,7 @@ Para evitar la inflacion de Esencia Vital (EV), el juego integra barreras de act
 
 2. Cuidado Diario e Incentivos:
 - Ganancia de Amistad Diaria: La amistad obtenida por cualquier acción de cuidado (caricias, limpieza, alimentación, combates, minijuegos, duchas) está limitada a de 1 a 3 puntos aleatorios por acción y se puede ganar solo una vez al día por tipo de acción. Las repeticiones de la misma acción el mismo día no aportarán más amistad.
-- Acariciar (cada toque individual genera un pequeño corazón flotante como feedback visual, requiriendo 5 toques para registrar la caricia) una vez al dia al Geno Compañero otorga +10 XP y un boost de +20% en la recuperacion de Resistencia para el resto del dia.
+- Acariciar (cada toque individual genera un pequeño corazón flotante como feedback visual, requiriendo 5 toques para registrar la caricia) una vez al dia al Geno Compañero otorga +10 XP.
 - El "Estado Optimo" (todas las necesidades > 80%) otorga un bonus de +25 LUK (+5% probabilidad de golpe critico) en el Coliseo y genera EV pasiva en el pedestal.
 - El estado "Huelga" (cualquier necesidad < 20%) inhabilita al Geno para combatir.
 - Decaimiento por Negligencia: Si el Geno permanece en estado de "Huelga" (necesidades < 20%) por más de 24 horas seguidas, perderá Amistad a razón de 1 punto por hora (24 puntos al día). Esto se detiene y el contador se restablece a cero al curar todas sus necesidades sobre el 20%.
