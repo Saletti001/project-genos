@@ -412,7 +412,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (window.ganarXP) {
                     window.ganarXP(10);
                 }
-                let msg = `¡Has acariciado a ${window.miMascota.name || 'tu Geno'}! Cuidado diario activado: +10 XP y +20% de velocidad de recuperación de resistencia para hoy.`;
+                let msg = `¡Has acariciado a ${window.miMascota.name || 'tu Geno'}! Cuidado diario activado: +10 XP para hoy.`;
                 if (gananciaExplicita > 0) {
                     msg += ` ¡Amistad +${gananciaExplicita}!`;
                 }
