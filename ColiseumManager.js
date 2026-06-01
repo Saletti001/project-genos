@@ -359,6 +359,7 @@ document.addEventListener("DOMContentLoaded", () => {
         ColiseumUI.agregarLog(`<span style="color:#4dd0e1">> INICIALIZANDO SECUENCIA DE COMBATE...</span>`);
         ColiseumUI.agregarLog(`<br><span style="color:#ffcc00; font-weight:bold;">--- BATTLE START ---</span>`);
 
+        ColiseumLogic.esperandoSwapForzado = false;
         ColiseumLogic.prepararJugador(window.miMascota);
         ColiseumLogic.generarRivalProcedural(window.miMascota.level || 1, quiereJefe);
         
@@ -411,6 +412,38 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function procesarRonda(accionJugador) {
+        if (ColiseumLogic.modoCombate === '3v3' && ColiseumLogic.esperandoSwapForzado) {
+            if (accionJugador === "swap_a" || accionJugador === "swap_b") {
+                const activeIdx = ColiseumLogic.playerActiveIndex;
+                let targetIndex = activeIdx;
+                if (accionJugador === "swap_a") {
+                    targetIndex = activeIdx === 0 ? 1 : (activeIdx === 1 ? 0 : 0);
+                } else if (accionJugador === "swap_b") {
+                    targetIndex = activeIdx === 0 ? 2 : (activeIdx === 1 ? 2 : 1);
+                }
+                
+                if (ColiseumLogic.playerTeam[targetIndex] && ColiseumLogic.playerTeam[targetIndex].hp > 0) {
+                    ColiseumLogic.esperandoSwapForzado = false;
+                    ColiseumLogic.swapGeno(true, targetIndex);
+                    
+                    const p = ColiseumLogic.player;
+                    const e = ColiseumLogic.enemy;
+                    
+                    ColiseumUI.agregarLog(`> 🔄 <span style="color:#00e5ff; font-weight:bold;">¡Entra ${ColiseumLogic.cName(p)} al combate!</span>`);
+                    
+                    ColiseumUI.animarSoporte(true, { nombre: "RELEVO" });
+                    ColiseumUI.actualizarGraficos(p, e);
+                    ColiseumUI.actualizarHP(p, e);
+                    if (typeof ColiseumUI.actualizarEstados === 'function') {
+                        ColiseumUI.actualizarEstados(p, e);
+                    }
+                    
+                    actualizarBotones();
+                }
+            }
+            return;
+        }
+
         if (accionJugador === "swap_a" || accionJugador === "swap_b") {
             if (ColiseumLogic.player.estados.includes("Enredado")) {
                 ColiseumUI.agregarLog(`> ❌ <span style="color:#ff3333; font-weight:bold;">¡No puedes retirar a tu Geno porque está Enredado!</span>`);
@@ -665,25 +698,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (ColiseumLogic.modoCombate === '3v3') {
                 let huboRelevoForzado = false;
 
-                if (pCaido) {
-                    let nextIdx = -1;
-                    for (let i = 1; i <= 2; i++) {
-                        let candidate = (ColiseumLogic.playerActiveIndex + i) % 3;
-                        if (ColiseumLogic.playerTeam[candidate] && ColiseumLogic.playerTeam[candidate].hp > 0) {
-                            nextIdx = candidate;
-                            break;
-                        }
-                    }
-                    if (nextIdx !== -1) {
-                        ColiseumLogic.swapGeno(true, nextIdx);
-                        ColiseumUI.agregarLog(`> 💀 <span style="color:#ff3333; font-weight:bold;">${p.nombre} ha caído!</span>`);
-                        ColiseumUI.agregarLog(`> 🔄 <span style="color:#00e5ff; font-weight:bold;">¡Entra ${ColiseumLogic.cName(ColiseumLogic.player)} en su reemplazo!</span>`);
-                        p = ColiseumLogic.player;
-                        pCaido = false;
-                        huboRelevoForzado = true;
-                    }
-                }
-
                 if (eCaido) {
                     let nextEnemyIdx = -1;
                     for (let i = 1; i <= 2; i++) {
@@ -700,6 +714,17 @@ document.addEventListener("DOMContentLoaded", () => {
                         e = ColiseumLogic.enemy;
                         eCaido = false;
                         huboRelevoForzado = true;
+                    }
+                }
+
+                if (pCaido) {
+                    const tieneReservas = ColiseumLogic.playerTeam && ColiseumLogic.playerTeam.some(g => g.hp > 0);
+                    const enemigoTieneGenosVivos = e.hp > 0 || (ColiseumLogic.enemyTeam && ColiseumLogic.enemyTeam.some(g => g.hp > 0));
+                    
+                    if (tieneReservas && enemigoTieneGenosVivos) {
+                        ColiseumLogic.esperandoSwapForzado = true;
+                        ColiseumUI.agregarLog(`> 💀 <span style="color:#ff3333; font-weight:bold;">¡${p.nombre} ha caído! Selecciona a tu próximo Geno usando los botones de relevo.</span>`);
+                        pCaido = false;
                     }
                 }
 
@@ -724,7 +749,8 @@ document.addEventListener("DOMContentLoaded", () => {
     function terminarCombate() {
         bloquearBotones(true);
         ColiseumUI.agregarLog(`<br><span style="color:#ffcc00; font-size: 16px; font-weight: bold;">--- FIN DEL COMBATE ---</span>`);
-        if (ColiseumLogic.player.hp > 0) {
+        const playerGano = ColiseumLogic.modoCombate === '3v3' ? ColiseumLogic.playerTeam.some(g => g.hp > 0) : (ColiseumLogic.player.hp > 0);
+        if (playerGano) {
             ColiseumUI.agregarLog(`<span style="color:#4CAF50">🏆 ¡VICTORIA!</span>`, "#ffd54f");
             let xpGanada = 50 + (ColiseumLogic.player.adn.level * 10);
             
@@ -884,6 +910,24 @@ document.addEventListener("DOMContentLoaded", () => {
             ColiseumUI.actualizarBotonesAtaque(activeGeno);
         }
         
+        if (ColiseumLogic.modoCombate === '3v3' && ColiseumLogic.esperandoSwapForzado) {
+            // Deshabilitar ataques
+            ["btn-atk-1", "btn-atk-2", "btn-atk-3", "btn-atk-4"].forEach(id => {
+                let btn = document.getElementById(id);
+                if (btn) btn.disabled = true;
+            });
+            // Habilitar swaps sólo para Genos vivos
+            const team = ColiseumLogic.playerTeam;
+            const activeIdx = ColiseumLogic.playerActiveIndex;
+            let idxA = activeIdx === 0 ? 1 : (activeIdx === 1 ? 0 : 0);
+            let idxB = activeIdx === 0 ? 2 : (activeIdx === 1 ? 2 : 1);
+            let btnSwapA = document.getElementById("btn-swap-a");
+            let btnSwapB = document.getElementById("btn-swap-b");
+            if (btnSwapA && team[idxA]) btnSwapA.disabled = (team[idxA].hp <= 0);
+            if (btnSwapB && team[idxB]) btnSwapB.disabled = (team[idxB].hp <= 0);
+            return;
+        }
+
         bloquearBotones(false);
         const p = ColiseumLogic.player;
         const equipados = p.ataquesEquipados;

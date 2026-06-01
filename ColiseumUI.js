@@ -326,6 +326,29 @@ window.ColiseumUI = {
                 50% { box-shadow: 0 0 25px rgba(213, 0, 249, 0.9), 0 0 10px rgba(255, 0, 127, 0.5); }
                 100% { box-shadow: 0 0 12px rgba(213, 0, 249, 0.6); }
             }
+            
+            #battle-area {
+                padding: 15px 15px 15px 15px !important;
+            }
+            #battle-log, .battle-log-container {
+                height: 110px !important;
+                margin: 10px -30px 10px -30px !important;
+                padding: 10px !important;
+            }
+            #battle-controls.mode-3v3 {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 8px !important;
+            }
+            #battle-controls.mode-3v3 .battle-btn {
+                padding: 10px 4px !important;
+                font-size: 8px !important;
+                letter-spacing: 0.2px !important;
+                height: 38px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                line-height: 1.1 !important;
+            }
         `;
         document.head.appendChild(style);
     },
@@ -356,17 +379,23 @@ window.ColiseumUI = {
         document.querySelector(".controls-container");
         if (controls) {
             area.appendChild(controls); controls.id = "battle-controls";
-            controls.className = "controls-container";
-            controls.innerHTML = `
-                <button id="btn-atk-1" class="battle-btn slot-1">BÁSICO</button>
-                <button id="btn-atk-2" class="battle-btn slot-2">VACÍO</button>
-                <button id="btn-atk-3" class="battle-btn slot-3">VACÍO</button>
-                <button id="btn-atk-4" class="battle-btn slot-4" disabled>🔒 NV. 25+</button>
-            `;
             if (window.ColiseumLogic.modoCombate === '3v3') {
-                controls.innerHTML += `
-                    <button id="btn-swap-a" class="battle-btn swap-btn" style="grid-column: span 1;">🔄 RELEVO</button>
-                    <button id="btn-swap-b" class="battle-btn swap-btn" style="grid-column: span 1;">🔄 CIERRE</button>
+                controls.className = "controls-container mode-3v3";
+                controls.innerHTML = `
+                    <button id="btn-atk-1" class="battle-btn slot-1">BÁSICO</button>
+                    <button id="btn-atk-2" class="battle-btn slot-2">VACÍO</button>
+                    <button id="btn-atk-3" class="battle-btn slot-3">VACÍO</button>
+                    <button id="btn-atk-4" class="battle-btn slot-4" disabled>🔒 NV. 25+</button>
+                    <button id="btn-swap-a" class="battle-btn swap-btn">🔄 RELEVO</button>
+                    <button id="btn-swap-b" class="battle-btn swap-btn">🔄 CIERRE</button>
+                `;
+            } else {
+                controls.className = "controls-container";
+                controls.innerHTML = `
+                    <button id="btn-atk-1" class="battle-btn slot-1">BÁSICO</button>
+                    <button id="btn-atk-2" class="battle-btn slot-2">VACÍO</button>
+                    <button id="btn-atk-3" class="battle-btn slot-3">VACÍO</button>
+                    <button id="btn-atk-4" class="battle-btn slot-4" disabled>🔒 NV. 25+</button>
                 `;
             }
             controls.style.setProperty("display", "none", "important");
@@ -708,16 +737,6 @@ window.ColiseumUI = {
             "Normal": "#ffffff"
         };
 
-        const elementLetters = {
-            "Biomutante": "B",
-            "Viral": "V",
-            "Cibernético": "C",
-            "Radiactivo": "R",
-            "Tóxico": "T",
-            "Sintético": "S",
-            "Normal": "N"
-        };
-
         function renderMiniTray(team, activeIndex, isPlayer) {
             const sideContainer = isPlayer ? 
                 (document.getElementById("player-sprite-battle") || document.querySelector(".fighter-left")) : 
@@ -729,11 +748,12 @@ window.ColiseumUI = {
                 tray = document.createElement("div");
                 tray.className = "team-mini-tray";
                 tray.style.position = "absolute";
-                tray.style.top = "15px";
-                tray.style.right = "15px";
+                tray.style.top = "-45px";
+                tray.style.left = "50%";
+                tray.style.transform = "translateX(-50%)";
                 tray.style.display = "flex";
-                tray.style.flexDirection = "column";
-                tray.style.gap = "6px";
+                tray.style.flexDirection = "row";
+                tray.style.gap = "8px";
                 tray.style.zIndex = "25";
                 sideContainer.appendChild(tray);
             }
@@ -744,7 +764,6 @@ window.ColiseumUI = {
                 const isActive = idx === activeIndex;
                 const hpPercent = Math.max(0, (fighter.hp / fighter.maxHp) * 100);
                 const elColor = elementColors[fighter.element] || "#ffffff";
-                const elLetter = elementLetters[fighter.element] || "N";
                 const isFainted = fighter.hp <= 0;
 
                 const item = document.createElement("div");
@@ -754,32 +773,39 @@ window.ColiseumUI = {
                 item.style.opacity = isFainted ? "0.4" : "1";
 
                 const dot = document.createElement("div");
-                dot.style.width = "22px";
-                dot.style.height = "22px";
+                dot.style.width = "34px";
+                dot.style.height = "34px";
                 dot.style.borderRadius = "50%";
                 dot.style.border = `2px solid ${isFainted ? '#f44336' : elColor}`;
-                dot.style.background = isActive ? `rgba(0, 255, 0, 0.2)` : `rgba(0,0,0,0.6)`;
-                dot.style.boxShadow = isActive ? `0 0 10px ${elColor}` : "none";
+                dot.style.background = isActive ? `rgba(0, 255, 0, 0.15)` : `rgba(13, 22, 30, 0.95)`;
+                dot.style.boxShadow = isActive ? `0 0 12px ${elColor}, inset 0 0 6px ${elColor}` : "none";
                 dot.style.display = "flex";
                 dot.style.alignItems = "center";
                 dot.style.justifyContent = "center";
-                dot.style.fontSize = "9px";
-                dot.style.fontWeight = "bold";
-                dot.style.color = "#fff";
+                dot.style.overflow = "hidden";
+                dot.style.position = "relative";
                 dot.title = `${fighter.nombre} (HP: ${Math.floor(fighter.hp)}/${fighter.maxHp})`;
                 
                 if (isFainted) {
-                    dot.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#f44336" stroke-width="3" style="width:12px; height:12px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+                    dot.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#f44336" stroke-width="3" style="width:16px; height:16px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
                 } else {
-                    dot.innerText = elLetter;
+                    const miniDiv = document.createElement("div");
+                    miniDiv.style.width = "100%";
+                    miniDiv.style.height = "100%";
+                    miniDiv.style.display = "flex";
+                    miniDiv.style.alignItems = "center";
+                    miniDiv.style.justifyContent = "center";
+                    miniDiv.style.transform = "scale(0.85)";
+                    miniDiv.innerHTML = ColiseumUI.inyectarSvgSeguro(fighter.adn);
+                    dot.appendChild(miniDiv);
                 }
 
                 const hpBarBg = document.createElement("div");
-                hpBarBg.style.width = "22px";
+                hpBarBg.style.width = "30px";
                 hpBarBg.style.height = "4px";
                 hpBarBg.style.background = "#000";
                 hpBarBg.style.border = "1px solid rgba(255,255,255,0.1)";
-                hpBarBg.style.marginTop = "2px";
+                hpBarBg.style.marginTop = "3px";
                 hpBarBg.style.borderRadius = "2px";
                 hpBarBg.style.overflow = "hidden";
 
