@@ -1762,12 +1762,16 @@ function iniciarSecuenciaBienvenida() {
                 const needsInfo = document.getElementById("needs-info-modal");
                 const energyInfo = document.getElementById("hud-energy-info-modal");
                 const drawerMenu = document.getElementById("drawer-menu");
+                const dailyLogin = document.getElementById("daily-login-modal");
+                const newsMailbox = document.getElementById("news-mailbox-modal");
 
                 const isModalOpen = (statsModal && !statsModal.classList.contains("hidden")) ||
                                     (coliseumHelp && !coliseumHelp.classList.contains("hidden")) ||
                                     (needsInfo && !needsInfo.classList.contains("hidden")) ||
                                     (energyInfo && !energyInfo.classList.contains("hidden")) ||
-                                    (drawerMenu && !drawerMenu.classList.contains("hidden"));
+                                    (drawerMenu && !drawerMenu.classList.contains("hidden")) ||
+                                    (dailyLogin && !dailyLogin.classList.contains("hidden")) ||
+                                    (newsMailbox && !newsMailbox.classList.contains("hidden"));
 
                 if (isModalOpen) return;
 

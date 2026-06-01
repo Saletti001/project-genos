@@ -62,18 +62,41 @@
                     <!-- Divisor sutil -->
                     <div style="width: 100%; height: 1px; background-color: rgba(255, 255, 255, 0.08);"></div>
 
-                    <!-- Barra de Energía Nexo -->
-                    <div id="hud-energy-container" style="display: flex; flex-direction: column; width: 100%; box-sizing: border-box;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                            <span style="color: #00e5ff; font-family: monospace; font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="#00e5ff" stroke="#00e5ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                                Energía Nexo
-                            </span>
-                            <span id="hud-energy-text" style="color: #fff; font-family: monospace; font-size: 10px; font-weight: bold;">100 / 100</span>
+                    <!-- Barra de Energía Nexo Flanqueada por Calendario y Buzón -->
+                    <div style="display: flex; align-items: center; gap: 10px; width: 100%; box-sizing: border-box;">
+                        <!-- Botón Calendario (Izquierda) -->
+                        <button id="btn-daily-login" style="background: rgba(0, 229, 255, 0.1); border: 1.5px solid rgba(0, 229, 255, 0.3); border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #00e5ff; transition: 0.2s; flex-shrink: 0;" onmouseover="this.style.background='rgba(0, 229, 255, 0.25)'; this.style.borderColor='#00e5ff';" onmouseout="this.style.background='rgba(0, 229, 255, 0.1)'; this.style.borderColor='rgba(0, 229, 255, 0.3)';" title="Recompensas Diarias">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                            </svg>
+                        </button>
+
+                        <!-- Barra de Energía Nexo (Centro) -->
+                        <div id="hud-energy-container" style="display: flex; flex-direction: column; flex: 1; box-sizing: border-box; cursor: pointer;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                <span style="color: #00e5ff; font-family: monospace; font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; gap: 4px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="#00e5ff" stroke="#00e5ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                                    Energía Nexo
+                                </span>
+                                <span id="hud-energy-text" style="color: #fff; font-family: monospace; font-size: 10px; font-weight: bold;">100 / 100</span>
+                            </div>
+                            <div style="width: 100%; height: 6px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(77, 208, 225, 0.3); border-radius: 3px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);">
+                                <div id="hud-energy-fill" style="width: 100%; height: 100%; background: linear-gradient(90deg, #00d2ff, #4dd0e1); box-shadow: 0 0 8px rgba(77,208,225,0.7); transition: width 0.3s ease;"></div>
+                            </div>
                         </div>
-                        <div style="width: 100%; height: 6px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(77, 208, 225, 0.3); border-radius: 3px; overflow: hidden; box-shadow: inset 0 1px 2px rgba(0,0,0,0.5);">
-                            <div id="hud-energy-fill" style="width: 100%; height: 100%; background: linear-gradient(90deg, #00d2ff, #4dd0e1); box-shadow: 0 0 8px rgba(77,208,225,0.7); transition: width 0.3s ease;"></div>
-                        </div>
+
+                        <!-- Botón Correo/Noticias (Derecha) -->
+                        <button id="btn-news-mailbox" style="background: rgba(138, 43, 226, 0.1); border: 1.5px solid rgba(138, 43, 226, 0.3); border-radius: 8px; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #a855f7; transition: 0.2s; position: relative; flex-shrink: 0;" onmouseover="this.style.background='rgba(138, 43, 226, 0.25)'; this.style.borderColor='#8A2BE2';" onmouseout="this.style.background='rgba(138, 43, 226, 0.1)'; this.style.borderColor='rgba(138, 43, 226, 0.3)';" title="Noticias y Buzón">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            <!-- Badge de no leído -->
+                            <div id="news-unread-badge" class="hidden" style="position: absolute; top: -2px; right: -2px; width: 8px; height: 8px; background: #ff007f; border-radius: 50%; box-shadow: 0 0 5px #ff007f;"></div>
+                        </button>
                     </div>
                 </div>
 
@@ -693,6 +716,52 @@
                 </div>
                 
                 <button id="btn-close-happiness-info-confirm" style="background: linear-gradient(90deg, #ffeb3b, #fbc02d); color: #07111c; font-weight: bold; border: none; padding: 10px; border-radius: 10px; width: 100%; cursor: pointer; text-transform: uppercase; margin-top: 15px; font-size: 12px; letter-spacing: 0.5px;">Entendido</button>
+            </div>
+        </div>
+
+        <!-- Modal de Recompensas Diarias (Premium Cyberpunk Neon Cyan) -->
+        <div id="daily-login-modal" class="hidden" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 26, 46, 0.85); z-index: 3000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
+            <div class="modal-content" style="background: linear-gradient(180deg, #101524 0%, #080b12 100%); border: 2px solid #00e5ff; box-shadow: 0 0 25px rgba(0, 229, 255, 0.4), inset 0 0 15px rgba(0, 229, 255, 0.1); width: 85%; max-width: 330px; border-radius: 16px; padding: 20px 18px; box-sizing: border-box; position: relative; max-height: 90vh; display: flex; flex-direction: column; font-family: sans-serif; color: white;">
+                <button id="close-daily-login" style="position: absolute; top: 12px; right: 15px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #ff4b4b; padding: 10px; z-index: 10; transition: transform 0.2s;"><svg style="pointer-events: none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                
+                <div style="display: flex; justify-content: center; margin-bottom: 5px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.6));">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
+                </div>
+                <h3 style="color: #00e5ff; text-transform: uppercase; margin: 0 0 4px 0; font-size: 14px; letter-spacing: 1.5px; text-align: center; font-weight: bold;">Recompensas Diarias</h3>
+                <p style="font-size: 10px; color: #80deea; text-align: center; margin: 0 0 15px 0; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Inicia sesión cada día para desbloquear suministros</p>
+
+                <div id="daily-rewards-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; flex: 1; overflow-y: auto; padding-right: 2px; scrollbar-width: none; -ms-overflow-style: none;">
+                    <!-- Inyectado dinámicamente -->
+                </div>
+                
+                <button id="btn-claim-daily" style="background: linear-gradient(90deg, #00d2ff, #008be2); color: #fff; font-weight: bold; border: none; padding: 12px; border-radius: 10px; width: 100%; cursor: pointer; text-transform: uppercase; margin-top: 15px; font-size: 12px; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(0,210,255,0.3); transition: 0.2s;">Reclamar Recompensa</button>
+            </div>
+        </div>
+
+        <!-- Modal de Buzón de Noticias (Premium Cyberpunk Neon Violet) -->
+        <div id="news-mailbox-modal" class="hidden" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 26, 46, 0.85); z-index: 3000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
+            <div class="modal-content" style="background: linear-gradient(180deg, #101524 0%, #080b12 100%); border: 2px solid #8A2BE2; box-shadow: 0 0 25px rgba(138, 43, 226, 0.4), inset 0 0 15px rgba(138, 43, 226, 0.1); width: 85%; max-width: 340px; border-radius: 16px; padding: 20px 18px; box-sizing: border-box; position: relative; max-height: 90vh; display: flex; flex-direction: column; font-family: sans-serif; color: white;">
+                <button id="close-news-mailbox" style="position: absolute; top: 12px; right: 15px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #ff4b4b; padding: 10px; z-index: 10; transition: transform 0.2s;"><svg style="pointer-events: none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                
+                <div style="display: flex; justify-content: center; margin-bottom: 5px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#8A2BE2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(138, 43, 226, 0.6));">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                </div>
+                <h3 style="color: #a855f7; text-transform: uppercase; margin: 0 0 4px 0; font-size: 14px; letter-spacing: 1.5px; text-align: center; font-weight: bold;">Buzón de Noticias</h3>
+                <p style="font-size: 10px; color: #d8b4fe; text-align: center; margin: 0 0 15px 0; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Actualizaciones de la Red Nexo y Anuncios Competitivos</p>
+
+                <div id="news-mailbox-list" style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-right: 2px; scrollbar-width: none; -ms-overflow-style: none;">
+                    <!-- Inyectado dinámicamente -->
+                </div>
+                
+                <button id="btn-close-news-confirm" style="background: linear-gradient(90deg, #8A2BE2, #a855f7); color: #fff; font-weight: bold; border: none; padding: 12px; border-radius: 10px; width: 100%; cursor: pointer; text-transform: uppercase; margin-top: 15px; font-size: 12px; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(138,43,226,0.3); transition: 0.2s;">Entendido</button>
             </div>
         </div>
 
@@ -1453,6 +1522,8 @@
     <script src="ImplantsManager.js"></script>
     <script src="WalletManager.js"></script>
     <script src="EnergyPackager.js"></script>
+    <script src="DailyLoginManager.js"></script>
+    <script src="MailboxManager.js"></script>
     
     <script>
         document.addEventListener("DOMContentLoaded", () => {

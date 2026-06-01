@@ -4,6 +4,9 @@
 
 const SAVE_KEY = "proyecto_genos_save_v1";
 
+window.dailyLoginData = { lastClaimDate: "", currentDayStreak: 0 };
+window.newsMailboxData = { lastReadNewsId: 0 };
+
 window.cargarProgreso = function() {
     const dataString = localStorage.getItem(SAVE_KEY);
     if (dataString) {
@@ -84,6 +87,8 @@ window.cargarProgreso = function() {
 
         if (data.nexoEnergy !== undefined) window.nexoEnergy = data.nexoEnergy;
         if (data.rationAutoActiveUntil !== undefined) window.rationAutoActiveUntil = data.rationAutoActiveUntil;
+        if (data.dailyLogin !== undefined) window.dailyLoginData = data.dailyLogin;
+        if (data.newsMailbox !== undefined) window.newsMailboxData = data.newsMailbox;
         if (window.NexoEnergyManager && data.lastActiveTime) {
             window.NexoEnergyManager.aplicarRecuperacionPasiva(data.lastActiveTime);
         }
@@ -159,6 +164,8 @@ window.guardarLocalSilencioso = function() {
         inventarioItems: window.miInventario ? (window.miInventario.items || window.miInventario.slots || []) : [],
         nexoEnergy: window.nexoEnergy !== undefined ? window.nexoEnergy : 100,
         rationAutoActiveUntil: window.rationAutoActiveUntil !== undefined ? window.rationAutoActiveUntil : 0,
+        dailyLogin: window.dailyLoginData,
+        newsMailbox: window.newsMailboxData,
         lastActiveTime: typeof window.obtenerTiempoSeguro === 'function' ? window.obtenerTiempoSeguro() : Date.now()
     };
     localStorage.setItem(SAVE_KEY, JSON.stringify(dataToSave));

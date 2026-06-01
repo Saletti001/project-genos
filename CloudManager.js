@@ -131,6 +131,8 @@ window.respaldarEnNube = async function() {
         ventasActivas: window.misVentas || [],
         nexoEnergy: window.nexoEnergy !== undefined ? window.nexoEnergy : 100,
         rationAutoActiveUntil: window.rationAutoActiveUntil !== undefined ? window.rationAutoActiveUntil : 0,
+        dailyLogin: window.dailyLoginData || null,
+        newsMailbox: window.newsMailboxData || null,
         lastActiveTime: window.obtenerTiempoSeguro()
     };
 
@@ -173,6 +175,8 @@ async function cargarDatosDeLaNube() {
         
         if (dj.nexoEnergy !== undefined) window.nexoEnergy = dj.nexoEnergy;
         if (dj.rationAutoActiveUntil !== undefined) window.rationAutoActiveUntil = dj.rationAutoActiveUntil;
+        if (dj.dailyLogin !== undefined) window.dailyLoginData = dj.dailyLogin;
+        if (dj.newsMailbox !== undefined) window.newsMailboxData = dj.newsMailbox;
         if (window.NexoEnergyManager && dj.lastActiveTime) {
             window.NexoEnergyManager.aplicarRecuperacionPasiva(dj.lastActiveTime);
         }
