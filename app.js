@@ -1689,8 +1689,8 @@ function iniciarSecuenciaBienvenida() {
         }, 30000);
 
         // --- GESTOS DE DESLIZAMIENTO HASTA EL BAÑO ---
-        let swipeStartX = 0;
-        let swipeStartY = 0;
+        let swipeStartX = -1;
+        let swipeStartY = -1;
 
         const mainSliderScreen = document.getElementById("main-slider-screen");
         if (mainSliderScreen) {
@@ -1708,6 +1708,7 @@ function iniciarSecuenciaBienvenida() {
                     target.closest(".care-action-btn") ||
                     target.closest("#care-clean-tools")
                 ) {
+                    swipeStartX = -1;
                     return;
                 }
                 swipeStartX = clientX;
@@ -1716,8 +1717,12 @@ function iniciarSecuenciaBienvenida() {
 
             const detectEnd = (clientX, clientY) => {
                 if (window.activeTool) return;
+                if (swipeStartX === -1) return;
                 const diffX = clientX - swipeStartX;
                 const diffY = clientY - swipeStartY;
+
+                // Resetear de inmediato para evitar re-evaluaciones con coordenadas huérfanas
+                swipeStartX = -1;
 
                 // Solo cuenta si el movimiento es eminentemente horizontal y lo bastante largo
                 if (Math.abs(diffX) > 80 && Math.abs(diffY) < 50) {
