@@ -194,8 +194,8 @@ document.addEventListener("DOMContentLoaded", () => {
         }
         ColiseumUI.configurarDOM();
         
-        const titleEl = document.querySelector(".coliseum-title-inside");
-        if (titleEl) titleEl.style.setProperty("display", "block", "important");
+        const titleEl = document.querySelector(".coliseum-title-inside") || document.querySelector("#coliseum-screen .screen-title");
+        if (titleEl) titleEl.classList.remove("hidden");
     
         ColiseumUI.limpiarLog();
         ColiseumUI.agregarLog(`<span style="color:#aaa;">> Conectando con los servidores del Coliseo...</span><br><span style="color:#4dd0e1">> Arena lista. Esperando combatientes.</span>`);
@@ -358,8 +358,8 @@ document.addEventListener("DOMContentLoaded", () => {
         if(btnLeave) btnLeave.style.setProperty("display", "none", "important");
         if(controls) controls.style.setProperty("display", "grid", "important");
         
-        const titleEl = document.querySelector(".coliseum-title-inside");
-        if (titleEl) titleEl.style.setProperty("display", "none", "important");
+        const titleEl = document.querySelector(".coliseum-title-inside") || document.querySelector("#coliseum-screen .screen-title");
+        if (titleEl) titleEl.classList.add("hidden");
         
         ColiseumUI.limpiarLog();
         ColiseumUI.agregarLog(`<span style="color:#4dd0e1">> INICIALIZANDO SECUENCIA DE COMBATE...</span>`);
@@ -908,8 +908,8 @@ document.addEventListener("DOMContentLoaded", () => {
             btnStart.innerText = "Buscar otro rival"; }
             if(btnLeave) btnLeave.style.setProperty("display", "", "important"); 
             
-            const titleEl = document.querySelector(".coliseum-title-inside");
-            if (titleEl) titleEl.style.setProperty("display", "block", "important");
+            const titleEl = document.querySelector(".coliseum-title-inside") || document.querySelector("#coliseum-screen .screen-title");
+            if (titleEl) titleEl.classList.remove("hidden");
         }, 1000);
     }
 
