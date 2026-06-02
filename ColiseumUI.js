@@ -27,7 +27,7 @@ window.ColiseumUI = {
             letter-spacing: 2px !important; width: 100% !important; border-bottom: 1px dashed rgba(77, 208, 225, 0.3); padding-bottom: 10px; display: block !important;
             }
             .coliseum-title-inside.hidden {
-                display: none !important;
+                visibility: hidden !important;
             }
             .fighters-wrapper { display: flex !important; align-items: center !important;
             justify-content: space-between !important; width: calc(100% + 60px) !important; margin: 0 -30px 15px -30px !important; position: relative; overflow: visible !important;
@@ -739,7 +739,7 @@ window.ColiseumUI = {
                 tray = document.createElement("div");
                 tray.className = "team-mini-tray";
                 tray.style.position = "absolute";
-                tray.style.top = "-35px";
+                tray.style.top = "-45px";
                 tray.style.left = "50%";
                 tray.style.transform = "translateX(-50%)";
                 tray.style.display = "flex";
