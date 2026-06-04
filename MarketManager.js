@@ -142,11 +142,11 @@ window.actualizarVistaBaul = function() {
         addressEl.style.color = "#ff007f"; // Zero warning color
         balanceEl.innerText = "0.0";
         
-        // Renderizar un único botón de "Primer depósito" idéntico al de Historial de Transacciones
+        // Renderizar un único botón de "Inicializar Wallet" idéntico al de Historial de Transacciones
         if (actionsContainer) {
             actionsContainer.innerHTML = `
                 <button id="vault-btn-first-deposit" class="market-btn-neon" style="flex: 1; background: linear-gradient(90deg, #1e293b, #334155); border: 1px solid #475569; padding: 12px 5px; font-size: 11px; margin-top: 0; box-shadow: none;">
-                    Primer depósito
+                    Inicializar Wallet
                 </button>
             `;
             const btnFirstDeposit = document.getElementById("vault-btn-first-deposit");
