@@ -20,6 +20,45 @@ window.forzarActualizacionMochila = function() {
     }
 };
 
+window.actualizarVistaBaul = function() {
+    const addressEl = document.getElementById("vault-wallet-address");
+    const balanceEl = document.getElementById("vault-wallet-balance");
+    const historyList = document.getElementById("vault-history-list");
+    
+    if (!addressEl || !balanceEl) return;
+
+    if (window.miWallet && window.miWallet.address) {
+        addressEl.innerText = window.miWallet.address;
+        addressEl.style.color = "#00e5ff"; // Active neon cyan
+        
+        let polNum = window.miWallet.pol !== undefined ? window.miWallet.pol : 0.0;
+        balanceEl.innerText = polNum.toFixed(1);
+        
+        // Render history
+        if (historyList) {
+            const txs = window.miWallet.history || [];
+            if (txs.length === 0) {
+                historyList.innerHTML = `<div style="color: #666; font-style: italic; text-align: center; padding: 10px;">Sin transacciones recientes.</div>`;
+            } else {
+                historyList.innerHTML = txs.map(tx => `
+                    <div style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 6px 0;">
+                        <span style="color: ${tx.tipo === 'Depósito' ? '#69F0AE' : '#ff5252'}; font-weight: bold;">${tx.tipo}</span>
+                        <span style="font-weight: bold; color: #fff;">${tx.monto.toFixed(1)} POL</span>
+                        <span style="color: #888;">${tx.fecha}</span>
+                    </div>
+                `).join('');
+            }
+        }
+    } else {
+        addressEl.innerText = "No Vinculada (Inicialización requerida)";
+        addressEl.style.color = "#ff007f"; // Zero warning color
+        balanceEl.innerText = "0.0";
+        if (historyList) {
+            historyList.innerHTML = `<div style="color: #ff007f; font-weight: bold; text-align: center; padding: 10px;">Billetera no sincronizada.</div>`;
+        }
+    }
+};
+
 window.iniciarMercado = function() {
     const contenedor = document.getElementById("market-screen");
     if (!contenedor) return;
@@ -81,6 +120,7 @@ window.iniciarMercado = function() {
                     <div style="display: flex; justify-content: center; margin-bottom: 15px; padding: 0; border-bottom: 1px solid #384a5e;">
                         <button id="tab-market-buy" class="market-tab-neon active">Comprar</button>
                         <button id="tab-market-sell" class="market-tab-neon">Mis Ventas</button>
+                        <button id="tab-market-vault" class="market-tab-neon">Mi Baúl</button>
                     </div>
                 </div>
                 <div class="market-scroll-area" style="flex: 1; overflow-y: auto; padding: 0 10px 20px 10px;">
@@ -122,6 +162,43 @@ window.iniciarMercado = function() {
                         <p style="text-align: center; color: #b39ddb; font-size: 10px; font-weight: bold; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px;">Lista tus Objetos y Genos</p>
                         <div id="market-my-listed" style="margin-bottom: 15px; width: 100%;"></div>
                         <div id="market-sell-grid" class="market-grid"></div>
+                    </div>
+
+                    <!-- Mi Baúl View (Cyberpunk Web3 Simulation) -->
+                    <div id="market-vault-view" class="hidden" style="display: flex; flex-direction: column; gap: 15px; color: #fff; padding: 10px;">
+                        <!-- Información General de la Wallet -->
+                        <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid #384a5e; border-radius: 12px; padding: 15px; text-align: center;">
+                            <div style="font-size: 11px; color: #80deea; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; margin-bottom: 5px;">Dirección de Wallet</div>
+                            <div id="vault-wallet-address" style="font-family: monospace; font-size: 11px; color: #ff007f; word-break: break-all; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; border: 1px solid rgba(255, 0, 127, 0.2);">
+                                No Vinculada
+                            </div>
+                        </div>
+
+                        <!-- Saldo de la Wallet -->
+                        <div style="background: rgba(0, 0, 0, 0.4); border: 1px solid #384a5e; border-radius: 12px; padding: 15px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                            <div style="font-size: 11px; color: #80deea; text-transform: uppercase; letter-spacing: 1px; font-weight: bold; margin-bottom: 5px;">Saldo en el Baúl</div>
+                            <div style="font-size: 28px; font-weight: 900; color: #00e5ff; text-shadow: 0 0 10px rgba(0, 229, 255, 0.4); display: flex; align-items: center; gap: 6px;">
+                                <span id="vault-wallet-balance">0.0</span> <span style="font-size: 16px; color: #80deea;">POL</span>
+                            </div>
+                        </div>
+
+                        <!-- Botones de Acción -->
+                        <div style="display: flex; gap: 10px;">
+                            <button id="vault-btn-deposit" class="market-btn-neon green" style="flex: 1; padding: 12px 5px; font-size: 11px; margin-top: 0;">Depositar</button>
+                            <button id="vault-btn-withdraw" class="market-btn-neon red" style="flex: 1; padding: 12px 5px; font-size: 11px; margin-top: 0;">Retirar</button>
+                        </div>
+                        
+                        <button id="vault-btn-history" class="market-btn-neon" style="background: linear-gradient(90deg, #1e293b, #334155); border: 1px solid #475569; padding: 12px 5px; font-size: 11px; margin-top: 0; box-shadow: none;">
+                            Historial de Transacciones
+                        </button>
+
+                        <!-- Panel de Historial (ocultable / dinámico) -->
+                        <div id="vault-history-panel" class="hidden" style="background: rgba(0,0,0,0.5); border: 1px solid #384a5e; border-radius: 8px; padding: 12px; max-height: 150px; overflow-y: auto;">
+                            <div style="font-size: 10px; color: #80deea; text-transform: uppercase; font-weight: bold; margin-bottom: 8px; border-bottom: 1px solid #384a5e; padding-bottom: 4px;">Historial</div>
+                            <div id="vault-history-list" style="display: flex; flex-direction: column; gap: 6px; font-size: 10px; color: #ccc;">
+                                <!-- Transacciones simuladas -->
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -196,26 +273,121 @@ window.iniciarMercado = function() {
 
     const tabBuy = document.getElementById("tab-market-buy");
     const tabSell = document.getElementById("tab-market-sell");
+    const tabVault = document.getElementById("tab-market-vault");
     const viewBuy = document.getElementById("market-buy-view");
     const viewSell = document.getElementById("market-sell-view");
+    const viewVault = document.getElementById("market-vault-view");
 
     tabBuy.addEventListener("click", () => {
-        tabBuy.classList.add("active"); tabSell.classList.remove("active");
-        viewBuy.classList.remove("hidden"); viewSell.classList.add("hidden");
+        tabBuy.classList.add("active"); tabSell.classList.remove("active"); tabVault.classList.remove("active");
+        viewBuy.classList.remove("hidden"); viewSell.classList.add("hidden"); viewVault.classList.add("hidden");
         if (typeof window.cargarMercadoGlobal === 'function') window.cargarMercadoGlobal();
     });
 
     tabSell.addEventListener("click", () => {
-        tabSell.classList.add("active"); tabBuy.classList.remove("active");
-        viewSell.classList.remove("hidden"); viewBuy.classList.add("hidden");
+        tabSell.classList.add("active"); tabBuy.classList.remove("active"); tabVault.classList.remove("active");
+        viewSell.classList.remove("hidden"); viewBuy.classList.add("hidden"); viewVault.classList.add("hidden");
         window.renderizarMisVentas();
     });
+
+    tabVault.addEventListener("click", () => {
+        tabVault.classList.add("active"); tabBuy.classList.remove("active"); tabSell.classList.remove("active");
+        viewVault.classList.remove("hidden"); viewBuy.classList.add("hidden"); viewSell.classList.add("hidden");
+        window.actualizarVistaBaul();
+    });
+
+    // Configurar botones de Mi Baúl
+    const btnDeposit = document.getElementById("vault-btn-deposit");
+    const btnWithdraw = document.getElementById("vault-btn-withdraw");
+    const btnHistory = document.getElementById("vault-btn-history");
+
+    if (btnDeposit) {
+        btnDeposit.onclick = () => {
+            if (!window.comercioDesbloqueado) {
+                alert("⚠️ Se requiere el 'Permiso de Comercio' (adquirible en el Bazar por 15 EV al llegar a Nv. 5 de Laboratorio) para realizar depósitos o retiros.");
+                return;
+            }
+            if (!window.miWallet || !window.miWallet.address) {
+                window.mostrarModalSaldoCero("deposit");
+                return;
+            }
+            const cantidadStr = prompt("Ingrese la cantidad de $POL a depositar en su Baúl:", "10.0");
+            if (cantidadStr === null) return;
+            const cantidad = parseFloat(cantidadStr);
+            if (isNaN(cantidad) || cantidad <= 0) {
+                alert("⚠️ Cantidad inválida.");
+                return;
+            }
+            // Simular depósito
+            window.miWallet.pol = (window.miWallet.pol || 0.0) + cantidad;
+            window.miWallet.history = window.miWallet.history || [];
+            window.miWallet.history.unshift({
+                tipo: 'Depósito',
+                monto: cantidad,
+                fecha: new Date().toLocaleTimeString()
+            });
+            alert(`✅ Depósito de ${cantidad.toFixed(1)} POL procesado exitosamente en la Red Nexo (Simulado).`);
+            window.actualizarVistaBaul();
+            if (window.WalletManager && window.WalletManager.actualizarBoton) window.WalletManager.actualizarBoton();
+            if (window.guardarJuego) window.guardarJuego();
+            else if (window.guardarProgreso) window.guardarProgreso();
+        };
+    }
+
+    if (btnWithdraw) {
+        btnWithdraw.onclick = () => {
+            if (!window.comercioDesbloqueado) {
+                alert("⚠️ Se requiere el 'Permiso de Comercio' (adquirible en el Bazar por 15 EV al llegar a Nv. 5 de Laboratorio) para realizar depósitos o retiros.");
+                return;
+            }
+            if (!window.miWallet || !window.miWallet.address) {
+                window.mostrarModalSaldoCero("withdraw");
+                return;
+            }
+            const maxVal = window.miWallet.pol || 0.0;
+            if (maxVal <= 0) {
+                alert("⚠️ No tienes fondos suficientes en el Baúl para retirar.");
+                return;
+            }
+            const cantidadStr = prompt(`Ingrese la cantidad de $POL a retirar (Máx. ${maxVal.toFixed(1)} POL):`, maxVal.toFixed(1));
+            if (cantidadStr === null) return;
+            const cantidad = parseFloat(cantidadStr);
+            if (isNaN(cantidad) || cantidad <= 0 || cantidad > maxVal) {
+                alert("⚠️ Cantidad inválida o saldo insuficiente.");
+                return;
+            }
+            // Simular retiro
+            window.miWallet.pol -= cantidad;
+            window.miWallet.history = window.miWallet.history || [];
+            window.miWallet.history.unshift({
+                tipo: 'Retiro',
+                monto: cantidad,
+                fecha: new Date().toLocaleTimeString()
+            });
+            alert(`✅ Retiro de ${cantidad.toFixed(1)} POL procesado exitosamente (Simulado).`);
+            window.actualizarVistaBaul();
+            if (window.WalletManager && window.WalletManager.actualizarBoton) window.WalletManager.actualizarBoton();
+            if (window.guardarJuego) window.guardarJuego();
+            else if (window.guardarProgreso) window.guardarProgreso();
+        };
+    }
+
+    if (btnHistory) {
+        btnHistory.onclick = () => {
+            const panel = document.getElementById("vault-history-panel");
+            if (panel) panel.classList.toggle("hidden");
+        };
+    }
 
     window.renderizarMisVentas();
     if (typeof window.cargarMercadoGlobal === 'function') window.cargarMercadoGlobal();
 };
 
 window.abrirDetalleItem = function(itemBase, tipoAccion = 'publicar') {
+    if (tipoAccion === 'publicar' && !window.comercioDesbloqueado) {
+        alert("⚠️ Se requiere el 'Permiso de Comercio' (adquirible en el Bazar por 15 EV al llegar a Nv. 5 de Laboratorio) para publicar objetos en venta.");
+        return;
+    }
     const modal = document.getElementById("market-detail-modal");
     const nameEl = document.getElementById("market-detail-name-text");
     const dynamicContent = document.getElementById("market-detail-dynamic-content");
@@ -313,6 +485,10 @@ window.abrirDetalleItem = function(itemBase, tipoAccion = 'publicar') {
 };
 
 window.abrirDetalleMercado = function(idGenoBuscar, tipoAccion) {
+    if (tipoAccion === 'publicar' && !window.comercioDesbloqueado) {
+        alert("⚠️ Se requiere el 'Permiso de Comercio' (adquirible en el Bazar por 15 EV al llegar a Nv. 5 de Laboratorio) para publicar Genos en venta.");
+        return;
+    }
     const modal = document.getElementById("market-detail-modal");
     let geno = null;
     if (typeof idGenoBuscar === "object" && idGenoBuscar !== null) {
@@ -854,6 +1030,10 @@ window.cancelarVentaEnNube = async function(saleId) {
 // FUNCIONES DE COMPRA Y COBRO
 // =========================================
 window.comprarListado = async function(listing) {
+    if (!window.comercioDesbloqueado) {
+        alert("⚠️ Se requiere el 'Permiso de Comercio' (adquirible en el Bazar por 15 EV al llegar a Nv. 5 de Laboratorio) para realizar compras en el mercado.");
+        return;
+    }
     if (!window.miUsuarioCloud) {
         alert("⚠️ Debes iniciar sesión para comprar en la Red Nexo.");
         return;
@@ -863,8 +1043,8 @@ window.comprarListado = async function(listing) {
         return;
     }
     const precio = parseFloat(listing.pricePol);
-    if (!window.miWallet || window.miWallet.pol < precio) {
-        alert("⚠️ No tienes suficientes $POL para esta compra.");
+    if (!window.miWallet || !window.miWallet.address || window.miWallet.pol < precio) {
+        window.mostrarModalSaldoCero("buy");
         return;
     }
 

@@ -104,12 +104,13 @@ window.cargarProgreso = function() {
                     window.miMascota.svg = generarSvgGeno(window.miMascota);
                 }
 
-                if (window.miWallet && data.pol !== undefined) {
-                    window.miWallet.pol = data.pol;
-                    // ✨ PASO 3 APLICADO: Avisamos al WalletManager en lugar de pintar texto estático
-                    if (typeof window.WalletManager !== 'undefined') {
-                        window.WalletManager.actualizarBoton();
-                    }
+                if (!window.miWallet) window.miWallet = { pol: 10.0 };
+                if (data.pol !== undefined) window.miWallet.pol = data.pol;
+                if (data.walletAddress !== undefined) window.miWallet.address = data.walletAddress;
+                if (data.walletHistory !== undefined) window.miWallet.history = data.walletHistory;
+
+                if (typeof window.WalletManager !== 'undefined') {
+                    window.WalletManager.actualizarBoton();
                 }
 
                 const pedestal = document.getElementById("geno-container");
@@ -161,6 +162,8 @@ window.guardarLocalSilencioso = function() {
         maxGenoSlots: window.maxGenoSlots || 6,
         esencia: window.miInventario ? (window.miInventario.vitalEssence || 0) : 0,
         pol: window.miWallet ? window.miWallet.pol : 10.0,
+        walletAddress: window.miWallet ? window.miWallet.address : null,
+        walletHistory: window.miWallet ? window.miWallet.history : [],
         inventarioItems: window.miInventario ? (window.miInventario.items || window.miInventario.slots || []) : [],
         nexoEnergy: window.nexoEnergy !== undefined ? window.nexoEnergy : 100,
         rationAutoActiveUntil: window.rationAutoActiveUntil !== undefined ? window.rationAutoActiveUntil : 0,
