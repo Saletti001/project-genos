@@ -133,6 +133,8 @@ window.respaldarEnNube = async function() {
         rationAutoActiveUntil: window.rationAutoActiveUntil !== undefined ? window.rationAutoActiveUntil : 0,
         dailyLogin: window.dailyLoginData || null,
         newsMailbox: window.newsMailboxData || null,
+        tournamentSaldosPendientes: window.TournamentManager ? window.TournamentManager.saldosPendientes : 0.0,
+        tournamentActive: window.TournamentManager ? window.TournamentManager.activeTournament : null,
         // Guardar nivel de laboratorio en JSONB como respaldo
         labLevel: window.labLevel || 1,
         labXP: window.labXP || 0,
@@ -227,6 +229,12 @@ async function cargarDatosDeLaNube() {
         if (dj.rationAutoActiveUntil !== undefined) window.rationAutoActiveUntil = dj.rationAutoActiveUntil;
         if (dj.dailyLogin !== undefined) window.dailyLoginData = dj.dailyLogin;
         if (dj.newsMailbox !== undefined) window.newsMailboxData = dj.newsMailbox;
+        if (dj.tournamentSaldosPendientes !== undefined && window.TournamentManager) {
+            window.TournamentManager.saldosPendientes = dj.tournamentSaldosPendientes;
+        }
+        if (dj.tournamentActive !== undefined && window.TournamentManager) {
+            window.TournamentManager.activeTournament = dj.tournamentActive;
+        }
         if (window.NexoEnergyManager && dj.lastActiveTime) {
             window.NexoEnergyManager.aplicarRecuperacionPasiva(dj.lastActiveTime);
         }

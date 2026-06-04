@@ -1113,6 +1113,16 @@
                     border-color: #8A2BE2 !important;
                     box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.08), 0 8px 25px rgba(138, 43, 226, 0.35), 0 0 15px rgba(0, 229, 255, 0.15) !important;
                 }
+                .lobby-card.card-tournament {
+                    border: 2px solid #ff007f !important;
+                    box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.05), 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 12px rgba(255, 0, 127, 0.05);
+                }
+                .lobby-card.card-tournament:hover {
+                    transform: translateY(-3px);
+                    background: linear-gradient(135deg, #182e42 0%, #0b1720 100%) !important;
+                    border-color: #ff55a3 !important;
+                    box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.08), 0 8px 25px rgba(255, 0, 127, 0.35), 0 0 15px rgba(255, 0, 127, 0.15) !important;
+                }
                 .lobby-scroll-list::-webkit-scrollbar {
                     display: none !important;
                 }
@@ -1400,6 +1410,20 @@
                             <p style="color: #cbd5e1; margin: 0; font-size: 11px; line-height: 1.25;">Enfrentamiento táctico con un equipo de 3 Genos. Domina la arena con relevos estratégicos y sinergias.</p>
                         </div>
                     </div>
+
+                    <!-- CARD 5: TORNEO DE LLAVES -->
+                    <div class="lobby-card card-tournament" onclick="TournamentManager.abrirTorneos()">
+                        <div style="background: rgba(255, 0, 127, 0.1); border: 1px solid #ff007f; border-radius: 10px; width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; flex-shrink: 0;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff007f" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="8" r="7" />
+                                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+                            </svg>
+                        </div>
+                        <div style="flex: 1;">
+                            <h3 style="color: #ff007f; margin: 0 0 3px 0; font-size: 13px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Torneo de Llaves</h3>
+                            <p style="color: #cbd5e1; margin: 0; font-size: 11px; line-height: 1.25;">Torneo de eliminación directa de 16 jugadores. Inscripción en $POL con premios acumulados.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1451,6 +1475,94 @@
                 <div class="fab-btn btn-go-home" style="position: relative !important; width: 100% !important; margin: 0 !important; display: block !important;">
                     <div class="fab-content" style="font-size: 13px; cursor: pointer; padding: 12px 0; width: 100%; text-align: center; font-weight: bold; letter-spacing: 1px;">RETIRARSE</div>
                 </div>
+            </div>
+        </div>
+
+        <!-- PANTALLA DE TORNEOS COMPETITIVOS -->
+        <div id="tournament-screen" class="app-screen hidden">
+            <!-- Header con título neón y botón de Volver -->
+            <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; margin-bottom: 15px; flex-shrink: 0;">
+                <h2 class="screen-title" style="color: #ff007f !important; text-shadow: 0 0 10px rgba(255,0,127,0.3) !important; text-transform: uppercase !important; letter-spacing: 2px !important; margin: 0 !important; font-weight: bold !important; font-size: 15px !important; border-bottom: none !important; padding-bottom: 0 !important;">Torneos de Llaves</h2>
+                <button onclick="navegarA('coliseum-lobby-screen')" style="background: transparent; border: 1px solid #384a5e; border-radius: 8px; color: #aaa; padding: 5px 10px; font-size: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase;">
+                    Volver
+                </button>
+            </div>
+
+            <!-- Panel de Saldos Pendientes (FIFO / Cancelaciones) -->
+            <div class="tourney-card" style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; margin-bottom: 12px;">
+                <div style="display: flex; flex-direction: column;">
+                    <span style="font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.5px;">Saldos Pendientes (Reembolsos):</span>
+                    <span style="font-size: 16px; font-weight: bold; color: #ffd700;"><span id="tourney-pending-balance-val">0.00</span> POL</span>
+                </div>
+                <button id="tourney-btn-claim-pending" class="market-btn-neon" onclick="TournamentManager.reclamarSaldoPendiente()" style="margin: 0; padding: 8px 12px; font-size: 10px; font-weight: bold; background: linear-gradient(90deg, #1e293b, #334155); border: 1px solid #475569; box-shadow: none;">
+                    Reclamar Reembolso
+                </button>
+            </div>
+
+            <!-- PANEL 1: LOBBY DE SELECCIÓN (TORNEOS DISPONIBLES) -->
+            <div id="tourney-lobby-panel" class="tourney-card" style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 15px; margin-bottom: 70px;">
+                <div style="text-align: center; color: #ccc; font-size: 11px; margin-bottom: 5px;">
+                    Selecciona un torneo activo de 16 jugadores en la red Polygon:
+                </div>
+                
+                <div class="tourney-grid">
+                    <div class="tourney-option-card" onclick="TournamentManager.inscribirse('neon')">
+                        <div class="tourney-title-glow" style="color: #ff007f; text-shadow: 0 0 8px rgba(255,0,127,0.3);">Copa Neón</div>
+                        <div style="font-size: 20px; font-weight: bold; color: #fff; margin: 5px 0;">1.00 POL</div>
+                        <div style="font-size: 9px; color: #aaa; text-transform: uppercase; margin-bottom: 8px;">Entrada</div>
+                        <div style="font-size: 9px; color: #69f0ae; line-height: 1.3;">Premio 1er Puesto:<br><b>9.00 POL</b></div>
+                    </div>
+                    <div class="tourney-option-card" onclick="TournamentManager.inscribirse('satelite')">
+                        <div class="tourney-title-glow" style="color: #00e5ff; text-shadow: 0 0 8px rgba(0,229,255,0.3);">Copa Satélite</div>
+                        <div style="font-size: 20px; font-weight: bold; color: #fff; margin: 5px 0;">0.50 POL</div>
+                        <div style="font-size: 9px; color: #aaa; text-transform: uppercase; margin-bottom: 8px;">Entrada</div>
+                        <div style="font-size: 9px; color: #69f0ae; line-height: 1.3;">Premio 1er Puesto:<br><b>4.50 POL</b></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PANEL 2: SALA DE ESPERA (COLA MATCHMAKING) -->
+            <div id="tourney-queue-panel" class="tourney-card hidden" style="flex-grow: 1; display: flex; flex-direction: column; margin-bottom: 70px;">
+                <div style="text-align: center; margin-bottom: 15px;">
+                    <div style="border: 3px solid rgba(0, 229, 255, 0.1); border-top: 3px solid #00e5ff; border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 0 auto 10px auto;"></div>
+                    <div style="font-size: 13px; font-weight: bold; color: #00e5ff;">Buscando Oponentes...</div>
+                    <div style="font-size: 10px; color: #888; margin-top: 2px;">Sincronizando jugadores (FIFO Matchmaking)</div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; border-bottom: 1.5px solid #384a5e; padding-bottom: 5px; margin-bottom: 10px;">
+                    <span style="font-size: 11px; font-weight: bold; color: #fff;">LOBBY COMPETITIVO</span>
+                    <span id="tourney-queue-count" style="font-size: 11px; font-weight: bold; color: #00e5ff; font-family: monospace;">1/16</span>
+                </div>
+
+                <div id="tourney-queue-list" style="flex-grow: 1; overflow-y: auto; max-height: 200px; background: rgba(0,0,0,0.3); border-radius: 8px; border: 1px solid #2a3a4a; padding: 5px;">
+                    <!-- Jugadores en cola -->
+                </div>
+
+                <button class="market-btn-neon red" onclick="TournamentManager.cancelarCola()" style="width: 100%; margin-top: 15px; padding: 12px 0;">
+                    Abandonar Cola (Reembolso)
+                </button>
+            </div>
+
+            <!-- PANEL 3: BRACKET COMPLETO DEL TORNEO -->
+            <div id="tourney-bracket-panel" class="hidden" style="flex-grow: 1; display: flex; flex-direction: column; gap: 15px; margin-bottom: 70px; min-height: 0;">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 15px; height: 100%; min-height: 0;">
+                    <!-- Árbol visual de llaves (Scroll horizontal) -->
+                    <div class="tourney-card" style="margin-bottom: 0; padding: 10px; overflow: hidden; display: flex; flex-direction: column; min-height: 0;">
+                        <div id="tourney-bracket-rounds" class="bracket-tree" style="overflow-x: auto;">
+                            <!-- Columnas de rondas inyectadas por JS -->
+                        </div>
+                    </div>
+
+                    <!-- Panel de control de encuentro a la derecha -->
+                    <div id="tourney-match-details" style="display: flex; flex-direction: column; justify-content: center;">
+                        <!-- Detalles inyectados por JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón Volver flotante abajo -->
+            <div class="fab-btn btn-go-home" style="position: absolute !important; bottom: 30px !important; left: 50% !important; transform: translateX(-50%) !important; width: 70% !important; max-width: 300px !important; z-index: 100 !important;" onclick="navegarA('coliseum-lobby-screen')">
+                <div class="fab-content" style="font-size: 13px; cursor: pointer; padding: 12px 0; font-weight: bold; text-align: center; letter-spacing: 1px;">VOLVER AL COLISEO</div>
             </div>
         </div>
 
@@ -1644,6 +1756,7 @@
     <script src="ImplantsUI.js"></script>
     <script src="ImplantsManager.js"></script>
     <script src="WalletManager.js"></script>
+    <script src="TournamentManager.js"></script>
     <script src="EnergyPackager.js"></script>
     <script src="DailyLoginManager.js"></script>
     <script src="MailboxManager.js"></script>

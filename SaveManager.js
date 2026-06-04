@@ -109,6 +109,13 @@ window.cargarProgreso = function() {
                 if (data.walletAddress !== undefined) window.miWallet.address = data.walletAddress;
                 if (data.walletHistory !== undefined) window.miWallet.history = data.walletHistory;
 
+                if (data.tournamentSaldosPendientes !== undefined && window.TournamentManager) {
+                    window.TournamentManager.saldosPendientes = data.tournamentSaldosPendientes;
+                }
+                if (data.tournamentActive !== undefined && window.TournamentManager) {
+                    window.TournamentManager.activeTournament = data.tournamentActive;
+                }
+
                 if (typeof window.WalletManager !== 'undefined') {
                     window.WalletManager.actualizarBoton();
                 }
@@ -169,6 +176,8 @@ window.guardarLocalSilencioso = function() {
         rationAutoActiveUntil: window.rationAutoActiveUntil !== undefined ? window.rationAutoActiveUntil : 0,
         dailyLogin: window.dailyLoginData,
         newsMailbox: window.newsMailboxData,
+        tournamentSaldosPendientes: window.TournamentManager ? window.TournamentManager.saldosPendientes : 0.0,
+        tournamentActive: window.TournamentManager ? window.TournamentManager.activeTournament : null,
         lastActiveTime: typeof window.obtenerTiempoSeguro === 'function' ? window.obtenerTiempoSeguro() : Date.now()
     };
     localStorage.setItem(SAVE_KEY, JSON.stringify(dataToSave));
