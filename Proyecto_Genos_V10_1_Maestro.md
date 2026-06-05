@@ -6,9 +6,109 @@ Tamagotchi genetico · Breeding estrategico · Coliseo Web3
 
 V9.1 + Sistema de Combate V1.1 + Balance V13.9 + Torneos Tematicos
 
-Abril 2026
+Abril 2026 | Actualizado: Junio 2026 — Estado de implementacion real
+
+> NOTA: Este documento es una guia de disenio. El codigo es la fuente de verdad.
+> Leyenda de estado: ✅ Completado en codigo | 🚧 Simulado/parcial (sin blockchain real) | ❌ Pendiente de implementar
 
 
+
+
+
+0. ESTADO DE IMPLEMENTACION — Junio 2026
+
+Esta seccion es la fuente de verdad sobre lo que esta realmente funcionando en el codigo.
+
+
+
+0.1 Modulos Completados ✅
+
+- app.js (V14.17): Motor central, generacion de Genos, stats V10.1, sistema genetico V9.1 con 3 slots A/B/C, tabla de IVs por rareza, curva de Gauss, calificacion S-D. COMPLETADO.
+
+- SVGEngine.js: Motor SVG dinamico de 7 capas. Formas, colores, patrones, ojos, auras. COMPLETADO.
+
+- EnergyManager.js: Sistema de Energia Nexo (max 100, recupera 1/12min) y Resistencia individual. Calculos offline retrospectivos. Estado Optimo (+25 LUK) y Huelga (bloquea combate). COMPLETADO.
+
+- SanctuaryManager.js (V10.3): Santuario funcional. 3 liberaciones/dia, cooldown 48h, 4 resultados (Exito/Estancada/Colapso/Critico), recompensas EV por rareza. COMPLETADO.
+
+- ReactorManager.js (V15.33): Reactor Genetico funcional. Fusion de Genos, mutaciones, resultados probabilisticos, corrector de calidad para rarezas "+". COMPLETADO.
+
+- BreedingManager.js (V9.7): Centro de Crianza funcional. Herencia Activa V9.1 (30%/75%/70%), generacion de crias, calculo de rareza y DEF. COMPLETADO.
+
+- RPGManager.js: Sistema de stats y progresion completo. Escaner Basico y Completo, gen Umbral del Despertar, gen Aceleracion Final (nivel max 55), Resonancia de Nivel. COMPLETADO.
+
+- ColiseumLogic.js: Motor de combate completo. 6 elementos + ciclo, STAB x1.20, multiplicadores V13.9 (x1.35/x0.75), 4 slots de ataque, DEF con formula min 35% ATK, estados de combate, sistema IFTTT. COMPLETADO.
+
+- ColiseumManager.js: Lobby del Coliseo. Modos: 'clon' (Torre PvE clon elemental), 'desafio' (NPC configurable), 3v3. Jefe de Liga (+15% XP). COMPLETADO.
+
+- ColiseumUI.js: UI del coliseo, log de combate, barras de HP, botones de accion, estados activos. COMPLETADO.
+
+- TournamentManager.js: Torneos de Llaves con sistema FIFO. 2 tipos implementados: Copa Neon Nexo ($1.0 EV, premios 9/3.6/1.8 EV) y Copa Satelite ($0.5 EV, premios 4.5/1.8/0.9 EV). NPCs generados proceduralmente. COMPLETADO.
+
+- ScholarshipManager.js: UI de Becas. Plaza pre-poblada con Genos NPC de muestra. Logica de alquiler 70/30. Estado local sin blockchain real. 🚧 SIMULADO.
+
+- MarketManager.js: Plaza de Comercio P2P. UI de venta/compra de Genos, Baul de POL, Realtime Supabase para pagos offline. Transacciones simuladas (no blockchain real). 🚧 SIMULADO.
+
+- WalletManager.js: Conexion MetaMask basica. Modal de wallet, actualizacion de boton. Sin smart contracts reales. 🚧 SIMULADO.
+
+- CloudManager.js: Backend Supabase completo. Login/registro/recuperacion, guardado/carga de nube, sincronizacion de tiempo, autoguardado con debounce. COMPLETADO.
+
+- ShopManager.js (V9.9): Bazar (consumibles, EV), Matriz Tactica (Dojo de ataques equipables), Premium. Seccion Dojo implementada con AttackCatalog. COMPLETADO.
+
+- ArcadeManager.js + MinigameCatch.js: Minijuego Lluvia de Manzanas (30s, consume 5 Energia Nexo). COMPLETADO.
+
+- DailyLoginManager.js: Login diario con recompensas escalonadas. COMPLETADO.
+
+- MailboxManager.js: Buzon de noticias en juego. COMPLETADO.
+
+- ImplantsManager.js + ImplantsUI.js: Sistema de implantes/accesorios cosmeticos. COMPLETADO.
+
+- InventoryManager.js: Inventario con slots, limites (99 basicos/20 consumibles/1 equipo), gestion de items. COMPLETADO.
+
+- AudioEngine.js: Motor de audio con efectos de sonido. COMPLETADO.
+
+- AttackCatalog.js: Catalogo completo de 60+ ataques con todos los elementos. COMPLETADO.
+
+- genes.js: 75+ genes en 7 categorias con combos sinergicos. COMPLETADO.
+
+
+
+0.2 Lo que NO esta implementado ❌
+
+- Liga Asincrona PvP Real: No existe matchmaking real entre jugadores. El Coliseo usa NPCs/clones locales.
+
+- Ligas Escalonadas con $POL real: Bronce/Plata/Oro/Platino/Diamante no estan implementadas con pagos reales.
+
+- Blockchain / NFT real: No hay contratos inteligentes desplegados. $POL es simulado localmente.
+
+- Libro de Linaje on-chain: El linaje se guarda off-chain en Supabase. No hay registro blockchain.
+
+- 10 Tipos de Torneos Tematicos adicionales: Solo existen Copa Neon y Copa Satelite. Los 12 tipos del documento (Solo Comunes, Copa Raro, El Olimpo, etc.) NO estan implementados.
+
+- Gen 0.5 Eventos: No existe mecanismo de Genos de evento esteriles.
+
+- Dashboard RORS: No existe monitoreo de ratio EV generada/consumida.
+
+- 500 Codigos Semilla Genesis: No existe sistema de codigos de comunidad.
+
+- Genopedia: No existe GitBook publico.
+
+- Matchmaking real entre jugadores: No hay servidor de matchmaking.
+
+- Semilla Genesis / Hongo Fundador: Existe como forma SVG pero no como codigo de evento.
+
+
+
+0.3 Resumen de Estado por Fase
+
+Fase 0 (Pre-lanzamiento): ❌ PENDIENTE — Codigos, Genopedia, Semilla Genesis no implementados.
+Fase 1 (Visual): ✅ COMPLETADA — Motor SVG, formas, laboratorio morfologico.
+Fase 2 (Economia basica): ✅ COMPLETADA — Inventario, Arcade, EV, Energia Nexo, Cuidado Tamagotchi.
+Fase 3 (Santuario + Reactor): ✅ COMPLETADA — Ambos modulos funcionales.
+Fase 4 (ADN y Linaje): ✅ COMPLETADA en codigo off-chain. ❌ Blockchain pendiente.
+Fase 5 (Coliseo): ✅ MOTOR COMPLETADO. 🚧 PvP real/ligas con $POL pendientes.
+Fase 6 (Web3): 🚧 UI implementada pero sin blockchain real desplegado.
+Fase 7 (Torneos Tematicos): 🚧 PARCIAL — 2 tipos de 12 implementados.
 
 
 
@@ -72,7 +172,7 @@ Ciclo rotativo de 4 semanas. Ventana de preparacion de 7 dias con descuento en e
 
 2. Resumen Ejecutivo
 
-Proyecto Genos es un juego de crianza tamagotchi con genetica procedural, economia Web3 y combate por turnos. Desarrollado en HTML/JS/CSS como PWA instalable. Fases 1 y 2 completadas.
+Proyecto Genos es un juego de crianza tamagotchi con genetica procedural, economia Web3 y combate por turnos. Desarrollado en HTML/JS/CSS como PWA instalable. Fases 1-5 (motor) completadas. Web3 real pendiente.
 
 
 
@@ -86,15 +186,15 @@ Ataques especiales
 
 Stats de combate
 
-8 fases (2 completadas)
+8 fases (✅ 1-3 completas, ✅ 4-5 motor listo, 🚧 6-7 parciales, ❌ 0 pendiente)
 
-83 genes (75+8 nuevos)
+83 genes (75+8 nuevos) — ✅ implementados
 
-35 combos
+35 combos — ✅ definidos en genes.js
 
-60 ataques (10/elemento)
+60 ataques (10/elemento) — ✅ AttackCatalog.js
 
-5 stats HP/ATK/SPD/LUK/DEF
+5 stats HP/ATK/SPD/LUK/DEF — ✅ implementados
 
 
 
@@ -104,58 +204,64 @@ Pixels gano Mejor Juego de Navegador GAM3 2025 con HTML/JS y alcanzo 1M de usuar
 
 3. Hoja de Ruta V10.1 — Fases Detalladas
 
-Fase 0 — Go-to-Market y Semilla Genesis
+Fase 0 — Go-to-Market y Semilla Genesis ❌ PENDIENTE
 
 4 semanas antes del lanzamiento global. 500 codigos irrevocables. Objetivo Dia 1: 2.000 usuarios.
 
+[ESTADO CODIGO] Ninguno de estos elementos tiene implementacion en el codigo actual.
 
+Genopedia: GitBook publico en genopedia.io. Capitulo 1 completado. Audiencia dual: jugadores e inversores. ❌ No existe.
 
-Genopedia: GitBook publico en genopedia.io. Capitulo 1 completado. Audiencia dual: jugadores e inversores.
+500 Codigos de Comunidad: criterios 2.000+ seguidores, gaming/web3. No se venden. Verificable on-chain. ❌ No existe sistema de codigos.
 
-500 Codigos de Comunidad: criterios 2.000+ seguidores, gaming/web3. No se venden. Verificable on-chain.
+Semilla Genesis — El Hongo Fundador: Deep Teal, logo Play en torso SVG. Solo por codigo. Marcador de linaje permanente. ❌ La forma SVG existe en caras.js pero no hay mecanica de codigo de evento.
 
-Semilla Genesis — El Hongo Fundador: Deep Teal, logo Play en torso SVG. Solo por codigo. Marcador de linaje permanente.
+Slots garantizados en la Semilla: cosmetico 38%, funcional B 92%, funcional C 72%. Ningun slot llega al 100%. ❌ Pendiente.
 
-Slots garantizados en la Semilla: cosmetico 38%, funcional B 92%, funcional C 72%. Ningun slot llega al 100%.
+Scholarship activo desde el Dia 1 (excepcion a Fase 6). Incubacion: el huevo eclosiona en el Dia 1 para todos. 🚧 ScholarshipManager existe pero sin blockchain.
 
-Scholarship activo desde el Dia 1 (excepcion a Fase 6). Incubacion: el huevo eclosiona en el Dia 1 para todos.
+Fase 1 — Infraestructura y Nucleo Visual ✅ COMPLETADA
 
-Fase 1 — Infraestructura y Nucleo Visual ✅ Completada
+[ESTADO CODIGO] SVGEngine.js + caras.js + accesorios.js + genes.js + motorGenetico.js. Todo operacional.
 
-Motor SVG Dinamico: 7 capas apiladas. Sombra > Cuerpo > Color > Patron > Ojos > Brillo premium > Aura rareza.
+Motor SVG Dinamico: 7 capas apiladas. Sombra > Cuerpo > Color > Patron > Ojos > Brillo premium > Aura rareza. ✅ Implementado en SVGEngine.js.
 
-Formas Gen 0: Gota (10%), Frijol (10%), Estrella, Circulo (26.7%), Cuadrado Redondeado (26.7%), Triangulo Redondeado (26.6%). El Hongo solo por codigo.
+Formas Gen 0: Gota (10%), Frijol (10%), Estrella, Circulo (26.7%), Cuadrado Redondeado (26.7%), Triangulo Redondeado (26.6%). El Hongo solo por codigo. ✅ Implementado.
 
-[V8] Mecanica Gordo (0.1%): probabilidad de que un Nucleo de ADN estandar contenga un Geno Legendario Gen 0.
+[V8] Mecanica Gordo (0.1%): probabilidad de que un Nucleo de ADN estandar contenga un Geno Legendario Gen 0. ✅ Implementado.
 
-[V10.1 NUEVO] Generacion Procedural de Accesorios PvE: los rivales del Coliseo (Torre de Mutacion) equipan hasta 4 accesorios cosmeticos (sombrero, alas, gafas, extras) usando el sistema de Doble Dado. Probabilidad basada en rareza: hasta 85% en Legendarios. Aumenta la diversidad visual en PvE.
+[V10.1 NUEVO] Generacion Procedural de Accesorios PvE: los rivales del Coliseo (Torre de Mutacion) equipan hasta 4 accesorios cosmeticos (sombrero, alas, gafas, extras) usando el sistema de Doble Dado. Probabilidad basada en rareza: hasta 85% en Legendarios. Aumenta la diversidad visual en PvE. ✅ Implementado en ColiseumLogic.js.
 
-[V9.1] Laboratorio Morfologico WYSIWYG. Boton Revelar Genes consume Escaner ADN del inventario. Titulo con cian #80deea.
+[V9.1] Laboratorio Morfologico WYSIWYG. Boton Revelar Genes consume Escaner ADN del inventario. Titulo con cian #80deea. ✅ Implementado (laboratorio.html).
 
-Fase 2 — Economia Basica y Supervivencia ✅ Completada
+Fase 2 — Economia Basica y Supervivencia ✅ COMPLETADA
 
-[V10.1 ACTUALIZADO] Inventario Bolsillos Rotos: 10 slots gratuitos. Expansion hasta 40 con $POL. Limite estricto por slot: 99 basicos / 20 consumibles / 1 equipo. El jugador debe descartar o consumir para liberar espacio.
+[ESTADO CODIGO] InventoryManager.js + EnergyManager.js + ArcadeManager.js + ShopManager.js. Todo operacional.
 
-Modo Arcade Lluvia de Manzanas: 30 segundos, ratio 5:1. Consume 5 de Energía Nexo.
+[V10.1 ACTUALIZADO] Inventario Bolsillos Rotos: 10 slots gratuitos. Expansion hasta 40 con $POL. Limite estricto por slot: 99 basicos / 20 consumibles / 1 equipo. El jugador debe descartar o consumir para liberar espacio. ✅ Implementado.
 
-Esencia Vital: off-chain. No vendible por $POL. Sin precio externo hasta Fase 6. Fuentes: victorias, minijuegos y cuidado diario pasivo.
+Modo Arcade Lluvia de Manzanas: 30 segundos, ratio 5:1. Consume 5 de Energía Nexo. ✅ Implementado en ArcadeManager.js + MinigameCatch.js.
 
-[V10.1 NUEVO] Sistema de Energía Nexo y Resistencia:
+Esencia Vital: off-chain. No vendible por $POL. Sin precio externo hasta Fase 6. Fuentes: victorias, minijuegos y cuidado diario pasivo. ✅ Implementado.
+
+[V10.1 NUEVO] Sistema de Energía Nexo y Resistencia: ✅ Implementado en EnergyManager.js.
 - Energía Nexo (Cuenta global): Max 100. Consume 5 en Arcade y 10 en Coliseo. Recupera 1 cada 12 minutos (5/hora).
 - Resistencia del Geno (Individual): Max 100. Consume 20 en Coliseo. Recupera 25/hora descansando en el Centro de Cuidado.
 - Recuperación Offline: Calcula la regeneración de forma retrospectiva al reconectarse.
 
-[V10.1 NUEVO] Sistema de Cuidado (Estilo Pou/Tamagotchi):
+[V10.1 NUEVO] Sistema de Cuidado (Estilo Pou/Tamagotchi): ✅ Implementado en EnergyManager.js y app.js.
 - Barras de Necesidades: Hambre (vacía en 12h), Diversión (vacía en 16h), Higiene (vacía en 24h) y Resistencia.
 - Cuidado Activo vs Reserva: Los Genos en reserva reducen sus necesidades 5x más despacio.
-- Bazar Consumibles: Ración Automática (🍱 costo: 2.00 EV, alimenta y congela Hambre de reservas por 24h) y Ducha de Plasma (🧼 costo: 1.00 EV, limpia Higiene al 100% de todos).
-- Interacciones y Cosecha: Caricias (cada toque individual genera un pequeño corazón flotante como feedback visual, requiriendo 5 toques para registrar la caricia y añadir Amistad/Cuidado Diario - la ganancia de Amistad para cualquier acción ahora es de 1 a 3 puntos aleatorios y está limitada a una única vez al día por tipo de acción). Manchas de suciedad se limpian en el Centro de Cuidado (baño) usando la herramienta de jabón y enjuagando con la ducha (baño de 8 segundos). Moneda dorada flotante aparece si evAcumulada >= 0.10 para recolectar EV pasiva. Si alguna necesidad cae bajo el 20%, una burbuja de diálogo flotante aparecerá sobre el Geno detallando la necesidad (ej. "Tengo Hambre", "Quiero Jugar") en color neón a juego. El manual de cuidado se abre al hacer clic sobre cualquiera de los 4 estados en la cuadrícula de necesidades del modal de estadísticas (eliminando el HUD de necesidades de la pantalla principal para evitar saturación visual).
-- Decaimiento por Negligencia (Amistad): Si cualquier necesidad del Geno cae por debajo del 20% (estado de Huelga/desatendido) durante más de 24 horas continuas, la Amistad disminuirá a razón de 1 punto por hora. Subir las necesidades sobre el 20% detiene el decaimiento y restablece el contador.
-- Impactos en Combate: "Estado Óptimo" (necesidades >80%) otorga +25 LUK (+5% crítico) y genera EV. "Huelga" (necesidades <20%) impide que el Geno luche en el Coliseo.
+- Bazar Consumibles: Ración Automática (🍱 costo: 2.00 EV, alimenta y congela Hambre de reservas por 24h) y Ducha de Plasma (🧼 costo: 1.00 EV, limpia Higiene al 100% de todos). ✅ En ShopManager.js.
+- Interacciones y Cosecha: Caricias, limpieza, moneda flotante de EV pasiva. ✅ Implementado.
+- Decaimiento por Negligencia (Amistad): Huelga > 24h = -1 Amistad/hora. ✅ Implementado.
+- Impactos en Combate: "Estado Óptimo" (necesidades >80%) otorga +25 LUK (+5% crítico) y genera EV. "Huelga" (necesidades <20%) impide que el Geno luche en el Coliseo. ✅ Implementado.
 
-Fase 3 — El Santuario y el Reactor Genetico
+Fase 3 — El Santuario y el Reactor Genetico ✅ COMPLETADA
 
-Santuario: liberar (no destruir). 3 liberaciones/dia max. Cooldown 48h desde nacimiento. Recompensa escalada por rareza.
+[ESTADO CODIGO] SanctuaryManager.js (V10.3) + ReactorManager.js (V15.33). Ambos modulos completamente operacionales.
+
+Santuario: liberar (no destruir). 3 liberaciones/dia max. Cooldown 48h desde nacimiento. Recompensa escalada por rareza. ✅ Implementado.
 
 
 
@@ -199,47 +305,61 @@ Nv.3 Epico > Leg.
 
 0.1% (Mitico)
 
-Fase 4 — ADN, Asimetria de Mercado y Linaje
+Fase 4 — ADN, Asimetria de Mercado y Linaje ✅ MOTOR COMPLETO / ❌ Blockchain pendiente
 
-5 stats: Vitalidad HP, Fuerza ATK, Agilidad SPD, Suerte LUK, Defensa DEF (V10).
+[ESTADO CODIGO] RPGManager.js + BreedingManager.js + genes.js. Motor off-chain completamente funcional. Supabase como backend.
 
-Sistema S-D: pureza de IVs. Un Comun S puede valer mas que un Legendario D.
+5 stats: Vitalidad HP, Fuerza ATK, Agilidad SPD, Suerte LUK, Defensa DEF (V10). ✅ Implementados con rangos por rareza.
 
-Escaner ADN: Basico $0.15 EV (slots activos) | Completo $0.50 EV (genes exactos).
+Sistema S-D: pureza de IVs. Un Comun S puede valer mas que un Legendario D. ✅ Implementado en RPGManager.js (calcularCalidad).
 
-Libro de Linaje en blockchain. Breeding: 7 crias max. Herencia Activa V9.1.
+Escaner ADN: Basico (slots activos) | Completo (genes exactos + tabla Dominante/Recesivo). ✅ Implementado en RPGManager.js con dos botones.
 
-Fase 5 — El Coliseo y Maestria Elemental
+Libro de Linaje en blockchain. Breeding: 7 crias max. Herencia Activa V9.1. ✅ Breeding implementado. ❌ Libro de Linaje on-chain pendiente (solo off-chain Supabase).
 
-6 elementos con ventaja/desventaja (x1.35/x0.75), STAB (x1.20) y efectos pasivos propios.
+Fase 5 — El Coliseo y Maestria Elemental ✅ MOTOR COMPLETO / 🚧 Ligas PvP reales pendientes
 
-4 Slots de ataque: Basico / Especial / Buff-Debuff / 3 Definitivos a elegir (nivel 25).
+[ESTADO CODIGO] ColiseumLogic.js + ColiseumManager.js + ColiseumUI.js + AttackCatalog.js. Motor de combate completamente operacional.
 
-Nuevo stat DEF: combates de 6-9 turnos. Formula actualizada con minimo 35% ATK.
+6 elementos con ventaja/desventaja (x1.35/x0.75), STAB (x1.20) y efectos pasivos propios. ✅ Implementado.
 
-3 modos: Liga Asincrona PvP, Torneos de Llaves (16 jugadores), Torre de Mutacion PvE.
+4 Slots de ataque: Basico / Especial / Buff-Debuff / 3 Definitivos a elegir (nivel 25). ✅ Implementado.
 
-Sistema IFTTT de defensa offline. Modo Tactico vs Simulacion Rapida.
+Nuevo stat DEF: combates de 6-9 turnos. Formula actualizada con minimo 35% ATK. ✅ Implementado.
 
-Ligas escalonadas: Bronce ($0.10) a Diamante ($10). Top 3: x1.8 / x1.0 / x0.6.
+3 modos en codigo: 'clon' (clon elemental PvE), 'desafio' (NPC configurable), '3v3'. ✅ Implementados.
+🚧 Liga Asincrona PvP real entre jugadores: NO implementada. Matchmaking local con NPCs.
+🚧 Torre de Mutacion como modo PvE estructurado con brackets: Parcial (modo 'desafio' con NPCs).
 
-Fase 6 — Expansion Web3 y Becas
+Sistema IFTTT de defensa offline. Modo Tactico vs Simulacion Rapida. ✅ IFTTT implementado en ColiseumLogic.js (evaluarCondicionIFTTT + resolverAccionIFTTT).
 
-Peg al Dolar: precios fijos en USD. $POL como vehiculo de pago.
+Ligas escalonadas: Bronce ($0.10) a Diamante ($10). Top 3: x1.8 / x1.0 / x0.6. ❌ NO implementadas con $POL real. Solo Copa Neon y Copa Satelite en TournamentManager.js.
 
-Plaza de Comercio P2P. Comision 2%-5% por transaccion en $POL.
+Torneos de Llaves: ✅ Copa Neon Nexo ($1.0 EV, premios 9/3.6/1.8) y Copa Satelite ($0.5 EV, premios 4.5/1.8/0.9). Sistema FIFO con bots NPCs funcional.
 
-Registro NFT: <$3 para convertir Geno en NFT. Libro de Linaje migra on-chain.
+Fase 6 — Expansion Web3 y Becas 🚧 UI IMPLEMENTADA / ❌ Blockchain pendiente
 
-Scholarships 70/30 via smart contract. Periodo de prueba 7 dias cancelable.
+[ESTADO CODIGO] WalletManager.js + MarketManager.js + ScholarshipManager.js. UI completa pero sin contratos reales.
 
-Fase 7 — LiveOps y Torneos Tematicos
+Peg al Dolar: precios fijos en USD. $POL como vehiculo de pago. 🚧 Logica de precios fijos implementada. $POL simulado localmente.
 
-Gen 0.5: Genos esteriles de evento irrepetibles. Un nuevo Gen 0.5 cada 6-8 semanas.
+Plaza de Comercio P2P. Comision 2%-5% por transaccion en $POL. 🚧 UI implementada en MarketManager.js. Realtime Supabase para notificaciones. Sin blockchain real.
+
+Registro NFT: <$3 para convertir Geno en NFT. Libro de Linaje migra on-chain. ❌ No implementado. Solo UI de wallet (MetaMask connect).
+
+Scholarships 70/30 via smart contract. Periodo de prueba 7 dias cancelable. 🚧 UI implementada en ScholarshipManager.js con Genos NPC de muestra. Sin smart contracts reales.
+
+Fase 7 — LiveOps y Torneos Tematicos 🚧 PARCIAL (2 de 12 tipos implementados)
+
+[ESTADO CODIGO] TournamentManager.js implementa 2 tipos de torneos. Los 10 tipos restantes del documento NO existen en codigo.
+
+Gen 0.5: Genos esteriles de evento irrepetibles. Un nuevo Gen 0.5 cada 6-8 semanas. ❌ No implementado.
 
 Torneos Tematicos: 12 tipos, ciclo rotativo de 4 semanas. Ver Seccion 8 para el sistema completo.
+🚧 IMPLEMENTADOS en TournamentManager.js: Copa Neon Nexo + Copa Satelite (2 de 12).
+❌ PENDIENTES: Solo Comunes, Copa Raro, El Olimpo, Liga Elemental Pura, Torneo Inverso, Copa Dos Mundos, Liga Novatos, El Gran Linaje, Torneo Sin Genes, Modo Berserker, El Espejo, Torneo del Fundador.
 
-Dashboard RORS: ratio EV generada/consumida. Objetivo >= 0.70. Alarma <0.65.
+Dashboard RORS: ratio EV generada/consumida. Objetivo >= 0.70. Alarma <0.65. ❌ No implementado.
 
 
 
@@ -3001,45 +3121,61 @@ Peg al Dolar: por que los precios no cambian aunque $POL suba o baje.
 
 
 
-13. Veredicto y Siguientes Pasos
+13. Veredicto y Siguientes Pasos — Actualizado Junio 2026
 
 Proyecto Genos V10.1 es el documento mas completo del proyecto. El balance V13.9 resuelve la dependencia del RNG elemental. Los 3 Definitivos por elemento crean mind games reales. Los Torneos Tematicos hacen que el esfuerzo de criar y mejorar Genos tenga recompensa competitiva directa.
 
-
-
-Las 3 Condiciones de Exito
-
-El Reactor y el Santuario DEBEN estar activos antes de abrir a usuarios masivos. Sin sinks, la EV se infla.
-
-La Fase 0 con los 500 codigos de Semilla Genesis no es opcional. Sin comunidad previa, lanzas en el vacio.
-
-La Plaza de Comercio debe estar operativa en Fase 6 antes que el Scholarship — primero el mercado, luego el alquiler.
+ESTADO ACTUAL (Junio 2026): El motor del juego esta completo y funcional. Las Fases 1-3 estan 100% implementadas. La Fase 4 (ADN) y Fase 5 (Coliseo) tienen el motor completo funcionando off-chain. La brecha critica es el layer blockchain (Fase 6) y los Torneos Tematicos completos (Fase 7).
 
 
 
-Proximos Pasos Concretos
+Las 3 Condiciones de Exito — Estado actual
 
-Hoy: implementar el stat DEF en el motor de combate con la nueva formula (minimo 35% ATK).
+✅ CUMPLIDA: El Reactor y el Santuario estan activos (SanctuaryManager.js + ReactorManager.js).
 
-Hoy: actualizar los multiplicadores elementales a x1.35/x0.75 y anadir el calculo de STAB x1.20.
+❌ PENDIENTE: La Fase 0 con los 500 codigos de Semilla Genesis. Sin comunidad previa, lanzas en el vacio.
 
-Hoy: corregir el ciclo elemental en la UI: Biomutante > Sintetico > Toxico > Radiactivo > Cibernetico > Viral.
-
-Esta semana: implementar el Sistema de Calificacion S-D en el motor SVG.
-
-Esta semana: anadir los 2 Definitivos extra por elemento en el catalogo del Dojo.
-
-Este mes: implementar Fase 3 completa (Santuario + Reactor). Los sinks antes del crecimiento masivo.
-
-Proximo sprint: el Dojo de Ataques (Fase 5) con los 60 ataques y el sistema de costes.
-
-Antes del lanzamiento: publicar Capitulo 1 de la Genopedia. Distribuir 500 codigos de Semilla Genesis.
-
-Fase 7 (post-lanzamiento): implementar el sistema de Torneos Tematicos empezando por Solo Comunes y Liga Elemental Pura.
+🚧 PARCIAL: La Plaza de Comercio tiene UI funcional (MarketManager.js) pero sin blockchain real. Scholarship UI existe sin contratos.
 
 
 
+Proximos Pasos Concretos — Actualizados
+
+✅ HECHO: Stat DEF implementado con formula min 35% ATK en ColiseumLogic.js.
+
+✅ HECHO: Multiplicadores elementales x1.35/x0.75 y STAB x1.20 implementados.
+
+✅ HECHO: Ciclo elemental correcto en UI: Biomutante > Sintetico > Toxico > Radiactivo > Cibernetico > Viral.
+
+✅ HECHO: Sistema S-D implementado en RPGManager.js y app.js.
+
+✅ HECHO: Dojo de Ataques en ShopManager.js (Matriz Tactica) con AttackCatalog.js.
+
+✅ HECHO: Fase 3 completa (Santuario + Reactor operacionales).
+
+--- PENDIENTES REALES ---
+
+PRIORIDAD ALTA: Implementar smart contracts en Polygon para $POL real, NFT y Libro de Linaje on-chain. Sin esto no hay Fase 6.
+
+PRIORIDAD ALTA: Crear sistema de Fase 0 — 500 codigos de Semilla Genesis irrevocables verificables.
+
+PRIORIDAD ALTA: Publicar Capitulo 1 de la Genopedia (genopedia.io).
+
+PRIORIDAD MEDIA: Implementar Liga Asincrona PvP real con matchmaking entre jugadores (actualmente solo NPCs locales).
+
+PRIORIDAD MEDIA: Implementar ligas escalonadas Bronce-Diamante con entrada en $POL real.
+
+PRIORIDAD MEDIA: Implementar los 10 tipos de Torneos Tematicos faltantes (actualmente solo Copa Neon + Copa Satelite de los 12 planificados).
+
+PRIORIDAD BAJA: Dashboard RORS de monitoreo economico.
+
+PRIORIDAD BAJA: Gen 0.5 — mecanica de Genos de evento esteriles.
 
 
-Proyecto Genos V10.1 — Documento Maestro Definitivo · Generado con Claude · Abril 2026
+
+
+
+Proyecto Genos V10.1 — Documento Maestro Definitivo · Actualizado Junio 2026
+Codigo fuente: https://github.com/Saletti001/Mascotas
+Estado: Motor de juego completo. Blockchain layer pendiente.
 

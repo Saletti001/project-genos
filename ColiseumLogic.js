@@ -503,6 +503,8 @@ window.ColiseumLogic = {
     },
 
     prepararJugador: function(mascota) {
+        const isSinGenes = window.TournamentManager && window.TournamentManager.activeTournament && window.TournamentManager.activeTournament.config && window.TournamentManager.activeTournament.config.id === "sin_genes";
+
         if (this.modoCombate === '3v3') {
             const teamGenos = (this.playerTeamIds || []).map(id => window.misGenos.find(g => String(g.id) === String(id))).filter(Boolean);
             if (teamGenos.length === 3) {
@@ -530,10 +532,10 @@ window.ColiseumLogic = {
                         isPlayer: true, adn: m,
                         maxHp: m.maxHp || pStats.hp, hp: m.hp || pStats.hp, atk: pStats.atk, def: pStats.def, spd: pStats.spd, luk: pStats.luk,
                         baseAtk: pStats.atk, baseDef: pStats.def, baseSpd: pStats.spd, baseLuk: pStats.luk,
-                        element: pElemento, rareza: m.rarity || m.rareza || "Común", genesId: [pGenB, pGenC], 
+                        element: pElemento, rareza: m.rarity || m.rareza || "Común", genesId: isSinGenes ? ["ninguno", "ninguno"] : [pGenB, pGenC], 
                         estados: [], efectosActivos: [], cooldowns: { especial: 0, tactica: 0, definitivo: 0 },
                         escudoCibernetico: pElemento === "Cibernético", 
-                        crystalSkin: pGenB === "piel_cristal" || pGenC === "piel_cristal",
+                        crystalSkin: isSinGenes ? false : (pGenB === "piel_cristal" || pGenC === "piel_cristal"),
                         decoyUsado: false, coreArUsado: false, rachaGolpes: 0, adaptativaStacks: 0, ultimoElementoRecibido: null,
                         danoRecibidoEsteTurno: 0, danoRecibidoTurnoAnterior: 0, proxVenenoDoble: false,
                         ataquesEquipados: playerAtaques
@@ -570,10 +572,10 @@ window.ColiseumLogic = {
             isPlayer: true, adn: mascota,
             maxHp: mascota.maxHp || pStats.hp, hp: mascota.hp || pStats.hp, atk: pStats.atk, def: pStats.def, spd: pStats.spd, luk: pStats.luk,
             baseAtk: pStats.atk, baseDef: pStats.def, baseSpd: pStats.spd, baseLuk: pStats.luk,
-            element: pElemento, rareza: mascota.rarity || mascota.rareza || "Común", genesId: [pGenB, pGenC], 
+            element: pElemento, rareza: mascota.rarity || mascota.rareza || "Común", genesId: isSinGenes ? ["ninguno", "ninguno"] : [pGenB, pGenC], 
             estados: [], efectosActivos: [], cooldowns: { especial: 0, tactica: 0, definitivo: 0 },
             escudoCibernetico: pElemento === "Cibernético", 
-            crystalSkin: pGenB === "piel_cristal" || pGenC === "piel_cristal",
+            crystalSkin: isSinGenes ? false : (pGenB === "piel_cristal" || pGenC === "piel_cristal"),
             decoyUsado: false, coreArUsado: false, rachaGolpes: 0, adaptativaStacks: 0, ultimoElementoRecibido: null,
             danoRecibidoEsteTurno: 0, danoRecibidoTurnoAnterior: 0, proxVenenoDoble: false,
             ataquesEquipados: playerAtaques
@@ -734,6 +736,9 @@ window.ColiseumLogic = {
                 }
 
                 let defRival = defensor.def;
+                if (window.TournamentManager && window.TournamentManager.activeTournament && window.TournamentManager.activeTournament.config && window.TournamentManager.activeTournament.config.id === "modo_berserker") {
+                    defRival = 0;
+                }
 
                 if (ataqueReal.perforante || ataqueReal.rompeEscudos) {
                     if (ataqueReal.perforante && defensor.genesId.includes("decoy") && !defensor.decoyUsado && atkBruto > 0) {

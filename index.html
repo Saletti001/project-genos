@@ -1541,25 +1541,48 @@
                 </button>
             </div>
 
-            <!-- PANEL 1: LOBBY DE SELECCIÓN (TORNEOS DISPONIBLES) -->
-            <div id="tourney-lobby-panel" class="tourney-card" style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 15px; margin-bottom: 70px;">
-                <div style="text-align: center; color: #ccc; font-size: 11px; margin-bottom: 5px;">
-                    Selecciona un torneo activo de 16 jugadores en la red Polygon:
+            <!-- Pestañas de Navegación -->
+            <div class="tournament-tabs" style="display: flex; gap: 10px; margin-bottom: 12px; flex-shrink: 0; z-index: 10;">
+                <button id="tab-tourney-brackets" class="market-btn-neon active" onclick="TournamentManager.setTab('brackets')" style="margin: 0; flex: 1; padding: 8px 0; font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Copas de Llaves</button>
+                <button id="tab-tourney-tematicos" class="market-btn-neon" onclick="TournamentManager.setTab('tematicos')" style="margin: 0; flex: 1; padding: 8px 0; font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">Torneos Temáticos</button>
+            </div>
+
+            <!-- CONTENIDO DE PESTAÑA: COPAS DE LLAVES -->
+            <div id="tourney-brackets-tab-content" style="display: contents;">
+                <!-- PANEL 1: LOBBY DE SELECCIÓN (TORNEOS DISPONIBLES) -->
+                <div id="tourney-lobby-panel" class="tourney-card" style="flex-grow: 1; display: flex; flex-direction: column; justify-content: center; gap: 15px; margin-bottom: 70px;">
+                    <div style="text-align: center; color: #ccc; font-size: 11px; margin-bottom: 5px;">
+                        Selecciona un torneo activo de 16 jugadores en la red Polygon:
+                    </div>
+                    
+                    <div class="tourney-grid">
+                        <div class="tourney-option-card" onclick="TournamentManager.inscribirse('neon')">
+                            <div class="tourney-title-glow" style="color: #ff007f; text-shadow: 0 0 8px rgba(255,0,127,0.3);">Copa Neón</div>
+                            <div style="font-size: 20px; font-weight: bold; color: #fff; margin: 5px 0;">1.00 POL</div>
+                            <div style="font-size: 9px; color: #aaa; text-transform: uppercase; margin-bottom: 8px;">Entrada</div>
+                            <div style="font-size: 9px; color: #69f0ae; line-height: 1.3;">Premio 1er Puesto:<br><b>9.00 POL</b></div>
+                        </div>
+                        <div class="tourney-option-card" onclick="TournamentManager.inscribirse('satelite')">
+                            <div class="tourney-title-glow" style="color: #00e5ff; text-shadow: 0 0 8px rgba(0,229,255,0.3);">Copa Satélite</div>
+                            <div style="font-size: 20px; font-weight: bold; color: #fff; margin: 5px 0;">0.50 POL</div>
+                            <div style="font-size: 9px; color: #aaa; text-transform: uppercase; margin-bottom: 8px;">Entrada</div>
+                            <div style="font-size: 9px; color: #69f0ae; line-height: 1.3;">Premio 1er Puesto:<br><b>4.50 POL</b></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CONTENIDO DE PESTAÑA: TORNEOS TEMÁTICOS -->
+            <div id="tourney-tematicos-tab-content" class="hidden" style="flex-grow: 1; display: flex; flex-direction: column; gap: 12px; margin-bottom: 70px;">
+                <!-- Banner de la Semana Actual -->
+                <div id="tourney-tematicos-banner" class="tourney-card" style="padding: 12px 15px; background: linear-gradient(135deg, rgba(255, 0, 127, 0.15) 0%, rgba(138, 43, 226, 0.15) 100%); border: 1.5px solid #ff007f; box-shadow: 0 0 15px rgba(255, 0, 127, 0.2); text-align: center;">
+                    <div id="tematicos-banner-week" style="font-size: 13px; font-weight: 900; color: #ff007f; text-transform: uppercase; letter-spacing: 1.5px; text-shadow: 0 0 8px rgba(255,0,127,0.4); margin-bottom: 4px;">Semana X - Rotación Temática</div>
+                    <div id="tematicos-banner-desc" style="font-size: 11px; color: #cbd5e1; line-height: 1.4;">Cargando detalles de la rotación...</div>
                 </div>
                 
-                <div class="tourney-grid">
-                    <div class="tourney-option-card" onclick="TournamentManager.inscribirse('neon')">
-                        <div class="tourney-title-glow" style="color: #ff007f; text-shadow: 0 0 8px rgba(255,0,127,0.3);">Copa Neón</div>
-                        <div style="font-size: 20px; font-weight: bold; color: #fff; margin: 5px 0;">1.00 POL</div>
-                        <div style="font-size: 9px; color: #aaa; text-transform: uppercase; margin-bottom: 8px;">Entrada</div>
-                        <div style="font-size: 9px; color: #69f0ae; line-height: 1.3;">Premio 1er Puesto:<br><b>9.00 POL</b></div>
-                    </div>
-                    <div class="tourney-option-card" onclick="TournamentManager.inscribirse('satelite')">
-                        <div class="tourney-title-glow" style="color: #00e5ff; text-shadow: 0 0 8px rgba(0,229,255,0.3);">Copa Satélite</div>
-                        <div style="font-size: 20px; font-weight: bold; color: #fff; margin: 5px 0;">0.50 POL</div>
-                        <div style="font-size: 9px; color: #aaa; text-transform: uppercase; margin-bottom: 8px;">Entrada</div>
-                        <div style="font-size: 9px; color: #69f0ae; line-height: 1.3;">Premio 1er Puesto:<br><b>4.50 POL</b></div>
-                    </div>
+                <!-- Grid de Torneos Temáticos Activos -->
+                <div id="tourney-tematicos-list" style="flex-grow: 1; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; max-height: 380px; -ms-overflow-style: none; scrollbar-width: none;">
+                    <!-- Tarjetas de torneos inyectadas por JS -->
                 </div>
             </div>
 
