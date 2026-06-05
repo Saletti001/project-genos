@@ -983,6 +983,9 @@ function iniciarSecuenciaBienvenida() {
                     
                     if (window.miInventario) {
                         window.miInventario.addEssence(evARecolectar);
+                        if (typeof window.registrarLogEconomia === "function") {
+                            window.registrarLogEconomia('reward', evARecolectar, 'daily_care');
+                        }
                         window.miInventario.updateUI();
                         window.miInventario.renderGrid();
                     }

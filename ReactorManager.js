@@ -509,6 +509,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     window.miInventario.vitalEssence -= reglas.cost;
                     if(typeof window.miInventario.updateUI === 'function') window.miInventario.updateUI();
                 }
+                if (typeof window.registrarLogEconomia === "function") {
+                    window.registrarLogEconomia('sink', reglas.cost, 'reactor');
+                }
                 
                 const idsABorrar = window.genosEnReactor.map(g => g.id);
                 window.misGenos = window.misGenos.filter(g => !idsABorrar.includes(g.id));
@@ -679,6 +682,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         } else {
                             window.miInventario.vitalEssence += compensacion;
                             if(typeof window.miInventario.updateUI === 'function') window.miInventario.updateUI();
+                        }
+                        if (typeof window.registrarLogEconomia === "function") {
+                            window.registrarLogEconomia('reward', compensacion, 'reactor');
                         }
                         mensaje = `¡COLAPSO DEL REACTOR! 💥\nLos 5 Genos se desintegraron. Recuperas ${compensacion} EV de los restos irradiados.`;
                     }

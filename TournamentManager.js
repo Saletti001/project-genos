@@ -508,6 +508,10 @@ window.TournamentManager = {
             window.WalletManager.actualizarBoton();
         }
 
+        if (typeof window.registrarLogEconomia === "function") {
+            window.registrarLogEconomia('pol_spent', conf.costo, 'tournament_entry');
+        }
+
         // Marcar participación de este Geno si es temático
         if (isThematic) {
             const absWeek = this.getSemanaAño();
@@ -1138,6 +1142,9 @@ window.TournamentManager = {
                     } else {
                         window.miWallet.pol += premio;
                     }
+                    if (typeof window.registrarLogEconomia === "function") {
+                        window.registrarLogEconomia('pol_reward', premio, 'tournament_payout');
+                    }
                 }
 
                 if (window.WalletManager && window.WalletManager.actualizarBoton) {
@@ -1198,6 +1205,10 @@ window.TournamentManager = {
 
         if (!window.miWallet) window.miWallet = { pol: 0 };
         window.miWallet.pol += monto;
+
+        if (typeof window.registrarLogEconomia === "function") {
+            window.registrarLogEconomia('pol_reward', monto, 'tournament_payout');
+        }
 
         if (window.WalletManager && window.WalletManager.actualizarBoton) {
             window.WalletManager.actualizarBoton();

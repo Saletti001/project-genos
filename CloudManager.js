@@ -149,7 +149,8 @@ window.respaldarEnNube = async function() {
         datos_juego: datosJuego,
         lab_level: window.labLevel || 1,
         lab_xp: window.labXP || 0,
-        comercio_desbloqueado: window.comercioDesbloqueado || false
+        comercio_desbloqueado: window.comercioDesbloqueado || false,
+        last_active_at: new Date().toISOString()
     };
 
     let { error } = await supabaseClient
@@ -171,6 +172,32 @@ window.respaldarEnNube = async function() {
 
     if (error) console.error("Error al guardar en la nube:", error);
     else console.log("☁️ Progreso guardado en la Nube.");
+};
+
+window.registrarLogEconomia = async function(actionType, amount, source) {
+    if (!window.supabaseClient || !window.miUsuarioCloud) return;
+    
+    const parsedAmount = parseFloat(amount);
+    if (isNaN(parsedAmount) || parsedAmount <= 0) return;
+
+    try {
+        const { error } = await window.supabaseClient
+            .from('economy_logs')
+            .insert([{
+                player_id: window.miUsuarioCloud.id,
+                action_type: actionType,
+                amount: parsedAmount,
+                source: source
+            }]);
+            
+        if (error) {
+            console.error("[ECONOMY LOG ERROR] Fallo al registrar log:", error);
+        } else {
+            console.log(`[ECONOMY LOG] Registrado: ${actionType} - ${parsedAmount} de ${source}`);
+        }
+    } catch (e) {
+        console.error("[ECONOMY LOG EXCEPTION]", e);
+    }
 };
 
 async function cargarDatosDeLaNube() {

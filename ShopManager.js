@@ -279,6 +279,9 @@ window.ShopManager = {
                 }
                 
                 window.miInventario.vitalEssence -= item.price;
+                if (typeof window.registrarLogEconomia === "function") {
+                    window.registrarLogEconomia('sink', item.price, 'bazar');
+                }
                 window.comercioDesbloqueado = true;
                 window.miInventario.updateUI();
                 
@@ -301,6 +304,9 @@ window.ShopManager = {
                 }
 
                 window.miInventario.vitalEssence -= item.price;
+                if (typeof window.registrarLogEconomia === "function") {
+                    window.registrarLogEconomia('sink', item.price, 'bazar');
+                }
                 const formasBase = ["gota", "frijol", "circulo", "cuadrado", "triangulo"];
                 const coloresBase = ["#ff6b6b", "#4dd0e1", "#fdfd96", "#b19cd9", "#77DD77", "#ff9800", "#ffb347", "#a8e6cf"];
                 const elementosBase = ["Biomutante", "Viral", "Cibernético", "Radiactivo", "Tóxico", "Sintético"];
@@ -389,6 +395,9 @@ window.ShopManager = {
             let agregadoExitosamente = window.miInventario.addItem(itemParaInventario);
             if (agregadoExitosamente) {
                 window.miInventario.vitalEssence -= item.price;
+                if (typeof window.registrarLogEconomia === "function") {
+                    window.registrarLogEconomia('sink', item.price, 'bazar');
+                }
                 window.miInventario.updateUI();
                 alert(`✅ Has comprado: ${item.name}`);
                 if(window.guardarJuego) window.guardarJuego();

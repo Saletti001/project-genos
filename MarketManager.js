@@ -1326,6 +1326,10 @@ window.comprarListado = async function(listing) {
 
         window.miWallet.pol -= precio;
 
+        if (typeof window.registrarLogEconomia === 'function') {
+            window.registrarLogEconomia('pol_sale', precio, 'market');
+        }
+
         const dataObj = listing.itemData || {};
         
         if (listing.isItem) {

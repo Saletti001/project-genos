@@ -507,7 +507,12 @@ document.addEventListener("DOMContentLoaded", () => {
             let esenciaActual = (window.miInventario && typeof window.miInventario.vitalEssence !== 'undefined') ? window.miInventario.vitalEssence : 9999; 
             if (esenciaActual < 500) { alert("⚠️ No tienes suficiente Esencia Vital (✨ 500)."); return; }
             
-            if(window.miInventario && typeof window.miInventario.addEssence === 'function') { window.miInventario.addEssence(-500); }
+            if(window.miInventario && typeof window.miInventario.addEssence === 'function') { 
+                window.miInventario.addEssence(-500); 
+                if (typeof window.registrarLogEconomia === "function") {
+                    window.registrarLogEconomia('sink', 500, 'breeding');
+                }
+            }
             actualizarPolUI();
             
             padre1.breedCount = (padre1.breedCount || 0) + 1; padre2.breedCount = (padre2.breedCount || 0) + 1;

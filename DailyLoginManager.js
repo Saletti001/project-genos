@@ -117,6 +117,9 @@ window.DailyLoginManager = {
         if (reward.type === "essence") {
             if (window.miInventario && typeof window.miInventario.addEssence === "function") {
                 window.miInventario.addEssence(reward.amount);
+                if (typeof window.registrarLogEconomia === "function") {
+                    window.registrarLogEconomia('reward', reward.amount, 'checkin');
+                }
                 alert(`✨ ¡Felicidades! Has reclamado tu recompensa de Día ${reward.day}: +${reward.amount} Esencia Vital.`);
             } else {
                 alert("❌ Error: El sistema de inventario no está listo.");

@@ -311,6 +311,9 @@ document.addEventListener("DOMContentLoaded", () => {
                             
                             if (window.miInventario && typeof window.miInventario.addEssence === 'function') {
                                 window.miInventario.addEssence(reward);
+                                if (typeof window.registrarLogEconomia === "function") {
+                                    window.registrarLogEconomia('reward', reward, 'sanctuary');
+                                }
                             }
                             
                             incrementDailyData();
