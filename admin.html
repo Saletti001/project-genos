@@ -1298,7 +1298,7 @@
             const ctx = document.getElementById('rarityDistributionChart').getContext('2d');
             
             // Expected categories
-            const rarities = ['Común', 'Raro', 'Épico', 'Legendario'];
+            const rarities = ['Común', 'Raro', 'Épico', 'Legendario', 'Mítico'];
             const counts = rarities.map(r => distribution[r] || 0);
 
             // Rarity Colors matching the SVG Engine
@@ -1306,14 +1306,16 @@
                 'rgba(148, 163, 184, 0.7)', // Common - Slate/Gray
                 'rgba(0, 229, 255, 0.7)',   // Rare - Cyan
                 'rgba(213, 0, 249, 0.7)',   // Epic - Purple/Pink
-                'rgba(255, 234, 0, 0.7)'    // Legendary - Yellow
+                'rgba(255, 234, 0, 0.7)',   // Legendary - Yellow
+                'rgba(255, 0, 127, 0.7)'    // Mythic - Neon Rose/Pink
             ];
             
             const borderColors = [
                 '#94a3b8',
                 '#00e5ff',
                 '#d500f9',
-                '#ffea00'
+                '#ffea00',
+                '#ff007f'
             ];
 
             if (charts.rarity) {
