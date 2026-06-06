@@ -165,7 +165,8 @@ window.respaldarEnNube = async function() {
             .upsert({
                 id: window.miUsuarioCloud.id,
                 email: window.miUsuarioCloud.email,
-                datos_juego: datosJuego
+                datos_juego: datosJuego,
+                last_active_at: new Date().toISOString()
             });
         error = fallbackRes.error;
     }
@@ -233,6 +234,30 @@ async function cargarDatosDeLaNube() {
 
     if (data && data.datos_juego) {
         console.log("☁️ Descargando progreso del jugador desde la Red Nexo...");
+        
+        // Actualizar última actividad de forma asíncrona en la base de datos
+        supabaseClient
+            .from('jugadores')
+            .update({ last_active_at: new Date().toISOString() })
+            .eq('id', window.miUsuarioCloud.id)
+            .then(({ error }) => {
+                if (error) console.warn("[CloudManager] No se pudo actualizar last_active_at:", error);
+            });
+
+        // Heartbeat periódico de actividad (cada 3 minutos) para mantener el estado "En Vivo" en el panel
+        if (window.activityHeartbeatInterval) clearInterval(window.activityHeartbeatInterval);
+        window.activityHeartbeatInterval = setInterval(() => {
+            if (!window.miUsuarioCloud) return;
+            supabaseClient
+                .from('jugadores')
+                .update({ last_active_at: new Date().toISOString() })
+                .eq('id', window.miUsuarioCloud.id)
+                .then(({ error }) => {
+                    if (error) console.warn("[CloudManager] Fallo en heartbeat de actividad:", error);
+                });
+        }, 180000);
+
+
         const dj = data.datos_juego;
         
         // Cargar variables de laboratorio con prioridad de columna y fallback a JSONB

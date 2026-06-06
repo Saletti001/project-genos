@@ -714,7 +714,99 @@
             font-family: var(--font-cyber);
             font-size: 14px;
             letter-spacing: 2px;
-            color: var(--neon-cyan);
+        }
+
+        /* Custom Select Styles */
+        .custom-select-wrapper {
+            position: relative;
+            user-select: none;
+            width: 200px;
+        }
+
+        .custom-select-trigger {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--neon-purple);
+            color: #fff;
+            padding: 8px 30px 8px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            font-family: var(--font-main);
+            box-shadow: 0 0 10px rgba(213, 0, 249, 0.15);
+            position: relative;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .custom-select-trigger::after {
+            content: '';
+            border: 4px solid transparent;
+            border-top-color: var(--neon-purple);
+            transition: transform 0.3s;
+            margin-left: 10px;
+            display: inline-block;
+        }
+
+        .custom-select-wrapper.open .custom-select-trigger::after {
+            transform: rotate(180deg);
+        }
+
+        .custom-select-options {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            background: rgba(10, 11, 16, 0.98);
+            border: 1px solid var(--neon-purple);
+            border-radius: 6px;
+            margin-top: 5px;
+            z-index: 1000;
+            display: none;
+            overflow-y: auto;
+            max-height: 250px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+        }
+
+        .custom-select-wrapper.open .custom-select-options {
+            display: block;
+        }
+
+        .custom-option {
+            padding: 10px 14px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-main);
+            border-bottom: 1px dashed rgba(213, 0, 249, 0.1);
+            text-align: left;
+        }
+
+        .custom-option:last-child {
+            border-bottom: none;
+        }
+
+        .custom-option:hover {
+            background: var(--neon-purple);
+            color: #000;
+        }
+
+        .custom-option.selected {
+            background: rgba(213, 0, 249, 0.2);
+            color: var(--neon-purple);
+        }
+
+        /* SVG KPI Icon formatting */
+        .kpi-icon-svg {
+            stroke: var(--neon-cyan);
+            filter: drop-shadow(0 0 2px rgba(0, 229, 255, 0.4));
         }
     </style>
 </head>
@@ -750,7 +842,13 @@
     <!-- Access Denied screen -->
     <div id="denied-screen" class="denied-screen hidden">
         <div class="denied-card">
-            <div class="denied-icon">🚨</div>
+            <div class="denied-icon" style="display: flex; justify-content: center; margin-bottom: 20px;">
+                <svg viewBox="0 0 24 24" width="64" height="64" fill="none" stroke="#ff007f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(255, 0, 127, 0.6));">
+                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                </svg>
+            </div>
             <div class="denied-title">Acceso Restringido</div>
             <div class="denied-desc">
                 El correo electrónico de tu cuenta no cuenta con autorizaciones en el registro central <span style="font-family: var(--font-mono); color: var(--neon-pink);">admin_whitelist</span>. Si crees que esto es un error, por favor contacta al administrador de la base de datos de Supabase.
@@ -779,7 +877,14 @@
             <div class="glass-panel kpi-card">
                 <div class="kpi-header">
                     <span>Actividad de Jugadores</span>
-                    <span class="kpi-icon">👥</span>
+                    <span class="kpi-icon" style="display: flex; align-items: center; color: var(--neon-cyan);">
+                        <svg class="kpi-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </span>
                 </div>
                 <div>
                     <div id="kpi-total-players" class="kpi-value">---</div>
@@ -799,7 +904,13 @@
             <div class="glass-panel kpi-card">
                 <div class="kpi-header">
                     <span>Esencia Vital (EV) Circulante</span>
-                    <span class="kpi-icon">🧬</span>
+                    <span class="kpi-icon" style="display: flex; align-items: center; color: var(--neon-cyan);">
+                        <svg class="kpi-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: var(--neon-cyan);">
+                            <path d="M4.5 10.5C4.5 10.5 7.5 13.5 12 13.5C16.5 13.5 19.5 10.5 19.5 10.5M4.5 13.5C4.5 13.5 7.5 10.5 12 10.5C16.5 10.5 19.5 13.5 19.5 13.5M12 3V21M3 12H21" stroke-dasharray="2 2"></path>
+                            <circle cx="12" cy="7" r="3" fill="var(--neon-cyan)" opacity="0.3"></circle>
+                            <circle cx="12" cy="17" r="3" fill="var(--neon-cyan)" opacity="0.3"></circle>
+                        </svg>
+                    </span>
                 </div>
                 <div>
                     <div id="kpi-total-ev" class="kpi-value" style="color: var(--neon-cyan);">---</div>
@@ -817,7 +928,13 @@
             <div class="glass-panel kpi-card">
                 <div class="kpi-header">
                     <span>Salud de Emisión RORS (24h)</span>
-                    <span class="kpi-icon">📊</span>
+                    <span class="kpi-icon" style="display: flex; align-items: center; color: var(--neon-purple);">
+                        <svg class="kpi-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: var(--neon-purple);">
+                            <line x1="18" y1="20" x2="18" y2="10"></line>
+                            <line x1="12" y1="20" x2="12" y2="4"></line>
+                            <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                    </span>
                 </div>
                 <div>
                     <div id="kpi-rors-ratio" class="kpi-value">---</div>
@@ -835,7 +952,13 @@
             <div class="glass-panel kpi-card">
                 <div class="kpi-header">
                     <span>Bóveda y Mercado POL</span>
-                    <span class="kpi-icon">💰</span>
+                    <span class="kpi-icon" style="display: flex; align-items: center; color: var(--neon-yellow);">
+                        <svg class="kpi-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: var(--neon-yellow);">
+                            <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                            <line x1="12" y1="10" x2="12" y2="14"></line>
+                            <line x1="2" y1="10" x2="22" y2="10"></line>
+                        </svg>
+                    </span>
                 </div>
                 <div>
                     <div id="kpi-total-pol-used" class="kpi-value" style="color: var(--neon-yellow);">---</div>
@@ -872,20 +995,123 @@
 
         </div>
 
+        <!-- Support & Compensation Panel -->
+        <div class="glass-panel logs-panel support-panel-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; min-height: 380px; margin-bottom: 30px;">
+            <!-- Column 1: Search & Profile Viewer -->
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="chart-card-header" style="border-left-color: var(--neon-cyan); margin-bottom: 10px;">Consulta de Cuenta de Usuario</div>
+                <div style="display: flex; gap: 10px;">
+                    <input type="email" id="support-search-email" class="logs-search" placeholder="Buscar usuario por correo..." style="flex-grow: 1;">
+                    <button id="btn-support-search" class="auth-btn" style="margin-top: 0; width: auto; padding: 0 20px; height: 38px;">Buscar</button>
+                </div>
+                <div id="support-profile-result" class="hidden" style="display: flex; flex-direction: column; gap: 12px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); font-size: 12px; font-family: var(--font-mono);">
+                    <div><span style="color: var(--text-muted);">UID:</span> <span id="prof-uid" style="color: var(--neon-cyan); font-size: 11px;">---</span></div>
+                    <div><span style="color: var(--text-muted);">EMAIL:</span> <span id="prof-email" style="color: #fff; font-weight: bold;">---</span></div>
+                    <div><span style="color: var(--text-muted);">NIVEL LAB:</span> <span id="prof-lab" style="color: var(--neon-yellow);">---</span></div>
+                    <div><span style="color: var(--text-muted);">ACTIVIDAD:</span> <span id="prof-active" style="color: #fff;">---</span></div>
+                    <div style="display: flex; gap: 20px; margin-top: 5px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px;">
+                        <div><span style="color: var(--text-muted);">EV:</span> <span id="prof-ev" style="color: var(--neon-green); font-weight: bold;">0.00</span></div>
+                        <div><span style="color: var(--text-muted);">POL:</span> <span id="prof-pol" style="color: var(--neon-cyan); font-weight: bold;">0.00</span></div>
+                        <div><span style="color: var(--text-muted);">MASCOTAS:</span> <span id="prof-mascotas" style="color: var(--neon-purple); font-weight: bold;">0</span></div>
+                    </div>
+                    <div style="margin-top: 5px;">
+                        <div style="color: var(--text-muted); margin-bottom: 5px; font-size: 10px;">MOCHILA DE INVENTARIO:</div>
+                        <div id="prof-items-list" style="display: flex; flex-wrap: wrap; gap: 6px; max-height: 120px; overflow-y: auto; padding-right: 5px;">
+                            <!-- Rendered dynamically -->
+                        </div>
+                    </div>
+                </div>
+                <div id="support-profile-empty" style="text-align: center; padding: 60px 20px; color: var(--text-muted); border: 1px dashed rgba(255,255,255,0.1); border-radius: 8px; font-size: 12px;">
+                    Escribe el correo electrónico de un jugador registrado para consultar sus balances de inventario y datos en tiempo real.
+                </div>
+            </div>
+
+            <!-- Column 2: Compensation Actions -->
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                <div class="chart-card-header" style="border-left-color: var(--neon-purple); margin-bottom: 10px;">Concesión de Compensación y Recursos</div>
+                
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Tipo de Recurso</label>
+                    <div class="custom-select-wrapper" id="support-type-wrapper" data-selected-value="ev" style="width: 100%;">
+                        <div class="custom-select-trigger" id="support-type-trigger">Esencia Vital (EV)</div>
+                        <div class="custom-select-options">
+                            <div class="custom-option selected" data-value="ev">Esencia Vital (EV)</div>
+                            <div class="custom-option" data-value="pol">POL (Token)</div>
+                            <div class="custom-option" data-value="item">Ítem de Inventario</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Predefined Item Selector -->
+                <div id="support-item-select-group" class="hidden" style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Seleccionar Ítem</label>
+                    <div class="custom-select-wrapper" id="support-item-wrapper" data-selected-value="incubator_01" style="width: 100%;">
+                        <div class="custom-select-trigger" id="support-item-trigger">Incubadora Térmica</div>
+                        <div class="custom-select-options">
+                            <div class="custom-option selected" data-value="incubator_01">Incubadora Térmica</div>
+                            <div class="custom-option" data-value="ration_auto">Ración Automática</div>
+                            <div class="custom-option" data-value="plasma_shower">Ducha de Plasma</div>
+                            <div class="custom-option" data-value="escaner_basico">Escáner Básico</div>
+                            <div class="custom-option" data-value="escaner_completo">Escáner Completo</div>
+                            <div class="custom-option" data-value="antidoto_uni">Antídoto Universal</div>
+                            <div class="custom-option" data-value="tinta_habilidad">Tinta de Habilidad</div>
+                            <div class="custom-option" data-value="comercio_licencia">Permiso de Comercio</div>
+                            <div class="custom-option" data-value="custom">Otro (Personalizado)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Item Detail Fields -->
+                <div id="support-custom-item-fields" class="hidden" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: rgba(0,0,0,0.25); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <label style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted);">ID del Ítem</label>
+                        <input type="text" id="custom-item-id" class="logs-search" style="width: 100%; height: 32px; padding: 6px 10px;" placeholder="ej: pocion_energia">
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <label style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted);">Nombre</label>
+                        <input type="text" id="custom-item-name" class="logs-search" style="width: 100%; height: 32px; padding: 6px 10px;" placeholder="ej: Poción de Energía">
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <label style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted);">Icono (Emoji/SVG)</label>
+                        <input type="text" id="custom-item-icon" class="logs-search" style="width: 100%; height: 32px; padding: 6px 10px;" placeholder="ej: 🧪">
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 4px;">
+                        <label style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted);">Categoría/Tipo</label>
+                        <input type="text" id="custom-item-type" class="logs-search" style="width: 100%; height: 32px; padding: 6px 10px;" placeholder="ej: consumable">
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 4px; grid-column: span 2;">
+                        <label style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted);">Descripción</label>
+                        <input type="text" id="custom-item-desc" class="logs-search" style="width: 100%; height: 32px; padding: 6px 10px;" placeholder="ej: Recupera 50% de resistencia.">
+                    </div>
+                </div>
+
+                <div style="display: flex; flex-direction: column; gap: 5px;">
+                    <label style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Monto o Cantidad a Conceder</label>
+                    <input type="number" id="support-amount" class="logs-search" style="width: 100%;" min="0.01" step="any" placeholder="Cantidad de recursos o unidades...">
+                </div>
+
+                <button id="btn-support-grant" class="auth-btn" style="margin-top: 10px; background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink)); box-shadow: 0 4px 15px rgba(255, 0, 127, 0.3);">CONCEDER COMPENSACIÓN</button>
+            </div>
+        </div>
+
         <!-- Logs Table Panel -->
         <div class="glass-panel logs-panel">
             <div class="logs-panel-header">
                 <div class="logs-panel-title">Historial Reciente de Logs Económicos</div>
                 <div class="logs-controls">
                     <input type="text" id="logs-search-input" class="logs-search" placeholder="Filtrar por correo o fuente...">
-                    <select id="logs-filter-action" class="logs-filter">
-                        <option value="all">Todas las Acciones</option>
-                        <option value="reward">Emisiones (Rewards)</option>
-                        <option value="sink">Quemas (Sinks)</option>
-                        <option value="pol_sale">Ventas POL (Mercado)</option>
-                        <option value="pol_spent">Inscripción Torneo</option>
-                        <option value="pol_reward">Premios Torneo</option>
-                    </select>
+                    
+                    <div class="custom-select-wrapper" id="logs-filter-wrapper" data-selected-value="all">
+                        <div class="custom-select-trigger" id="logs-filter-trigger">Todas las Acciones</div>
+                        <div class="custom-select-options">
+                            <div class="custom-option selected" data-value="all">Todas las Acciones</div>
+                            <div class="custom-option" data-value="reward">Emisiones (Rewards)</div>
+                            <div class="custom-option" data-value="sink">Quemas (Sinks)</div>
+                            <div class="custom-option" data-value="pol_sale">Ventas POL (Mercado)</div>
+                            <div class="custom-option" data-value="pol_spent">Inscripción Torneo</div>
+                            <div class="custom-option" data-value="pol_reward">Premios Torneo</div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -913,7 +1139,13 @@
 
     <!-- Toast Alerts -->
     <div id="cyber-toast" class="cyber-toast">
-        <span id="toast-icon">ℹ️</span>
+        <span id="toast-icon" style="display: flex; align-items: center;">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--neon-cyan)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 2px rgba(0, 229, 255, 0.4));">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+        </span>
         <span id="toast-message">Notificación del sistema.</span>
     </div>
 
@@ -926,10 +1158,61 @@
         let charts = {};
         let allLogs = [];
 
+        // Catálogo de ítems predefinidos para soporte y compensación
+        const SUPPORT_ITEM_CATALOG = {
+            "incubator_01": {
+                name: "Incubadora Térmica",
+                type: "consumable",
+                icon: `<svg viewBox="0 0 100 100" width="16" height="16" style="vertical-align: middle;"><rect x="38" y="10" width="24" height="8" rx="4" fill="#ff9800"/><rect x="25" y="18" width="50" height="72" rx="10" fill="#1a2a36" stroke="#ff9800" stroke-width="6"/><rect x="35" y="45" width="30" height="35" rx="4" fill="#ff5722"/><path d="M50 35 L50 40 M40 35 L40 40 M60 35 L60 40" stroke="#ff9800" stroke-width="4" stroke-linecap="round"/><path d="M50 50 Q58 60 50 70 Q42 60 50 50" fill="#ffeb3b"/></svg>`,
+                desc: "Batería térmica de alta capacidad. Proporciona la energía necesaria para incubar un Bio-Núcleo."
+            },
+            "ration_auto": {
+                name: "Ración Automática",
+                type: "consumable",
+                icon: "🍱",
+                desc: "Alimenta automáticamente a todos tus Genos en reserva por 24 horas."
+            },
+            "plasma_shower": {
+                name: "Ducha de Plasma",
+                type: "consumable",
+                icon: "🧼",
+                desc: "Limpia a todo tu inventario de mascotas a 100% de Higiene."
+            },
+            "escaner_basico": {
+                name: "Escáner Básico",
+                type: "basic",
+                icon: `<svg viewBox="0 0 100 100" width="16" height="16" style="vertical-align: middle;"><path d="M45 20 A25 25 0 1 1 20 45 A25 25 0 0 1 45 20" fill="none" stroke="#00E5FF" stroke-width="8"/><path d="M62 62 L90 90" stroke="#00E5FF" stroke-width="12" stroke-linecap="round"/><circle cx="45" cy="45" r="12" fill="#00B0FF" opacity="0.5"/><path d="M25 45 L65 45 M45 25 L45 65" stroke="#00E5FF" stroke-width="4" opacity="0.8"/></svg>`,
+                desc: "Revela slots activos del Geno."
+            },
+            "escaner_completo": {
+                name: "Escáner Completo",
+                type: "basic",
+                icon: `<svg viewBox="0 0 100 100" width="16" height="16" style="vertical-align: middle;"><path d="M25 20 Q50 50 75 80 M75 20 Q50 50 25 80" fill="none" stroke="#D500F9" stroke-width="8"/><line x1="33" y1="50" x2="67" y2="50" stroke="#D500F9" stroke-width="5"/><line x1="42" y1="30" x2="58" y2="70" stroke="#D500F9" stroke-width="5"/><line x1="58" y1="30" x2="42" y2="70" stroke="#D500F9" stroke-width="5"/><circle cx="25" cy="20" r="7" fill="#AA00FF"/><circle cx="75" cy="80" r="7" fill="#AA00FF"/><circle cx="75" cy="20" r="7" fill="#AA00FF"/><circle cx="25" cy="80" r="7" fill="#AA00FF"/></svg>`,
+                desc: "Revela la genética exacta S-D."
+            },
+            "antidoto_uni": {
+                name: "Antídoto Universal",
+                type: "consumable",
+                icon: `<svg viewBox="0 0 100 100" width="16" height="16" style="vertical-align: middle;"><path d="M40 10 L60 10 L60 30 L85 80 A10 10 0 0 1 75 95 L25 95 A10 10 0 0 1 15 80 L40 30 Z" fill="none" stroke="#C6FF00" stroke-width="6"/><path d="M25 75 L75 75 L65 50 L35 50 Z" fill="#C6FF00"/><circle cx="45" cy="65" r="5" fill="#fff" opacity="0.9"/><circle cx="58" cy="58" r="3" fill="#fff" opacity="0.7"/></svg>`,
+                desc: "Limpia cualquier estado alterado."
+            },
+            "tinta_habilidad": {
+                name: "Tinta de Habilidad",
+                type: "basic",
+                icon: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle;"><path d="M12 3C8 3 6 6 6 10V18C6 19 7 20 8 20H16C17 20 18 19 18 18V10C18 6 16 3 12 3Z" stroke="#FF4081" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="#FF4081" opacity="0.5"/><path d="M10 20L8 22H16L14 20" stroke="#FF4081" stroke-width="2"/></svg>`,
+                desc: "Permite re-escribir e implantar genes en el Laboratorio."
+            },
+            "comercio_licencia": {
+                name: "Permiso de Comercio",
+                type: "consumable",
+                icon: "📜",
+                desc: "Permiso de Acceso a la Red de Comercio del Bazar. Permite depositar, retirar y vender Genos. (Requiere Laboratorio Nv. 5)"
+            }
+        };
+
         // Inicialización
         document.addEventListener("DOMContentLoaded", async () => {
             try {
-                // Verificar si las librerías CDN se cargaron correctamente (por ej. si Brave Shields o adblockers las bloquearon)
                 if (!window.supabase) {
                     throw new Error("No se pudo cargar la librería de Supabase desde el CDN. Si usas Brave o un adblocker, por favor desactiva los escudos (Shields) para este sitio.");
                 }
@@ -944,39 +1227,42 @@
                 
                 // Setup Live Filters
                 document.getElementById("logs-search-input").addEventListener("input", filterLogsTable);
-                document.getElementById("logs-filter-action").addEventListener("change", filterLogsTable);
+                
+                // Setup Support Panel Events
+                document.getElementById("btn-support-search").onclick = handleSupportSearch;
+                document.getElementById("btn-support-grant").onclick = handleSupportGrant;
+                
+                // Inicializar selectores personalizados
+                initCustomSelects();
             } catch (e) {
                 console.error("[INIT ERROR]", e);
-                // Mostrar alerta de error en la interfaz
                 const errorMsg = document.getElementById("auth-error-msg");
                 if (errorMsg) {
                     errorMsg.innerText = "Error crítico de inicialización: " + e.message;
                     errorMsg.classList.remove("hidden");
                 }
                 showToast("Fallo de inicialización: " + e.message, true);
-                
-                // Mostrar el portal de login con el error correspondiente
                 showAuthPortal();
             } finally {
-                // Asegurar que el cargador de inicialización se oculta siempre
                 const overlay = document.getElementById("loading-overlay");
                 if (overlay) overlay.classList.add("hidden");
             }
         });
 
-        // Toast Helper
+        // Toast Helper con SVG en lugar de Emojis
         function showToast(message, isError = false) {
             const toast = document.getElementById("cyber-toast");
             const toastMsg = document.getElementById("toast-message");
             const toastIcon = document.getElementById("toast-icon");
             
             toastMsg.innerText = message;
-            toastIcon.innerText = isError ? "⚠️" : "⚡";
             
             if (isError) {
                 toast.classList.add("error");
+                toastIcon.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--neon-pink)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 2px rgba(255, 0, 127, 0.4));"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
             } else {
                 toast.classList.remove("error");
+                toastIcon.innerHTML = `<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--neon-green)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 2px rgba(105, 240, 174, 0.4));"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
             }
             
             toast.classList.add("show");
@@ -1021,8 +1307,6 @@
         // Verify if logged-in user is whitelisted
         async function verifyWhitelist(user) {
             try {
-                // Call the admin RPC function. If it succeeds, the user is authorized.
-                // If it fails with 'Acceso denegado', they are not whitelisted.
                 const { data, error } = await supabaseClient.rpc('get_admin_metrics');
                 
                 if (error) {
@@ -1036,19 +1320,18 @@
                     return;
                 }
 
-                // If successful, show console and load data
                 showAdminConsole(user.email);
                 renderMetrics(data);
                 showToast("Terminal autorizada. Carga de datos completa.");
 
-                // Poll metrics every 15 seconds to keep the dashboard live
+                // Refrescar métricas cada 60 segundos (ajustado para optimizar recursos de Supabase)
                 if (window.metricsInterval) clearInterval(window.metricsInterval);
                 window.metricsInterval = setInterval(async () => {
                     const { data: freshData, error: freshErr } = await supabaseClient.rpc('get_admin_metrics');
                     if (!freshErr && freshData) {
                         renderMetrics(freshData);
                     }
-                }, 15000);
+                }, 60000);
 
             } catch (e) {
                 console.error("[WHITELIST EXCEPTION]", e);
@@ -1097,11 +1380,276 @@
             showToast("Terminal desconectada.");
             showAuthPortal();
             
-            // Clear input fields
             document.getElementById("admin-email").value = "";
             document.getElementById("admin-pass").value = "";
             document.getElementById("auth-error-msg").classList.add("hidden");
         }
+
+        // Control y comportamiento de selectores customizados
+        function initCustomSelects() {
+            document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
+                const trigger = wrapper.querySelector('.custom-select-trigger');
+                const options = wrapper.querySelectorAll('.custom-option');
+                
+                // Limpiar listeners duplicados clonando el trigger
+                const newTrigger = trigger.cloneNode(true);
+                trigger.parentNode.replaceChild(newTrigger, trigger);
+                
+                newTrigger.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    document.querySelectorAll('.custom-select-wrapper').forEach(other => {
+                        if (other !== wrapper) other.classList.remove('open');
+                    });
+                    wrapper.classList.toggle('open');
+                });
+                
+                options.forEach(opt => {
+                    const newOpt = opt.cloneNode(true);
+                    opt.parentNode.replaceChild(newOpt, opt);
+                    
+                    newOpt.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        wrapper.querySelectorAll('.custom-option').forEach(o => o.classList.remove('selected'));
+                        newOpt.classList.add('selected');
+                        newTrigger.innerText = newOpt.innerText;
+                        wrapper.classList.remove('open');
+                        
+                        const value = newOpt.getAttribute('data-value');
+                        wrapper.setAttribute('data-selected-value', value);
+                        
+                        // Callbacks según el ID del selector
+                        if (wrapper.id === 'logs-filter-wrapper') {
+                            filterLogsTable();
+                        } else if (wrapper.id === 'support-type-wrapper') {
+                            handleSupportTypeChange(value);
+                        } else if (wrapper.id === 'support-item-wrapper') {
+                            handleSupportItemChange(value);
+                        }
+                    });
+                });
+            });
+            
+            // Cerrar al clickear fuera
+            document.addEventListener('click', () => {
+                document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
+                    wrapper.classList.remove('open');
+                });
+            });
+        }
+
+        // Eventos del Formulario de Soporte
+        function handleSupportTypeChange(value) {
+            const itemSelectGroup = document.getElementById("support-item-select-group");
+            const customFields = document.getElementById("support-custom-item-fields");
+            
+            if (value === "item") {
+                itemSelectGroup.classList.remove("hidden");
+                const currentItem = document.getElementById("support-item-wrapper").getAttribute("data-selected-value");
+                if (currentItem === "custom") {
+                    customFields.classList.remove("hidden");
+                } else {
+                    customFields.classList.add("hidden");
+                }
+            } else {
+                itemSelectGroup.classList.add("hidden");
+                customFields.classList.add("hidden");
+            }
+        }
+
+        function handleSupportItemChange(value) {
+            const customFields = document.getElementById("support-custom-item-fields");
+            if (value === "custom") {
+                customFields.classList.remove("hidden");
+                document.getElementById("custom-item-id").value = "";
+                document.getElementById("custom-item-name").value = "";
+                document.getElementById("custom-item-icon").value = "";
+                document.getElementById("custom-item-type").value = "";
+                document.getElementById("custom-item-desc").value = "";
+            } else {
+                customFields.classList.add("hidden");
+            }
+        }
+
+        // Buscar información en tiempo real de una cuenta de usuario
+        async function handleSupportSearch() {
+            const emailInput = document.getElementById("support-search-email");
+            const email = emailInput.value.trim();
+            const btn = document.getElementById("btn-support-search");
+            const resultBox = document.getElementById("support-profile-result");
+            const emptyBox = document.getElementById("support-profile-empty");
+            
+            if (!email) {
+                showToast("Escribe un correo electrónico.", true);
+                return;
+            }
+            
+            btn.innerText = "BUSCANDO...";
+            btn.disabled = true;
+            
+            try {
+                const { data, error } = await supabaseClient.rpc('get_player_profile_admin', { target_email: email });
+                
+                if (error) throw error;
+                
+                if (!data) {
+                    showToast("Usuario no encontrado en la Red Genos.", true);
+                    resultBox.classList.add("hidden");
+                    emptyBox.classList.remove("hidden");
+                    return;
+                }
+                
+                // Escribir datos básicos
+                document.getElementById("prof-uid").innerText = data.id;
+                document.getElementById("prof-email").innerText = data.email;
+                document.getElementById("prof-lab").innerText = "LAB NV " + data.lab_level;
+                
+                // Calcular tiempo transcurrido desde la última actividad
+                const lastActive = new Date(data.last_active_at);
+                const diffMs = Date.now() - lastActive.getTime();
+                const diffMin = Math.floor(diffMs / 60000);
+                
+                let activeHtml = "";
+                if (diffMin <= 10) {
+                    activeHtml = `<span style="color: var(--neon-green); font-weight: bold; display: flex; align-items: center; gap: 4px;"><span class="pulsing-indicator"></span> En Vivo (Activo ahora)</span>`;
+                } else if (diffMin < 1440) {
+                    const diffHr = Math.floor(diffMin / 60);
+                    activeHtml = `<span style="color: var(--neon-yellow);">Reciente (hace ${diffHr}h)</span>`;
+                } else {
+                    activeHtml = `<span style="color: var(--text-muted);">Inactivo (${lastActive.toLocaleDateString()})</span>`;
+                }
+                document.getElementById("prof-active").innerHTML = activeHtml;
+                
+                // Escribir Balances
+                document.getElementById("prof-ev").innerText = Number(data.vital_essence || 0).toLocaleString('en-US', { maximumFractionDigits: 1 }) + " EV";
+                document.getElementById("prof-pol").innerText = Number(data.pol || 0).toFixed(2) + " POL";
+                document.getElementById("prof-mascotas").innerText = data.genos_count || 0;
+                
+                // Mostrar Mochila
+                const itemsList = document.getElementById("prof-items-list");
+                itemsList.innerHTML = "";
+                
+                const slots = data.slots || [];
+                if (slots.length === 0) {
+                    itemsList.innerHTML = `<span style="color: var(--text-muted); font-style: italic; font-size: 11px;">Mochila vacía.</span>`;
+                } else {
+                    slots.forEach(slot => {
+                        let iconHtml = "📦";
+                        if (slot.id && SUPPORT_ITEM_CATALOG[slot.id]) {
+                            iconHtml = SUPPORT_ITEM_CATALOG[slot.id].icon;
+                        } else if (slot.icon) {
+                            iconHtml = slot.icon;
+                        }
+                        
+                        itemsList.innerHTML += `
+                            <div style="background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 6px; font-size: 10px;" title="${slot.description || ''}">
+                                <span style="display: inline-flex; align-items: center;">${iconHtml}</span>
+                                <span style="color: #fff;">${slot.name}</span>
+                                <b style="color: var(--neon-cyan);">x${slot.count}</b>
+                            </div>
+                        `;
+                    });
+                }
+                
+                emptyBox.classList.add("hidden");
+                resultBox.classList.remove("hidden");
+                showToast("Perfil de jugador cargado con éxito.");
+            } catch (e) {
+                console.error("[SUPPORT SEARCH ERROR]", e);
+                showToast("Fallo al consultar usuario: " + e.message, true);
+            } finally {
+                btn.innerText = "Buscar";
+                btn.disabled = false;
+            }
+        }
+
+        // Conceder compensación al jugador
+        async function handleSupportGrant() {
+            const targetEmail = document.getElementById("prof-email").innerText;
+            const amountInput = document.getElementById("support-amount");
+            const amount = parseFloat(amountInput.value);
+            
+            if (!targetEmail || targetEmail === "---") {
+                showToast("Busca un jugador antes de otorgar compensación.", true);
+                return;
+            }
+            
+            if (isNaN(amount) || amount <= 0) {
+                showToast("Monto a otorgar no válido (debe ser mayor a 0).", true);
+                return;
+            }
+            
+            const rewardType = document.getElementById("support-type-wrapper").getAttribute("data-selected-value");
+            
+            let itemId = "";
+            let itemName = "";
+            let itemIcon = "";
+            let itemType = "";
+            let itemDesc = "";
+            
+            if (rewardType === "item") {
+                const itemVal = document.getElementById("support-item-wrapper").getAttribute("data-selected-value");
+                if (itemVal === "custom") {
+                    itemId = document.getElementById("custom-item-id").value.trim();
+                    itemName = document.getElementById("custom-item-name").value.trim();
+                    itemIcon = document.getElementById("custom-item-icon").value.trim();
+                    itemType = document.getElementById("custom-item-type").value.trim();
+                    itemDesc = document.getElementById("custom-item-desc").value.trim();
+                    
+                    if (!itemId || !itemName) {
+                        showToast("El ID y Nombre del ítem personalizado son requeridos.", true);
+                        return;
+                    }
+                } else {
+                    const catalogItem = SUPPORT_ITEM_CATALOG[itemVal];
+                    itemId = itemVal;
+                    itemName = catalogItem.name;
+                    itemIcon = catalogItem.icon;
+                    itemType = catalogItem.type;
+                    itemDesc = catalogItem.desc;
+                }
+            }
+            
+            const confirmMsg = `¿Confirmas que deseas enviar esta compensación?\n\n` +
+                               `Destinatario: ${targetEmail}\n` +
+                               `Recurso: ${rewardType.toUpperCase()}\n` +
+                               (rewardType === "item" ? `Detalle: ${itemName} (${itemId})\n` : "") +
+                               `Monto/Cantidad: ${amount}`;
+                               
+            if (!confirm(confirmMsg)) return;
+            
+            const btn = document.getElementById("btn-support-grant");
+            btn.innerText = "PROCESANDO TRANSACCIÓN...";
+            btn.disabled = true;
+            
+            try {
+                const { data, error } = await supabaseClient.rpc('admin_grant_reward', {
+                    target_email: targetEmail,
+                    reward_type: rewardType,
+                    item_id: itemId,
+                    item_name: itemName,
+                    item_icon: itemIcon,
+                    item_type: itemType,
+                    item_desc: itemDesc,
+                    amount: amount
+                });
+                
+                if (error) throw error;
+                
+                showToast("Compensación enviada con éxito.");
+                amountInput.value = "";
+                
+                // Recargar el visor de perfil para reflejar la actualización inmediatamente
+                await handleSupportSearch();
+                
+            } catch (e) {
+                console.error("[SUPPORT GRANT ERROR]", e);
+                showToast("Fallo en la transacción de soporte: " + e.message, true);
+            } finally {
+                btn.innerText = "CONCEDER COMPENSACIÓN";
+                btn.disabled = false;
+            }
+        }
+
 
         // Render Dashboard metrics
         function renderMetrics(data) {
