@@ -86,7 +86,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             window.LoginUI.mostrarMensaje("¡Cuenta creada!", "#00d2ff");
             setTimeout(() => {
                 window.LoginUI.ocultar();
-                window.respaldarEnNube();
+                if (!localStorage.getItem("proyecto_genos_save_v1")) {
+                    if (typeof window.iniciarSecuenciaBienvenida === 'function') {
+                        window.iniciarSecuenciaBienvenida();
+                    }
+                } else {
+                    window.respaldarEnNube();
+                }
             }, 1000);
         }
     };
@@ -230,9 +236,24 @@ async function cargarDatosDeLaNube() {
         error = fallbackRes.error;
     }
 
-    if (error) return console.log("Perfil nuevo o error. Iniciando partida fresca.");
+    if (error) {
+        console.log("Perfil nuevo o error. Iniciando partida fresca.");
+        if (!localStorage.getItem("proyecto_genos_save_v1")) {
+            if (typeof window.iniciarSecuenciaBienvenida === 'function') {
+                window.iniciarSecuenciaBienvenida();
+            }
+        }
+        return;
+    }
 
     if (data && data.datos_juego) {
+        const dj = data.datos_juego;
+        // Si no tiene mascota activa y no hay partida guardada localmente
+        if ((!dj.mascotaActiva || dj.mascotaActiva.id === "temp") && !localStorage.getItem("proyecto_genos_save_v1")) {
+            if (typeof window.iniciarSecuenciaBienvenida === 'function') {
+                window.iniciarSecuenciaBienvenida();
+            }
+        }
         console.log("☁️ Descargando progreso del jugador desde la Red Nexo...");
         
         // Actualizar última actividad de forma asíncrona en la base de datos

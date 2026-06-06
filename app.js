@@ -244,14 +244,6 @@ document.addEventListener("DOMContentLoaded", () => {
         
     }, 500);
 
-    setTimeout(() => {
-        const noHayPartida = !localStorage.getItem("proyecto_genos_save_v1");
-        if (noHayPartida) {
-            const pedestal = document.getElementById("geno-container");
-            if (pedestal) pedestal.innerHTML = "";
-            iniciarSecuenciaBienvenida();
-        }
-    }, 100);
 
     const fabMenu = document.getElementById("fab-menu");
     const drawerMenu = document.getElementById("drawer-menu");
