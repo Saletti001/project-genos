@@ -1832,8 +1832,76 @@
     <script src="DailyRewardsCatalog.js"></script>
     <script src="DailyLoginManager.js"></script>
     <script src="MailboxManager.js"></script>
-    
+    <!-- Cyberpunk Dialog Overlay -->
+    <div id="cyber-alert-modal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(5, 7, 12, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999; display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s ease; display: none;">
+        <div style="background: rgba(14, 18, 30, 0.95); border: 2px solid #00e5ff; box-shadow: 0 0 25px rgba(0, 229, 255, 0.35); border-radius: 12px; width: 90%; max-width: 400px; padding: 25px; box-sizing: border-box; text-align: center; position: relative; overflow: hidden; transform: scale(0.9); transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+            <!-- Grid decorativo cyberpunk -->
+            <div style="position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(90deg, #00e5ff, #d500f9);"></div>
+            <div style="font-size: 30px; margin-bottom: 15px; filter: drop-shadow(0 0 8px rgba(0, 229, 255, 0.5));">
+                <svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                </svg>
+            </div>
+            <h3 style="font-family: 'Orbitron', sans-serif; font-size: 13px; color: #fff; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; text-shadow: 0 0 5px rgba(0, 229, 255, 0.2);">Mensaje de Red Nexo</h3>
+            <p id="cyber-alert-text" style="font-family: 'Outfit', sans-serif; font-size: 12px; color: #cbd5e1; line-height: 1.5; margin-bottom: 22px; word-break: break-word; text-align: center; font-weight: 600;"></p>
+            <button id="cyber-alert-btn" style="background: linear-gradient(90deg, #00e5ff, #d500f9); border: none; color: #fff; font-family: 'Orbitron', sans-serif; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1.5px; padding: 10px 24px; border-radius: 6px; cursor: pointer; box-shadow: 0 4px 12px rgba(0, 229, 255, 0.25); transition: all 0.2s; outline: none; width: 100%;" onmouseover="this.style.filter='brightness(1.1)'; this.style.boxShadow='0 6px 16px rgba(0, 229, 255, 0.45)';" onmouseout="this.style.filter='none'; this.style.boxShadow='0 4px 12px rgba(0, 229, 255, 0.25)';">Aceptar</button>
+        </div>
+    </div>
+
     <script>
+        // Custom window.alert override
+        (function() {
+            const nativeAlert = window.alert;
+            window.alert = function(msg) {
+                const modal = document.getElementById("cyber-alert-modal");
+                const textEl = document.getElementById("cyber-alert-text");
+                const btn = document.getElementById("cyber-alert-btn");
+                const content = modal ? modal.querySelector("div") : null;
+                
+                if (!modal || !textEl || !btn) {
+                    nativeAlert(msg);
+                    return;
+                }
+                
+                textEl.innerHTML = String(msg).replace(/\n/g, "<br>");
+                modal.style.display = "flex";
+                modal.classList.remove("hidden");
+                
+                setTimeout(() => {
+                    modal.style.opacity = "1";
+                    if (content) content.style.transform = "scale(1)";
+                }, 10);
+                
+                btn.focus();
+                
+                return new Promise((resolve) => {
+                    const closeAlert = () => {
+                        modal.style.opacity = "0";
+                        if (content) content.style.transform = "scale(0.9)";
+                        setTimeout(() => {
+                            modal.style.display = "none";
+                            modal.classList.add("hidden");
+                            btn.removeEventListener("click", closeAlert);
+                            document.removeEventListener("keydown", handleKey);
+                            resolve();
+                        }, 200);
+                    };
+                    
+                    const handleKey = (e) => {
+                        if (e.key === "Enter" || e.key === "Escape" || e.key === " ") {
+                            e.preventDefault();
+                            closeAlert();
+                        }
+                    };
+                    
+                    btn.addEventListener("click", closeAlert);
+                    document.addEventListener("keydown", handleKey);
+                });
+            };
+        })();
+
         document.addEventListener("DOMContentLoaded", () => {
             const inyectarIconos = () => {
                 if(!window.iconoEV) return;
