@@ -13,7 +13,10 @@ window.clockOffset = 0;
 
 window.obtenerHoraServidor = async function() {
     try {
-        const respuesta = await fetch(supabaseUrl, { method: 'HEAD' });
+        const respuesta = await fetch(supabaseUrl + '/rest/v1/', {
+            method: 'HEAD',
+            headers: { 'apikey': supabaseKey }
+        });
         const fechaHeader = respuesta.headers.get('Date');
         if (fechaHeader) {
             return new Date(fechaHeader).getTime();
