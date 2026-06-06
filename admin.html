@@ -13,6 +13,7 @@
     <!-- Supabase and Chart.js CDN -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="EmojiReplacer.js"></script>
 
     <style>
         :root {
@@ -838,7 +839,7 @@
             vertical-align: middle;
         }
 
-        #prof-items-list span {
+        #prof-items-list .prof-item-icon {
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -1035,7 +1036,7 @@
             </div>
 
             <!-- Chart 2: Geno Rarity / Element Distribution -->
-            <div class="glass-panel chart-card" style="overflow: visible !important;">
+            <div class="glass-panel chart-card" style="overflow: visible !important; position: relative; z-index: 3;">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-left: 3px solid var(--neon-cyan); padding-left: 10px; height: 24px;">
                     <div id="chart-population-title" class="chart-card-header" style="border-left: none; padding-left: 0; margin-bottom: 0;">Población de Mascotas</div>
                     <div class="custom-select-wrapper" id="population-filter-wrapper" data-selected-value="rarity" style="width: 140px;">
@@ -1054,7 +1055,7 @@
         </div>
 
         <!-- Support & Compensation Panel -->
-        <div class="glass-panel logs-panel support-panel-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; min-height: 380px; margin-bottom: 30px;">
+        <div class="glass-panel logs-panel support-panel-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; min-height: 380px; margin-bottom: 30px; position: relative; z-index: 2;">
             <!-- Column 1: Search & Profile Viewer -->
             <div style="display: flex; flex-direction: column; gap: 15px;">
                 <div class="chart-card-header" style="border-left-color: var(--neon-cyan); margin-bottom: 10px;">Consulta de Cuenta de Usuario</div>
@@ -1073,7 +1074,7 @@
                         <div><span style="color: var(--text-muted);">MASCOTAS:</span> <span id="prof-mascotas" style="color: var(--neon-purple); font-weight: bold;">0</span></div>
                     </div>
                     <div style="margin-top: 5px;">
-                        <div style="color: var(--text-muted); margin-bottom: 5px; font-size: 10px;">MOCHILA DE INVENTARIO:</div>
+                        <div style="color: var(--text-muted); margin-bottom: 5px; font-size: 10px;">ALMACÉN NEXO:</div>
                         <div id="prof-items-list" style="display: flex; flex-wrap: wrap; gap: 6px; max-height: 120px; overflow-y: auto; padding-right: 5px;">
                             <!-- Rendered dynamically -->
                         </div>
@@ -1153,7 +1154,7 @@
         </div>
 
         <!-- Logs Table Panel -->
-        <div class="glass-panel logs-panel">
+        <div class="glass-panel logs-panel" style="position: relative; z-index: 1;">
             <div class="logs-panel-header">
                 <div class="logs-panel-title">Historial Reciente de Logs Económicos</div>
                 <div class="logs-controls">
@@ -1228,13 +1229,13 @@
             "ration_auto": {
                 name: "Ración Automática",
                 type: "consumable",
-                icon: "🍱",
+                icon: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#69f0ae" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/><line x1="15" y1="9" x2="15" y2="3"/></svg>`,
                 desc: "Alimenta automáticamente a todos tus Genos en reserva por 24 horas."
             },
             "plasma_shower": {
                 name: "Ducha de Plasma",
                 type: "consumable",
-                icon: "🧼",
+                icon: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#00e5ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><rect x="2" y="7" width="20" height="10" rx="3" ry="3"/><circle cx="6" cy="12" r="1"/><circle cx="18" cy="12" r="1"/><circle cx="12" cy="12" r="2" fill="#00e5ff" opacity="0.4"/></svg>`,
                 desc: "Limpia a todo tu inventario de mascotas a 100% de Higiene."
             },
             "escaner_basico": {
@@ -1264,7 +1265,7 @@
             "comercio_licencia": {
                 name: "Permiso de Comercio",
                 type: "consumable",
-                icon: "📜",
+                icon: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#ffea00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`,
                 desc: "Permiso de Acceso a la Red de Comercio del Bazar. Permite depositar, retirar y vender Genos. (Requiere Laboratorio Nv. 5)"
             }
         };
@@ -1585,16 +1586,16 @@
                 document.getElementById("prof-pol").innerText = Number(data.pol || 0).toFixed(2) + " POL";
                 document.getElementById("prof-mascotas").innerText = data.genos_count || 0;
                 
-                // Mostrar Mochila
+                // Mostrar Almacén Nexo
                 const itemsList = document.getElementById("prof-items-list");
                 itemsList.innerHTML = "";
                 
                 const slots = data.slots || [];
                 if (slots.length === 0) {
-                    itemsList.innerHTML = `<span style="color: var(--text-muted); font-style: italic; font-size: 11px;">Mochila vacía.</span>`;
+                    itemsList.innerHTML = `<span style="color: var(--text-muted); font-style: italic; font-size: 11px;">Almacén vacío.</span>`;
                 } else {
                     slots.forEach(slot => {
-                        let iconHtml = "📦";
+                        let iconHtml = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#d500f9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>`;
                         if (slot.id && SUPPORT_ITEM_CATALOG[slot.id]) {
                             iconHtml = SUPPORT_ITEM_CATALOG[slot.id].icon;
                         } else if (slot.icon) {
@@ -1603,7 +1604,7 @@
                         
                         itemsList.innerHTML += `
                             <div style="background: rgba(255,255,255,0.05); padding: 4px 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; gap: 6px; font-size: 10px;" title="${slot.description || ''}">
-                                <span style="display: inline-flex; align-items: center;">${iconHtml}</span>
+                                <span class="prof-item-icon" style="display: inline-flex; align-items: center;">${iconHtml}</span>
                                 <span style="color: #fff;">${slot.name}</span>
                                 <b style="color: var(--neon-cyan);">x${slot.count}</b>
                             </div>

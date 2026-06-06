@@ -1,0 +1,3106 @@
+{
+  "accesorios.js": [
+    {
+      "line": 64,
+      "text": "<!-- ✨ FIX: Coordenadas ajustadas a (-45, 25) para simetría -->",
+      "emojis": [
+        "✨"
+      ]
+    }
+  ],
+  "admin.html": [
+    {
+      "line": 1134,
+      "text": "<input type=\"text\" id=\"custom-item-icon\" class=\"logs-search\" style=\"width: 100%; height: 32px; padding: 6px 10px;\" placeholder=\"ej: 🧪\">",
+      "emojis": [
+        "🧪"
+      ]
+    },
+    {
+      "line": 1231,
+      "text": "icon: \"🍱\",",
+      "emojis": [
+        "🍱"
+      ]
+    },
+    {
+      "line": 1237,
+      "text": "icon: \"🧼\",",
+      "emojis": [
+        "🧼"
+      ]
+    },
+    {
+      "line": 1267,
+      "text": "icon: \"📜\",",
+      "emojis": [
+        "📜"
+      ]
+    },
+    {
+      "line": 1597,
+      "text": "let iconHtml = \"📦\";",
+      "emojis": [
+        "📦"
+      ]
+    }
+  ],
+  "app.js": [
+    {
+      "line": 481,
+      "text": "window.miInventario.addItem({ id: \"dna_scanner\", name: \"Escáner ADN\", icon: \"🧬\", type: \"consumible\", maxStack: 20 }, 5);",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 591,
+      "text": ": '🧬';",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 647,
+      "text": "emptyCard.innerHTML = `<div style=\"width: 70px; height: 70px; display: flex; justify-content: center; align-items: center; font-size: 32px; color: #4dd0e1; flex: 1;\">🧬</div><span style=\"color: #4dd0e1; font-weight: bold; font-size: 11px; margin-top: 5px; text-align: center; flex-shrink: 0;\">Vacío</span>`;",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 657,
+      "text": "buyCard.innerHTML = `<div style=\"width: 100px; height: 100px; display: flex; justify-content: center; align-items: center; font-size: 32px; color: #e0b0ff;\">➕</div><span style=\"color: white; font-weight: bold; font-size: 12px; margin-top: 5px; text-align: center;\">Comprar Slot #${siguienteSlot}</span><span style=\"color: #e0b0ff; font-weight: bold; font-size: 11px; margin-top: 5px; text-align: center;\">${costoExpansion} POL</span>`;",
+      "emojis": [
+        "➕"
+      ]
+    },
+    {
+      "line": 748,
+      "text": "const svgBioNucleo = typeof generarSvgGeno === 'function' ? generarSvgGeno({ isEgg: true, color: miPrimerGeno.color, id: \"genesis\" }) : '🧬';",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 975,
+      "text": "coin.innerText = \"✨\";",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 993,
+      "text": "alert(`✨ ¡Has cosechado ${evARecolectar.toFixed(2)} EV de tu Geno!`);",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 1131,
+      "text": "label.innerText = msRestante > 0 ? `✓ ${h > 0 ? h + 'h ' : ''}${m}m` : \"✓ Completo\";",
+      "emojis": [
+        "✓"
+      ]
+    },
+    {
+      "line": 1486,
+      "text": "labelTools.innerText = `🧼 ¡Casi listo! Enjuaga por ${segsRestantes}s más...`;",
+      "emojis": [
+        "🧼"
+      ]
+    },
+    {
+      "line": 1513,
+      "text": "alert(`🧼 ¡Has bañado por completo a ${window.miMascota.name}! Higiene al 100% y ¡Amistad +${gananciaExplicita}!`);",
+      "emojis": [
+        "🧼"
+      ]
+    },
+    {
+      "line": 1515,
+      "text": "alert(`🧼 ¡Has bañado por completo a ${window.miMascota.name}! Higiene al 100%. (Amistad por limpieza ya obtenida hoy)`);",
+      "emojis": [
+        "🧼"
+      ]
+    }
+  ],
+  "ArcadeData.js": [
+    {
+      "line": 3,
+      "text": "{ id: 'catch', title: 'Lluvia de Manzanas', icon: '🍎', desc: 'Atrapa 5 manzanas para ganar 1 item.', locked: false },",
+      "emojis": [
+        "🍎"
+      ]
+    },
+    {
+      "line": 4,
+      "text": "{ id: 'g2', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 5,
+      "text": "{ id: 'g3', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 6,
+      "text": "{ id: 'g4', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 7,
+      "text": "{ id: 'g5', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 8,
+      "text": "{ id: 'g6', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 9,
+      "text": "{ id: 'g7', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 10,
+      "text": "{ id: 'g8', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 11,
+      "text": "{ id: 'g9', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 12,
+      "text": "{ id: 'g10', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 13,
+      "text": "{ id: 'g11', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 14,
+      "text": "{ id: 'g12', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 15,
+      "text": "{ id: 'g13', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 16,
+      "text": "{ id: 'g14', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 17,
+      "text": "{ id: 'g15', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 18,
+      "text": "{ id: 'g16', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 19,
+      "text": "{ id: 'g17', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 20,
+      "text": "{ id: 'g18', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 21,
+      "text": "{ id: 'g19', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 22,
+      "text": "{ id: 'g20', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 23,
+      "text": "{ id: 'g21', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 24,
+      "text": "{ id: 'g22', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 25,
+      "text": "{ id: 'g23', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 26,
+      "text": "{ id: 'g24', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 27,
+      "text": "{ id: 'g25', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 28,
+      "text": "{ id: 'g26', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 29,
+      "text": "{ id: 'g27', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 30,
+      "text": "{ id: 'g28', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 31,
+      "text": "{ id: 'g29', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true },",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 32,
+      "text": "{ id: 'g30', title: 'Próximamente', icon: '🔒', desc: 'Nuevo minijuego en desarrollo.', locked: true }",
+      "emojis": [
+        "🔒"
+      ]
+    }
+  ],
+  "BreedingManager.js": [
+    {
+      "line": 353,
+      "text": "<div style=\"color: #aaa; font-size: 12px; margin-bottom: 10px; text-align: center;\">🔒 ADN Bloqueado</div>",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 354,
+      "text": "<button id=\"btn-id-scan\" style=\"background: linear-gradient(90deg, #8A2BE2, #00d2ff); color: white; border: none; padding: 10px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; text-transform: uppercase; width: 100%; box-shadow: 0 4px 10px rgba(138, 43, 226, 0.3);\">Revelar Genes (🧬 Escáner)</button>",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 444,
+      "text": "if(yaSeleccionado) statusText = `<span style=\"color: #f0ad4e; font-weight: bold; font-size: 11px;\">⚠️ Ya está seleccionado</span>`;",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 445,
+      "text": "else if((geno.breedCount||0) >= maxCrias) statusText = `<span style=\"color: #d9534f; font-weight: bold; font-size: 11px;\">🔒 Límite de síntesis</span>`;",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 446,
+      "text": "else if(geno.scholarship) statusText = `<span style=\"color: #a855f7; font-weight: bold; font-size: 11px;\">⚠️ Bloqueado: Beca Activa</span>`;",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 500,
+      "text": "alert(\"🎒 ¡Almacén y Espacios de Emergencia LLENOS!\\nNo tienes espacio para sintetizar. Libera espacio destruyendo ítems menos valiosos.\");",
+      "emojis": [
+        "🎒"
+      ]
+    },
+    {
+      "line": 503,
+      "text": "alert(\"⚠️ Advertencia: Tu Almacén principal está lleno.\\nEl Bio-Núcleo se guardará en un espacio de emergencia temporal (24h).\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 508,
+      "text": "if (esenciaActual < 500) { alert(\"⚠️ No tienes suficiente Esencia Vital (✨ 500).\"); return; }",
+      "emojis": [
+        "⚠",
+        "✨"
+      ]
+    },
+    {
+      "line": 680,
+      "text": "const svgCapsula = typeof generarSvgGeno === 'function' ? generarSvgGeno({ isEgg: true, color: colorHijo }) : '🧬';",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 734,
+      "text": "actionHtml = `<button id=\"btn-activate-${huevo.id}\" style=\"margin-top: 8px; font-size: 10px; background: linear-gradient(135deg, #4dd0e1, #3b82f6); color: #0d1a24; border: none; border-radius: 6px; padding: 5px 10px; cursor: pointer; font-weight: bold; box-shadow: 0 2px 8px rgba(77, 208, 225, 0.4); text-transform: uppercase;\">ACTIVAR (Usa 1🔋)</button>`;",
+      "emojis": [
+        "🔋"
+      ]
+    },
+    {
+      "line": 736,
+      "text": "actionHtml = `<button id=\"btn-buy-${huevo.id}\" style=\"margin-top: 8px; font-size: 10px; background: linear-gradient(135deg, #ff9800, #ff5722); color: white; border: none; border-radius: 6px; padding: 5px 10px; cursor: pointer; font-weight: bold; box-shadow: 0 2px 8px rgba(255, 152, 0, 0.4); text-transform: uppercase;\">🛒 🔋 0.2 POL</button>`;",
+      "emojis": [
+        "🛒",
+        "🔋"
+      ]
+    },
+    {
+      "line": 742,
+      "text": "actionHtml = `<button id=\"btn-skip-${huevo.id}\" style=\"margin-top: 8px; font-size: 10px; background: linear-gradient(135deg, #8b5cf6, #3b82f6); color: white; border: none; border-radius: 6px; padding: 5px 10px; cursor: pointer; font-weight: bold; box-shadow: 0 2px 8px rgba(139, 92, 246, 0.4); text-transform: uppercase;\">⚡ 0.5 POL</button>`;",
+      "emojis": [
+        "⚡"
+      ]
+    },
+    {
+      "line": 745,
+      "text": "actionHtml = `<button id=\"btn-claim-${huevo.id}\" style=\"margin-top: 8px; font-size: 10px; background: linear-gradient(135deg, #77DD77, #3b82f6); color: #0d1a24; border: none; border-radius: 6px; padding: 5px 10px; cursor: pointer; font-weight: bold; box-shadow: 0 2px 8px rgba(119, 221, 119, 0.4); text-transform: uppercase;\">✨ RECLAMAR</button>`;",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 773,
+      "text": "window.miInventario.addItem({ id: \"incubator_01\", name: \"Incubadora Térmica\", icon: \"🔋\", type: \"consumible\", maxStack: 20 }, 1);",
+      "emojis": [
+        "🔋"
+      ]
+    },
+    {
+      "line": 775,
+      "text": "} else { alert(\"❌ No tienes suficiente POL.\"); }",
+      "emojis": [
+        "❌"
+      ]
+    },
+    {
+      "line": 784,
+      "text": "alert(\"⚠️ LÍMITE DE ALOJAMIENTO ALCANZADO\\nNo tienes más espacio en 'Mis Genos'. Expande tu capacidad con ➕ POL antes de abrir este núcleo.\");",
+      "emojis": [
+        "⚠",
+        "➕"
+      ]
+    },
+    {
+      "line": 796,
+      "text": "alert(`⚡ ¡Geno nacido!`);",
+      "emojis": [
+        "⚡"
+      ]
+    },
+    {
+      "line": 807,
+      "text": "alert(\"⚠️ LÍMITE DE ALOJAMIENTO ALCANZADO\\nNo tienes más espacio en 'Mis Genos'. Expande tu capacidad con ➕ POL antes de reclamar este Geno.\");",
+      "emojis": [
+        "⚠",
+        "➕"
+      ]
+    },
+    {
+      "line": 817,
+      "text": "alert(`🧬 ¡Geno nacido!`);",
+      "emojis": [
+        "🧬"
+      ]
+    }
+  ],
+  "CloudManager.js": [
+    {
+      "line": 175,
+      "text": "else console.log(\"☁️ Progreso guardado en la Nube.\");",
+      "emojis": [
+        "☁"
+      ]
+    },
+    {
+      "line": 236,
+      "text": "console.log(\"☁️ Descargando progreso del jugador desde la Red Nexo...\");",
+      "emojis": [
+        "☁"
+      ]
+    }
+  ],
+  "ColiseumLogic.js": [
+    {
+      "line": 26,
+      "text": "let nomNormalizado = nombreItem.replace(/💿/g, \"\").replace(/MT /gi, \"\").replace(/\\n/g, \" \").replace(/\\s+/g, \" \").trim().toLowerCase();",
+      "emojis": [
+        "💿"
+      ]
+    },
+    {
+      "line": 606,
+      "text": "logs.push(`<span style=\"color:#ff3333\">🔥 🧬 [Gen Oculto: Contra-Golpe] ¡${this.cName(defensor)} gana +30% ATK por la adrenalina del Definitivo!</span>`);",
+      "emojis": [
+        "🔥",
+        "🧬"
+      ]
+    },
+    {
+      "line": 629,
+      "text": "logs.push(`<span style=\"color:#ce93d8;\">💥 ¡El ataque fue potenciado masivamente!</span>`);",
+      "emojis": [
+        "💥"
+      ]
+    },
+    {
+      "line": 650,
+      "text": "logs.push(`> ⚡ [Contrarrestar] ¡${this.cName(atacante)} devuelve el impacto y causa <span style=\"color:#ff6b6b; font-weight:bold;\">${dmgDevuelto} de daño puro</span>!`);",
+      "emojis": [
+        "⚡"
+      ]
+    },
+    {
+      "line": 656,
+      "text": "logs.push(`<span style=\"color:#e0b0ff\">🦇 🧬 [Gen Oculto: Vampirismo] ${this.cName(atacante)} recupera ${roboVida} HP.</span>`);",
+      "emojis": [
+        "🦇",
+        "🧬"
+      ]
+    },
+    {
+      "line": 682,
+      "text": "logs.push(`<span style=\"color:#b19cd9\">⚡ 🧬 [Gen Oculto: Velocidad Fantasma] ¡${this.cName(atacante)} ataca rápido dos veces!</span>`);",
+      "emojis": [
+        "⚡",
+        "🧬"
+      ]
+    },
+    {
+      "line": 728,
+      "text": "logs.push(`> <span style=\"color:#e0e0e0; font-style:italic;\">💨 ¡${this.cName(defensor)} logró evadir el ataque!</span>`);",
+      "emojis": [
+        "💨"
+      ]
+    },
+    {
+      "line": 734,
+      "text": "logs.push(`<span style=\"color:#00e5ff\">⚡ ¡Tras evadir, ${this.cName(defensor)} aumenta su Velocidad en +${spdBoost}!</span>`);",
+      "emojis": [
+        "⚡"
+      ]
+    },
+    {
+      "line": 748,
+      "text": "logs.push(`<span style=\"color:#e0e0e0; font-style:italic;\">💨 🧬 [Gen Oculto: Maestro del Engaño] ¡${this.cName(defensor)} evadió el golpe perforante!</span>`);",
+      "emojis": [
+        "💨",
+        "🧬"
+      ]
+    },
+    {
+      "line": 752,
+      "text": "logs.push(`<span style=\"color:#80deea;\">🛡️ 🧬 [Gen Oculto: Postura Inquebrantable] Absorbe parcialmente la perforación.</span>`);",
+      "emojis": [
+        "🛡",
+        "🧬"
+      ]
+    },
+    {
+      "line": 790,
+      "text": "logs.push(`<span style=\"color:#80deea\">🛡️ 🧬 [Gen Oculto: Armadura Adaptativa] Daño reducido un ${defensor.adaptativaStacks * 10}%.</span>`);",
+      "emojis": [
+        "🛡",
+        "🧬"
+      ]
+    },
+    {
+      "line": 802,
+      "text": "logs.push(`<span style=\"color:#00d2ff\">🛡️ [Pasivo: Escudo Cibernético] ${this.cName(defensor)} absorbe el impacto.</span>`);",
+      "emojis": [
+        "🛡"
+      ]
+    },
+    {
+      "line": 806,
+      "text": "logs.push(`<span style=\"color:#80deea\">💎 🧬 [Gen Oculto: Piel de Cristal] ${this.cName(defensor)} anula el daño por completo.</span>`);",
+      "emojis": [
+        "💎",
+        "🧬"
+      ]
+    },
+    {
+      "line": 822,
+      "text": "logs.push(`<span style=\"color:#ff9800\">⚔️ 🧬 [Gen Oculto: Ruptura Defensiva] DEF de ${this.cName(defensor)} -10% permanente.</span>`);",
+      "emojis": [
+        "⚔",
+        "🧬"
+      ]
+    },
+    {
+      "line": 831,
+      "text": "logs.push(`<span style=\"color:#ff3333\">💢 🧬 [Gen Oculto: Retroalimentación] ${this.cName(defensor)} recibe +15% ATK por el gran impacto!</span>`);",
+      "emojis": [
+        "💢",
+        "🧬"
+      ]
+    },
+    {
+      "line": 837,
+      "text": "if (isCrit) logs.push(`> 💥 <span style=\"color:#ff0000; font-weight:bold;\">¡CRÍTICO!</span> ${this.cName(atacante)} causa <span style=\"color:#ff6b6b; font-weight:bold;\">${dmg} de daño</span>.${tipoGolpe}${textoStab}`);",
+      "emojis": [
+        "💥"
+      ]
+    },
+    {
+      "line": 847,
+      "text": "if (roboSkill > 0) logs.push(`<span style=\"color:#e0b0ff\">🦇 [Absorción] ${this.cName(atacante)} drena ${roboTotal} HP.</span>`);",
+      "emojis": [
+        "🦇"
+      ]
+    },
+    {
+      "line": 848,
+      "text": "else logs.push(`<span style=\"color:#e0b0ff\">🦇 🧬 [Gen Oculto: Vampirismo] ${this.cName(atacante)} recupera ${roboTotal} HP.</span>`);",
+      "emojis": [
+        "🦇",
+        "🧬"
+      ]
+    },
+    {
+      "line": 865,
+      "text": "if (purgoAlgo) logs.push(`<span style=\"color:#ffcc00\">🚫 ¡Los incrementos de stats de ${this.cName(defensor)} fueron purgados!</span>`);",
+      "emojis": [
+        "🚫"
+      ]
+    },
+    {
+      "line": 885,
+      "text": "logs.push(`<span style=\"color:#80deea\">🛡️ 🧬 [Gen Oculto: Núcleo Coraza] ¡${this.cName(defensor)} bloquea la reducción de stats!</span>`);",
+      "emojis": [
+        "🛡",
+        "🧬"
+      ]
+    },
+    {
+      "line": 893,
+      "text": "logs.push(`<span style=\"color:#00e5ff\">💨 ¡${this.cName(atacante)} aumenta su Velocidad en +${val}!</span>`);",
+      "emojis": [
+        "💨"
+      ]
+    },
+    {
+      "line": 899,
+      "text": "logs.push(`<span style=\"color:#ff3333\">⚔️ ¡${this.cName(atacante)} aumenta su Ataque en +${val}!</span>`);",
+      "emojis": [
+        "⚔"
+      ]
+    },
+    {
+      "line": 906,
+      "text": "logs.push(`<span style=\"color:#80deea\">🛡️ ¡${this.cName(atacante)} levanta una barrera de +${val} DEF!</span>`);",
+      "emojis": [
+        "🛡"
+      ]
+    },
+    {
+      "line": 913,
+      "text": "logs.push(`<span style=\"color:#80deea\">🛡️ ¡${this.cName(atacante)} aumenta su Defensa en +${val}!</span>`);",
+      "emojis": [
+        "🛡"
+      ]
+    },
+    {
+      "line": 920,
+      "text": "logs.push(`<span style=\"color:#4CAF50\">🍀 ¡${this.cName(atacante)} aumenta su Suerte en +${val}!</span>`);",
+      "emojis": [
+        "🍀"
+      ]
+    },
+    {
+      "line": 928,
+      "text": "logs.push(`<span style=\"color:#e0e0e0\">💨 ¡${this.cName(atacante)} adopta una postura evasiva (+${Math.floor(ataqueReal.buffEvasion * 100)}% Evasión)!</span>`);",
+      "emojis": [
+        "💨"
+      ]
+    },
+    {
+      "line": 935,
+      "text": "logs.push(`<span style=\"color:#80deea\">🛡️ ¡${this.cName(atacante)} activa un Escudo Adaptativo de +${val} DEF!</span>`);",
+      "emojis": [
+        "🛡"
+      ]
+    },
+    {
+      "line": 953,
+      "text": "logs.push(`<span style=\"color:#b19cd9\">📉 ¡${this.cName(defensor)} pierde Suerte y probabilidad de crítico!</span>`);",
+      "emojis": [
+        "📉"
+      ]
+    },
+    {
+      "line": 957,
+      "text": "logs.push(`<span style=\"color:#888\">🌫️ ¡La precisión de ${this.cName(defensor)} fue reducida a ciegas!</span>`);",
+      "emojis": [
+        "🌫"
+      ]
+    },
+    {
+      "line": 966,
+      "text": "logs.push(`<span style=\"color:#00d2ff\">❄️ 🧬 [Gen Oculto: Sangre Fría] ¡${this.cName(target)} bloquea el estado!</span>`);",
+      "emojis": [
+        "❄",
+        "🧬"
+      ]
+    },
+    {
+      "line": 976,
+      "text": "logs.push(`<span style=\"color:#9c27b0\">🧪 ¡El Veneno fue concentrado con doble intensidad y duración!</span>`);",
+      "emojis": [
+        "🧪"
+      ]
+    },
+    {
+      "line": 1012,
+      "text": "logs.push(`<span style=\"color:#4CAF50\">🌿 [Pasiva: Biomutante] ${this.cName(target)} activa regeneración natural.</span>`);",
+      "emojis": [
+        "🌿"
+      ]
+    },
+    {
+      "line": 1016,
+      "text": "logs.push(`<span style=\"color:#ffcc00\">⚡ 🧬 [Gen Oculto: Acel. de Estado] ¡El estado surte efecto de inmediato!</span>`);",
+      "emojis": [
+        "⚡",
+        "🧬"
+      ]
+    },
+    {
+      "line": 1061,
+      "text": "logs.push(`<span style=\"color:#4CAF50\">🌿 [Pasivo: Biomutante] ${this.cName(fighter)} regenera ${regen} HP.</span>`);",
+      "emojis": [
+        "🌿"
+      ]
+    },
+    {
+      "line": 1067,
+      "text": "logs.push(`<span style=\"color:#4CAF50\">✨ [Regeneración] ${this.cName(fighter)} recupera ${healDmg} HP.</span>`);",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 1073,
+      "text": "logs.push(`<span style=\"color:#b2ff59\">☢️ [Campo Radiactivo] ${this.cName(fighter)} pierde ${radDmg} HP.</span>`);",
+      "emojis": [
+        "☢"
+      ]
+    },
+    {
+      "line": 1080,
+      "text": "logs.push(`<span style=\"color:#ff3d00\">⚡ [Sobrecarga] ${this.cName(fighter)} pierde ${sobreDmg} HP por el esfuerzo.</span>`);",
+      "emojis": [
+        "⚡"
+      ]
+    },
+    {
+      "line": 1087,
+      "text": "logs.push(`<span style=\"color:#ff9800\">🔥 [Quemadura] ${this.cName(fighter)} pierde ${burnDmg} HP.</span>`); anims.dmg += burnDmg;",
+      "emojis": [
+        "🔥"
+      ]
+    },
+    {
+      "line": 1092,
+      "text": "logs.push(`<span style=\"color:#9c27b0\">☠️ [Veneno] ${this.cName(fighter)} pierde ${venDmg} HP.</span>`); anims.dmg += venDmg;",
+      "emojis": [
+        "☠"
+      ]
+    }
+  ],
+  "ColiseumManager.js": [
+    {
+      "line": 247,
+      "text": "alert(\"⚠️ Al menos uno de tus Genos seleccionados está en huelga (necesidades básicas por debajo del 20%) y se niega a combatir. ¡Cuídalo en el Laboratorio!\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 257,
+      "text": "alert(\"⚠️ Tu Geno activo está en huelga (necesidades básicas por debajo del 20%) y se niega a combatir. ¡Cuídalo en el Laboratorio!\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 274,
+      "text": "ColiseumUI.agregarLog(`<span style=\"color:#d500f9; font-weight:bold; font-size:14px; text-shadow: 0 0 10px rgba(213,0,249,0.5);\">⚠️ DETECTADA SEÑAL DE JEFE DE LIGA</span>`);",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 281,
+      "text": "<button id=\"btn-challenge-boss\" class=\"boss-btn-challenge\">⚔️ Desafiar al Jefe de Liga</button>",
+      "emojis": [
+        "⚔"
+      ]
+    },
+    {
+      "line": 326,
+      "text": "alert(\"⚠️ Al menos uno de tus Genos seleccionados está en huelga (necesidades básicas por debajo del 20%) y se niega a combatir. ¡Cuídalo en el Laboratorio!\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 336,
+      "text": "alert(\"⚠️ Tu Geno activo está en huelga (necesidades básicas por debajo del 20%) y se niega a combatir. ¡Cuídalo en el Laboratorio!\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 381,
+      "text": "ColiseumUI.agregarLog(`<span style=\"color:#69f0ae; font-weight:bold;\">🛡️ MODO ENTRENAMIENTO: Tu Geno es menor a nivel 5. Parámetros del oponente ajustados (-15% estadísticas base, nivel equilibrado).</span>`);",
+      "emojis": [
+        "🛡"
+      ]
+    },
+    {
+      "line": 397,
+      "text": "ColiseumUI.agregarLog(`<span style=\"color:#d500f9; font-weight:bold; font-size:13px; text-shadow: 0 0 5px rgba(213,0,249,0.4);\">⚔️ DETECTADO: ${ColiseumLogic.cName(e)} (Jefe de Liga)</span>`);",
+      "emojis": [
+        "⚔"
+      ]
+    },
+    {
+      "line": 399,
+      "text": "ColiseumUI.agregarLog(`<span style=\"color:#b19cd9;\">> 🧬 Escáner detecta Genética de ${ColiseumLogic.cName(e)}: Calidad [${calidadEnemigo}].</span>`);",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 402,
+      "text": "ColiseumUI.agregarLog(`<span style=\"color:#4CAF50; font-weight:bold;\">> ⚔️ Matchup: ¡VENTAJA! Tus ataques ${p.element} harán +35% de Daño a ${ColiseumLogic.cName(e)}, y los suyos te harán -25%.</span>`);",
+      "emojis": [
+        "⚔"
+      ]
+    },
+    {
+      "line": 404,
+      "text": "ColiseumUI.agregarLog(`<span style=\"color:#ff5722; font-weight:bold;\">> ⚠️ Matchup: ¡PELIGRO! Los ataques ${e.element} de ${ColiseumLogic.cName(e)} te harán +35% de Daño, y los tuyos harán -25%.</span>`);",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 406,
+      "text": "ColiseumUI.agregarLog(`<span style=\"color:#80deea;\">> ⚖️ Matchup: Neutral (${p.element} vs ${e.element}). Terreno equilibrado entre ${ColiseumLogic.cName(p)} y ${ColiseumLogic.cName(e)}.</span>`);",
+      "emojis": [
+        "⚖"
+      ]
+    },
+    {
+      "line": 438,
+      "text": "ColiseumUI.agregarLog(`> 🔄 <span style=\"color:#00e5ff; font-weight:bold;\">¡Entra ${ColiseumLogic.cName(p)} al combate!</span>`);",
+      "emojis": [
+        "🔄"
+      ]
+    },
+    {
+      "line": 455,
+      "text": "ColiseumUI.agregarLog(`> ❌ <span style=\"color:#ff3333; font-weight:bold;\">¡No puedes retirar a tu Geno porque está Enredado!</span>`);",
+      "emojis": [
+        "❌"
+      ]
+    },
+    {
+      "line": 476,
+      "text": "ColiseumUI.agregarLog(`> 🔄 <span style=\"color:#a855f7; font-weight:bold;\">${oldName} se retira del combate y entra ${ColiseumLogic.cName(p)}!</span>`);",
+      "emojis": [
+        "🔄"
+      ]
+    },
+    {
+      "line": 518,
+      "text": "ColiseumUI.agregarLog(`<span style=\"color:#555;\">&nbsp;&nbsp;♦ ♦ ♦</span>`);",
+      "emojis": [
+        "♦"
+      ]
+    },
+    {
+      "line": 534,
+      "text": "ColiseumUI.agregarLog(`> ❄️ <span style=\"color:#80deea; font-weight:bold;\">¡${ColiseumLogic.cName(atacante)} está completamente congelado y no puede moverse!</span>`);",
+      "emojis": [
+        "❄"
+      ]
+    },
+    {
+      "line": 543,
+      "text": "ColiseumUI.agregarLog(`> ⚡ <span style=\"color:#ffcc00; font-weight:bold;\">¡${ColiseumLogic.cName(atacante)} está paralizado! ¡Su cuerpo no responde!</span>`);",
+      "emojis": [
+        "⚡"
+      ]
+    },
+    {
+      "line": 718,
+      "text": "ColiseumUI.agregarLog(`> 💥 <span style=\"color:#ffcc00; font-weight:bold;\">¡${e.nombre} ha sido derrotado!</span>`);",
+      "emojis": [
+        "💥"
+      ]
+    },
+    {
+      "line": 719,
+      "text": "ColiseumUI.agregarLog(`> 🔄 <span style=\"color:#ff6b6b; font-weight:bold;\">¡El rival envía a ${ColiseumLogic.cName(ColiseumLogic.enemy)} al combate!</span>`);",
+      "emojis": [
+        "🔄"
+      ]
+    },
+    {
+      "line": 732,
+      "text": "ColiseumUI.agregarLog(`> 💀 <span style=\"color:#ff3333; font-weight:bold;\">¡${p.nombre} ha caído! Selecciona a tu próximo Geno usando los botones de relevo.</span>`);",
+      "emojis": [
+        "💀"
+      ]
+    },
+    {
+      "line": 760,
+      "text": "ColiseumUI.agregarLog(`<span style=\"color:#4CAF50\">🏆 ¡VICTORIA!</span>`, \"#ffd54f\");",
+      "emojis": [
+        "🏆"
+      ]
+    },
+    {
+      "line": 764,
+      "text": "ColiseumUI.agregarLog(`<span style=\"color:#69f0ae; font-weight:bold;\">🧪 ¡+25 XP de Laboratorio!</span>`);",
+      "emojis": [
+        "🧪"
+      ]
+    },
+    {
+      "line": 771,
+      "text": "ColiseumUI.agregarLog(`<span style=\"color:#ffd700; font-weight:bold; text-shadow: 0 0 8px rgba(255,215,0,0.5);\">🌟 ¡Bono de Jefe de Liga! Derrotaste al Jefe y obtuviste un +15% de XP adicional (+${bonusXp} XP).</span>`);",
+      "emojis": [
+        "🌟"
+      ]
+    },
+    {
+      "line": 828,
+      "text": "alert(`¡Súper Evolución! 🌟\\n${geno.alias || geno.name} ha alcanzado el Nivel ${geno.level}.\\nTienes ${levelUps * 3} Puntos de Atributo disponibles.`);",
+      "emojis": [
+        "🌟"
+      ]
+    },
+    {
+      "line": 843,
+      "text": "ColiseumUI.agregarLog(`<span style=\"color:#ec407a\">💖 ¡${geno.alias || geno.name} se siente más unido a ti! Amistad +${gananciaExplicita}.</span>`);",
+      "emojis": [
+        "💖"
+      ]
+    },
+    {
+      "line": 845,
+      "text": "ColiseumUI.agregarLog(`<span style=\"color:#aaa\">💖 Victoria de ${geno.alias || geno.name}. (Amistad por combate ya obtenida hoy).</span>`);",
+      "emojis": [
+        "💖"
+      ]
+    },
+    {
+      "line": 889,
+      "text": "ColiseumUI.agregarLog(`<span style=\"color:#ec407a\">💖 ¡Tu Geno se siente más unido a ti! Amistad +${gananciaExplicita}.</span>`);",
+      "emojis": [
+        "💖"
+      ]
+    },
+    {
+      "line": 891,
+      "text": "ColiseumUI.agregarLog(`<span style=\"color:#aaa\">💖 Victoria del Geno. (Amistad por combate ya obtenida hoy).</span>`);",
+      "emojis": [
+        "💖"
+      ]
+    },
+    {
+      "line": 902,
+      "text": "ColiseumUI.agregarLog(`<span style=\"color:#f44336\">💀 DERROTA. Tu equipo debe descansar.</span>`);",
+      "emojis": [
+        "💀"
+      ]
+    },
+    {
+      "line": 906,
+      "text": "ColiseumUI.agregarLog(`<span style=\"color:#ff8a80; font-weight:bold;\">🧪 +5 XP de Laboratorio.</span>`);",
+      "emojis": [
+        "🧪"
+      ]
+    },
+    {
+      "line": 986,
+      "text": "alert(\"⚠️ Se requieren al menos 3 Genos en tu colección para combatir en la modalidad 3v3. ¡Consigue más Genos en el Mercado o Centro de Crianza!\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 1175,
+      "text": "alert(\"⚠️ Todos los Genos de tu equipo deben tener al menos 20 de Resistencia para combatir en el Coliseo.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 1181,
+      "text": "alert(\"⚠️ Al menos uno de tus Genos seleccionados está en huelga (necesidades por debajo del 20%) y no puede combatir.\");",
+      "emojis": [
+        "⚠"
+      ]
+    }
+  ],
+  "ColiseumUI.js": [
+    {
+      "line": 128,
+      "text": "/* ✨ FIX: Comentamos el CSS destructivo para no pisar el diseño del botón de neón */",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 234,
+      "text": "/* ✨ NUEVOS ESTILOS PARA BLOQUEOS Y EVASIÓN */",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 247,
+      "text": "/* ✨ TRAY DE ESTADOS SVG (AMPLIADO A 140PX) */",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 380,
+      "text": "<button id=\"btn-atk-4\" class=\"battle-btn slot-4\" disabled>🔒 NV. 25+</button>",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 389,
+      "text": "<button id=\"btn-atk-4\" class=\"battle-btn slot-4\" disabled>🔒 NV. 25+</button>",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 402,
+      "text": "/* ✨ FIX: Evitamos reasignar clases y moverlo del HTML para respetar el neón */",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 423,
+      "text": "if (mascota.level < 25) { btn4.innerText = \"🔒 NV. 25+\";",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 617,
+      "text": "\"🧬\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:none; stroke:#00e5ff; stroke-width:2; stroke-linecap:round; margin-right:4px;\"><path d=\"M4.5 10.5c3-6 12-6 15 0m-15 3c3 6 12 6 15 0\"/><path d=\"M6 8v8m4-9v10m4-10v10m4-9v8\"/></svg>`,",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 618,
+      "text": "\"⚖️\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:none; stroke:#ffcc00; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-right:4px;\"><path d=\"M12 3v17M12 6l7-2M12 6L5 4M5 4v8M19 4v8M3 12h4M17 12h4M8 20h8\"/></svg>`,",
+      "emojis": [
+        "⚖"
+      ]
+    },
+    {
+      "line": 619,
+      "text": "\"🔥\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:none; stroke:#ff3d00; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-right:4px;\"><path d=\"M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z\"/></svg>`,",
+      "emojis": [
+        "🔥"
+      ]
+    },
+    {
+      "line": 620,
+      "text": "\"🦇\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:none; stroke:#e0b0ff; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-right:4px;\"><path d=\"M2 10c2-3 6-3 8-1 1-1 3-1 4 0 2-2 6-2 8 1 0 3-4 6-10 9-6-3-10-6-10-9zM12 9v5\"/></svg>`,",
+      "emojis": [
+        "🦇"
+      ]
+    },
+    {
+      "line": 621,
+      "text": "\"⚡\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:none; stroke:#ffcc00; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-right:4px;\"><polygon points=\"13 2 3 14 12 14 11 22 21 10 12 10 13 2\"/></svg>`,",
+      "emojis": [
+        "⚡"
+      ]
+    },
+    {
+      "line": 622,
+      "text": "\"💨\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:none; stroke:#e0e0e0; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-right:4px;\"><path d=\"M5 12h14M13 18l5-6-5-6M2 17h6M2 7h4\"/></svg>`,",
+      "emojis": [
+        "💨"
+      ]
+    },
+    {
+      "line": 623,
+      "text": "\"🛡️\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:none; stroke:#4dd0e1; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-right:4px;\"><path d=\"M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z\"/></svg>`,",
+      "emojis": [
+        "🛡"
+      ]
+    },
+    {
+      "line": 624,
+      "text": "\"💎\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:none; stroke:#00e5ff; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-right:4px;\"><path d=\"M6 3h12l4 6-10 12L2 9zM11 3v18M2 9h20M22 9L12 21 2 9\"/></svg>`,",
+      "emojis": [
+        "💎"
+      ]
+    },
+    {
+      "line": 625,
+      "text": "\"⚔️\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:none; stroke:#ff5722; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-right:4px;\"><path d=\"m3 21 18-18M21 21 3 3M5 16l3 3M19 16l-3 3\"/></svg>`,",
+      "emojis": [
+        "⚔"
+      ]
+    },
+    {
+      "line": 626,
+      "text": "\"💢\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:none; stroke:#ff3333; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-right:4px;\"><path d=\"m19 5-4 4H9L5 5M5 19l4-4h6l4 4M2 12h4m12 0h4\"/></svg>`,",
+      "emojis": [
+        "💢"
+      ]
+    },
+    {
+      "line": 627,
+      "text": "\"❄️\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:none; stroke:#80deea; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-right:4px;\"><path d=\"M12 2v20M2 12h20M20 8l-8 4-8-4M4 16l8-4 8 4\"/></svg>`,",
+      "emojis": [
+        "❄"
+      ]
+    },
+    {
+      "line": 628,
+      "text": "\"💀\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:none; stroke:#ff3333; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-right:4px;\"><path d=\"M9 10h.01M15 10h.01M12 2a7 7 0 0 0-7 7v3c0 2.2 1.8 4 4 4h6c2.2 0 4-1.8 4-4V9a7 7 0 0 0-7-7zM10 20h4\"/></svg>`,",
+      "emojis": [
+        "💀"
+      ]
+    },
+    {
+      "line": 629,
+      "text": "\"🏆\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:none; stroke:#ffd700; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-right:4px;\"><path d=\"M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34M12 2a6 6 0 0 1 6 6v3a6 6 0 0 1-6 6 6 6 0 0 1-6-6V8a6 6 0 0 1 6-6z\"/></svg>`,",
+      "emojis": [
+        "🏆"
+      ]
+    },
+    {
+      "line": 630,
+      "text": "\"💖\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:#ec407a; stroke:#ec407a; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-right:4px;\"><path d=\"M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z\"/></svg>`,",
+      "emojis": [
+        "💖"
+      ]
+    },
+    {
+      "line": 631,
+      "text": "\"🔄\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:none; stroke:#a855f7; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-right:4px;\"><path d=\"M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16\"/><path d=\"M16 16h5v5M8 8H3V3\"/></svg>`,",
+      "emojis": [
+        "🔄"
+      ]
+    },
+    {
+      "line": 632,
+      "text": "\"❌\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:none; stroke:#ff3333; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-right:4px;\"><line x1=\"18\" y1=\"6\" x2=\"6\" y2=\"18\"/><line x1=\"6\" y1=\"6\" x2=\"18\" y2=\"18\"/></svg>`,",
+      "emojis": [
+        "❌"
+      ]
+    },
+    {
+      "line": 633,
+      "text": "\"⚠️\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:none; stroke:#ff9800; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-right:4px;\"><path d=\"m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z\"/><line x1=\"12\" y1=\"9\" x2=\"12\" y2=\"13\"/><line x1=\"12\" y1=\"17\" x2=\"12.01\" y2=\"17\"/></svg>`,",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 634,
+      "text": "\"💥\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:none; stroke:#ffcc00; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-right:4px;\"><path d=\"m12 2 3 5 5-2-2 5 5 3-5 1 2 5-5-2-3 5-1-5-5 2 2-5-5-3 5-1-2-5 5 2Z\"/></svg>`,",
+      "emojis": [
+        "💥"
+      ]
+    },
+    {
+      "line": 635,
+      "text": "\"🌟\": `<svg viewBox=\"0 0 24 24\" width=\"14\" height=\"14\" style=\"display:inline-block; vertical-align:middle; fill:none; stroke:#ffd700; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; margin-right:4px;\"><polygon points=\"12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2\"/></svg>`",
+      "emojis": [
+        "🌟"
+      ]
+    }
+  ],
+  "DailyLoginManager.js": [
+    {
+      "line": 73,
+      "text": "return \"🎁\";",
+      "emojis": [
+        "🎁"
+      ]
+    },
+    {
+      "line": 123,
+      "text": "alert(`✨ ¡Felicidades! Has reclamado tu recompensa de Día ${reward.day}: +${reward.amount} Esencia Vital.`);",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 125,
+      "text": "alert(\"❌ Error: El sistema de inventario no está listo.\");",
+      "emojis": [
+        "❌"
+      ]
+    },
+    {
+      "line": 140,
+      "text": "alert(`✨ ¡Felicidades! Has reclamado tu recompensa de Día ${reward.day}: ${reward.name}.`);",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 143,
+      "text": "alert(\"❌ Error: El sistema de inventario no está listo.\");",
+      "emojis": [
+        "❌"
+      ]
+    },
+    {
+      "line": 161,
+      "text": "alert(`✨ ¡Felicidades! Abriste tu Caja Sorpresa del Día ${reward.day} y obtuviste: ${itemObj.name}.`);",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 164,
+      "text": "alert(\"❌ Error: El sistema de inventario no está listo.\");",
+      "emojis": [
+        "❌"
+      ]
+    },
+    {
+      "line": 173,
+      "text": "alert(\"🔒 Ya has reclamado tu recompensa de hoy. ¡Vuelve mañana!\");",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 188,
+      "text": "alert(\"❌ Error al procesar reclamo en el servidor: \" + error.message);",
+      "emojis": [
+        "❌"
+      ]
+    },
+    {
+      "line": 195,
+      "text": "alert(\"🔒 \" + (res ? res.message : \"No cumples con las condiciones para reclamar.\"));",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 231,
+      "text": "alert(\"❌ Error de comunicación con la base de datos.\");",
+      "emojis": [
+        "❌"
+      ]
+    },
+    {
+      "line": 298,
+      "text": "statusText = \"Reclamado ✓\";",
+      "emojis": [
+        "✓"
+      ]
+    }
+  ],
+  "DailyRewardsCatalog.js": [
+    {
+      "line": 98,
+      "text": "return \"🎁\";",
+      "emojis": [
+        "🎁"
+      ]
+    }
+  ],
+  "EnergyPackager.js": [
+    {
+      "line": 98,
+      "text": "alert(`❌ Energía insuficiente. Necesitas ${costoTotal} EV (incluyendo el 10% de impuesto).`);",
+      "emojis": [
+        "❌"
+      ]
+    },
+    {
+      "line": 123,
+      "text": "alert(`✨ ¡Cápsula creada y guardada en tu mochila!`);",
+      "emojis": [
+        "✨"
+      ]
+    }
+  ],
+  "ImplantsManager.js": [
+    {
+      "line": 121,
+      "text": "item = { id: \"cos_\" + slot + \"_\" + Date.now(), name: currentVal.replace(/_/g, ' ').toUpperCase(), icon: \"📦\", type: \"Cosmético\", subType: slot, maxStack: 1, evCost: 0, id_cosmetico: currentVal };",
+      "emojis": [
+        "📦"
+      ]
+    },
+    {
+      "line": 130,
+      "text": "item = { id: atk.id + \"_\" + Date.now(), name: atk.nombre, icon: \"💿\", type: \"MT\", subType: slot === 'atk_4' ? \"Definitivo\" : (slot === 'atk_2' ? 'Técnica' : 'Soporte'), element: atk.element, maxStack: 1, id_ataque: atk.id, power: atk.power, evCost: 0 };",
+      "emojis": [
+        "💿"
+      ]
+    },
+    {
+      "line": 207,
+      "text": "unequipBtn.innerText = \"❌ DESEQUIPAR ACTUAL\";",
+      "emojis": [
+        "❌"
+      ]
+    },
+    {
+      "line": 245,
+      "text": "<span style=\"color:#ffd700; font-size:11px; font-weight:bold;\">${costo > 0 ? costo + ' ✨ EV' : 'GRATIS'}</span>",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 444,
+      "text": "<button onclick=\"ImplantsManager.moveRule(${index}, -1)\" style=\"background: transparent; border: none; color: #4dd0e1; cursor: pointer; padding: 2px; font-size: 12px; line-height: 1; transition: transform 0.1s;\" onmouseover=\"this.style.transform='scale(1.2)'\" onmouseout=\"this.style.transform='scale(1)'\">🔼</button>",
+      "emojis": [
+        "🔼"
+      ]
+    },
+    {
+      "line": 445,
+      "text": "<button onclick=\"ImplantsManager.moveRule(${index}, 1)\" style=\"background: transparent; border: none; color: #4dd0e1; cursor: pointer; padding: 2px; font-size: 12px; line-height: 1; transition: transform 0.1s;\" onmouseover=\"this.style.transform='scale(1.2)'\" onmouseout=\"this.style.transform='scale(1)'\">🔽</button>",
+      "emojis": [
+        "🔽"
+      ]
+    },
+    {
+      "line": 448,
+      "text": "<button onclick=\"ImplantsManager.deleteRule(${index})\" style=\"background: transparent; border: none; color: #ff6b6b; cursor: pointer; padding: 6px; font-size: 14px; font-weight: bold; margin-left: 2px; transition: transform 0.1s;\" onmouseover=\"this.style.transform='scale(1.2)'\" onmouseout=\"this.style.transform='scale(1)'\">❌</button>",
+      "emojis": [
+        "❌"
+      ]
+    }
+  ],
+  "ImplantsUI.js": [
+    {
+      "line": 128,
+      "text": "<span class=\"item-name\" id=\"slot-atk-4\" style=\"color:#888;\">🔒 Nv. 25+</span>",
+      "emojis": [
+        "🔒"
+      ]
+    }
+  ],
+  "index.html": [
+    {
+      "line": 58,
+      "text": "<span id=\"pol-amount\" style=\"color: #e9d5ff; font-weight: bold; font-family: sans-serif; font-size: 13.5px;\">0.0 POL | 🦊 Vincular</span>",
+      "emojis": [
+        "🦊"
+      ]
+    },
+    {
+      "line": 109,
+      "text": "<span style=\"font-size: 11px;\">🧪</span>",
+      "emojis": [
+        "🧪"
+      ]
+    },
+    {
+      "line": 345,
+      "text": "<button class=\"btn-add-stat hidden\" data-stat=\"hp\" style=\"background: #4dd0e1; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-weight: bold; color: #000; box-shadow: 0 0 5px #4dd0e1; display: flex; justify-content: center; align-items: center;\">➕</button>",
+      "emojis": [
+        "➕"
+      ]
+    },
+    {
+      "line": 355,
+      "text": "<button class=\"btn-add-stat hidden\" data-stat=\"atk\" style=\"background: #4dd0e1; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-weight: bold; color: #000; box-shadow: 0 0 5px #4dd0e1; display: flex; justify-content: center; align-items: center;\">➕</button>",
+      "emojis": [
+        "➕"
+      ]
+    },
+    {
+      "line": 365,
+      "text": "<button class=\"btn-add-stat hidden\" data-stat=\"def\" style=\"background: #4dd0e1; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-weight: bold; color: #000; box-shadow: 0 0 5px #4dd0e1; display: flex; justify-content: center; align-items: center;\">➕</button>",
+      "emojis": [
+        "➕"
+      ]
+    },
+    {
+      "line": 375,
+      "text": "<button class=\"btn-add-stat hidden\" data-stat=\"spd\" style=\"background: #4dd0e1; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-weight: bold; color: #000; box-shadow: 0 0 5px #4dd0e1; display: flex; justify-content: center; align-items: center;\">➕</button>",
+      "emojis": [
+        "➕"
+      ]
+    },
+    {
+      "line": 385,
+      "text": "<button class=\"btn-add-stat hidden\" data-stat=\"luk\" style=\"background: #4dd0e1; border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; font-weight: bold; color: #000; box-shadow: 0 0 5px #4dd0e1; display: flex; justify-content: center; align-items: center;\">➕</button>",
+      "emojis": [
+        "➕"
+      ]
+    },
+    {
+      "line": 390,
+      "text": "<button id=\"btn-use-scanner\" class=\"btn-scanner\" style=\"width: 100%; background: linear-gradient(90deg, #8A2BE2, #00d2ff); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase;\">Usar Escáner 🧬</button>",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 602,
+      "text": "<button id=\"btn-use-item\" style=\"flex: 1.5; background: linear-gradient(90deg, #4CAF50, #8bc34a); color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; transition: opacity 0.2s;\" onmouseover=\"this.style.opacity='0.9'\" onmouseout=\"this.style.opacity='1'\">Usar 🍱</button>",
+      "emojis": [
+        "🍱"
+      ]
+    },
+    {
+      "line": 613,
+      "text": "<div id=\"arcade-info-icon\" style=\"font-size: 45px; margin-bottom: 10px; filter: drop-shadow(0 0 10px rgba(255,255,255,0.2));\">🍎</div>",
+      "emojis": [
+        "🍎"
+      ]
+    },
+    {
+      "line": 900,
+      "text": "Biomutante ➔ Sintético ➔ Tóxico ➔ Radiactivo ➔ Cibernético ➔ Viral ➔ Biomutante",
+      "emojis": [
+        "➔"
+      ]
+    },
+    {
+      "line": 932,
+      "text": "<div id=\"play-area\"><div id=\"falling-object\">🍎</div> <div id=\"player-basket\">🧺</div></div>",
+      "emojis": [
+        "🍎",
+        "🧺"
+      ]
+    },
+    {
+      "line": 938,
+      "text": "<p style=\"text-align: center; color: #666; font-size: 14px; padding: 0 20px; margin-bottom: 5px;\">Libera Genos en la naturaleza para obtener ✨ EV.</p>",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 1052,
+      "text": "<div style=\"background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; border: 1px solid #333;\">❤️ Vit: <span id=\"id-card-hp\" style=\"float: right; font-weight: bold; color: #fff;\">--</span></div>",
+      "emojis": [
+        "❤"
+      ]
+    },
+    {
+      "line": 1053,
+      "text": "<div style=\"background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; border: 1px solid #333;\">⚔️ Fue: <span id=\"id-card-atk\" style=\"float: right; font-weight: bold; color: #fff;\">--</span></div>",
+      "emojis": [
+        "⚔"
+      ]
+    },
+    {
+      "line": 1054,
+      "text": "<div style=\"background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; border: 1px solid #333; grid-column: span 2; text-align: center;\">🛡️ Defensa: <span id=\"id-card-def\" style=\"font-weight: bold; color: #fff; margin-left: 10px;\">--</span></div>",
+      "emojis": [
+        "🛡"
+      ]
+    },
+    {
+      "line": 1055,
+      "text": "<div style=\"background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; border: 1px solid #333;\">⚡ Agi: <span id=\"id-card-spd\" style=\"float: right; font-weight: bold; color: #fff;\">--</span></div>",
+      "emojis": [
+        "⚡"
+      ]
+    },
+    {
+      "line": 1056,
+      "text": "<div style=\"background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; border: 1px solid #333;\">🍀 Sue: <span id=\"id-card-luk\" style=\"float: right; font-weight: bold; color: #fff;\">--</span></div>",
+      "emojis": [
+        "🍀"
+      ]
+    },
+    {
+      "line": 1061,
+      "text": "<div id=\"id-card-locked-text\" style=\"color: #aaa; font-size: 12px; margin-bottom: 10px;\">🔒 Secuencia Bloqueada</div>",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 1484,
+      "text": "🛡️ Asistencia de Entrenamiento Activa (-15% Stats Enemigo)",
+      "emojis": [
+        "🛡"
+      ]
+    }
+  ],
+  "InventoryManager.js": [
+    {
+      "line": 66,
+      "text": "alert(\"🎒 ¡Almacén y Espacios de Emergencia LLENOS!\\nDebes destruir algo para hacer espacio.\");",
+      "emojis": [
+        "🎒"
+      ]
+    },
+    {
+      "line": 254,
+      "text": "console.log(\"⚠️ Un ítem de emergencia ha sido destruido por falta de espacio.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 265,
+      "text": "alert(\"❌ Debes tener un Geno seleccionado como Compañero activo para alimentarlo.\");",
+      "emojis": [
+        "❌"
+      ]
+    },
+    {
+      "line": 295,
+      "text": "alert(`🍱 Alimentaste a ${window.miMascota.name}. Hambre +20%, ¡Amistad +${gananciaExplicita}!`);",
+      "emojis": [
+        "🍱"
+      ]
+    },
+    {
+      "line": 297,
+      "text": "alert(`🍱 Alimentaste a ${window.miMascota.name}. Hambre +20%. (Amistad ya obtenida hoy)`);",
+      "emojis": [
+        "🍱"
+      ]
+    },
+    {
+      "line": 335,
+      "text": "alert(`🍱 Ración Automática activada por 24h. Todos los Genos en reserva han sido alimentados.`);",
+      "emojis": [
+        "🍱"
+      ]
+    },
+    {
+      "line": 365,
+      "text": "alert(`🧼 Ducha de Plasma activada. Higiene al 100% y Amistad (1-3 pts) para todos tus Genos elegibles hoy.`);",
+      "emojis": [
+        "🧼"
+      ]
+    },
+    {
+      "line": 373,
+      "text": "alert(\"❌ Debes tener un Geno seleccionado como Compañero activo para usar la poción.\");",
+      "emojis": [
+        "❌"
+      ]
+    },
+    {
+      "line": 379,
+      "text": "alert(\"💚 Tu Geno ya tiene la Resistencia al máximo.\");",
+      "emojis": [
+        "💚"
+      ]
+    },
+    {
+      "line": 394,
+      "text": "alert(`⚡ Usaste una Poción de Energía en ${window.miMascota.name || 'tu Geno'}. Resistencia +50% (Actual: ${window.miMascota.resistencia}%).`);",
+      "emojis": [
+        "⚡"
+      ]
+    },
+    {
+      "line": 401,
+      "text": "alert(`🧪 La Tinta de Habilidad es un material genético. Se utiliza en el Laboratorio para el refinamiento de genes y habilidades.`);",
+      "emojis": [
+        "🧪"
+      ]
+    },
+    {
+      "line": 418,
+      "text": "btnFill.innerText = \"🧪 Llenar\";",
+      "emojis": [
+        "🧪"
+      ]
+    },
+    {
+      "line": 423,
+      "text": "this.addItem({ id: \"caja_test_\" + Date.now() + Math.random(), name: \"Caja de Suministros\", icon: \"📦\", type: \"basic\", maxStack: 1, desc: \"Ítem de relleno.\" });",
+      "emojis": [
+        "📦"
+      ]
+    },
+    {
+      "line": 426,
+      "text": "if (added > 0) alert(\"🎒 Inventario lleno.\"); else alert(\"El inventario ya está lleno.\");",
+      "emojis": [
+        "🎒"
+      ]
+    },
+    {
+      "line": 431,
+      "text": "btnEssence.innerText = \"🧪 +1000 ✨\";",
+      "emojis": [
+        "🧪",
+        "✨"
+      ]
+    },
+    {
+      "line": 440,
+      "text": "btnDevStore.innerText = \"🛒 Tienda Dev\";",
+      "emojis": [
+        "🛒"
+      ]
+    },
+    {
+      "line": 452,
+      "text": "{ id: \"cosm_corona\", name: \"Corona Rey\", icon: \"👑\", type: \"Cosmético\", subType: \"head\", id_cosmetico: \"corona_rey\", evCost: 0, desc: \"Símbolo de realeza.\", maxStack: 1 },",
+      "emojis": [
+        "👑"
+      ]
+    },
+    {
+      "line": 453,
+      "text": "{ id: \"cosm_jetpack\", name: \"Jetpack\", icon: \"🚀\", type: \"Cosmético\", subType: \"back\", id_cosmetico: \"jetpack\", evCost: 0, desc: \"Propulsores de combate.\", maxStack: 1 },",
+      "emojis": [
+        "🚀"
+      ]
+    },
+    {
+      "line": 454,
+      "text": "{ id: \"cosm_dron\", name: \"Dron Centinela\", icon: \"🤖\", type: \"Cosmético\", subType: \"skin\", id_cosmetico: \"malla_cibernetica\", evCost: 0, desc: \"Asistente automatizado.\", maxStack: 1 },",
+      "emojis": [
+        "🤖"
+      ]
+    },
+    {
+      "line": 455,
+      "text": "{ id: \"cosm_aura\", name: \"Fuego Solar\", icon: \"☀️\", type: \"Cosmético\", subType: \"aura\", id_cosmetico: \"fuego_solar\", evCost: 0, desc: \"Aura de plasma.\", maxStack: 1 }",
+      "emojis": [
+        "☀"
+      ]
+    },
+    {
+      "line": 465,
+      "text": "devItems.push({ id: \"mt_\" + atk.id, name: \"MT \" + atk.nombre, icon: \"💿\", type: \"MT\", subType: \"Técnica\", element: elemento, id_ataque: atk.id, power: atk.potencia || 0, evCost: 0, desc: atk.descripcion, maxStack: 1 });",
+      "emojis": [
+        "💿"
+      ]
+    },
+    {
+      "line": 470,
+      "text": "devItems.push({ id: \"mt_\" + atk.id, name: \"MT \" + atk.nombre, icon: \"💿\", type: \"MT\", subType: \"Soporte\", element: elemento, id_ataque: atk.id, power: atk.potencia || 0, evCost: 0, desc: atk.descripcion, maxStack: 1 });",
+      "emojis": [
+        "💿"
+      ]
+    },
+    {
+      "line": 475,
+      "text": "devItems.push({ id: \"mt_\" + atk.id, name: \"MT \" + atk.nombre, icon: \"💿\", type: \"MT\", subType: \"Definitivo\", element: elemento, id_ataque: atk.id, power: atk.potencia || 0, evCost: 0, desc: atk.descripcion, maxStack: 1 });",
+      "emojis": [
+        "💿"
+      ]
+    },
+    {
+      "line": 480,
+      "text": "alert(\"⚠️ No se encontró el AttackCatalog. Asegúrate de haberlo reemplazado primero.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 494,
+      "text": "if(added > 0) alert(`🛒 ¡Almacén expandido a 100 slots! Se inyectaron ${added} objetos únicos. Ve al Laboratorio a ver tu arsenal completo.`);",
+      "emojis": [
+        "🛒"
+      ]
+    }
+  ],
+  "LabManager.js": [
+    {
+      "line": 45,
+      "text": "alert(`🧪 ¡EXPANSIÓN CIENTÍFICA! 🌟\\nTu Laboratorio ha ascendido al Nivel ${window.labLevel}.\\n` +",
+      "emojis": [
+        "🧪",
+        "🌟"
+      ]
+    },
+    {
+      "line": 47,
+      "text": "? \"🔓 ¡Has desbloqueado el derecho a comprar el Permiso de Comercio en el Bazar!\"",
+      "emojis": [
+        "🔓"
+      ]
+    },
+    {
+      "line": 121,
+      "text": "alert(`🧪 ¡CUIDADO COMPLETO CON ÉXITO! ✨\\nHas cumplido todas las necesidades diarias de ${geno.name || 'tu Geno'}.\\n¡Obtienes +30 XP de Laboratorio!`);",
+      "emojis": [
+        "🧪",
+        "✨"
+      ]
+    }
+  ],
+  "laboratorio.html": [
+    {
+      "line": 6,
+      "text": "<title>🔬 Laboratorio Genético y de Implantes V15.8</title>",
+      "emojis": [
+        "🔬"
+      ]
+    },
+    {
+      "line": 1111,
+      "text": "<h1>🔬 Laboratorio Central V15.8</h1>",
+      "emojis": [
+        "🔬"
+      ]
+    },
+    {
+      "line": 1114,
+      "text": "<button class=\"tab-btn active\" onclick=\"switchTab('tab-adn', this)\">🧬 ADN y Biología</button>",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 1115,
+      "text": "<button class=\"tab-btn\" onclick=\"switchTab('tab-implantes', this)\">⚙️ Implantes y Stats</button>",
+      "emojis": [
+        "⚙"
+      ]
+    },
+    {
+      "line": 1116,
+      "text": "<button class=\"tab-btn\" onclick=\"switchTab('tab-combat', this)\">⚔️ Simulación Combate</button>",
+      "emojis": [
+        "⚔"
+      ]
+    },
+    {
+      "line": 1117,
+      "text": "<button class=\"tab-btn\" onclick=\"switchTab('tab-animaciones', this)\">✨ Prueba de Animaciones</button>",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 1126,
+      "text": "<option value=\"Biomutante\">🧬 Biomutante</option><option value=\"Viral\">🦠 Viral</option>",
+      "emojis": [
+        "🧬",
+        "🦠"
+      ]
+    },
+    {
+      "line": 1127,
+      "text": "<option value=\"Cibernético\">⚙️ Cibernético</option><option value=\"Radiactivo\">☢️ Radiactivo</option>",
+      "emojis": [
+        "⚙",
+        "☢"
+      ]
+    },
+    {
+      "line": 1128,
+      "text": "<option value=\"Tóxico\">🧪 Tóxico</option><option value=\"Sintético\">🤖 Sintético</option>",
+      "emojis": [
+        "🧪",
+        "🤖"
+      ]
+    },
+    {
+      "line": 1140,
+      "text": "<label style=\"color:#ffcc00\">✨ Gen A (Cosmético)</label>",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 1144,
+      "text": "<label style=\"color:#80deea\">⚙️ Gen B (Funcional 1)</label>",
+      "emojis": [
+        "⚙"
+      ]
+    },
+    {
+      "line": 1148,
+      "text": "<label style=\"color:#8A2BE2\">⚙️ Gen C (Funcional 2)</label>",
+      "emojis": [
+        "⚙"
+      ]
+    },
+    {
+      "line": 1157,
+      "text": "<button class=\"btn-secundario\" onclick=\"document.getElementById('geno-display-1').classList.toggle('flipped')\" title=\"Invierte visualmente al Geno\">🔄 VOLTEAR</button>",
+      "emojis": [
+        "🔄"
+      ]
+    },
+    {
+      "line": 1164,
+      "text": "<button class=\"btn-secundario\" style=\"flex: 1; padding: 8px; font-size: 11px;\" onclick=\"cambiarFondoVis('blanco')\">🤍 Fondo Blanco</button>",
+      "emojis": [
+        "🤍"
+      ]
+    },
+    {
+      "line": 1178,
+      "text": "📥 DESCARGAR PNG SIN FONDO",
+      "emojis": [
+        "📥"
+      ]
+    },
+    {
+      "line": 1219,
+      "text": "<div class=\"stat-name\" style=\"color:#ff6b6b;\">❤️ Vit:</div>",
+      "emojis": [
+        "❤"
+      ]
+    },
+    {
+      "line": 1231,
+      "text": "<div class=\"stat-name\" style=\"color:#aaa;\">⚔️ Fue:</div>",
+      "emojis": [
+        "⚔"
+      ]
+    },
+    {
+      "line": 1243,
+      "text": "<div class=\"stat-name\" style=\"color:#80deea;\">🛡️ Def:</div>",
+      "emojis": [
+        "🛡"
+      ]
+    },
+    {
+      "line": 1255,
+      "text": "<div class=\"stat-name\" style=\"color:#b19cd9;\">⚡ Agi:</div>",
+      "emojis": [
+        "⚡"
+      ]
+    },
+    {
+      "line": 1267,
+      "text": "<div class=\"stat-name\" style=\"color:#4CAF50;\">🍀 Sue:</div>",
+      "emojis": [
+        "🍀"
+      ]
+    },
+    {
+      "line": 1303,
+      "text": "<select id=\"sel-mt-definitivo\" class=\"lab-select\"><option value=\"ninguno\">🔒 REQUIERE NV. 25</option></select>",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 1395,
+      "text": "<button id=\"btn-generar-combate\" class=\"btn-fight\" style=\"flex: 1.5; min-width: 180px; padding: 12px;\">⚔️ GENERAR ARENA</button>",
+      "emojis": [
+        "⚔"
+      ]
+    },
+    {
+      "line": 1435,
+      "text": "<button id=\"btn-auto-combat\" class=\"btn-fight\" style=\"margin-top: 12px; width: 100%; padding: 10px; background: linear-gradient(90deg, #00acc1, #8A2BE2);\">🤖 Auto Combate (Evaluar Tácticas IFTTT)</button>",
+      "emojis": [
+        "🤖"
+      ]
+    },
+    {
+      "line": 1444,
+      "text": "<div style=\"font-size: 14px; font-weight: bold; color: #4dd0e1; text-shadow: 0 0 8px rgba(77,208,225,0.4);\">🎬 PANEL DE PREVIEW DE ANIMACIONES</div>",
+      "emojis": [
+        "🎬"
+      ]
+    },
+    {
+      "line": 1458,
+      "text": "<button class=\"btn-secundario\" onclick=\"cargarGenosPreviewTest()\" style=\"padding: 8px 15px; font-size: 12px; font-weight: bold;\">🔄 Recargar Genos</button>",
+      "emojis": [
+        "🔄"
+      ]
+    },
+    {
+      "line": 1485,
+      "text": "<label style=\"color: #4dd0e1; font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;\">💥 Animaciones de Impacto (Daño / Golpe)</label>",
+      "emojis": [
+        "💥"
+      ]
+    },
+    {
+      "line": 1499,
+      "text": "<label style=\"color: #69f0ae; font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;\">🛡️ Animaciones de Soporte y Curación</label>",
+      "emojis": [
+        "🛡"
+      ]
+    },
+    {
+      "line": 1508,
+      "text": "<label style=\"color: #e040fb; font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;\">✨ Efectos de Partículas de Estado (Fin de Turno)</label>",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 1518,
+      "text": "<label style=\"color: #ffcc00; font-size: 9px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 6px;\">💬 Texto Flotante de Combate y Efecto de Golpe</label>",
+      "emojis": [
+        "💬"
+      ]
+    },
+    {
+      "line": 1613,
+      "text": "<!-- ✨ FIX: Cambiamos 'power' por 'potencia' para que lea la base de datos real -->",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 1619,
+      "text": "${info.accuracy ? `<span style=\"background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px;\">🎯 ACC: ${info.accuracy}%</span>` : ``}",
+      "emojis": [
+        "🎯"
+      ]
+    },
+    {
+      "line": 1647,
+      "text": "<span style=\"background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px;\">🎯 ACC: 100%</span>",
+      "emojis": [
+        "🎯"
+      ]
+    },
+    {
+      "line": 3069,
+      "text": "totalBonusText = `(+${mathVal} + ${bonusVal}🧬)`;",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 3246,
+      "text": "<button onclick=\"moveRule(${index}, -1)\" style=\"background: transparent; border: none; color: #4dd0e1; cursor: pointer; padding: 2px; font-size: 12px; line-height: 1;\">🔼</button>",
+      "emojis": [
+        "🔼"
+      ]
+    },
+    {
+      "line": 3247,
+      "text": "<button onclick=\"moveRule(${index}, 1)\" style=\"background: transparent; border: none; color: #4dd0e1; cursor: pointer; padding: 2px; font-size: 12px; line-height: 1;\">🔽</button>",
+      "emojis": [
+        "🔽"
+      ]
+    },
+    {
+      "line": 3250,
+      "text": "<button onclick=\"deleteRule(${index})\" style=\"background: transparent; border: none; color: #ff6b6b; cursor: pointer; padding: 6px; font-size: 14px; font-weight: bold; margin-left: 2px;\">❌</button>",
+      "emojis": [
+        "❌"
+      ]
+    },
+    {
+      "line": 3352,
+      "text": "let o = document.createElement(\"option\"); o.value = \"ninguno\"; o.innerText = \"🔒 REQUIERE NV. 25\"; selDef.appendChild(o);",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 3594,
+      "text": "document.getElementById(`${px}-atk`).innerText = `⚔️ ${p.atk}`; document.getElementById(`${px}-spd`).innerText = `⚡ ${p.spd}`; document.getElementById(`${px}-luk`).innerText = `🍀 ${p.luk}`;",
+      "emojis": [
+        "⚔",
+        "⚡",
+        "🍀"
+      ]
+    },
+    {
+      "line": 3653,
+      "text": "agregarLogLaboratorio(`<span style=\"color:#555;\">&nbsp;&nbsp;♦ ♦ ♦</span>`);",
+      "emojis": [
+        "♦"
+      ]
+    },
+    {
+      "line": 3668,
+      "text": "agregarLogLaboratorio(`> ❄️ <span style=\"color:#80deea; font-weight:bold;\">¡${engine.cName(atacante)} está completamente congelado y no puede moverse!</span>`);",
+      "emojis": [
+        "❄"
+      ]
+    },
+    {
+      "line": 3676,
+      "text": "agregarLogLaboratorio(`> ⚡ <span style=\"color:#ffcc00; font-weight:bold;\">¡${engine.cName(atacante)} está paralizado! ¡Su cuerpo no responde!</span>`);",
+      "emojis": [
+        "⚡"
+      ]
+    },
+    {
+      "line": 3823,
+      "text": "if (p.hp > 0) agregarLogLaboratorio(`<span style=\"color:#4CAF50\">🏆 ¡VICTORIA!</span>`);",
+      "emojis": [
+        "🏆"
+      ]
+    },
+    {
+      "line": 3824,
+      "text": "else agregarLogLaboratorio(`<span style=\"color:#f44336\">💀 DERROTA. Tu Geno debe descansar.</span>`);",
+      "emojis": [
+        "💀"
+      ]
+    }
+  ],
+  "MarketManager.js": [
+    {
+      "line": 30,
+      "text": "alert(\"⚠️ Se requiere el 'Permiso de Comercio' (adquirible en el Bazar por 15 EV al llegar a Nv. 5 de Laboratorio) para realizar depósitos o retiros.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 41,
+      "text": "alert(\"⚠️ Cantidad inválida.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 52,
+      "text": "alert(`✅ Depósito de ${cantidad.toFixed(1)} POL procesado exitosamente en la Red Nexo (Simulado).`);",
+      "emojis": [
+        "✅"
+      ]
+    },
+    {
+      "line": 63,
+      "text": "alert(\"⚠️ Se requiere el 'Permiso de Comercio' (adquirible en el Bazar por 15 EV al llegar a Nv. 5 de Laboratorio) para realizar depósitos o retiros.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 72,
+      "text": "alert(\"⚠️ No tienes fondos suficientes en tu Wallet para retirar.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 79,
+      "text": "alert(\"⚠️ Cantidad inválida o saldo insuficiente.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 90,
+      "text": "alert(`✅ Retiro de ${cantidad.toFixed(1)} POL procesado exitosamente (Simulado).`);",
+      "emojis": [
+        "✅"
+      ]
+    },
+    {
+      "line": 156,
+      "text": "alert(\"⚠️ Se requiere el 'Permiso de Comercio' (adquirible en el Bazar por 15 EV al llegar a Nv. 5 de Laboratorio) para realizar depósitos o retiros.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 263,
+      "text": "<div style=\"color: #00d2ff; font-size: 30px; margin-bottom: 15px; animation: spin 2s linear infinite;\">🌐</div>",
+      "emojis": [
+        "🌐"
+      ]
+    },
+    {
+      "line": 459,
+      "text": "alert(\"⚠️ Se requiere el 'Permiso de Comercio' (adquirible en el Bazar por 15 EV al llegar a Nv. 5 de Laboratorio) para publicar objetos en venta.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 471,
+      "text": "${itemBase.icon || '🔋'}",
+      "emojis": [
+        "🔋"
+      ]
+    },
+    {
+      "line": 491,
+      "text": "if (!window.miUsuarioCloud) { alert(\"⚠️ Debes iniciar sesión (Vincular) para poder interactuar con la Red Nexo global.\"); return; }",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 493,
+      "text": "if (isNaN(precio) || precio <= 0) { alert(\"⚠️ Introduce un precio válido mayor a 0.\"); return; }",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 512,
+      "text": "alert(`✅ Has publicado [1x ${itemBase.name}] en la red por ${ventaObjeto.pricePol} POL.`);",
+      "emojis": [
+        "✅"
+      ]
+    },
+    {
+      "line": 532,
+      "text": "<div style=\"color: #D500F9; font-size: 16px; font-weight: bold; text-align: center;\">🔷 ${itemBase.pricePol} POL</div>",
+      "emojis": [
+        "🔷"
+      ]
+    },
+    {
+      "line": 560,
+      "text": "alert(\"⚠️ Se requiere el 'Permiso de Comercio' (adquirible en el Bazar por 15 EV al llegar a Nv. 5 de Laboratorio) para publicar Genos en venta.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 672,
+      "text": "<div style=\"color: #aaa; font-size: 12px;\">🔒 ADN Bloqueado</div>",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 728,
+      "text": "if (!window.miUsuarioCloud) { alert(\"⚠️ Debes iniciar sesión (Vincular) para poder interactuar con la Red Nexo global.\"); return; }",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 730,
+      "text": "if (isNaN(precio) || precio <= 0) { alert(\"⚠️ Introduce un precio válido mayor a 0.\"); return; }",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 738,
+      "text": "alert(`✅ Has publicado a [${obtenerNombreGeno(geno)}] en la red por ${geno.pricePol} POL.`);",
+      "emojis": [
+        "✅"
+      ]
+    },
+    {
+      "line": 859,
+      "text": "console.log(\"👻 Fantasmas limpiados de Mis Ventas\");",
+      "emojis": [
+        "👻"
+      ]
+    },
+    {
+      "line": 885,
+      "text": "let svgIcon = '🧬';",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 919,
+      "text": "<div style=\"width: 50px; height: 50px; margin-bottom: 10px; filter: drop-shadow(0px 5px 8px rgba(0,210,255,0.4)); pointer-events: none;\">${item.icon || '🔋'}</div>",
+      "emojis": [
+        "🔋"
+      ]
+    },
+    {
+      "line": 944,
+      "text": "const iconoListado = isItem ? (venta.itemData.icon || \"🔋\") : \"🧬\";",
+      "emojis": [
+        "🔋",
+        "🧬"
+      ]
+    },
+    {
+      "line": 954,
+      "text": "<span style=\"color: #D500F9; font-weight: 900; pointer-events: none;\">🔷 ${venta.pricePol}</span>",
+      "emojis": [
+        "🔷"
+      ]
+    },
+    {
+      "line": 978,
+      "text": "icon: venta.icon || \"📦\",",
+      "emojis": [
+        "📦"
+      ]
+    },
+    {
+      "line": 988,
+      "text": "alert(\"🎒 ¡Almacén lleno! No puedes cancelar esta venta hasta liberar un espacio.\");",
+      "emojis": [
+        "🎒"
+      ]
+    },
+    {
+      "line": 1023,
+      "text": "<span style=\"font-size: 16px; display: flex; align-items: center; justify-content: center; width: 20px; height: 20px;\">🎓</span>",
+      "emojis": [
+        "🎓"
+      ]
+    },
+    {
+      "line": 1070,
+      "text": "<span style=\"font-size: 16px; display: flex; align-items: center; justify-content: center; width: 20px; height: 20px;\">🛡️</span>",
+      "emojis": [
+        "🛡"
+      ]
+    },
+    {
+      "line": 1104,
+      "text": "<div style=\"color: #00d2ff; font-size: 30px; margin-bottom: 15px; animation: spin 2s linear infinite;\">🌐</div>",
+      "emojis": [
+        "🌐"
+      ]
+    },
+    {
+      "line": 1158,
+      "text": "let svgIcon = esObjeto ? (data.icon || '🔋') : '🧬';",
+      "emojis": [
+        "🔋",
+        "🧬"
+      ]
+    },
+    {
+      "line": 1177,
+      "text": "<span style=\"color: #D500F9; font-weight: 900; font-size: 12px;\">🔷 ${listing.pricePol} POL</span>",
+      "emojis": [
+        "🔷"
+      ]
+    },
+    {
+      "line": 1224,
+      "text": "<div style=\"color: #D500F9; font-size: 16px; font-weight: bold; text-align: center;\">🔷 ${data.pricePol} POL</div>",
+      "emojis": [
+        "🔷"
+      ]
+    },
+    {
+      "line": 1256,
+      "text": "else console.log(\"☁️ Venta registrada en la Red Nexo:\", payload.saleId);",
+      "emojis": [
+        "☁"
+      ]
+    },
+    {
+      "line": 1269,
+      "text": "else console.log(\"☁️ Venta retirada de la Red Nexo:\", saleId);",
+      "emojis": [
+        "☁"
+      ]
+    },
+    {
+      "line": 1277,
+      "text": "alert(\"⚠️ Se requiere el 'Permiso de Comercio' (adquirible en el Bazar por 15 EV al llegar a Nv. 5 de Laboratorio) para realizar compras en el mercado.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 1281,
+      "text": "alert(\"⚠️ Debes iniciar sesión para comprar en la Red Nexo.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 1285,
+      "text": "alert(\"⚠️ No puedes comprar tu propio artículo.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 1316,
+      "text": "alert(`⚠️ Error de base de datos: ${error.message || JSON.stringify(error)}\\n\\n(Verifica si tienes permisos RLS para hacer UPDATE o si la columna no existe).`);",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 1322,
+      "text": "alert(\"⚠️ La compra falló (0 filas afectadas). El artículo pudo haber sido vendido o retirado, o no tienes permisos (RLS) para modificarlo.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 1349,
+      "text": "alert(`🎉 ¡Compra exitosa! Se ha añadido [${dataObj.name || \"Geno\"}] a tu cuenta.`);",
+      "emojis": [
+        "🎉"
+      ]
+    },
+    {
+      "line": 1360,
+      "text": "alert(\"⚠️ Ocurrió un error al procesar el pago.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 1409,
+      "text": "alert(`🎉 ¡Tus artículos se vendieron en el Mercado!\\n\\nHas vendido: ${nombresVendidos.join(', ')}.\\nRecibes: ${totalGanado.toFixed(2)} POL netos.\\n\\n(Se aportó ${totalBoveda.toFixed(2)} POL de comisión a la Bóveda Global)`);",
+      "emojis": [
+        "🎉"
+      ]
+    },
+    {
+      "line": 1431,
+      "text": "console.log(\"📡 Iniciando conexión Supabase Realtime para el mercado...\");",
+      "emojis": [
+        "📡"
+      ]
+    },
+    {
+      "line": 1442,
+      "text": "console.log(\"⚡ Supabase Realtime Event:\", payload);",
+      "emojis": [
+        "⚡"
+      ]
+    },
+    {
+      "line": 1454,
+      "text": "console.log(\"✅ Conectado a Supabase Realtime exitosamente.\");",
+      "emojis": [
+        "✅"
+      ]
+    },
+    {
+      "line": 1477,
+      "text": "let svgIcon = '🧬';",
+      "emojis": [
+        "🧬"
+      ]
+    }
+  ],
+  "MinigameCatch.js": [
+    {
+      "line": 85,
+      "text": "const evStr = this.evGanada > 0 ? ` | ⚡ +${this.evGanada.toFixed(2)} EV` : \"\";",
+      "emojis": [
+        "⚡"
+      ]
+    },
+    {
+      "line": 104,
+      "text": "icon  = \"💣\";",
+      "emojis": [
+        "💣"
+      ]
+    },
+    {
+      "line": 109,
+      "text": "icon  = \"🍎\";",
+      "emojis": [
+        "🍎"
+      ]
+    },
+    {
+      "line": 214,
+      "text": "icon: \"🍎\",",
+      "emojis": [
+        "🍎"
+      ]
+    },
+    {
+      "line": 259,
+      "text": "let msg = `¡Tiempo terminado!\\nAtrapaste ${this.score} manzana(s).\\nRatio 5:1 = Ganas ${reward} 🍎.`;",
+      "emojis": [
+        "🍎"
+      ]
+    },
+    {
+      "line": 260,
+      "text": "if (this.evGanada > 0) msg += `\\n⚡ +${this.evGanada.toFixed(2)} EV atrapada(s)!`;",
+      "emojis": [
+        "⚡"
+      ]
+    },
+    {
+      "line": 261,
+      "text": "if (xpObtenida > 0) msg += `\\n🧪 +${xpObtenida} XP de Laboratorio!`;",
+      "emojis": [
+        "🧪"
+      ]
+    },
+    {
+      "line": 266,
+      "text": "let msg = `¡Tiempo terminado!\\nAtrapaste ${this.score} manzana(s).\\nRatio 5:1 = Ganas ${reward} 🍎.`;",
+      "emojis": [
+        "🍎"
+      ]
+    },
+    {
+      "line": 267,
+      "text": "if (xpObtenida > 0) msg += `\\n🧪 +${xpObtenida} XP de Laboratorio!`;",
+      "emojis": [
+        "🧪"
+      ]
+    }
+  ],
+  "ReactorManager.js": [
+    {
+      "line": 665,
+      "text": "msgGen = `🧬 [Catalizador Genético] ¡Los catalizadores aumentaron la probabilidad de éxito crítico!\\n\\n`;",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 667,
+      "text": "mensaje = `${msgGen}¡ÉXITO CRÍTICO! 🌟\\nEl Reactor ha creado una anomalía: [Geno ${reglas.resCrit.rarity}].`;",
+      "emojis": [
+        "🌟"
+      ]
+    },
+    {
+      "line": 670,
+      "text": "mensaje = `¡FUSIÓN ESTABLE! ✨\\nHas obtenido un [Geno ${reglas.resNorm.rarity}].`;",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 674,
+      "text": "mensaje = `🧬 [Gen Oculto: Resistencia al Colapso] ¡Evitaste la destrucción total del Reactor!\\n\\nMUTACIÓN ESTANCADA ⚠️\\nLa inestabilidad destruyó a 4, pero lograste recuperar 1 [Geno ${reglas.resStag.rarity}]. ¡Sus genes han mutado!`;",
+      "emojis": [
+        "🧬",
+        "⚠"
+      ]
+    },
+    {
+      "line": 676,
+      "text": "mensaje = `MUTACIÓN ESTANCADA ⚠️\\nLa inestabilidad destruyó a 4, pero lograste recuperar 1 [Geno ${reglas.resStag.rarity}]. ¡Sus genes han mutado!`;",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 689,
+      "text": "mensaje = `¡COLAPSO DEL REACTOR! 💥\\nLos 5 Genos se desintegraron. Recuperas ${compensacion} EV de los restos irradiados.`;",
+      "emojis": [
+        "💥"
+      ]
+    }
+  ],
+  "RPGManager.js": [
+    {
+      "line": 21,
+      "text": "alert(\"✨ ¡Gen Activado: Umbral del Despertar!\\nLas estadísticas base de tu Geno han aumentado +5 de forma permanente.\");",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 381,
+      "text": "resonanciaMsg = `\\n\\n🧬 [Resonancia de Nivel] ¡Tu estadística líder (${nameMap[highestKey]}) aumentó +1 de forma permanente!`;",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 385,
+      "text": "alert(`¡Súper Evolución! 🌟\\n${window.miMascota.name} ha alcanzado el Nivel ${window.miMascota.level}.\\nTienes 3 Puntos de Atributo disponibles.${resonanciaMsg}`);",
+      "emojis": [
+        "🌟"
+      ]
+    },
+    {
+      "line": 491,
+      "text": "alert(\"⚠️ Acción denegada: No puedes renombrar un Geno alquilado.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 499,
+      "text": "let mensaje = window.miMascota.renames === 0 ? \"Bautizo Genético:\\nEl primer cambio de nombre es GRATUITO.\\n\\n¿Cómo quieres llamar a tu Geno?\" : `Cambio de Identidad:\\nRenombrar cuesta ${costoEsencia} ✨.\\n\\nNuevo nombre:`;",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 502,
+      "text": "alert(`No tienes suficiente Esencia Vital. Cuesta ${costoEsencia} ✨.`); return;",
+      "emojis": [
+        "✨"
+      ]
+    }
+  ],
+  "SanctuaryManager.js": [
+    {
+      "line": 11,
+      "text": "/* 🚫 Pantalla principal con posición relativa para anclar el botón flotante */",
+      "emojis": [
+        "🚫"
+      ]
+    },
+    {
+      "line": 18,
+      "text": "padding: 20px 20px 0px 20px !important; /* 👈 Sin padding abajo, el botón usará ese espacio */",
+      "emojis": [
+        "👈"
+      ]
+    },
+    {
+      "line": 22,
+      "text": "position: relative !important; /* 👈 VITAL para el botón absolute */",
+      "emojis": [
+        "👈"
+      ]
+    },
+    {
+      "line": 25,
+      "text": "/* ✨ FIX MAESTRO: El panel deja un hueco de 90px exactos para el botón flotante */",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 32,
+      "text": "margin-bottom: 90px !important; /* 👈 HUECO INFERIOR PARA QUE EL BOTÓN NO SE MONTE */",
+      "emojis": [
+        "👈"
+      ]
+    },
+    {
+      "line": 119,
+      "text": "child.innerHTML = `Libera Genos en la naturaleza para obtener <span style=\"display: inline-block; width: 1.4em; height: 1.4em; vertical-align: middle; margin: 0 2px; transform: translateY(-2px);\">${window.iconoEV || '✨'}</span> EV.`;",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 247,
+      "text": "let svg = typeof generarSvgGeno === 'function' ? generarSvgGeno(geno) : '🧬';",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 293,
+      "text": "<span style=\"color: #ffcc00; font-weight: bold; font-size: 13px; text-shadow: 0 0 5px rgba(255,204,0,0.5);\">+${reward} ${window.iconoEV || '✨'}</span>",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 308,
+      "text": "if (confirm(`⚠️ ALERTA DEL SANTUARIO\\n\\nEstás a punto de liberar a ${geno.name} en la naturaleza.\\nEsta acción es PERMANENTE y el Geno se perderá para siempre.\\n\\n¿Estás seguro de proceder a cambio de ✨ ${reward} Esencia Vital?`)) {",
+      "emojis": [
+        "⚠",
+        "✨"
+      ]
+    },
+    {
+      "line": 321,
+      "text": "alert(`🕊️ ${geno.name} ha sido liberado con éxito.\\nLa Red Nexo te recompensa con ✨ ${reward} Esencia Vital.`);",
+      "emojis": [
+        "🕊",
+        "✨"
+      ]
+    }
+  ],
+  "ScholarshipManager.js": [
+    {
+      "line": 11,
+      "text": "console.log(\"🧬 [ScholarshipManager] Inicializando módulo de Becas...\");",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 34,
+      "text": "console.log(\"🧬 [ScholarshipManager] Generando catálogo de becas inicial...\");",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 269,
+      "text": "icon: \"💿\",",
+      "emojis": [
+        "💿"
+      ]
+    },
+    {
+      "line": 315,
+      "text": "message: \"⚠️ Bloqueo de seguridad: No puedes reclamar tu Geno mientras el becado compite activamente en un Torneo de Llaves.\"",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 373,
+      "text": "message: `⚠️ Nivel de Laboratorio insuficiente. Requieres Nivel ${becaGeno.scholarship.minLabLevel} (tienes Nv. ${nivelJugador}).`",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 415,
+      "text": "message: \"⚠️ Bloqueo de seguridad: No puedes devolver el Geno mientras esté compitiendo en un Torneo de Llaves.\"",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 480,
+      "text": "console.log(`🤖 [Scholarship SIM] El becado virtual \"${scholarNombre}\" ha alquilado tu Geno ${becaGeno.name}.`);",
+      "emojis": [
+        "🤖"
+      ]
+    },
+    {
+      "line": 508,
+      "text": "console.log(`🏆 [Scholarship SIM] ¡Tu becado \"${scholarNombre}\" usando a \"${bGeno.name}\" quedó en Top de Torneo! Premio total: ${premioTotal} POL. Tu parte (${bGeno.scholarship.splitOwner}%): +${splits.ownerAmount} POL. Parte de becado: +${splits.scholarAmount} POL.`);",
+      "emojis": [
+        "🏆"
+      ]
+    },
+    {
+      "line": 517,
+      "text": "<div style=\"color: #00e5ff; font-weight: bold; margin-bottom: 5px;\">🏆 RECOMPENSA DE BECA</div>",
+      "emojis": [
+        "🏆"
+      ]
+    }
+  ],
+  "ShopManager.js": [
+    {
+      "line": 192,
+      "text": "? `<div style=\"font-weight: 900; color: ${colorLuz}; margin: 10px 0 15px 0; font-size: 15px; text-shadow: 0 0 8px ${colorLuz}80;\">✨ ${item.price.toFixed(2)} EV</div>`",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 193,
+      "text": ": `<div style=\"font-weight: 900; color: ${colorLuz}; margin: 10px 0 15px 0; font-size: 15px; text-shadow: 0 0 8px ${colorLuz}80;\">🔷 ${item.price.toFixed(2)} POL</div>`;",
+      "emojis": [
+        "🔷"
+      ]
+    },
+    {
+      "line": 248,
+      "text": "? `<span style=\"color: ${colorLuz}; text-shadow: 0 0 8px ${colorLuz}80;\">✨ ${item.price.toFixed(2)} EV</span>`",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 249,
+      "text": ": `<span style=\"color: ${colorLuz}; text-shadow: 0 0 8px ${colorLuz}80;\">🔷 ${item.price.toFixed(2)} POL</span>`;",
+      "emojis": [
+        "🔷"
+      ]
+    },
+    {
+      "line": 267,
+      "text": "alert(`❌ No tienes suficiente Esencia Vital. Necesitas ${item.price.toFixed(2)} ✨`);",
+      "emojis": [
+        "❌",
+        "✨"
+      ]
+    },
+    {
+      "line": 273,
+      "text": "alert(\"❌ Bloqueado: Tu Nivel de Laboratorio debe ser 5 o superior.\");",
+      "emojis": [
+        "❌"
+      ]
+    },
+    {
+      "line": 277,
+      "text": "alert(\"✉️ Ya has adquirido esta Licencia de Comercio.\");",
+      "emojis": [
+        "✉"
+      ]
+    },
+    {
+      "line": 291,
+      "text": "alert(\"🎉 ¡Licencia de Comercio adquirida con éxito!\\nHas desbloqueado el acceso completo a la Red de Comercio.\");",
+      "emojis": [
+        "🎉"
+      ]
+    },
+    {
+      "line": 302,
+      "text": "alert(\"🎒 ¡Almacén y Espacios de Emergencia LLENOS!\\nLibera espacio para recibir este Bio-Núcleo.\");",
+      "emojis": [
+        "🎒"
+      ]
+    },
+    {
+      "line": 370,
+      "text": "const svgCapsula = typeof generarSvgGeno === 'function' ? generarSvgGeno({ isEgg: true, color: colorRandom }) : '🧬';",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 381,
+      "text": "alert(\"✅ ¡Has comprado un Bio-Núcleo Básico!\\nRevisa tu Cámara de Bio-Núcleos en el Centro de Crianza para incubarlo.\");",
+      "emojis": [
+        "✅"
+      ]
+    },
+    {
+      "line": 402,
+      "text": "alert(`✅ Has comprado: ${item.name}`);",
+      "emojis": [
+        "✅"
+      ]
+    },
+    {
+      "line": 409,
+      "text": "alert(`❌ No tienes suficiente $POL. Necesitas ${item.price.toFixed(2)} 🔷`);",
+      "emojis": [
+        "❌",
+        "🔷"
+      ]
+    },
+    {
+      "line": 415,
+      "text": "alert(\"⚠️ Ya tienes una mochila de este tamaño o superior.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 425,
+      "text": "alert(`🎒 ¡Mochila expandida permanentemente a ${item.value} ranuras!`);",
+      "emojis": [
+        "🎒"
+      ]
+    },
+    {
+      "line": 441,
+      "text": "alert(`✅ Has comprado: ${item.name}`);",
+      "emojis": [
+        "✅"
+      ]
+    },
+    {
+      "line": 463,
+      "text": "{ id: \"ration_auto\", name: \"Ración Automática\", icon: \"🍱\", type: \"consumable\", price: 2.00, currency: \"EV\", desc: \"Alimenta automáticamente a todos tus Genos en reserva por 24 horas.\" },",
+      "emojis": [
+        "🍱"
+      ]
+    },
+    {
+      "line": 464,
+      "text": "{ id: \"plasma_shower\", name: \"Ducha de Plasma\", icon: \"🧼\", type: \"consumable\", price: 1.00, currency: \"EV\", desc: \"Limpia a todo tu inventario de mascotas a 100% de Higiene.\" },",
+      "emojis": [
+        "🧼"
+      ]
+    },
+    {
+      "line": 468,
+      "text": "{ id: \"comercio_licencia\", name: \"Permiso de Comercio\", icon: \"📜\", type: \"consumable\", price: 15.00, currency: \"EV\", desc: \"Permiso de Acceso a la Red de Comercio del Bazar. Permite depositar, retirar y vender Genos. (Requiere Laboratorio Nv. 5)\" }",
+      "emojis": [
+        "📜"
+      ]
+    },
+    {
+      "line": 513,
+      "text": "const icono = this.iconosSVG[elemento] || \"💿\";",
+      "emojis": [
+        "💿"
+      ]
+    }
+  ],
+  "TournamentManager.js": [
+    {
+      "line": 45,
+      "text": "iconoEmoji: \"⚪\",",
+      "emojis": [
+        "⚪"
+      ]
+    },
+    {
+      "line": 56,
+      "text": "iconoEmoji: \"🟢\",",
+      "emojis": [
+        "🟢"
+      ]
+    },
+    {
+      "line": 67,
+      "text": "iconoEmoji: \"🌱\",",
+      "emojis": [
+        "🌱"
+      ]
+    },
+    {
+      "line": 79,
+      "text": "iconoEmoji: \"🌀\",",
+      "emojis": [
+        "🌀"
+      ]
+    },
+    {
+      "line": 90,
+      "text": "iconoEmoji: \"🔄\",",
+      "emojis": [
+        "🔄"
+      ]
+    },
+    {
+      "line": 102,
+      "text": "iconoEmoji: \"🧬\",",
+      "emojis": [
+        "🧬"
+      ]
+    },
+    {
+      "line": 113,
+      "text": "iconoEmoji: \"🚫\",",
+      "emojis": [
+        "🚫"
+      ]
+    },
+    {
+      "line": 125,
+      "text": "iconoEmoji: \"⚡\",",
+      "emojis": [
+        "⚡"
+      ]
+    },
+    {
+      "line": 447,
+      "text": "${!canEnter ? `<div style=\"font-size: 9px; color: #ef4444; font-weight: bold; text-align: left; margin-top: 2px; padding: 4px 8px; background: rgba(239, 68, 68, 0.1); border-radius: 4px; border-left: 3px solid #ef4444;\">⚠️ ${validation.motivo}</div>` : ''}",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 461,
+      "text": "alert(\"⚠️ Se requiere el 'Permiso de Comercio' (adquirible en el Bazar por 15 EV al llegar a Nv. 5 de Laboratorio) para participar en Torneos competitivos.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 466,
+      "text": "alert(\"⚠️ Debes tener un Geno activo para poder competir.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 472,
+      "text": "alert(\"⚠️ Tu Geno activo no tiene suficiente Resistencia (se requiere al menos 20%). Déjalo descansar en el Laboratorio.\");",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 487,
+      "text": "alert(`⚠️ No puedes inscribirte: ${validation.motivo}`);",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 579,
+      "text": "alert(`⚠️ ¡DIVISIÓN LLENA! (Cola Desbordada)\\n\\nLa Copa Neón ha alcanzado el límite de 16 jugadores antes de tu confirmación de bloque. \\n\\nPor protocolo FIFO, has sido reubicado automáticamente en la Copa Satélite (0.50 POL). Los 0.50 POL de exceso se han reembolsado a tus saldos pendientes.`);",
+      "emojis": [
+        "⚠"
+      ]
+    },
+    {
+      "line": 601,
+      "text": "alert(`⚙️ QUÓRUM COMPLETADO\\n\\nSe ha inyectado el competidor número 16 (${npcSubsidio.nombre}) subsidiado por la casa para evitar demoras competitivas. ¡Comienza el Torneo!`);",
+      "emojis": [
+        "⚙"
+      ]
+    },
+    {
+      "line": 671,
+      "text": "alert(`🚪 Has salido de la cola. Se te han devuelto ${reembolso.toFixed(2)} POL a tu balance.`);",
+      "emojis": [
+        "🚪"
+      ]
+    },
+    {
+      "line": 711,
+      "text": "log: [ `🏆 Torneo ${conf.nombre} iniciado.` ],",
+      "emojis": [
+        "🏆"
+      ]
+    },
+    {
+      "line": 802,
+      "text": "<div class=\"cup-icon\">🏆</div>",
+      "emojis": [
+        "🏆"
+      ]
+    },
+    {
+      "line": 829,
+      "text": "payoutText = `<div style=\"color: #69f0ae; font-weight: bold; margin-top: 10px;\">🎁 Premio por 1er Lugar: +${payout.toFixed(2)} POL</div>`;",
+      "emojis": [
+        "🎁"
+      ]
+    },
+    {
+      "line": 832,
+      "text": "payoutText = `<div style=\"color: #80deea; font-weight: bold; margin-top: 10px;\">🎁 Premio por 2do Lugar: +${payout.toFixed(2)} POL</div>`;",
+      "emojis": [
+        "🎁"
+      ]
+    },
+    {
+      "line": 835,
+      "text": "payoutText = `<div style=\"color: #ffb300; font-weight: bold; margin-top: 10px;\">🎁 Premio por 3er Lugar: +${payout.toFixed(2)} POL</div>`;",
+      "emojis": [
+        "🎁"
+      ]
+    },
+    {
+      "line": 842,
+      "text": "<div style=\"font-size: 20px; font-weight: bold; color: #ffd700; margin-bottom: 8px;\">🏆 TORNEO FINALIZADO</div>",
+      "emojis": [
+        "🏆"
+      ]
+    },
+    {
+      "line": 862,
+      "text": "<div style=\"font-size: 14px; font-weight: bold; color: #ff007f; margin-bottom: 8px;\">💥 ESTÁS ELIMINADO</div>",
+      "emojis": [
+        "💥"
+      ]
+    },
+    {
+      "line": 881,
+      "text": "<div style=\"font-size: 13px; font-weight: bold; color: #69f0ae; margin-bottom: 5px;\">✅ COMBATE COMPLETADO</div>",
+      "emojis": [
+        "✅"
+      ]
+    },
+    {
+      "line": 914,
+      "text": "⚔️ INICIAR DUELO",
+      "emojis": [
+        "⚔"
+      ]
+    },
+    {
+      "line": 1055,
+      "text": "t.log.push(`⚔️ Llave ${matchId}: ${myMatch.winner.nombre} avanzó tras derrotar a ${ganoPlayer ? myMatch.p2.nombre : myMatch.p1.nombre}.`);",
+      "emojis": [
+        "⚔"
+      ]
+    },
+    {
+      "line": 1067,
+      "text": "alert(\"🎉 ¡Victoria en tu llave de torneo! Has avanzado a la siguiente ronda.\");",
+      "emojis": [
+        "🎉"
+      ]
+    },
+    {
+      "line": 1069,
+      "text": "alert(\"💥 Derrota en el Coliseo. Has sido eliminado del torneo.\");",
+      "emojis": [
+        "💥"
+      ]
+    },
+    {
+      "line": 1092,
+      "text": "t.log.push(`🤖 Simulación: ${m.winner.nombre} vence a ${p1Wins ? m.p2.nombre : m.p1.nombre} por ${m.score1}-${m.score2}.`);",
+      "emojis": [
+        "🤖"
+      ]
+    },
+    {
+      "line": 1121,
+      "text": "t.log.push(`📢 Ronda de ${ganadores.length} competidores lista.`);",
+      "emojis": [
+        "📢"
+      ]
+    },
+    {
+      "line": 1127,
+      "text": "t.log.push(`👑 ¡${finalMatch.winner.nombre} se consagra campeón de la ${t.config.nombre}!`);",
+      "emojis": [
+        "👑"
+      ]
+    },
+    {
+      "line": 1227,
+      "text": "alert(`💰 Reclamación exitosa: Se añadieron +${monto.toFixed(2)} POL a tu Wallet.`);",
+      "emojis": [
+        "💰"
+      ]
+    },
+    {
+      "line": 1239,
+      "text": "console.log(\"🏆 Interceptando rival del torneo:\", this.enemy.nombre);",
+      "emojis": [
+        "🏆"
+      ]
+    },
+    {
+      "line": 1265,
+      "text": "if (confirm(\"⚠️ Estás en medio de un combate de Torneo. Si te retiras ahora, perderás por abandono. ¿Seguro que deseas retirarte?\")) {",
+      "emojis": [
+        "⚠"
+      ]
+    }
+  ],
+  "WalletManager.js": [
+    {
+      "line": 21,
+      "text": "🦊 CONECTAR METAMASK",
+      "emojis": [
+        "🦊"
+      ]
+    },
+    {
+      "line": 105,
+      "text": "\"🔒 Nota de seguridad: Tu dirección de comercio en la red Polygon se generará de forma automática y totalmente segura solo cuando decidas iniciar el proceso de depósito.\",",
+      "emojis": [
+        "🔒"
+      ]
+    },
+    {
+      "line": 106,
+      "text": "\"🛡️ Para mantener la seguridad de tu Laboratorio, la firma digital de tu Wallet solo se vinculará a tu cuenta al detectar una orden de depósito confirmada.\",",
+      "emojis": [
+        "🛡"
+      ]
+    },
+    {
+      "line": 107,
+      "text": "\"💡 Puedes seguir explorando la Plaza de Comercio de forma libre. El enlace con la red de transacciones se activará únicamente al preparar los fondos de tu primer intercambio.\"",
+      "emojis": [
+        "💡"
+      ]
+    },
+    {
+      "line": 184,
+      "text": "let alertMsg = `🎉 ¡Billetera Privy sincronizada con éxito!\\nDirección: ${generatedAddress}`;",
+      "emojis": [
+        "🎉"
+      ]
+    },
+    {
+      "line": 186,
+      "text": "alertMsg += `\\n🎁 Se han depositado +10.0 POL de cortesía para pruebas.`;",
+      "emojis": [
+        "🎁"
+      ]
+    },
+    {
+      "line": 191,
+      "text": "alert(\"✨ Ahora puedes depositar o retirar fondos desde el panel de Wallet.\");",
+      "emojis": [
+        "✨"
+      ]
+    },
+    {
+      "line": 216,
+      "text": "polText.innerText = `${saldo} POL | ✅ ${shortAddress}`;",
+      "emojis": [
+        "✅"
+      ]
+    },
+    {
+      "line": 227,
+      "text": "polText.innerText = `${saldo} POL | 🦊 Vincular`;",
+      "emojis": [
+        "🦊"
+      ]
+    }
+  ]
+}

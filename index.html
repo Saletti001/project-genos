@@ -1797,6 +1797,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="LoginUI.js"></script>
+    <script src="EmojiReplacer.js"></script>
     <script src="CloudManager.js"></script>
     <script src="EnergyManager.js"></script>
     <script src="SaveManager.js"></script>
@@ -1851,56 +1852,7 @@
     </div>
 
     <script>
-        // Custom window.alert override
-        (function() {
-            const nativeAlert = window.alert;
-            window.alert = function(msg) {
-                const modal = document.getElementById("cyber-alert-modal");
-                const textEl = document.getElementById("cyber-alert-text");
-                const btn = document.getElementById("cyber-alert-btn");
-                const content = modal ? modal.querySelector("div") : null;
-                
-                if (!modal || !textEl || !btn) {
-                    nativeAlert(msg);
-                    return;
-                }
-                
-                textEl.innerHTML = String(msg).replace(/\n/g, "<br>");
-                modal.style.display = "flex";
-                modal.classList.remove("hidden");
-                
-                setTimeout(() => {
-                    modal.style.opacity = "1";
-                    if (content) content.style.transform = "scale(1)";
-                }, 10);
-                
-                btn.focus();
-                
-                return new Promise((resolve) => {
-                    const closeAlert = () => {
-                        modal.style.opacity = "0";
-                        if (content) content.style.transform = "scale(0.9)";
-                        setTimeout(() => {
-                            modal.style.display = "none";
-                            modal.classList.add("hidden");
-                            btn.removeEventListener("click", closeAlert);
-                            document.removeEventListener("keydown", handleKey);
-                            resolve();
-                        }, 200);
-                    };
-                    
-                    const handleKey = (e) => {
-                        if (e.key === "Enter" || e.key === "Escape" || e.key === " ") {
-                            e.preventDefault();
-                            closeAlert();
-                        }
-                    };
-                    
-                    btn.addEventListener("click", closeAlert);
-                    document.addEventListener("keydown", handleKey);
-                });
-            };
-        })();
+        // Custom window.alert override is now handled centrally by EmojiReplacer.js
 
         document.addEventListener("DOMContentLoaded", () => {
             const inyectarIconos = () => {
