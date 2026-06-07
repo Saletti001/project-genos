@@ -13,7 +13,7 @@ const anclajes = {
     nube: { cabezaX: 80, cabezaY: 42, espaldaX: 80, espaldaY: 98 },
     pentagono: { cabezaX: 80, cabezaY: 38, espaldaX: 80, espaldaY: 85 },
     chili: { cabezaX: 80, cabezaY: 25, espaldaX: 80, espaldaY: 90 },
-    rayo: { cabezaX: 80, cabezaY: 30, espaldaX: 80, espaldaY: 85 }
+    diamante: { cabezaX: 80, cabezaY: 30, espaldaX: 80, espaldaY: 85 }
 };
 
 const dicSombreros = {

@@ -139,7 +139,7 @@ function generarSvgGeno(genesVisuales) {
         case "pentagono": pathD = "M 80 25 Q 84 25 86 29 L 132 63 Q 135 66 134 70 L 112 125 Q 110 130 105 130 L 55 130 Q 50 130 48 125 L 26 70 Q 25 66 28 63 L 74 29 Q 76 25 80 25 Z"; shineD = "M 70 45 L 45 80 Q 60 70 90 70 Z"; break;
         case "nube": pathD = "M 45 130 C 20 130, 20 75, 50 70 C 55 25, 105 25, 110 70 C 140 75, 140 130, 115 130 Z"; shineD = "M 55 60 Q 80 40 105 60 Q 80 50 55 60 Z"; break;
         case "chili": pathD = "M 80 20 C 40 20, 30 70, 45 105 C 60 140, 80 145, 80 145 C 80 145, 100 140, 115 105 C 130 70, 120 20, 80 20 Z"; shineD = "M 50 60 C 40 90, 60 120, 75 135 C 60 110, 50 80, 65 50 Z"; break;
-        case "rayo": pathD = "M 80 15 L 135 85 L 80 155 L 25 85 Z"; shineD = "M 80 25 L 35 85 L 48 85 L 80 37 Z"; break;
+        case "diamante": pathD = "M 80 15 L 135 85 L 80 155 L 25 85 Z"; shineD = "M 80 25 L 35 85 L 48 85 L 80 37 Z"; break;
         default: pathD = "M 65 25 C 110 20, 135 50, 135 85 C 135 125, 105 145, 75 145 C 35 145, 25 115, 35 75 C 40 50, 35 30, 65 25 Z"; shineD = "M 45 48 Q 60 38 75 40 Q 55 52 50 75 Q 40 60 45 48 Z"; break;
     }
 
