@@ -818,6 +818,100 @@
             color: var(--neon-purple);
         }
 
+        /* Color modifiers for custom selectors */
+        /* Cyan */
+        .custom-select-wrapper.cyan .custom-select-trigger {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 229, 255, 0.15);
+        }
+        .custom-select-wrapper.cyan .custom-select-trigger::after {
+            border-top-color: var(--neon-cyan);
+        }
+        .custom-select-wrapper.cyan .custom-select-options {
+            border-color: var(--neon-cyan);
+        }
+        .custom-select-wrapper.cyan .custom-option {
+            border-bottom-color: rgba(0, 229, 255, 0.1);
+        }
+        .custom-select-wrapper.cyan .custom-option:hover {
+            background: var(--neon-cyan);
+            color: #000;
+        }
+        .custom-select-wrapper.cyan .custom-option.selected {
+            background: rgba(0, 229, 255, 0.2);
+            color: var(--neon-cyan);
+        }
+
+        /* Purple */
+        .custom-select-wrapper.purple .custom-select-trigger {
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 10px rgba(213, 0, 249, 0.15);
+        }
+        .custom-select-wrapper.purple .custom-select-trigger::after {
+            border-top-color: var(--neon-purple);
+        }
+        .custom-select-wrapper.purple .custom-select-options {
+            border-color: var(--neon-purple);
+        }
+        .custom-select-wrapper.purple .custom-option {
+            border-bottom-color: rgba(213, 0, 249, 0.1);
+        }
+        .custom-select-wrapper.purple .custom-option:hover {
+            background: var(--neon-purple);
+            color: #000;
+        }
+        .custom-select-wrapper.purple .custom-option.selected {
+            background: rgba(213, 0, 249, 0.2);
+            color: var(--neon-purple);
+        }
+
+        /* Green */
+        .custom-select-wrapper.green .custom-select-trigger {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 10px rgba(105, 240, 174, 0.15);
+        }
+        .custom-select-wrapper.green .custom-select-trigger::after {
+            border-top-color: var(--neon-green);
+        }
+        .custom-select-wrapper.green .custom-select-options {
+            border-color: var(--neon-green);
+        }
+        .custom-select-wrapper.green .custom-option {
+            border-bottom-color: rgba(105, 240, 174, 0.1);
+        }
+        .custom-select-wrapper.green .custom-option:hover {
+            background: var(--neon-green);
+            color: #000;
+        }
+        .custom-select-wrapper.green .custom-option.selected {
+            background: rgba(105, 240, 174, 0.2);
+            color: var(--neon-green);
+        }
+
+        /* Yellow */
+        .custom-select-wrapper.yellow .custom-select-trigger {
+            border-color: var(--neon-yellow);
+            box-shadow: 0 0 10px rgba(255, 235, 59, 0.15);
+        }
+        .custom-select-wrapper.yellow .custom-select-trigger::after {
+            border-top-color: var(--neon-yellow);
+        }
+        .custom-select-wrapper.yellow .custom-select-options {
+            border-color: var(--neon-yellow);
+        }
+        .custom-select-wrapper.yellow .custom-option {
+            border-bottom-color: rgba(255, 235, 59, 0.1);
+        }
+        .custom-select-wrapper.yellow .custom-option:hover {
+            background: var(--neon-yellow);
+            color: #000;
+        }
+        .custom-select-wrapper.yellow .custom-option.selected {
+            background: rgba(255, 235, 59, 0.2);
+            color: var(--neon-yellow);
+        }
+
+
         /* SVG KPI Icon formatting */
         .kpi-icon-svg {
             stroke: var(--neon-cyan);
@@ -920,278 +1014,472 @@
             </div>
         </header>
 
-        <!-- KPI Cards Grid -->
-        <div class="kpi-grid">
-            
-            <!-- KPI 1: Players -->
-            <div class="glass-panel kpi-card">
-                <div class="kpi-header">
-                    <span>Actividad de Jugadores</span>
-                    <span class="kpi-icon" style="display: flex; align-items: center; color: var(--neon-cyan);">
-                        <svg class="kpi-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="9" cy="7" r="4"></circle>
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                        </svg>
-                    </span>
-                </div>
-                <div>
-                    <div id="kpi-total-players" class="kpi-value">---</div>
-                    <div class="kpi-meta">
-                        <span>Registrados</span>
-                    </div>
-                </div>
-                <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px; margin-top: 10px; display: flex; justify-content: space-between;">
-                    <span style="font-size: 10px; color: var(--text-muted);">Activos 24h: <b id="val-active-24h" style="color: #fff;">0</b></span>
-                    <span style="font-size: 10px; color: var(--text-muted); display: flex; align-items: center; gap: 4px;">
-                        <span class="pulsing-indicator"></span> En Vivo: <b id="val-active-now" style="color: var(--neon-green);">0</b>
-                    </span>
-                </div>
-            </div>
-
-            <!-- KPI 2: EV Circulation -->
-            <div class="glass-panel kpi-card">
-                <div class="kpi-header">
-                    <span>Esencia Vital (EV) Circulante</span>
-                    <span class="kpi-icon" style="display: flex; align-items: center; color: var(--neon-cyan);">
-                        <svg class="kpi-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: var(--neon-cyan);">
-                            <path d="M4.5 10.5C4.5 10.5 7.5 13.5 12 13.5C16.5 13.5 19.5 10.5 19.5 10.5M4.5 13.5C4.5 13.5 7.5 10.5 12 10.5C16.5 10.5 19.5 13.5 19.5 13.5M12 3V21M3 12H21" stroke-dasharray="2 2"></path>
-                            <circle cx="12" cy="7" r="3" fill="var(--neon-cyan)" opacity="0.3"></circle>
-                            <circle cx="12" cy="17" r="3" fill="var(--neon-cyan)" opacity="0.3"></circle>
-                        </svg>
-                    </span>
-                </div>
-                <div>
-                    <div id="kpi-total-ev" class="kpi-value" style="color: var(--neon-cyan);">---</div>
-                    <div class="kpi-meta">
-                        <span>Circulación global agregada</span>
-                    </div>
-                </div>
-                <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px; margin-top: 10px; display: flex; justify-content: space-between;">
-                    <span style="font-size: 10px; color: var(--text-muted);">24h Emisión: <b id="val-ev-emitted" style="color: var(--neon-green);">0</b></span>
-                    <span style="font-size: 10px; color: var(--text-muted);">24h Quema: <b id="val-ev-burned" style="color: var(--neon-pink);">0</b></span>
-                </div>
-            </div>
-
-            <!-- KPI 3: RORS Ratio -->
-            <div class="glass-panel kpi-card">
-                <div class="kpi-header">
-                    <span>Salud de Emisión RORS (24h)</span>
-                    <span class="kpi-icon" style="display: flex; align-items: center; color: var(--neon-purple);">
-                        <svg class="kpi-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: var(--neon-purple);">
-                            <line x1="18" y1="20" x2="18" y2="10"></line>
-                            <line x1="12" y1="20" x2="12" y2="4"></line>
-                            <line x1="6" y1="20" x2="6" y2="14"></line>
-                        </svg>
-                    </span>
-                </div>
-                <div>
-                    <div id="kpi-rors-ratio" class="kpi-value">---</div>
-                    <div class="kpi-meta">
-                        <span>Ratio Recompensa / Quema</span>
-                    </div>
-                </div>
-                <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 10px; color: var(--text-muted);">Estado Económico:</span>
-                    <span id="rors-status-badge" class="rors-badge">---</span>
-                </div>
-            </div>
-
-            <!-- KPI 4: POL metrics -->
-            <div class="glass-panel kpi-card">
-                <div class="kpi-header">
-                    <span>Bóveda y Mercado POL</span>
-                    <span class="kpi-icon" style="display: flex; align-items: center; color: var(--neon-yellow);">
-                        <svg class="kpi-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: var(--neon-yellow);">
-                            <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
-                            <line x1="12" y1="10" x2="12" y2="14"></line>
-                            <line x1="2" y1="10" x2="22" y2="10"></line>
-                        </svg>
-                    </span>
-                </div>
-                <div>
-                    <div id="kpi-total-pol-used" class="kpi-value" style="color: var(--neon-yellow);">---</div>
-                    <div class="kpi-meta">
-                        <span>POL Usado (Volumen de Mercado)</span>
-                    </div>
-                </div>
-                <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 10px; color: var(--text-muted);">Bóveda Global del Juego:</span>
-                    <span id="val-boveda-balance" style="font-weight: bold; color: var(--neon-green); font-family: var(--font-mono); font-size: 11px;">0.00 POL</span>
-                </div>
-            </div>
-
+        <!-- Navigation Tabs -->
+        <div style="display: flex; gap: 15px; margin-bottom: 25px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 15px;">
+            <button id="tab-metrics" class="auth-btn" style="margin-top: 0; width: auto; padding: 10px 20px; background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple)); border: none; letter-spacing: 1px;">Métricas y Soporte</button>
+            <button id="tab-balance" class="btn-logout" style="width: auto; padding: 9px 20px; font-weight: bold; font-family: var(--font-cyber); letter-spacing: 1px;">Balance y Configuración</button>
         </div>
 
-        <!-- Charts Grid Row -->
-        <div class="charts-row">
-            
-            <!-- Chart 1: Daily History Curve -->
-            <div class="glass-panel chart-card">
-                <div class="chart-card-header">Curva de Emisión vs Quema (Esencia Vital)</div>
-                <div class="chart-container">
-                    <canvas id="evCurveChart"></canvas>
-                </div>
-            </div>
-
-            <!-- Chart 2: Geno Rarity / Element Distribution -->
-            <div class="glass-panel chart-card" style="overflow: visible !important; position: relative; z-index: 3;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-left: 3px solid var(--neon-cyan); padding-left: 10px; height: 24px;">
-                    <div id="chart-population-title" class="chart-card-header" style="border-left: none; padding-left: 0; margin-bottom: 0;">Población de Mascotas</div>
-                    <div class="custom-select-wrapper" id="population-filter-wrapper" data-selected-value="rarity" style="width: 140px;">
-                        <div class="custom-select-trigger" id="population-filter-trigger" style="padding: 4px 10px; font-size: 10px;">Por Rareza</div>
-                        <div class="custom-select-options">
-                            <div class="custom-option selected" data-value="rarity" style="padding: 6px 10px; font-size: 10px;">Por Rareza</div>
-                            <div class="custom-option" data-value="element" style="padding: 6px 10px; font-size: 10px;">Por Elemento</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="chart-container">
-                    <canvas id="rarityDistributionChart"></canvas>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- Support & Compensation Panel -->
-        <div class="glass-panel logs-panel support-panel-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; min-height: 380px; margin-bottom: 30px; position: relative; z-index: 2;">
-            <!-- Column 1: Search & Profile Viewer -->
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <div class="chart-card-header" style="border-left-color: var(--neon-cyan); margin-bottom: 10px;">Consulta de Cuenta de Usuario</div>
-                <div style="display: flex; gap: 10px;">
-                    <input type="email" id="support-search-email" class="logs-search" placeholder="Buscar usuario por correo..." autocomplete="off" style="flex-grow: 1;">
-                    <button id="btn-support-search" class="auth-btn" style="margin-top: 0; width: auto; padding: 0 20px; height: 38px;">Buscar</button>
-                </div>
-                <div id="support-profile-result" class="hidden" style="display: flex; flex-direction: column; gap: 12px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); font-size: 12px; font-family: var(--font-mono);">
-                    <div><span style="color: var(--text-muted);">UID:</span> <span id="prof-uid" style="color: var(--neon-cyan); font-size: 11px;">---</span></div>
-                    <div><span style="color: var(--text-muted);">EMAIL:</span> <span id="prof-email" style="color: #fff; font-weight: bold;">---</span></div>
-                    <div><span style="color: var(--text-muted);">NIVEL LAB:</span> <span id="prof-lab" style="color: var(--neon-yellow);">---</span></div>
-                    <div><span style="color: var(--text-muted);">ACTIVIDAD:</span> <span id="prof-active" style="color: #fff;">---</span></div>
-                    <div style="display: flex; gap: 20px; margin-top: 5px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px;">
-                        <div><span style="color: var(--text-muted);">EV:</span> <span id="prof-ev" style="color: var(--neon-green); font-weight: bold;">0.00</span></div>
-                        <div><span style="color: var(--text-muted);">POL:</span> <span id="prof-pol" style="color: var(--neon-cyan); font-weight: bold;">0.00</span></div>
-                        <div><span style="color: var(--text-muted);">MASCOTAS:</span> <span id="prof-mascotas" style="color: var(--neon-purple); font-weight: bold;">0</span></div>
-                    </div>
-                    <div style="margin-top: 5px;">
-                        <div style="color: var(--text-muted); margin-bottom: 5px; font-size: 10px;">ALMACÉN NEXO:</div>
-                        <div id="prof-items-list" style="display: flex; flex-wrap: wrap; gap: 6px; max-height: 120px; overflow-y: auto; padding-right: 5px;">
-                            <!-- Rendered dynamically -->
-                        </div>
-                    </div>
-                </div>
-                <div id="support-profile-empty" style="text-align: center; padding: 60px 20px; color: var(--text-muted); border: 1px dashed rgba(255,255,255,0.1); border-radius: 8px; font-size: 12px;">
-                    Escribe el correo electrónico de un jugador registrado para consultar sus balances de inventario y datos en tiempo real.
-                </div>
-            </div>
-
-            <!-- Column 2: Compensation Actions -->
-            <div style="display: flex; flex-direction: column; gap: 15px;">
-                <div class="chart-card-header" style="border-left-color: var(--neon-purple); margin-bottom: 10px;">Concesión de Compensación y Recursos</div>
+        <!-- Metrics View Container -->
+        <div id="metrics-view">
+            <!-- KPI Cards Grid -->
+            <div class="kpi-grid">
                 
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Tipo de Recurso</label>
-                    <div class="custom-select-wrapper" id="support-type-wrapper" data-selected-value="ev" style="width: 100%;">
-                        <div class="custom-select-trigger" id="support-type-trigger">Esencia Vital (EV)</div>
-                        <div class="custom-select-options">
-                            <div class="custom-option selected" data-value="ev">Esencia Vital (EV)</div>
-                            <div class="custom-option" data-value="pol">POL (Token)</div>
-                            <div class="custom-option" data-value="item">Ítem de Inventario</div>
+                <!-- KPI 1: Players -->
+                <div class="glass-panel kpi-card">
+                    <div class="kpi-header">
+                        <span>Actividad de Jugadores</span>
+                        <span class="kpi-icon" style="display: flex; align-items: center; color: var(--neon-cyan);">
+                            <svg class="kpi-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </span>
+                    </div>
+                    <div>
+                        <div id="kpi-total-players" class="kpi-value">---</div>
+                        <div class="kpi-meta">
+                            <span>Registrados</span>
+                        </div>
+                    </div>
+                    <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px; margin-top: 10px; display: flex; justify-content: space-between;">
+                        <span style="font-size: 10px; color: var(--text-muted);">Activos 24h: <b id="val-active-24h" style="color: #fff;">0</b></span>
+                        <span style="font-size: 10px; color: var(--text-muted); display: flex; align-items: center; gap: 4px;">
+                            <span class="pulsing-indicator"></span> En Vivo: <b id="val-active-now" style="color: var(--neon-green);">0</b>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- KPI 2: EV Circulation -->
+                <div class="glass-panel kpi-card">
+                    <div class="kpi-header">
+                        <span>Esencia Vital (EV) Circulante</span>
+                        <span class="kpi-icon" style="display: flex; align-items: center; color: var(--neon-cyan);">
+                            <svg class="kpi-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: var(--neon-cyan);">
+                                <path d="M4.5 10.5C4.5 10.5 7.5 13.5 12 13.5C16.5 13.5 19.5 10.5 19.5 10.5M4.5 13.5C4.5 13.5 7.5 10.5 12 10.5C16.5 10.5 19.5 13.5 19.5 13.5M12 3V21M3 12H21" stroke-dasharray="2 2"></path>
+                                <circle cx="12" cy="7" r="3" fill="var(--neon-cyan)" opacity="0.3"></circle>
+                                <circle cx="12" cy="17" r="3" fill="var(--neon-cyan)" opacity="0.3"></circle>
+                            </svg>
+                        </span>
+                    </div>
+                    <div>
+                        <div id="kpi-total-ev" class="kpi-value" style="color: var(--neon-cyan);">---</div>
+                        <div class="kpi-meta">
+                            <span>Circulación global agregada</span>
+                        </div>
+                    </div>
+                    <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px; margin-top: 10px; display: flex; justify-content: space-between;">
+                        <span style="font-size: 10px; color: var(--text-muted);">24h Emisión: <b id="val-ev-emitted" style="color: var(--neon-green);">0</b></span>
+                        <span style="font-size: 10px; color: var(--text-muted);">24h Quema: <b id="val-ev-burned" style="color: var(--neon-pink);">0</b></span>
+                    </div>
+                </div>
+
+                <!-- KPI 3: RORS Ratio -->
+                <div class="glass-panel kpi-card">
+                    <div class="kpi-header">
+                        <span>Salud de Emisión RORS (24h)</span>
+                        <span class="kpi-icon" style="display: flex; align-items: center; color: var(--neon-purple);">
+                            <svg class="kpi-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: var(--neon-purple);">
+                                <line x1="18" y1="20" x2="18" y2="10"></line>
+                                <line x1="12" y1="20" x2="12" y2="4"></line>
+                                <line x1="6" y1="20" x2="6" y2="14"></line>
+                            </svg>
+                        </span>
+                    </div>
+                    <div>
+                        <div id="kpi-rors-ratio" class="kpi-value">---</div>
+                        <div class="kpi-meta">
+                            <span>Ratio Recompensa / Quema</span>
+                        </div>
+                    </div>
+                    <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 10px; color: var(--text-muted);">Estado Económico:</span>
+                        <span id="rors-status-badge" class="rors-badge">---</span>
+                    </div>
+                </div>
+
+                <!-- KPI 4: POL metrics -->
+                <div class="glass-panel kpi-card">
+                    <div class="kpi-header">
+                        <span>Bóveda y Mercado POL</span>
+                        <span class="kpi-icon" style="display: flex; align-items: center; color: var(--neon-yellow);">
+                            <svg class="kpi-icon-svg" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="stroke: var(--neon-yellow);">
+                                <rect x="2" y="4" width="20" height="16" rx="2" ry="2"></rect>
+                                <line x1="12" y1="10" x2="12" y2="14"></line>
+                                <line x1="2" y1="10" x2="22" y2="10"></line>
+                            </svg>
+                        </span>
+                    </div>
+                    <div>
+                        <div id="kpi-total-pol-used" class="kpi-value" style="color: var(--neon-yellow);">---</div>
+                        <div class="kpi-meta">
+                            <span>POL Usado (Volumen de Mercado)</span>
+                        </div>
+                    </div>
+                    <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 8px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 10px; color: var(--text-muted);">Bóveda Global del Juego:</span>
+                        <span id="val-boveda-balance" style="font-weight: bold; color: var(--neon-green); font-family: var(--font-mono); font-size: 11px;">0.00 POL</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Charts Grid Row -->
+            <div class="charts-row">
+                
+                <!-- Chart 1: Daily History Curve -->
+                <div class="glass-panel chart-card">
+                    <div class="chart-card-header">Curva de Emisión vs Quema (Esencia Vital)</div>
+                    <div class="chart-container">
+                        <canvas id="evCurveChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Geno Rarity / Element Distribution -->
+                <div class="glass-panel chart-card" style="overflow: visible !important; position: relative; z-index: 3;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-left: 3px solid var(--neon-cyan); padding-left: 10px; height: 24px;">
+                        <div id="chart-population-title" class="chart-card-header" style="border-left: none; padding-left: 0; margin-bottom: 0;">Población de Mascotas</div>
+                        <div class="custom-select-wrapper" id="population-filter-wrapper" data-selected-value="rarity" style="width: 140px;">
+                            <div class="custom-select-trigger" id="population-filter-trigger" style="padding: 4px 10px; font-size: 10px;">Por Rareza</div>
+                            <div class="custom-select-options">
+                                <div class="custom-option selected" data-value="rarity" style="padding: 6px 10px; font-size: 10px;">Por Rareza</div>
+                                <div class="custom-option" data-value="element" style="padding: 6px 10px; font-size: 10px;">Por Elemento</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="rarityDistributionChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Support & Compensation Panel -->
+            <div class="glass-panel logs-panel support-panel-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; min-height: 380px; margin-bottom: 30px; position: relative; z-index: 2;">
+                <!-- Column 1: Search & Profile Viewer -->
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="chart-card-header" style="border-left-color: var(--neon-cyan); margin-bottom: 10px;">Consulta de Cuenta de Usuario</div>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="email" id="support-search-email" class="logs-search" placeholder="Buscar usuario por correo..." autocomplete="off" style="flex-grow: 1;">
+                        <button id="btn-support-search" class="auth-btn" style="margin-top: 0; width: auto; padding: 0 20px; height: 38px;">Buscar</button>
+                    </div>
+                    <div id="support-profile-result" class="hidden" style="display: flex; flex-direction: column; gap: 12px; background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05); font-size: 12px; font-family: var(--font-mono);">
+                        <div><span style="color: var(--text-muted);">UID:</span> <span id="prof-uid" style="color: var(--neon-cyan); font-size: 11px;">---</span></div>
+                        <div><span style="color: var(--text-muted);">EMAIL:</span> <span id="prof-email" style="color: #fff; font-weight: bold;">---</span></div>
+                        <div><span style="color: var(--text-muted);">NIVEL LAB:</span> <span id="prof-lab" style="color: var(--neon-yellow);">---</span></div>
+                        <div><span style="color: var(--text-muted);">ACTIVIDAD:</span> <span id="prof-active" style="color: #fff;">---</span></div>
+                        <div style="display: flex; gap: 20px; margin-top: 5px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px;">
+                            <div><span style="color: var(--text-muted);">EV:</span> <span id="prof-ev" style="color: var(--neon-green); font-weight: bold;">0.00</span></div>
+                            <div><span style="color: var(--text-muted);">POL:</span> <span id="prof-pol" style="color: var(--neon-cyan); font-weight: bold;">0.00</span></div>
+                            <div><span style="color: var(--text-muted);">MASCOTAS:</span> <span id="prof-mascotas" style="color: var(--neon-purple); font-weight: bold;">0</span></div>
+                        </div>
+                        <div style="margin-top: 5px;">
+                            <div style="color: var(--text-muted); margin-bottom: 5px; font-size: 10px;">ALMACÉN NEXO:</div>
+                            <div id="prof-items-list" style="display: flex; flex-wrap: wrap; gap: 6px; max-height: 120px; overflow-y: auto; padding-right: 5px;">
+                                <!-- Rendered dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                    <div id="support-profile-empty" style="text-align: center; padding: 60px 20px; color: var(--text-muted); border: 1px dashed rgba(255,255,255,0.1); border-radius: 8px; font-size: 12px;">
+                        Escribe el correo electrónico de un jugador registrado para consultar sus balances de inventario y datos en tiempo real.
+                    </div>
+                </div>
+
+                <!-- Column 2: Compensation Actions -->
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="chart-card-header" style="border-left-color: var(--neon-purple); margin-bottom: 10px;">Concesión de Compensación y Recursos</div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <label style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Tipo de Recurso</label>
+                        <div class="custom-select-wrapper" id="support-type-wrapper" data-selected-value="ev" style="width: 100%;">
+                            <div class="custom-select-trigger" id="support-type-trigger">Esencia Vital (EV)</div>
+                            <div class="custom-select-options">
+                                <div class="custom-option selected" data-value="ev">Esencia Vital (EV)</div>
+                                <div class="custom-option" data-value="pol">POL (Token)</div>
+                                <div class="custom-option" data-value="item">Ítem de Inventario</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Predefined Item Selector -->
+                    <div id="support-item-select-group" class="hidden" style="display: flex; flex-direction: column; gap: 5px;">
+                        <label style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Seleccionar Ítem</label>
+                        <div class="custom-select-wrapper" id="support-item-wrapper" data-selected-value="incubator_01" style="width: 100%;">
+                            <div class="custom-select-trigger" id="support-item-trigger">Incubadora Térmica</div>
+                            <div class="custom-select-options">
+                                <div class="custom-option selected" data-value="incubator_01">Incubadora Térmica</div>
+                                <div class="custom-option" data-value="ration_auto">Ración Automática</div>
+                                <div class="custom-option" data-value="plasma_shower">Ducha de Plasma</div>
+                                <div class="custom-option" data-value="escaner_basico">Escáner Básico</div>
+                                <div class="custom-option" data-value="escaner_completo">Escáner Completo</div>
+                                <div class="custom-option" data-value="antidoto_uni">Antídoto Universal</div>
+                                <div class="custom-option" data-value="tinta_habilidad">Tinta de Habilidad</div>
+                                <div class="custom-option" data-value="comercio_licencia">Permiso de Comercio</div>
+                                <div class="custom-option" data-value="custom">Otro (Personalizado)</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Custom Item Detail Fields -->
+                    <div id="support-custom-item-fields" class="hidden" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: rgba(0,0,0,0.25); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <label style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted);">ID del Ítem</label>
+                            <input type="text" id="custom-item-id" class="logs-search" style="width: 100%; height: 32px; padding: 6px 10px;" placeholder="ej: pocion_energia">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <label style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted);">Nombre</label>
+                            <input type="text" id="custom-item-name" class="logs-search" style="width: 100%; height: 32px; padding: 6px 10px;" placeholder="ej: Poción de Energía">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <label style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted);">Icono (Emoji/SVG)</label>
+                            <input type="text" id="custom-item-icon" class="logs-search" style="width: 100%; height: 32px; padding: 6px 10px;" placeholder="ej: 🧪">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 4px;">
+                            <label style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted);">Categoría/Tipo</label>
+                            <input type="text" id="custom-item-type" class="logs-search" style="width: 100%; height: 32px; padding: 6px 10px;" placeholder="ej: consumable">
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 4px; grid-column: span 2;">
+                            <label style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted);">Descripción</label>
+                            <input type="text" id="custom-item-desc" class="logs-search" style="width: 100%; height: 32px; padding: 6px 10px;" placeholder="ej: Recupera 50% de resistencia.">
+                        </div>
+                    </div>
+
+                    <div style="display: flex; flex-direction: column; gap: 5px;">
+                        <label style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Monto o Cantidad a Conceder</label>
+                        <input type="number" id="support-amount" class="logs-search" style="width: 100%;" min="0.01" step="any" placeholder="Cantidad de recursos o unidades...">
+                    </div>
+
+                    <button id="btn-support-grant" class="auth-btn" style="margin-top: 10px; background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink)); box-shadow: 0 4px 15px rgba(255, 0, 127, 0.3);">CONCEDER COMPENSACIÓN</button>
+                </div>
+            </div>
+
+            <!-- Logs Table Panel -->
+            <div class="glass-panel logs-panel" style="position: relative; z-index: 1;">
+                <div class="logs-panel-header">
+                    <div class="logs-panel-title">Historial Reciente de Logs Económicos</div>
+                    <div class="logs-controls">
+                        <input type="text" id="logs-search-input" class="logs-search" placeholder="Filtrar por correo o fuente...">
+                        
+                        <div class="custom-select-wrapper" id="logs-filter-wrapper" data-selected-value="all">
+                            <div class="custom-select-trigger" id="logs-filter-trigger">Todas las Acciones</div>
+                            <div class="custom-select-options">
+                                <div class="custom-option selected" data-value="all">Todas las Acciones</div>
+                                <div class="custom-option" data-value="reward">Emisiones (Rewards)</div>
+                                <div class="custom-option" data-value="sink">Quemas (Sinks)</div>
+                                <div class="custom-option" data-value="pol_sale">Ventas POL (Mercado)</div>
+                                <div class="custom-option" data-value="pol_spent">Inscripción Torneo</div>
+                                <div class="custom-option" data-value="pol_reward">Premios Torneo</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- Predefined Item Selector -->
-                <div id="support-item-select-group" class="hidden" style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Seleccionar Ítem</label>
-                    <div class="custom-select-wrapper" id="support-item-wrapper" data-selected-value="incubator_01" style="width: 100%;">
-                        <div class="custom-select-trigger" id="support-item-trigger">Incubadora Térmica</div>
-                        <div class="custom-select-options">
-                            <div class="custom-option selected" data-value="incubator_01">Incubadora Térmica</div>
-                            <div class="custom-option" data-value="ration_auto">Ración Automática</div>
-                            <div class="custom-option" data-value="plasma_shower">Ducha de Plasma</div>
-                            <div class="custom-option" data-value="escaner_basico">Escáner Básico</div>
-                            <div class="custom-option" data-value="escaner_completo">Escáner Completo</div>
-                            <div class="custom-option" data-value="antidoto_uni">Antídoto Universal</div>
-                            <div class="custom-option" data-value="tinta_habilidad">Tinta de Habilidad</div>
-                            <div class="custom-option" data-value="comercio_licencia">Permiso de Comercio</div>
-                            <div class="custom-option" data-value="custom">Otro (Personalizado)</div>
-                        </div>
-                    </div>
+                
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>ID Log</th>
+                                <th>Usuario</th>
+                                <th>Acción</th>
+                                <th>Monto</th>
+                                <th>Módulo / Origen</th>
+                            </tr>
+                        </thead>
+                        <tbody id="logs-table-body">
+                            <tr>
+                                <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 30px;">Cargando registros del sistema...</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-
-                <!-- Custom Item Detail Fields -->
-                <div id="support-custom-item-fields" class="hidden" style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; background: rgba(0,0,0,0.25); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.05);">
-                    <div style="display: flex; flex-direction: column; gap: 4px;">
-                        <label style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted);">ID del Ítem</label>
-                        <input type="text" id="custom-item-id" class="logs-search" style="width: 100%; height: 32px; padding: 6px 10px;" placeholder="ej: pocion_energia">
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 4px;">
-                        <label style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted);">Nombre</label>
-                        <input type="text" id="custom-item-name" class="logs-search" style="width: 100%; height: 32px; padding: 6px 10px;" placeholder="ej: Poción de Energía">
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 4px;">
-                        <label style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted);">Icono (Emoji/SVG)</label>
-                        <input type="text" id="custom-item-icon" class="logs-search" style="width: 100%; height: 32px; padding: 6px 10px;" placeholder="ej: 🧪">
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 4px;">
-                        <label style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted);">Categoría/Tipo</label>
-                        <input type="text" id="custom-item-type" class="logs-search" style="width: 100%; height: 32px; padding: 6px 10px;" placeholder="ej: consumable">
-                    </div>
-                    <div style="display: flex; flex-direction: column; gap: 4px; grid-column: span 2;">
-                        <label style="font-family: var(--font-mono); font-size: 9px; color: var(--text-muted);">Descripción</label>
-                        <input type="text" id="custom-item-desc" class="logs-search" style="width: 100%; height: 32px; padding: 6px 10px;" placeholder="ej: Recupera 50% de resistencia.">
-                    </div>
-                </div>
-
-                <div style="display: flex; flex-direction: column; gap: 5px;">
-                    <label style="font-family: var(--font-mono); font-size: 10px; color: var(--text-muted); text-transform: uppercase;">Monto o Cantidad a Conceder</label>
-                    <input type="number" id="support-amount" class="logs-search" style="width: 100%;" min="0.01" step="any" placeholder="Cantidad de recursos o unidades...">
-                </div>
-
-                <button id="btn-support-grant" class="auth-btn" style="margin-top: 10px; background: linear-gradient(90deg, var(--neon-purple), var(--neon-pink)); box-shadow: 0 4px 15px rgba(255, 0, 127, 0.3);">CONCEDER COMPENSACIÓN</button>
             </div>
         </div>
 
-        <!-- Logs Table Panel -->
-        <div class="glass-panel logs-panel" style="position: relative; z-index: 1;">
-            <div class="logs-panel-header">
-                <div class="logs-panel-title">Historial Reciente de Logs Económicos</div>
-                <div class="logs-controls">
-                    <input type="text" id="logs-search-input" class="logs-search" placeholder="Filtrar por correo o fuente...">
+        <!-- Balance View Container -->
+        <div id="balance-view" class="hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <div class="chart-card-header" style="border-left-color: var(--neon-green); margin-bottom: 0;">Gestión de Balance Económico Dinámico</div>
+                <div style="font-family: var(--font-mono); font-size: 11px;">
+                    VERSIÓN EN NUBE: <span id="balance-version-badge" class="rors-badge stable">Cargando...</span>
+                </div>
+            </div>
+
+            <!-- Form layout: grid of panels -->
+            <div class="support-panel-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+                
+                <!-- Card 1: Bazar y Laboratorio de Implantes (Sinks EV) -->
+                <div class="glass-panel logs-panel" style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="chart-card-header" style="border-left-color: var(--neon-cyan);">Bazar y Laboratorio de Implantes (Precios en EV)</div>
                     
-                    <div class="custom-select-wrapper" id="logs-filter-wrapper" data-selected-value="all">
-                        <div class="custom-select-trigger" id="logs-filter-trigger">Todas las Acciones</div>
-                        <div class="custom-select-options">
-                            <div class="custom-option selected" data-value="all">Todas las Acciones</div>
-                            <div class="custom-option" data-value="reward">Emisiones (Rewards)</div>
-                            <div class="custom-option" data-value="sink">Quemas (Sinks)</div>
-                            <div class="custom-option" data-value="pol_sale">Ventas POL (Mercado)</div>
-                            <div class="custom-option" data-value="pol_spent">Inscripción Torneo</div>
-                            <div class="custom-option" data-value="pol_reward">Premios Torneo</div>
+                    <!-- Bazar Section -->
+                    <div style="background: rgba(0,0,0,0.15); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
+                        <span style="color: var(--neon-cyan); font-weight: bold; font-size: 11px; display: block; margin-bottom: 8px;">SELECCIONAR ÍTEM DEL BAZAR:</span>
+                        <div class="custom-select-wrapper cyan" id="select-bazar-item-wrapper" data-selected-value="" style="width: 100%; margin-bottom: 12px;">
+                            <input type="hidden" id="select-bazar-item" value="">
+                            <div class="custom-select-trigger" id="select-bazar-item-trigger">Seleccionar...</div>
+                            <div class="custom-select-options"></div>
+                        </div>
+                        
+                        <div id="bazar-item-details" style="display: flex; gap: 10px; align-items: flex-end;">
+                            <div style="flex: 1;">
+                                <label style="color: var(--text-muted); font-size: 9px; font-family: var(--font-mono);">PRECIO (EV)</label>
+                                <input type="number" id="input-bazar-item-price" class="logs-search" style="width: 100%; margin-top: 5px; height: 35px;" step="any">
+                            </div>
+                            <button id="btn-add-bazar-item-trigger" class="btn-logout" style="height: 35px; width: auto; padding: 0 15px; font-size: 10px; font-weight: bold; font-family: var(--font-cyber); letter-spacing: 0.5px; border-color: var(--neon-cyan); color: var(--neon-cyan);">+ AÑADIR</button>
+                        </div>
+                    </div>
+
+                    <!-- Laboratorio de Implantes Section -->
+                    <div style="background: rgba(0,0,0,0.15); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03); margin-top: 5px;">
+                        <span style="color: var(--neon-cyan); font-weight: bold; font-size: 11px; display: block; margin-bottom: 8px;">SELECCIONAR CATEGORÍA DEL LABORATORIO DE IMPLANTES:</span>
+                        <div class="custom-select-wrapper cyan" id="select-dojo-category-wrapper" data-selected-value="" style="width: 100%; margin-bottom: 12px;">
+                            <input type="hidden" id="select-dojo-category" value="">
+                            <div class="custom-select-trigger" id="select-dojo-category-trigger">Seleccionar...</div>
+                            <div class="custom-select-options"></div>
+                        </div>
+                        
+                        <div id="dojo-category-details" style="display: flex; gap: 10px; align-items: flex-end;">
+                            <div style="flex: 1;">
+                                <label style="color: var(--text-muted); font-size: 9px; font-family: var(--font-mono);">PRECIO BASE (EV)</label>
+                                <input type="number" id="input-dojo-category-price" class="logs-search" style="width: 100%; margin-top: 5px; height: 35px;" step="any">
+                            </div>
+                            <button id="btn-add-dojo-category-trigger" class="btn-logout" style="height: 35px; width: auto; padding: 0 15px; font-size: 10px; font-weight: bold; font-family: var(--font-cyber); letter-spacing: 0.5px; border-color: var(--neon-cyan); color: var(--neon-cyan);">+ AÑADIR</button>
                         </div>
                     </div>
                 </div>
+
+                <!-- Card 2: Tienda Premium (POL) y Recompensas (EV / XP) -->
+                <div class="glass-panel logs-panel" style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="chart-card-header" style="border-left-color: var(--neon-purple);">Mejoras Premium y Recompensas Gameplay</div>
+                    
+                    <!-- Premium Section -->
+                    <div style="background: rgba(0,0,0,0.15); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
+                        <span style="color: var(--neon-purple); font-weight: bold; font-size: 11px; display: block; margin-bottom: 8px;">TIENDA PREMIUM (POL):</span>
+                        <div class="custom-select-wrapper purple" id="select-premium-item-wrapper" data-selected-value="" style="width: 100%; margin-bottom: 12px;">
+                            <input type="hidden" id="select-premium-item" value="">
+                            <div class="custom-select-trigger" id="select-premium-item-trigger">Seleccionar...</div>
+                            <div class="custom-select-options"></div>
+                        </div>
+                        
+                        <div id="premium-item-details" style="display: flex; gap: 10px; align-items: flex-end;">
+                            <div style="flex: 1;">
+                                <label style="color: var(--text-muted); font-size: 9px; font-family: var(--font-mono);">PRECIO (POL)</label>
+                                <input type="number" id="input-premium-item-price" class="logs-search" style="width: 100%; margin-top: 5px; height: 35px;" step="any">
+                            </div>
+                            <button id="btn-add-premium-item-trigger" class="btn-logout" style="height: 35px; width: auto; padding: 0 15px; font-size: 10px; font-weight: bold; font-family: var(--font-cyber); letter-spacing: 0.5px; border-color: var(--neon-purple); color: var(--neon-purple);">+ AÑADIR</button>
+                        </div>
+                    </div>
+
+                    <!-- Daily Rewards Section -->
+                    <div style="background: rgba(0,0,0,0.15); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
+                        <span style="color: var(--neon-green); font-weight: bold; font-size: 11px; display: block; margin-bottom: 8px;">RECOMPENSAS DIARIAS (EV Base):</span>
+                        <div class="custom-select-wrapper green" id="select-login-reward-wrapper" data-selected-value="" style="width: 100%; margin-bottom: 12px;">
+                            <input type="hidden" id="select-login-reward" value="">
+                            <div class="custom-select-trigger" id="select-login-reward-trigger">Seleccionar...</div>
+                            <div class="custom-select-options"></div>
+                        </div>
+                        
+                        <div id="login-reward-details" style="display: flex; gap: 10px; align-items: flex-end;">
+                            <div style="flex: 1;">
+                                <label style="color: var(--text-muted); font-size: 9px; font-family: var(--font-mono);">VALOR BASE (EV)</label>
+                                <input type="number" id="input-login-reward-value" class="logs-search" style="width: 100%; margin-top: 5px; height: 35px;" step="any">
+                            </div>
+                            <button id="btn-add-login-reward-trigger" class="btn-logout" style="height: 35px; width: auto; padding: 0 15px; font-size: 10px; font-weight: bold; font-family: var(--font-cyber); letter-spacing: 0.5px; border-color: var(--neon-green); color: var(--neon-green);">+ AÑADIR</button>
+                        </div>
+                    </div>
+
+                    <!-- Gameplay Rewards Section -->
+                    <div style="background: rgba(0,0,0,0.15); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
+                        <span style="color: var(--neon-yellow); font-weight: bold; font-size: 11px; display: block; margin-bottom: 8px;">RECOMPENSAS DE GAMEPLAY:</span>
+                        <div class="custom-select-wrapper yellow" id="select-gameplay-reward-wrapper" data-selected-value="" style="width: 100%; margin-bottom: 12px;">
+                            <input type="hidden" id="select-gameplay-reward" value="">
+                            <div class="custom-select-trigger" id="select-gameplay-reward-trigger">Seleccionar...</div>
+                            <div class="custom-select-options"></div>
+                        </div>
+                        
+                        <div id="gameplay-reward-details" style="display: flex; gap: 10px; align-items: flex-end;">
+                            <div style="flex: 1;">
+                                <label style="color: var(--text-muted); font-size: 9px; font-family: var(--font-mono);">VALOR RECOMPENSA</label>
+                                <input type="number" id="input-gameplay-reward-value" class="logs-search" style="width: 100%; margin-top: 5px; height: 35px;" step="any">
+                            </div>
+                            <button id="btn-add-gameplay-reward-trigger" class="btn-logout" style="height: 35px; width: auto; padding: 0 15px; font-size: 10px; font-weight: bold; font-family: var(--font-cyber); letter-spacing: 0.5px; border-color: var(--neon-yellow); color: var(--neon-yellow);">+ AÑADIR</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Inscripción y Premios de Torneos (Ancho Completo) -->
+                <div class="glass-panel logs-panel" style="grid-column: span 2; display: flex; flex-direction: column; gap: 15px;">
+                    <div class="chart-card-header" style="border-left-color: var(--neon-yellow);">Torneos (Precios de Inscripción y Premios en POL)</div>
+                    
+                    <div style="background: rgba(0,0,0,0.15); padding: 15px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
+                        <span style="color: var(--neon-yellow); font-weight: bold; font-size: 11px; display: block; margin-bottom: 8px;">SELECCIONAR TORNEO COMPATIBLE:</span>
+                        <div class="custom-select-wrapper yellow" id="select-tournament-wrapper" data-selected-value="" style="width: 100%; margin-bottom: 12px;">
+                            <input type="hidden" id="select-tournament" value="">
+                            <div class="custom-select-trigger" id="select-tournament-trigger">Seleccionar...</div>
+                            <div class="custom-select-options"></div>
+                        </div>
+                        
+                        <div id="tournament-details" style="display: grid; grid-template-columns: 1fr 2fr; gap: 15px; align-items: flex-end;">
+                            <div>
+                                <label style="color: var(--text-muted); font-size: 9px; font-family: var(--font-mono);">COSTO DE ENTRADA (POL)</label>
+                                <input type="number" id="input-tournament-cost" class="logs-search" style="width: 100%; margin-top: 5px; height: 35px;" step="any">
+                            </div>
+                            <div>
+                                <label style="color: var(--text-muted); font-size: 9px; font-family: var(--font-mono);">PREMIOS (1º / 2º / 3º LUGAR EN POL)</label>
+                                <div style="display: flex; gap: 8px; margin-top: 5px; align-items: center;">
+                                    <input type="number" id="input-tournament-p1" class="logs-search" style="flex:1; height: 35px; text-align: center; padding: 0 4px;" placeholder="1º" step="any">
+                                    <input type="number" id="input-tournament-p2" class="logs-search" style="flex:1; height: 35px; text-align: center; padding: 0 4px;" placeholder="2º" step="any">
+                                    <input type="number" id="input-tournament-p3" class="logs-search" style="flex:1; height: 35px; text-align: center; padding: 0 4px;" placeholder="3º" step="any">
+                                    <button id="btn-add-tournament-trigger" class="btn-logout" style="height: 35px; width: auto; padding: 0 15px; font-size: 10px; font-weight: bold; font-family: var(--font-cyber); letter-spacing: 0.5px; border-color: var(--neon-yellow); color: var(--neon-yellow);">+ NUEVO TORNEO</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Publish Button Panel -->
+            <div class="glass-panel logs-panel" style="display: flex; justify-content: space-between; align-items: center; padding: 20px;">
+                <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-muted);">
+                    ⚠️ Al publicar los cambios, se incrementará la versión activa y se actualizará la caché de todos los jugadores conectados.
+                </span>
+                <button id="btn-save-balance" class="auth-btn" style="margin-top: 0; width: auto; padding: 12px 35px; background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan)); color: #000; font-weight: bold; border: none;">GUARDAR Y PUBLICAR BALANCE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Item Modal -->
+    <div id="add-item-modal" class="auth-screen hidden" style="z-index: 110000; background: rgba(7, 8, 13, 0.95); position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;">
+        <div class="auth-card" style="border-color: var(--neon-cyan); box-shadow: 0 0 35px rgba(0, 229, 255, 0.2);">
+            <div class="auth-logo" id="add-modal-title">AÑADIR CONFIGURACIÓN</div>
+            <div class="auth-subtitle" id="add-modal-subtitle">Sección</div>
+            
+            <div class="auth-input-group">
+                <label id="lbl-add-id">IDENTIFICADOR / CLAVE ÚNICA (inglés/minúscula)</label>
+                <input type="text" id="add-item-key" class="auth-input" placeholder="ej: bio_nucleo_basico">
             </div>
             
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>ID Log</th>
-                            <th>Usuario</th>
-                            <th>Acción</th>
-                            <th>Monto</th>
-                            <th>Módulo / Origen</th>
-                        </tr>
-                    </thead>
-                    <tbody id="logs-table-body">
-                        <tr>
-                            <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 30px;">Cargando registros del sistema...</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="auth-input-group" id="group-add-value">
+                <label id="lbl-add-value">VALOR / PRECIO BASE</label>
+                <input type="number" id="add-item-value" class="auth-input" step="any" placeholder="ej: 150">
+            </div>
+
+            <div id="group-add-payouts" class="hidden">
+                <label style="display: block; font-family: var(--font-mono); font-size: 10px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 1.5px;">PREMIOS (1º / 2º / 3º EN POL)</label>
+                <div style="display: flex; gap: 8px;">
+                    <input type="number" id="add-item-p1" class="auth-input" style="text-align: center;" placeholder="1º" step="any">
+                    <input type="number" id="add-item-p2" class="auth-input" style="text-align: center;" placeholder="2º" step="any">
+                    <input type="number" id="add-item-p3" class="auth-input" style="text-align: center;" placeholder="3º" step="any">
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 30px;">
+                <button id="btn-add-modal-cancel" class="btn-logout" style="flex: 1; padding: 12px; font-weight: bold; border-radius: 8px;">CANCELAR</button>
+                <button id="btn-add-modal-confirm" class="auth-btn" style="flex: 1; margin-top: 0; padding: 12px; font-weight: bold; border-radius: 8px; background: var(--neon-cyan); color: #000;">AGREGAR</button>
             </div>
         </div>
     </div>
@@ -1291,6 +1579,36 @@
                 // Setup Support Panel Events
                 document.getElementById("btn-support-search").onclick = handleSupportSearch;
                 document.getElementById("btn-support-grant").onclick = handleSupportGrant;
+
+                // Setup Navigation Tabs click events
+                document.getElementById("tab-metrics").onclick = selectMetricsTab;
+                document.getElementById("tab-balance").onclick = selectBalanceTab;
+
+                // Setup Save Balance Button
+                document.getElementById("btn-save-balance").onclick = handleSaveBalance;
+
+                // Setup dropdown change events
+                document.getElementById("select-bazar-item").onchange = onBazarItemChange;
+                document.getElementById("select-dojo-category").onchange = onDojoCategoryChange;
+                document.getElementById("select-premium-item").onchange = onPremiumItemChange;
+                document.getElementById("select-login-reward").onchange = onLoginRewardChange;
+                document.getElementById("select-gameplay-reward").onchange = onGameplayRewardChange;
+                document.getElementById("select-tournament").onchange = onTournamentChange;
+
+                // Setup add trigger events
+                document.getElementById("btn-add-bazar-item-trigger").onclick = () => openAddModal('bazar', 'AÑADIR ÍTEM DEL BAZAR', 'Bazar (EV)');
+                document.getElementById("btn-add-dojo-category-trigger").onclick = () => openAddModal('dojo', 'AÑADIR CATEGORÍA AL LAB. DE IMPLANTES', 'Laboratorio de Implantes (EV)');
+                document.getElementById("btn-add-premium-item-trigger").onclick = () => openAddModal('premium', 'AÑADIR ÍTEM PREMIUM', 'Premium (POL)');
+                document.getElementById("btn-add-login-reward-trigger").onclick = () => openAddModal('login_reward', 'AÑADIR RECOMPENSA DIARIA', 'Login (EV)');
+                document.getElementById("btn-add-gameplay-reward-trigger").onclick = () => openAddModal('gameplay_reward', 'AÑADIR RECOMPENSA GAMEPLAY', 'Gameplay');
+                document.getElementById("btn-add-tournament-trigger").onclick = () => openAddModal('tournament', 'AÑADIR TORNEO TEMÁTICO', 'Torneo (POL)');
+
+                // Modal close & confirm
+                document.getElementById("btn-add-modal-cancel").onclick = closeAddModal;
+                document.getElementById("btn-add-modal-confirm").onclick = handleConfirmAdd;
+
+                // Bind inputs sync
+                bindInputSync();
                 
                 // Inicializar selectores personalizados
                 initCustomSelects();
@@ -1443,6 +1761,9 @@
             document.getElementById("admin-email").value = "";
             document.getElementById("admin-pass").value = "";
             document.getElementById("auth-error-msg").classList.add("hidden");
+
+            // Reset tabs to metrics tab
+            selectMetricsTab();
         }
 
         // Control y comportamiento de selectores customizados
@@ -1477,6 +1798,13 @@
                         const value = newOpt.getAttribute('data-value');
                         wrapper.setAttribute('data-selected-value', value);
                         
+                        // Si tiene input oculto, actualizarlo y lanzar evento change
+                        const hiddenInput = wrapper.querySelector('input[type="hidden"]');
+                        if (hiddenInput) {
+                            hiddenInput.value = value;
+                            hiddenInput.dispatchEvent(new Event('change'));
+                        }
+                        
                         // Callbacks según el ID del selector
                         if (wrapper.id === 'logs-filter-wrapper') {
                             filterLogsTable();
@@ -1491,12 +1819,15 @@
                 });
             });
             
-            // Cerrar al clickear fuera
-            document.addEventListener('click', () => {
-                document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
-                    wrapper.classList.remove('open');
+            // Cerrar al clickear fuera (evitar duplicar evento en document)
+            if (!window.customSelectGlobalListenerAdded) {
+                document.addEventListener('click', () => {
+                    document.querySelectorAll('.custom-select-wrapper').forEach(wrapper => {
+                        wrapper.classList.remove('open');
+                    });
                 });
-            });
+                window.customSelectGlobalListenerAdded = true;
+            }
         }
 
         // Eventos del Formulario de Soporte
@@ -2007,6 +2338,469 @@
         // Rarity Distribution Doughnut Chart
         function buildRarityChart(distribution) {
             updatePopulationChart();
+        }
+
+        // --- GESTIÓN DE BALANCE ECONÓMICO ---
+        let activeBalanceConfig = null;
+        let activeBalanceVersion = 1;
+
+        function getFloatVal(id, fallback = 0) {
+            const el = document.getElementById(id);
+            if (!el) return fallback;
+            const val = parseFloat(el.value);
+            return isNaN(val) ? fallback : val;
+        }
+
+        function getIntVal(id, fallback = 0) {
+            const el = document.getElementById(id);
+            if (!el) return fallback;
+            const val = parseInt(el.value, 10);
+            return isNaN(val) ? fallback : val;
+        }
+
+        function selectMetricsTab() {
+            document.getElementById("metrics-view").classList.remove("hidden");
+            document.getElementById("balance-view").classList.add("hidden");
+            
+            const tabMetrics = document.getElementById("tab-metrics");
+            const tabBalance = document.getElementById("tab-balance");
+            
+            tabMetrics.className = "auth-btn";
+            tabMetrics.style.cssText = "margin-top: 0; width: auto; padding: 10px 20px; background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple)); border: none; letter-spacing: 1px;";
+            
+            tabBalance.className = "btn-logout";
+            tabBalance.style.cssText = "width: auto; padding: 9px 20px; font-weight: bold; font-family: var(--font-cyber); letter-spacing: 1px;";
+        }
+
+        async function selectBalanceTab() {
+            document.getElementById("metrics-view").classList.add("hidden");
+            document.getElementById("balance-view").classList.remove("hidden");
+            
+            const tabMetrics = document.getElementById("tab-metrics");
+            const tabBalance = document.getElementById("tab-balance");
+            
+            tabBalance.className = "auth-btn";
+            tabBalance.style.cssText = "margin-top: 0; width: auto; padding: 10px 20px; background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple)); border: none; letter-spacing: 1px;";
+            
+            tabMetrics.className = "btn-logout";
+            tabMetrics.style.cssText = "width: auto; padding: 9px 20px; font-weight: bold; font-family: var(--font-cyber); letter-spacing: 1px;";
+            
+            await loadBalanceConfig();
+        }
+
+        async function loadBalanceConfig() {
+            if (!supabaseClient) return;
+            
+            try {
+                const badge = document.getElementById("balance-version-badge");
+                if (badge) badge.innerText = "Cargando...";
+
+                const { data, error } = await supabaseClient
+                    .from('game_balance')
+                    .select('version, config')
+                    .eq('id', 1)
+                    .single();
+
+                if (error) throw error;
+
+                if (data) {
+                    activeBalanceVersion = data.version;
+                    activeBalanceConfig = data.config;
+
+                    if (badge) {
+                        badge.innerText = "v" + activeBalanceVersion;
+                    }
+
+                    const conf = activeBalanceConfig;
+                    
+                    // Populating dropdowns
+                    populateDropdown("select-bazar-item", conf.shop_items.bazar);
+                    populateDropdown("select-dojo-category", conf.shop_items.dojo_base_prices);
+                    populateDropdown("select-premium-item", conf.shop_items.premium);
+                    
+                    // Login rewards - ignoring multiplier_enabled key
+                    const loginKeys = Object.keys(conf.login_rewards).filter(k => k !== "multiplier_enabled");
+                    populateDropdown("select-login-reward", loginKeys);
+
+                    // Gameplay rewards keys (flattened path)
+                    const gpRewards = [];
+                    for (let sec in conf.gameplay_rewards) {
+                        for (let sub in conf.gameplay_rewards[sec]) {
+                            gpRewards.push(`${sec}.${sub}`);
+                        }
+                    }
+                    populateDropdown("select-gameplay-reward", gpRewards);
+
+                    // Tournaments
+                    const tourneys = ["neon", "satelite", ...Object.keys(conf.tournaments.tematicos)];
+                    populateDropdown("select-tournament", tourneys);
+
+                    // Setup Initial Values
+                    onBazarItemChange();
+                    onDojoCategoryChange();
+                    onPremiumItemChange();
+                    onLoginRewardChange();
+                    onGameplayRewardChange();
+                    onTournamentChange();
+                }
+            } catch (e) {
+                console.error("[LOAD BALANCE ERROR]", e);
+                showToast("Error al cargar configuración de balance: " + e.message, true);
+            }
+        }
+
+        async function handleSaveBalance() {
+            if (!activeBalanceConfig) {
+                showToast("No hay ninguna configuración cargada para guardar.", true);
+                return;
+            }
+
+            const btn = document.getElementById("btn-save-balance");
+            btn.innerText = "PUBLICANDO...";
+            btn.disabled = true;
+
+            try {
+                const nextVersion = activeBalanceVersion + 1;
+
+                const { data, error } = await supabaseClient
+                    .from('game_balance')
+                    .update({
+                        version: nextVersion,
+                        config: activeBalanceConfig,
+                        updated_at: new Date().toISOString()
+                    })
+                    .eq('id', 1)
+                    .select();
+
+                if (error) throw error;
+
+                activeBalanceVersion = nextVersion;
+                
+                const badge = document.getElementById("balance-version-badge");
+                if (badge) badge.innerText = "v" + activeBalanceVersion;
+
+                showToast("¡Balance guardado y publicado con éxito! Versión " + activeBalanceVersion + " activa.");
+            } catch (e) {
+                console.error("[SAVE BALANCE ERROR]", e);
+                showToast("Fallo al guardar balance: " + e.message, true);
+            } finally {
+                btn.innerText = "GUARDAR Y PUBLICAR BALANCE";
+                btn.disabled = false;
+            }
+        }
+
+        // --- DYNAMIC SELECT POPULATION & EVENTS ---
+        function populateDropdown(selectId, items, selectedValue) {
+            const wrapper = document.getElementById(selectId + "-wrapper");
+            const input = document.getElementById(selectId);
+            
+            if (wrapper && input) {
+                // Selector personalizado (.custom-select-wrapper)
+                const optionsContainer = wrapper.querySelector(".custom-select-options");
+                const trigger = wrapper.querySelector(".custom-select-trigger");
+                if (!optionsContainer || !trigger) return;
+                
+                optionsContainer.innerHTML = "";
+                let itemKeys = [];
+                
+                if (Array.isArray(items)) {
+                    itemKeys = items;
+                } else {
+                    itemKeys = Object.keys(items);
+                }
+                
+                itemKeys.forEach(item => {
+                    const opt = document.createElement("div");
+                    opt.className = "custom-option";
+                    opt.setAttribute("data-value", item);
+                    opt.innerText = item.replace(/_/g, " ").toUpperCase();
+                    optionsContainer.appendChild(opt);
+                });
+                
+                // Determinar valor inicial
+                let finalValue = selectedValue;
+                if (!finalValue && itemKeys.length > 0) {
+                    finalValue = itemKeys[0];
+                }
+                
+                if (finalValue) {
+                    const targetOpt = optionsContainer.querySelector(`.custom-option[data-value="${finalValue}"]`);
+                    if (targetOpt) {
+                        optionsContainer.querySelectorAll('.custom-option').forEach(o => o.classList.remove('selected'));
+                        targetOpt.classList.add('selected');
+                        trigger.innerText = targetOpt.innerText;
+                        input.value = finalValue;
+                        wrapper.setAttribute('data-selected-value', finalValue);
+                    } else {
+                        trigger.innerText = "SELECCIONAR...";
+                        input.value = "";
+                        wrapper.setAttribute('data-selected-value', "");
+                    }
+                } else {
+                    trigger.innerText = "SELECCIONAR...";
+                    input.value = "";
+                    wrapper.setAttribute('data-selected-value', "");
+                }
+                
+                // Re-inicializar listeners para los selectores custom
+                initCustomSelects();
+            } else {
+                // Selector tradicional (<select>) como fallback
+                const select = document.getElementById(selectId);
+                if (!select) return;
+                select.innerHTML = "";
+                
+                if (Array.isArray(items)) {
+                    items.forEach(item => {
+                        const opt = document.createElement("option");
+                        opt.value = item;
+                        opt.innerText = item.replace(/_/g, " ").toUpperCase();
+                        select.appendChild(opt);
+                    });
+                } else {
+                    for (let key in items) {
+                        const opt = document.createElement("option");
+                        opt.value = key;
+                        opt.innerText = key.replace(/_/g, " ").toUpperCase();
+                        select.appendChild(opt);
+                    }
+                }
+                
+                if (selectedValue && select.querySelector(`option[value="${selectedValue}"]`)) {
+                    select.value = selectedValue;
+                } else if (select.options.length > 0) {
+                    select.selectedIndex = 0;
+                }
+            }
+        }
+
+        function onBazarItemChange() {
+            const selected = document.getElementById("select-bazar-item").value;
+            if (!selected || !activeBalanceConfig) return;
+            const price = activeBalanceConfig.shop_items.bazar[selected]?.price || 0;
+            document.getElementById("input-bazar-item-price").value = price;
+        }
+
+        function onDojoCategoryChange() {
+            const selected = document.getElementById("select-dojo-category").value;
+            if (!selected || !activeBalanceConfig) return;
+            const price = activeBalanceConfig.shop_items.dojo_base_prices[selected] || 0;
+            document.getElementById("input-dojo-category-price").value = price;
+        }
+
+        function onPremiumItemChange() {
+            const selected = document.getElementById("select-premium-item").value;
+            if (!selected || !activeBalanceConfig) return;
+            const price = activeBalanceConfig.shop_items.premium[selected]?.price || 0;
+            document.getElementById("input-premium-item-price").value = price;
+        }
+
+        function onLoginRewardChange() {
+            const selected = document.getElementById("select-login-reward").value;
+            if (!selected || !activeBalanceConfig) return;
+            const value = activeBalanceConfig.login_rewards[selected] || 0;
+            document.getElementById("input-login-reward-value").value = value;
+        }
+
+        function onGameplayRewardChange() {
+            const selected = document.getElementById("select-gameplay-reward").value;
+            if (!selected || !activeBalanceConfig) return;
+            const parts = selected.split(".");
+            const value = activeBalanceConfig.gameplay_rewards[parts[0]]?.[parts[1]] || 0;
+            document.getElementById("input-gameplay-reward-value").value = value;
+        }
+
+        function onTournamentChange() {
+            const selected = document.getElementById("select-tournament").value;
+            if (!selected || !activeBalanceConfig) return;
+            
+            let tour;
+            if (selected === "neon" || selected === "satelite") {
+                tour = activeBalanceConfig.tournaments[selected];
+            } else {
+                tour = activeBalanceConfig.tournaments.tematicos[selected];
+            }
+            
+            if (tour) {
+                document.getElementById("input-tournament-cost").value = tour.costo || 0;
+                document.getElementById("input-tournament-p1").value = tour.payouts?.["1"] || 0;
+                document.getElementById("input-tournament-p2").value = tour.payouts?.["2"] || 0;
+                document.getElementById("input-tournament-p3").value = tour.payouts?.["3"] || 0;
+            }
+        }
+
+        function bindInputSync() {
+            document.getElementById("input-bazar-item-price").oninput = function() {
+                const selected = document.getElementById("select-bazar-item").value;
+                if (selected && activeBalanceConfig) {
+                    activeBalanceConfig.shop_items.bazar[selected].price = parseFloat(this.value) || 0;
+                }
+            };
+            
+            document.getElementById("input-dojo-category-price").oninput = function() {
+                const selected = document.getElementById("select-dojo-category").value;
+                if (selected && activeBalanceConfig) {
+                    activeBalanceConfig.shop_items.dojo_base_prices[selected] = parseFloat(this.value) || 0;
+                }
+            };
+
+            document.getElementById("input-premium-item-price").oninput = function() {
+                const selected = document.getElementById("select-premium-item").value;
+                if (selected && activeBalanceConfig) {
+                    activeBalanceConfig.shop_items.premium[selected].price = parseFloat(this.value) || 0;
+                }
+            };
+
+            document.getElementById("input-login-reward-value").oninput = function() {
+                const selected = document.getElementById("select-login-reward").value;
+                if (selected && activeBalanceConfig) {
+                    activeBalanceConfig.login_rewards[selected] = parseInt(this.value) || 0;
+                }
+            };
+
+            document.getElementById("input-gameplay-reward-value").oninput = function() {
+                const selected = document.getElementById("select-gameplay-reward").value;
+                if (selected && activeBalanceConfig) {
+                    const parts = selected.split(".");
+                    if (parts[1] === "ev_gem_value") {
+                        activeBalanceConfig.gameplay_rewards[parts[0]][parts[1]] = parseFloat(this.value) || 0;
+                    } else {
+                        activeBalanceConfig.gameplay_rewards[parts[0]][parts[1]] = parseInt(this.value) || 0;
+                    }
+                }
+            };
+
+            const syncTourney = function() {
+                const selected = document.getElementById("select-tournament").value;
+                if (selected && activeBalanceConfig) {
+                    const cost = parseFloat(document.getElementById("input-tournament-cost").value) || 0;
+                    const p1 = parseFloat(document.getElementById("input-tournament-p1").value) || 0;
+                    const p2 = parseFloat(document.getElementById("input-tournament-p2").value) || 0;
+                    const p3 = parseFloat(document.getElementById("input-tournament-p3").value) || 0;
+                    
+                    let target;
+                    if (selected === "neon" || selected === "satelite") {
+                        target = activeBalanceConfig.tournaments[selected];
+                    } else {
+                        target = activeBalanceConfig.tournaments.tematicos[selected];
+                    }
+                    
+                    if (target) {
+                        target.costo = cost;
+                        if (!target.payouts) target.payouts = {};
+                        target.payouts["1"] = p1;
+                        target.payouts["2"] = p2;
+                        target.payouts["3"] = p3;
+                    }
+                }
+            };
+
+            document.getElementById("input-tournament-cost").oninput = syncTourney;
+            document.getElementById("input-tournament-p1").oninput = syncTourney;
+            document.getElementById("input-tournament-p2").oninput = syncTourney;
+            document.getElementById("input-tournament-p3").oninput = syncTourney;
+        }
+
+        // --- ADD CONFIG MODAL ---
+        let addSectionTarget = "";
+
+        function openAddModal(section, title, subtitle) {
+            addSectionTarget = section;
+            document.getElementById("add-modal-title").innerText = title;
+            document.getElementById("add-modal-subtitle").innerText = subtitle;
+            document.getElementById("add-item-key").value = "";
+            document.getElementById("add-item-value").value = "";
+            
+            if (section === "tournament") {
+                document.getElementById("group-add-payouts").classList.remove("hidden");
+                document.getElementById("add-item-p1").value = "";
+                document.getElementById("add-item-p2").value = "";
+                document.getElementById("add-item-p3").value = "";
+                document.getElementById("lbl-add-value").innerText = "COSTO DE ENTRADA (POL)";
+            } else {
+                document.getElementById("group-add-payouts").classList.add("hidden");
+                if (section === "gameplay_reward") {
+                    document.getElementById("lbl-add-id").innerText = "IDENTIFICADOR (ej: coliseum.mi_recompensa)";
+                } else {
+                    document.getElementById("lbl-add-id").innerText = "IDENTIFICADOR / CLAVE ÚNICA";
+                }
+                document.getElementById("lbl-add-value").innerText = "VALOR / PRECIO BASE";
+            }
+            
+            document.getElementById("add-item-modal").classList.remove("hidden");
+        }
+
+        function closeAddModal() {
+            document.getElementById("add-item-modal").classList.add("hidden");
+        }
+
+        function handleConfirmAdd() {
+            const key = document.getElementById("add-item-key").value.trim().toLowerCase();
+            const val = parseFloat(document.getElementById("add-item-value").value);
+            
+            if (!key) {
+                showToast("El identificador es obligatorio.", true);
+                return;
+            }
+            if (isNaN(val)) {
+                showToast("El precio o valor es obligatorio.", true);
+                return;
+            }
+
+            if (!activeBalanceConfig) return;
+
+            if (addSectionTarget === "bazar") {
+                activeBalanceConfig.shop_items.bazar[key] = { price: val, currency: "EV" };
+                populateDropdown("select-bazar-item", activeBalanceConfig.shop_items.bazar, key);
+                onBazarItemChange();
+            } else if (addSectionTarget === "dojo") {
+                activeBalanceConfig.shop_items.dojo_base_prices[key] = val;
+                populateDropdown("select-dojo-category", activeBalanceConfig.shop_items.dojo_base_prices, key);
+                onDojoCategoryChange();
+            } else if (addSectionTarget === "premium") {
+                activeBalanceConfig.shop_items.premium[key] = { price: val, currency: "POL" };
+                populateDropdown("select-premium-item", activeBalanceConfig.shop_items.premium, key);
+                onPremiumItemChange();
+            } else if (addSectionTarget === "login_reward") {
+                activeBalanceConfig.login_rewards[key] = parseInt(val, 10);
+                populateDropdown("select-login-reward", activeBalanceConfig.login_rewards, key);
+                onLoginRewardChange();
+            } else if (addSectionTarget === "gameplay_reward") {
+                if (!key.includes(".")) {
+                    showToast("Formato inválido. Debe incluir sección, ej: coliseum.my_reward", true);
+                    return;
+                }
+                const parts = key.split(".");
+                if (!activeBalanceConfig.gameplay_rewards[parts[0]]) {
+                    activeBalanceConfig.gameplay_rewards[parts[0]] = {};
+                }
+                activeBalanceConfig.gameplay_rewards[parts[0]][parts[1]] = val;
+                
+                const gpRewards = [];
+                for (let sec in activeBalanceConfig.gameplay_rewards) {
+                    for (let sub in activeBalanceConfig.gameplay_rewards[sec]) {
+                        gpRewards.push(`${sec}.${sub}`);
+                    }
+                }
+                populateDropdown("select-gameplay-reward", gpRewards, key);
+                onGameplayRewardChange();
+            } else if (addSectionTarget === "tournament") {
+                const p1 = parseFloat(document.getElementById("add-item-p1").value) || 0;
+                const p2 = parseFloat(document.getElementById("add-item-p2").value) || 0;
+                const p3 = parseFloat(document.getElementById("add-item-p3").value) || 0;
+                
+                activeBalanceConfig.tournaments.tematicos[key] = {
+                    costo: val,
+                    payouts: { "1": p1, "2": p2, "3": p3 }
+                };
+                
+                const tourneys = ["neon", "satelite", ...Object.keys(activeBalanceConfig.tournaments.tematicos)];
+                populateDropdown("select-tournament", tourneys, key);
+                onTournamentChange();
+            }
+
+            closeAddModal();
+            showToast("Elemento agregado localmente. Recuerda presionar GUARDAR Y PUBLICAR para aplicar en la nube.");
         }
     </script>
 </body>

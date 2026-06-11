@@ -31,12 +31,125 @@ window.obtenerTiempoSeguro = function() {
     return Date.now() + (window.clockOffset || 0);
 };
 
+window.cargarConfiguracionBalance = async function() {
+    const DEFAULT_CONFIG = {
+        shop_items: {
+            bazar: {
+                bio_nucleo_basico: { price: 200.0, currency: "EV" },
+                ration_auto: { price: 2.0, currency: "EV" },
+                plasma_shower: { price: 1.0, currency: "EV" },
+                escaner_basico: { price: 0.15, currency: "EV" },
+                escaner_completo: { price: 0.50, currency: "EV" },
+                antidoto_uni: { price: 0.10, currency: "EV" },
+                nexo_charge: { price: 0.50, currency: "EV" },
+                catalizador_xp: { price: 50.0, currency: "EV" },
+                comercio_licencia: { price: 15.0, currency: "EV" }
+            },
+            dojo_base_prices: {
+                Basico: 10.0,
+                Intermedio: 25.0,
+                Avanzado: 50.0,
+                Definitivo: 100.0
+            },
+            premium: {
+                exp_20: { price: 2.0, currency: "POL" },
+                exp_30: { price: 5.0, currency: "POL" },
+                exp_40: { price: 10.0, currency: "POL" },
+                acelerador_elite: { price: 0.50, currency: "POL" }
+            }
+        },
+        tournaments: {
+            neon: { costo: 1.0, payouts: { 1: 9.0, 2: 3.6, 3: 1.8 } },
+            satelite: { costo: 0.5, payouts: { 1: 4.5, 2: 1.8, 3: 0.9 } },
+            tematicos: {
+                solo_comunes: { costo: 0.05, payouts: { 1: 0.40, 2: 0.16, 3: 0.08 } },
+                copa_raro: { costo: 0.10, payouts: { 1: 0.80, 2: 0.32, 3: 0.16 } },
+                liga_novatos: { costo: 0.05, payouts: { 1: 0.40, 2: 0.16, 3: 0.08 } },
+                elemental_pura: { costo: 0.10, payouts: { 1: 0.80, 2: 0.32, 3: 0.16 } },
+                torneo_inverso: { costo: 0.10, payouts: { 1: 0.80, 2: 0.32, 3: 0.16 } },
+                gran_linaje: { costo: 0.15, payouts: { 1: 1.20, 2: 0.48, 3: 0.24 } }
+            }
+        },
+        login_rewards: {
+            essence_day1: 15,
+            essence_day4: 25,
+            multiplier_enabled: true
+        },
+        gameplay_rewards: {
+            arcade_catch: {
+                apple_ratio: 5,
+                ev_gem_value: 0.05
+            },
+            coliseum: {
+                win_xp: 25,
+                lose_xp: 5
+            }
+        }
+    };
+
+    window.GameEconomyConfig = DEFAULT_CONFIG;
+
+    try {
+        if (!window.supabaseClient) {
+            console.log("[ECONOMY CONFIG] Usando fallback estático (supabase no disponible).");
+            const localCached = localStorage.getItem("genos_config");
+            if (localCached) window.GameEconomyConfig = JSON.parse(localCached);
+            return;
+        }
+
+        const { data: balanceData, error } = await window.supabaseClient
+            .from('game_balance')
+            .select('version, config')
+            .eq('id', 1)
+            .single();
+
+        if (error) {
+            console.warn("[ECONOMY CONFIG] Error al cargar de Supabase, usando fallback:", error);
+            const localCached = localStorage.getItem("genos_config");
+            if (localCached) {
+                window.GameEconomyConfig = JSON.parse(localCached);
+                console.log("[ECONOMY CONFIG] Cargada caché local offline.");
+            }
+            return;
+        }
+
+        if (balanceData) {
+            const serverVersion = balanceData.version;
+            const serverConfig = balanceData.config;
+            const localVersion = parseInt(localStorage.getItem("genos_config_version") || "0");
+
+            if (serverVersion !== localVersion || !localStorage.getItem("genos_config")) {
+                console.log(`[ECONOMY CONFIG] Actualizando de versión ${localVersion} a ${serverVersion}`);
+                localStorage.setItem("genos_config", JSON.stringify(serverConfig));
+                localStorage.setItem("genos_config_version", serverVersion.toString());
+                window.GameEconomyConfig = serverConfig;
+            } else {
+                console.log(`[ECONOMY CONFIG] Usando caché local (Versión ${localVersion} al día)`);
+                window.GameEconomyConfig = JSON.parse(localStorage.getItem("genos_config"));
+            }
+        }
+    } catch (e) {
+        console.error("[ECONOMY CONFIG] Excepción al inicializar configuración de balance:", e);
+        const localCached = localStorage.getItem("genos_config");
+        if (localCached) {
+            window.GameEconomyConfig = JSON.parse(localCached);
+        }
+    } finally {
+        if (window.TournamentManager && typeof window.TournamentManager.sincronizarConBalance === "function") {
+            window.TournamentManager.sincronizarConBalance();
+        }
+    }
+};
+
 document.addEventListener("DOMContentLoaded", async () => {
     // Sincronizar el reloj del servidor de Supabase inmediatamente
     window.obtenerHoraServidor().then(serverTime => {
         window.clockOffset = serverTime - Date.now();
         console.log(`[TIME SYNC] Sincronización inicial. Offset: ${window.clockOffset} ms`);
     });
+
+    // Cargar balance de economía dinámico
+    await window.cargarConfiguracionBalance();
 
     window.LoginUI.inyectar();
 
@@ -66,8 +179,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else {
             window.miUsuarioCloud = data.user;
             window.LoginUI.mostrarMensaje("¡Conexión exitosa!", "#4CAF50");
-            setTimeout(() => {
+            setTimeout(async () => {
                 window.LoginUI.ocultar();
+                await window.cargarConfiguracionBalance();
                 cargarDatosDeLaNube();
             }, 1000);
         }
@@ -87,8 +201,9 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else {
             window.miUsuarioCloud = data.user;
             window.LoginUI.mostrarMensaje("¡Cuenta creada!", "#00d2ff");
-            setTimeout(() => {
+            setTimeout(async () => {
                 window.LoginUI.ocultar();
+                await window.cargarConfiguracionBalance();
                 if (!localStorage.getItem("proyecto_genos_save_v1")) {
                     if (typeof window.iniciarSecuenciaBienvenida === 'function') {
                         window.iniciarSecuenciaBienvenida();

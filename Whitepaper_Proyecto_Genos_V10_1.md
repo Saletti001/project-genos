@@ -199,7 +199,7 @@ Es una barra de energía global asociada a la cuenta del jugador (máximo 100 pu
 - **Partida de Torre PvE (una oleada):** consume **5 energía** (recompensa moderada).
 - **Partida en el Arcade (Lluvia de Manzanas):** consume **5 energía** (actividad casual).
 - **Inscripción en Torneo Temático:** consume **20 energía** (alto coste, alta recompensa).
-- **Acciones Pasivas (Laboratorio, Crianza, Dojo, Tienda):** **Sin coste de energía** (no limita el juego estratégico o comercial).
+- **Acciones Pasivas (Laboratorio, Crianza, Laboratorio de Implantes, Tienda):** **Sin coste de energía** (no limita el juego estratégico o comercial).
 
 *Tasa de Recuperación:* Se recupera de forma pasiva a razón de **1 energía cada 12 minutos** (5 de energía por hora), con un cap máximo de 100 que actúa como limitador de acumulación.
 

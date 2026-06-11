@@ -195,10 +195,14 @@ class MinigameCatch {
                 if (item.dataset.type === "apple") {
                     this.score++;
                 } else if (item.dataset.type === "ev") {
-                    this.evGanada = parseFloat((this.evGanada + 0.05).toFixed(2));
+                    let evGemVal = 0.05;
+                    if (window.GameEconomyConfig && window.GameEconomyConfig.gameplay_rewards && window.GameEconomyConfig.gameplay_rewards.arcade_catch && window.GameEconomyConfig.gameplay_rewards.arcade_catch.ev_gem_value !== undefined) {
+                        evGemVal = window.GameEconomyConfig.gameplay_rewards.arcade_catch.ev_gem_value;
+                    }
+                    this.evGanada = parseFloat((this.evGanada + evGemVal).toFixed(2));
                     // Acumular en el Geno activo inmediatamente
                     if (window.miMascota && window.miMascota.id && window.miMascota.id !== "temp") {
-                        window.miMascota.evAcumulada = Math.min(10.0, (window.miMascota.evAcumulada || 0) + 0.05);
+                        window.miMascota.evAcumulada = Math.min(10.0, (window.miMascota.evAcumulada || 0) + evGemVal);
                     }
                     // Feedback visual rápido
                     this.playArea.style.backgroundColor = "rgba(255, 215, 0, 0.15)";
@@ -242,7 +246,11 @@ class MinigameCatch {
         this.playArea.className = "";
         
         if (!quit) {
-            const reward = Math.floor(this.score / 5);
+            let appleRatio = 5;
+            if (window.GameEconomyConfig && window.GameEconomyConfig.gameplay_rewards && window.GameEconomyConfig.gameplay_rewards.arcade_catch && window.GameEconomyConfig.gameplay_rewards.arcade_catch.apple_ratio !== undefined) {
+                appleRatio = window.GameEconomyConfig.gameplay_rewards.arcade_catch.apple_ratio;
+            }
+            const reward = Math.floor(this.score / appleRatio);
             
             if (reward > 0 && window.miInventario) {
                 window.miInventario.addItem({
@@ -293,14 +301,22 @@ class MinigameCatch {
                 if (window.guardarJuego) window.guardarJuego();
                 else if (window.guardarProgreso) window.guardarProgreso();
 
-                let msg = `¡Tiempo terminado!\nAtrapaste ${this.score} manzana(s).\nRatio 5:1 = Ganas ${reward} 🍎.`;
+                let appleRatio = 5;
+                if (window.GameEconomyConfig && window.GameEconomyConfig.gameplay_rewards && window.GameEconomyConfig.gameplay_rewards.arcade_catch && window.GameEconomyConfig.gameplay_rewards.arcade_catch.apple_ratio !== undefined) {
+                    appleRatio = window.GameEconomyConfig.gameplay_rewards.arcade_catch.apple_ratio;
+                }
+                let msg = `¡Tiempo terminado!\nAtrapaste ${this.score} manzana(s).\nRatio ${appleRatio}:1 = Ganas ${reward} 🍎.`;
                 if (this.evGanada > 0) msg += `\n⚡ +${this.evGanada.toFixed(2)} EV atrapada(s)!`;
                 if (xpObtenida > 0) msg += `\n🧪 +${xpObtenida} XP de Laboratorio!`;
                 if (gananciaExplicita > 0) msg += `\n¡Diversión +20% y Amistad +${gananciaExplicita}!`;
                 else                       msg += `\n¡Diversión +20%! (Amistad por Arcade ya obtenida hoy)`;
                 alert(msg);
             } else {
-                let msg = `¡Tiempo terminado!\nAtrapaste ${this.score} manzana(s).\nRatio 5:1 = Ganas ${reward} 🍎.`;
+                let appleRatio = 5;
+                if (window.GameEconomyConfig && window.GameEconomyConfig.gameplay_rewards && window.GameEconomyConfig.gameplay_rewards.arcade_catch && window.GameEconomyConfig.gameplay_rewards.arcade_catch.apple_ratio !== undefined) {
+                    appleRatio = window.GameEconomyConfig.gameplay_rewards.arcade_catch.apple_ratio;
+                }
+                let msg = `¡Tiempo terminado!\nAtrapaste ${this.score} manzana(s).\nRatio ${appleRatio}:1 = Ganas ${reward} 🍎.`;
                 if (xpObtenida > 0) msg += `\n🧪 +${xpObtenida} XP de Laboratorio!`;
                 alert(msg);
             }

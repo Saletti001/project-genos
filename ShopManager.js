@@ -513,6 +513,16 @@ window.ShopManager = {
             { id: "comercio_licencia", name: "Permiso de Comercio", icon: "📜", type: "consumable", price: 15.00, currency: "EV", desc: "Permiso de Acceso a la Red de Comercio del Bazar. Permite depositar, retirar y vender Genos. (Requiere Laboratorio Nv. 5)" }
         ];
 
+        // Sobrescribir con precios dinámicos de Supabase si están disponibles
+        if (window.GameEconomyConfig && window.GameEconomyConfig.shop_items && window.GameEconomyConfig.shop_items.bazar) {
+            items.forEach(item => {
+                const confItem = window.GameEconomyConfig.shop_items.bazar[item.id];
+                if (confItem && confItem.price !== undefined) {
+                    item.price = confItem.price;
+                }
+            });
+        }
+
         items.forEach(item => {
             let tarjeta;
             if(item.id === "bio_nucleo_basico") tarjeta = this.crearTarjeta(item, "#00d2ff", "#005c8a", "EV");
@@ -559,7 +569,14 @@ window.ShopManager = {
         for (const [elemento, ramas] of Object.entries(window.AttackCatalog.ataquesPorElemento)) {
             const icono = this.iconosSVG[elemento] || "💿";
             
-            const agregarRama = (rama, subType, price) => {
+            const agregarRama = (rama, subType, defaultPrice) => {
+                let price = defaultPrice;
+                if (window.GameEconomyConfig && window.GameEconomyConfig.shop_items && window.GameEconomyConfig.shop_items.dojo_base_prices) {
+                    const dojoConfig = window.GameEconomyConfig.shop_items.dojo_base_prices;
+                    if (subType === "Soporte" && dojoConfig.Basico !== undefined) price = dojoConfig.Basico;
+                    else if (subType === "Especial" && dojoConfig.Intermedio !== undefined) price = dojoConfig.Intermedio;
+                    else if (subType === "Definitivo" && dojoConfig.Definitivo !== undefined) price = dojoConfig.Definitivo;
+                }
                 if(rama) {
                     rama.forEach(atk => {
                         dojoItems.push({ 
@@ -599,6 +616,16 @@ window.ShopManager = {
             { id: "exp_40", name: "Caja Fuerte Nv. 4", icon: this.iconosSVG["exp_40"], type: "expansion", value: 40, price: 10.00, currency: "POL", desc: "Expande el inventario a 40 ranuras." },
             { id: "acelerador_elite", name: "Acelerador Elite", icon: this.iconosSVG["acelerador_elite"], type: "lab_xp_boost_pol", levelsGranted: 3, price: 0.50, currency: "POL", desc: "Módulo de conocimiento élite. Otorga al instante la XP exacta para subir 3 niveles completos de Laboratorio." }
         ];
+
+        // Sobrescribir con precios dinámicos de Supabase si están disponibles
+        if (window.GameEconomyConfig && window.GameEconomyConfig.shop_items && window.GameEconomyConfig.shop_items.premium) {
+            items.forEach(item => {
+                const confItem = window.GameEconomyConfig.shop_items.premium[item.id];
+                if (confItem && confItem.price !== undefined) {
+                    item.price = confItem.price;
+                }
+            });
+        }
 
         items.forEach(item => {
             let tarjeta = this.crearTarjeta(item, "#E040FB", "#7B1FA2", "POL");

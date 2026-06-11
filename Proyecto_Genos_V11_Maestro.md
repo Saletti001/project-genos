@@ -103,7 +103,7 @@ Sistema de Torneos Tematicos (Fase 7 expandida):
 
 12 tipos de torneo organizados en 4 categorias: rareza, elemental, progresion y reglas especiales.
 
-Ciclo rotativo de 4 semanas. Ventana de preparacion de 7 dias con descuento en el Dojo.
+Ciclo rotativo de 4 semanas. Ventana de preparacion de 7 dias con descuento en el Laboratorio de Implantes.
 
 3 capas de recompensa: inmediatas (EV), permanentes en blockchain (Libro de Linaje) y estacionales.
 
@@ -658,7 +658,7 @@ El jugador elige 1 de los 3 Definitivos de su propio elemento. 1 uso por combate
 
 
 
-Coste de aprendizaje en el Dojo (Fase 5): Basico ~10 EV | Intermedio ~25 EV | Avanzado ~50 EV | Definitivo ~100 EV.
+Coste de aprendizaje en el Laboratorio de Implantes (Fase 5): Basico ~10 EV | Intermedio ~25 EV | Avanzado ~50 EV | Definitivo ~100 EV.
 
 Los ataques se pueden olvidar y reensenar libremente pagando el coste en EV.
 
@@ -2378,7 +2378,7 @@ Este sistema regula el incentivo de conexión diaria del jugador en un bucle inf
 Para que el sistema funcione de forma dinámica sin repetir los mismos premios exactos, clasificamos los recursos del juego en 4 Categorías Maestras:
 
 * **A. Categoría: RECURSOS_BASICOS (Monedas y Alimentos)**:
-  * **Esencia Vital (EV)**: Moneda interna off-chain para el mantenimiento, Reactor, Santuario y Dojo.
+  * **Esencia Vital (EV)**: Moneda interna off-chain para el mantenimiento, Reactor, Santuario y Laboratorio de Implantes.
   * **Manzanas**: Alimento fundamental para resetear el estado de Hambre en el modo Tamagotchi (restaura 20%).
 * **B. Categoría: CONSUMIBLES_TAMAGOTCHI (Gestión de Necesidades)**:
   * **Poción de Energía**: Recupera 50% de Resistencia del Geno activo para permitirle combatir en el Coliseo.
@@ -2386,8 +2386,8 @@ Para que el sistema funcione de forma dinámica sin repetir los mismos premios e
 * **C. Categoría: HERRAMIENTAS_GENETICAS (Laboratorio)**:
   * **Escáner de ADN Básico**: Revela los slots de genes activos del Geno en el Reactor (valorado en el documento en $0.15 EV).
   * **Escáner de ADN Completo**: Revela la cadena genética entera del Geno en el Reactor (valorado en el documento en $0.50 EV).
-* **D. Categoría: ITEMS_COMPETITIVOS (Dojo de Ataques)**:
-  * **Tinta de Habilidad**: Permite al jugador resetear o cambiar un ataque de su Geno en el Dojo antes de inscribirse a un torneo.
+* **D. Categoría: ITEMS_COMPETITIVOS (Lab. Implantes - Ataques)**:
+  * **Tinta de Habilidad**: Permite al jugador resetear o cambiar un ataque de su Geno en el Laboratorio de Implantes antes de inscribirse a un torneo.
 
 ### 7.2 Matriz Dinámica del Calendario (Bucle de 4 Semanas)
 
@@ -2548,7 +2548,7 @@ Lunes-Jue
 
 Preparacion
 
-Cambio de ataques en el Dojo con 20% de descuento si son del elemento del torneo. Reconfiguracion del IFTTT gratis.
+Cambio de ataques en el Laboratorio de Implantes con 20% de descuento si son del elemento del torneo. Reconfiguracion del IFTTT gratis.
 
 Miercoles
 
@@ -2576,7 +2576,7 @@ Top 3 recibe recompensas. Victorias registradas en Libro de Linaje. Puntos de te
 
 
 
-La ventana de preparacion de 7 dias es donde ocurre el meta real: debate en comunidad, pruebas en la Torre PvE, ajuste de ataques en el Dojo y reconfiguracion del IFTTT. El torneo no empieza el viernes — empieza el lunes con el anuncio.
+La ventana de preparacion de 7 dias es donde ocurre el meta real: debate en comunidad, pruebas en la Torre PvE, ajuste de ataques en el Laboratorio de Implantes y reconfiguracion del IFTTT. El torneo no empieza el viernes — empieza el lunes con el anuncio.
 
 
 
@@ -2692,7 +2692,7 @@ El Torneo Sin Genes demuestra que el sistema de combate tiene profundidad indepe
 
 La rotacion semanal garantiza que ningun build domina permanentemente. El meta cambia cada 7 dias.
 
-El ciclo virtuoso: el anuncio del lunes genera 4 sesiones activas en la semana (ver anuncio, ajustar ataques en el Dojo, configurar IFTTT, consultar resultados). El torneo no es una funcion adicional — es el pegamento que da significado al Dojo, al Escaner, al IFTTT y al Libro de Linaje.
+El ciclo virtuoso: el anuncio del lunes genera 4 sesiones activas en la semana (ver anuncio, ajustar ataques en el Laboratorio de Implantes, configurar IFTTT, consultar resultados). El torneo no es una funcion adicional — es el pegamento que da significado al Laboratorio de Implantes, al Escaner, al IFTTT y al Libro de Linaje.
 
 
 
@@ -2792,7 +2792,7 @@ Afinidad Genetica STAB x1.20: como funciona y que ataques lo reciben.
 
 Los 4 Slots de Ataque. Los 3 Definitivos por elemento y los mind games.
 
-Los 60 Ataques Especiales: catalogo y como aprenderlos en el Dojo.
+Los 60 Ataques Especiales: catalogo y como aprenderlos en el Laboratorio de Implantes.
 
 Los 11 Estados de Combate. Reglas de acumulacion.
 
@@ -2810,7 +2810,7 @@ El Santuario Genetico: freno anti-bots (3/dia, 48h cooldown).
 
 El Reactor Genetico: 5 Genos + EV. Los 4 resultados.
 
-La Tienda de Esencia y el Dojo de Ataques.
+La Tienda de Esencia y el Laboratorio de Implantes (Ataques).
 
 
 
@@ -2854,7 +2854,7 @@ Proximos Pasos Concretos — Actualizados
 
 ✅ HECHO: Sistema S-D implementado en RPGManager.js y app.js.
 
-✅ HECHO: Dojo de Ataques en ShopManager.js (Matriz Tactica) con AttackCatalog.js.
+✅ HECHO: Laboratorio de Implantes (Ataques) en ShopManager.js (Matriz Tactica) con AttackCatalog.js.
 
 ✅ HECHO: Fase 3 completa (Santuario + Reactor operacionales).
 

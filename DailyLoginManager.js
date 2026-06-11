@@ -8,10 +8,18 @@ window.DailyLoginManager = {
         const weekNum = window.DailyRewardsCatalog ? window.DailyRewardsCatalog.getCicloSemana() : 1;
         const mult = window.labLevel || 1;
 
+        let baseDay1 = 15;
+        let baseDay4 = 25;
+        if (window.GameEconomyConfig && window.GameEconomyConfig.login_rewards) {
+            const lr = window.GameEconomyConfig.login_rewards;
+            if (lr.essence_day1 !== undefined) baseDay1 = lr.essence_day1;
+            if (lr.essence_day4 !== undefined) baseDay4 = lr.essence_day4;
+        }
+
         // Días intermedios (1, 2, 4, 5) siempre entregan EV o Manzanas escaladas por el nivel de laboratorio
-        const day1 = { day: 1, name: `${15 * mult} EV`, type: "essence", amount: 15 * mult, iconName: "essence", desc: "Esencia Vital" };
+        const day1 = { day: 1, name: `${baseDay1 * mult} EV`, type: "essence", amount: baseDay1 * mult, iconName: "essence", desc: "Esencia Vital" };
         const day2 = { day: 2, name: `${1 * mult} Manzana${mult > 1 ? 's' : ''}`, type: "item", id: "apple_01", amount: 1 * mult, iconName: "apple", desc: "Manzana Nexo para tu Geno." };
-        const day4 = { day: 4, name: `${25 * mult} EV`, type: "essence", amount: 25 * mult, iconName: "essence", desc: "Esencia Vital" };
+        const day4 = { day: 4, name: `${baseDay4 * mult} EV`, type: "essence", amount: baseDay4 * mult, iconName: "essence", desc: "Esencia Vital" };
         const day5 = { day: 5, name: `${2 * mult} Manzana${mult > 1 ? 's' : ''}`, type: "item", id: "apple_01", amount: 2 * mult, iconName: "apple", desc: "Manzana Nexo para tu Geno." };
 
         if (weekNum === 1) {

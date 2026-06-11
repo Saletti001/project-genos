@@ -758,10 +758,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const playerGano = ColiseumLogic.modoCombate === '3v3' ? ColiseumLogic.playerTeam.some(g => g.hp > 0) : (ColiseumLogic.player.hp > 0);
         if (playerGano) {
             ColiseumUI.agregarLog(`<span style="color:#4CAF50">🏆 ¡VICTORIA!</span>`, "#ffd54f");
-            if (typeof window.ganarXPLaboratorio === 'function') {
-                window.ganarXPLaboratorio(25, "Victoria en el Coliseo");
+            let winXp = 25;
+            if (window.GameEconomyConfig && window.GameEconomyConfig.gameplay_rewards && window.GameEconomyConfig.gameplay_rewards.coliseum && window.GameEconomyConfig.gameplay_rewards.coliseum.win_xp !== undefined) {
+                winXp = window.GameEconomyConfig.gameplay_rewards.coliseum.win_xp;
             }
-            ColiseumUI.agregarLog(`<span style="color:#69f0ae; font-weight:bold;">🧪 ¡+25 XP de Laboratorio!</span>`);
+            if (typeof window.ganarXPLaboratorio === 'function') {
+                window.ganarXPLaboratorio(winXp, "Victoria en el Coliseo");
+            }
+            ColiseumUI.agregarLog(`<span style="color:#69f0ae; font-weight:bold;">🧪 ¡+${winXp} XP de Laboratorio!</span>`);
             let xpGanada = 50 + (ColiseumLogic.player.adn.level * 10);
             
             const esJefe = ColiseumLogic.enemy && ColiseumLogic.enemy.esJefeDeLiga;
@@ -900,10 +904,14 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         } else {
             ColiseumUI.agregarLog(`<span style="color:#f44336">💀 DERROTA. Tu equipo debe descansar.</span>`);
-            if (typeof window.ganarXPLaboratorio === 'function') {
-                window.ganarXPLaboratorio(5, "Derrota en el Coliseo");
+            let loseXp = 5;
+            if (window.GameEconomyConfig && window.GameEconomyConfig.gameplay_rewards && window.GameEconomyConfig.gameplay_rewards.coliseum && window.GameEconomyConfig.gameplay_rewards.coliseum.lose_xp !== undefined) {
+                loseXp = window.GameEconomyConfig.gameplay_rewards.coliseum.lose_xp;
             }
-            ColiseumUI.agregarLog(`<span style="color:#ff8a80; font-weight:bold;">🧪 +5 XP de Laboratorio.</span>`);
+            if (typeof window.ganarXPLaboratorio === 'function') {
+                window.ganarXPLaboratorio(loseXp, "Derrota en el Coliseo");
+            }
+            ColiseumUI.agregarLog(`<span style="color:#ff8a80; font-weight:bold;">🧪 +${loseXp} XP de Laboratorio.</span>`);
         }
 
         setTimeout(() => {

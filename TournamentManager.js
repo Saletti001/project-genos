@@ -250,9 +250,34 @@ window.TournamentManager = {
     },
 
     init: function() {
+        this.sincronizarConBalance();
         this.cargarSaldos();
         this.inyectarEstilos();
         this.vincularHooks();
+    },
+
+    sincronizarConBalance: function() {
+        if (window.GameEconomyConfig && window.GameEconomyConfig.tournaments) {
+            const configTourneys = window.GameEconomyConfig.tournaments;
+            if (configTourneys.neon) {
+                if (configTourneys.neon.costo !== undefined) this.CONFIG.neon.costo = configTourneys.neon.costo;
+                if (configTourneys.neon.payouts !== undefined) this.CONFIG.neon.premios = configTourneys.neon.payouts;
+            }
+            if (configTourneys.satelite) {
+                if (configTourneys.satelite.costo !== undefined) this.CONFIG.satelite.costo = configTourneys.satelite.costo;
+                if (configTourneys.satelite.payouts !== undefined) this.CONFIG.satelite.premios = configTourneys.satelite.payouts;
+            }
+            if (configTourneys.tematicos) {
+                for (let key in this.TEMATICOS_CONFIG) {
+                    const confItem = configTourneys.tematicos[key];
+                    if (confItem) {
+                        if (confItem.costo !== undefined) this.TEMATICOS_CONFIG[key].costo = confItem.costo;
+                        if (confItem.payouts !== undefined) this.TEMATICOS_CONFIG[key].premios = confItem.payouts;
+                    }
+                }
+            }
+            console.log("[TournamentManager] Configuración de torneos sincronizada con el balance dinámico.");
+        }
     },
 
     cargarSaldos: function() {
