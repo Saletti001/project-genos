@@ -138,6 +138,11 @@ window.cargarProgreso = function() {
                 if (data.becasPlaza !== undefined) {
                     window.becasPlaza = data.becasPlaza;
                 }
+                if (data.defensiveAlignment !== undefined) {
+                    window.defensiveAlignment = data.defensiveAlignment;
+                } else {
+                    window.defensiveAlignment = null;
+                }
 
                 if (typeof window.WalletManager !== 'undefined') {
                     window.WalletManager.actualizarBoton();
@@ -202,6 +207,7 @@ window.guardarLocalSilencioso = function() {
         tournamentSaldosPendientes: window.TournamentManager ? window.TournamentManager.saldosPendientes : 0.0,
         tournamentActive: window.TournamentManager ? window.TournamentManager.activeTournament : null,
         becasPlaza: window.becasPlaza || [],
+        defensiveAlignment: window.defensiveAlignment || null,
         prBronce: window.prBronce !== undefined ? window.prBronce : 0,
         prPlata: window.prPlata !== undefined ? window.prPlata : 0,
         prOro: window.prOro !== undefined ? window.prOro : 0,

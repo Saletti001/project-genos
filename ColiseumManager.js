@@ -1714,6 +1714,10 @@ document.addEventListener("DOMContentLoaded", () => {
             arenaCard.className = "lobby-card card-estandar";
             arenaCard.style.borderColor = "#00e5ff";
             
+            const defGenoName = (window.defensiveAlignment && window.defensiveAlignment.geno) 
+                ? (window.defensiveAlignment.geno.alias || window.defensiveAlignment.geno.name) 
+                : "Mascota Activa (Predet.)";
+            
             if (!window.arenaTicketActive) {
                 arenaCard.innerHTML = `
                     <div style="background: rgba(0, 229, 255, 0.1); border: 1px solid #00e5ff; border-radius: 10px; width: 44px; height: 44px; display: flex; justify-content: center; align-items: center; flex-shrink: 0;">
@@ -1721,12 +1725,18 @@ document.addEventListener("DOMContentLoaded", () => {
                             <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2" />
                         </svg>
                     </div>
-                    <div style="flex: 1; display:flex; align-items:center; justify-content:space-between; gap:10px;">
-                        <div>
-                            <h3 style="color: #00e5ff; margin: 0 0 3px 0; font-size: 13px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Arena del Nexo (PvP)</h3>
-                            <p style="color: #cbd5e1; margin: 0; font-size: 11px;">Liga actual: <strong style="color:#ff007f;">${activeLeague}</strong> (${prPoints} PR). Coste pase (5 peleas): ${ticketCost.toFixed(2)} $POL.</p>
+                    <div style="flex: 1; display:flex; flex-direction:column; gap:8px;">
+                        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+                            <div>
+                                <h3 style="color: #00e5ff; margin: 0 0 3px 0; font-size: 13px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Arena del Nexo (PvP)</h3>
+                                <p style="color: #cbd5e1; margin: 0; font-size: 11px;">Liga actual: <strong style="color:#ff007f;">${activeLeague}</strong> (${prPoints} PR). Coste pase (5 peleas): ${ticketCost.toFixed(2)} $POL.</p>
+                            </div>
+                            <button onclick="window.ColiseumManager.comprarPaseArena()" class="market-btn-neon" style="margin:0; padding:8px 12px; font-size:10px; font-weight:bold; background:linear-gradient(90deg, #00b4d8, #0077b6); border:1px solid #0096c7; color:#fff; cursor:pointer; border-radius:6px; box-shadow:0 0 10px rgba(0,229,255,0.3);">Comprar</button>
                         </div>
-                        <button onclick="window.ColiseumManager.comprarPaseArena()" class="market-btn-neon" style="margin:0; padding:8px 12px; font-size:10px; font-weight:bold; background:linear-gradient(90deg, #00b4d8, #0077b6); border:1px solid #0096c7; color:#fff; cursor:pointer; border-radius:6px; box-shadow:0 0 10px rgba(0,229,255,0.3);">Comprar</button>
+                        <div style="border-top:1px dashed rgba(0, 229, 255, 0.2); padding-top:6px; margin-top:2px; display:flex; align-items:center; justify-content:space-between; gap: 8px;">
+                            <span style="font-size:10px; color:#aaa; display:flex; align-items:center; gap:4px;">🛡️ Defensa: <strong style="color:#00ffcc;">${defGenoName}</strong></span>
+                            <button onclick="window.ColiseumManager.abrirConfigurarDefensa(event)" class="market-btn-neon" style="margin:0; padding:4px 8px; font-size:9px; font-weight:bold; background:#111b24; border:1px solid #00e5ff; color:#00e5ff; cursor:pointer; border-radius:4px; box-shadow:0 0 5px rgba(0,229,255,0.1);">Configurar Defensa</button>
+                        </div>
                     </div>
                 `;
             } else {
@@ -1739,12 +1749,18 @@ document.addEventListener("DOMContentLoaded", () => {
                             <polygon points="12 2 22 8.5 22 15.5 12 22 2 15.5 2 8.5 12 2" />
                         </svg>
                     </div>
-                    <div style="flex: 1; display:flex; align-items:center; justify-content:space-between; gap:10px;">
-                        <div>
-                            <h3 style="color: #00e5ff; margin: 0 0 3px 0; font-size: 13px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Pase Activo: ${played}/5 peleas</h3>
-                            <p style="color: #cbd5e1; margin: 0; font-size: 11px;">Récord de ronda: <strong style="color:#69f0ae;">${wins}V</strong> - <strong style="color:#ff3d00;">${losses}D</strong> en Liga ${activeLeague}.</p>
+                    <div style="flex: 1; display:flex; flex-direction:column; gap:8px;">
+                        <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+                            <div>
+                                <h3 style="color: #00e5ff; margin: 0 0 3px 0; font-size: 13px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Pase Activo: ${played}/5 peleas</h3>
+                                <p style="color: #cbd5e1; margin: 0; font-size: 11px;">Récord de ronda: <strong style="color:#69f0ae;">${wins}V</strong> - <strong style="color:#ff3d00;">${losses}D</strong> en Liga ${activeLeague}.</p>
+                            </div>
+                            <button onclick="window.ColiseumManager.buscarOponentePvP()" class="market-btn-neon" style="margin:0; padding:8px 12px; font-size:10px; font-weight:bold; background:linear-gradient(90deg, #ff007f, #b85cff); border:1px solid #ff007f; color:#fff; cursor:pointer; border-radius:6px; box-shadow:0 0 10px rgba(255,0,127,0.3); animation: status-pulse 1.5s infinite alternate;">Pelear</button>
                         </div>
-                        <button onclick="window.ColiseumManager.buscarOponentePvP()" class="market-btn-neon" style="margin:0; padding:8px 12px; font-size:10px; font-weight:bold; background:linear-gradient(90deg, #ff007f, #b85cff); border:1px solid #ff007f; color:#fff; cursor:pointer; border-radius:6px; box-shadow:0 0 10px rgba(255,0,127,0.3); animation: status-pulse 1.5s infinite alternate;">Pelear</button>
+                        <div style="border-top:1px dashed rgba(0, 229, 255, 0.2); padding-top:6px; margin-top:2px; display:flex; align-items:center; justify-content:space-between; gap: 8px;">
+                            <span style="font-size:10px; color:#aaa; display:flex; align-items:center; gap:4px;">🛡️ Defensa: <strong style="color:#00ffcc;">${defGenoName}</strong></span>
+                            <button onclick="window.ColiseumManager.abrirConfigurarDefensa(event)" class="market-btn-neon" style="margin:0; padding:4px 8px; font-size:9px; font-weight:bold; background:#111b24; border:1px solid #00e5ff; color:#00e5ff; cursor:pointer; border-radius:4px; box-shadow:0 0 5px rgba(0,229,255,0.1);">Configurar Defensa</button>
+                        </div>
                     </div>
                 `;
             }
@@ -1994,8 +2010,11 @@ document.addEventListener("DOMContentLoaded", () => {
                     
                 if (!error && profiles && profiles.length > 0) {
                     const validGhosts = profiles.filter(p => {
-                        if (!p.datos_juego || !p.datos_juego.mascotaActiva) return false;
-                        const mascot = p.datos_juego.mascotaActiva;
+                        if (!p.datos_juego) return false;
+                        const defenseAlign = p.datos_juego.defensive_alignment;
+                        const mascot = (defenseAlign && defenseAlign.geno) ? defenseAlign.geno : p.datos_juego.mascotaActiva;
+                        if (!mascot) return false;
+                        
                         const gLeague = window.ColiseumManager.obtenerLigaPorGeno(mascot);
                         if (gLeague !== activeLeague) return false;
                         
@@ -2012,7 +2031,11 @@ document.addEventListener("DOMContentLoaded", () => {
                         let candidates = validGhosts;
                         if (aplicarValvula) {
                             // Priorizar fantasmas que tengan el elemento counter
-                            const counterGhosts = validGhosts.filter(g => g.datos_juego.mascotaActiva.element === counterElement);
+                            const counterGhosts = validGhosts.filter(g => {
+                                const defenseAlign = g.datos_juego.defensive_alignment;
+                                const mascot = (defenseAlign && defenseAlign.geno) ? defenseAlign.geno : g.datos_juego.mascotaActiva;
+                                return mascot && mascot.element === counterElement;
+                            });
                             if (counterGhosts.length > 0) {
                                 candidates = counterGhosts;
                             }
@@ -2024,9 +2047,16 @@ document.addEventListener("DOMContentLoaded", () => {
                             ? ghostsUnderLimit[Math.floor(Math.random() * ghostsUnderLimit.length)]
                             : candidates[Math.floor(Math.random() * candidates.length)];
                         
-                        rivalGeno = chosenGhost.datos_juego.mascotaActiva;
-                        rivalName = rivalGeno.alias || rivalGeno.name || "Geno Fantasma";
-                        rivalGeno.iftttRules = chosenGhost.ifttt_script || [];
+                        const defenseAlign = chosenGhost.datos_juego.defensive_alignment;
+                        if (defenseAlign && defenseAlign.geno) {
+                            rivalGeno = JSON.parse(JSON.stringify(defenseAlign.geno));
+                            rivalName = rivalGeno.alias || rivalGeno.name || "Geno Fantasma";
+                            rivalGeno.iftttRules = defenseAlign.geno.iftttRules || [];
+                        } else {
+                            rivalGeno = JSON.parse(JSON.stringify(chosenGhost.datos_juego.mascotaActiva));
+                            rivalName = rivalGeno.alias || rivalGeno.name || "Geno Fantasma";
+                            rivalGeno.iftttRules = chosenGhost.ifttt_script || [];
+                        }
                         ghostOwnerId = chosenGhost.id;
                         
                         if (aplicarValvula) {
@@ -2568,5 +2598,243 @@ document.addEventListener("DOMContentLoaded", () => {
         const e = window.ColiseumLogic.enemy;
         let accionAuto = window.ColiseumLogic.resolverAccionIFTTT(p, e);
         procesarRonda(accionAuto);
+    };
+
+    // ==========================================
+    // CONTROLADORES DE ALINEACIÓN DEFENSIVA
+    // ==========================================
+    window.ColiseumManager.tempSelectedGenoId = null;
+
+    window.ColiseumManager.abrirConfigurarDefensa = function(event) {
+        if (event) event.stopPropagation();
+        
+        const modal = document.getElementById("coliseum-defense-modal");
+        if (!modal) return;
+        
+        // Cargar lista de Genos
+        const listContainer = document.getElementById("coliseum-defense-genos-list");
+        if (!listContainer) return;
+        listContainer.innerHTML = "";
+        
+        if (!window.misGenos || window.misGenos.length === 0) {
+            listContainer.innerHTML = `<p style="color:#aaa; font-size:11px; text-align:center; padding:10px 0;">No tienes Genos en tu base de datos genética.</p>`;
+            modal.classList.remove("hidden");
+            return;
+        }
+        
+        // Determinar qué Geno está actualmente seleccionado en defensiveAlignment o usar miMascota
+        let currentDefId = null;
+        if (window.defensiveAlignment && window.defensiveAlignment.genoId) {
+            currentDefId = window.defensiveAlignment.genoId;
+        } else if (window.miMascota) {
+            currentDefId = window.miMascota.id;
+        }
+        
+        window.ColiseumManager.tempSelectedGenoId = currentDefId;
+        
+        window.misGenos.forEach(geno => {
+            const card = document.createElement("div");
+            card.className = "defense-geno-card";
+            card.id = `defense-card-${geno.id}`;
+            const isSelected = String(geno.id) === String(currentDefId);
+            
+            card.style.cssText = `
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 10px;
+                background: ${isSelected ? 'rgba(0, 229, 255, 0.15)' : 'rgba(13, 22, 30, 0.4)'};
+                border: 2px solid ${isSelected ? '#00e5ff' : 'rgba(255, 255, 255, 0.1)'};
+                border-radius: 12px;
+                cursor: pointer;
+                transition: 0.2s;
+                margin-bottom: 4px;
+            `;
+            
+            let svgMarkup = "";
+            if (geno.svg) {
+                svgMarkup = geno.svg;
+            } else if (typeof generarSvgGeno === 'function') {
+                svgMarkup = generarSvgGeno(geno);
+            } else {
+                svgMarkup = `<svg width="30" height="30"></svg>`;
+            }
+            
+            card.onclick = () => window.ColiseumManager.seleccionarGenoDefensivo(geno.id);
+            
+            card.innerHTML = `
+                <div style="width: 36px; height: 36px; display:flex; justify-content:center; align-items:center; flex-shrink:0;">
+                    ${svgMarkup}
+                </div>
+                <div style="flex:1; text-align:left;">
+                    <span style="font-size:11px; font-weight:bold; color:#fff; display:block;">${geno.alias || geno.name}</span>
+                    <span style="font-size:9px; color:#aaa; text-transform:uppercase;">${geno.rarity || 'Común'} | ${geno.element} | Nv.${geno.level}</span>
+                </div>
+                ${isSelected ? '<span style="font-size:9px; color:#00e5ff; font-weight:bold; flex-shrink:0;">🛡️ DEFENSOR</span>' : ''}
+            `;
+            listContainer.appendChild(card);
+        });
+        
+        modal.classList.remove("hidden");
+        window.ColiseumManager.seleccionarGenoDefensivo(currentDefId);
+    };
+
+    window.ColiseumManager.seleccionarGenoDefensivo = function(genoId) {
+        window.ColiseumManager.tempSelectedGenoId = genoId;
+        
+        // Actualizar bordes en la lista
+        const cards = document.querySelectorAll(".defense-geno-card");
+        cards.forEach(card => {
+            const isTarget = card.id === `defense-card-${genoId}`;
+            card.style.background = isTarget ? 'rgba(0, 229, 255, 0.15)' : 'rgba(13, 22, 30, 0.4)';
+            card.style.borderColor = isTarget ? '#00e5ff' : 'rgba(255, 255, 255, 0.1)';
+        });
+        
+        const geno = window.misGenos.find(g => String(g.id) === String(genoId));
+        const previewContainer = document.getElementById("defense-geno-preview");
+        if (!previewContainer) return;
+        
+        if (!geno) {
+            previewContainer.innerHTML = `<p style="color:#aaa; font-size:11px; text-align:center; padding:20px 0;">Selecciona un Geno de la lista.</p>`;
+            return;
+        }
+        
+        let svgMarkup = "";
+        if (geno.svg) {
+            svgMarkup = geno.svg;
+        } else if (typeof generarSvgGeno === 'function') {
+            svgMarkup = generarSvgGeno(geno);
+        } else {
+            svgMarkup = `<svg width="40" height="40"></svg>`;
+        }
+        
+        previewContainer.innerHTML = `
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:12px; background:rgba(0,0,0,0.2); padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.05);">
+                <div style="width: 50px; height: 50px; background:rgba(0,0,0,0.3); border-radius:50%; border:1px dashed #00e5ff; display:flex; justify-content:center; align-items:center; flex-shrink:0;">
+                    ${svgMarkup}
+                </div>
+                <div style="text-align:left;">
+                    <h4 style="margin:0; font-size:13px; color:#00e5ff; font-weight:bold;">${geno.alias || geno.name}</h4>
+                    <span style="font-size:10px; color:#cbd5e1; text-transform:uppercase;">Nv.${geno.level} | ${geno.rarity || 'Común'} | ${geno.element}</span>
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px; font-size:10px; margin-bottom:12px; text-align:left;">
+                <div style="background:rgba(0,0,0,0.2); padding:5px 8px; border-radius:4px; color:#aaa;">❤️ HP: <span style="float:right; color:#fff; font-weight:bold;">${geno.stats?.hp || 100}</span></div>
+                <div style="background:rgba(0,0,0,0.2); padding:5px 8px; border-radius:4px; color:#aaa;">⚔️ ATK: <span style="float:right; color:#fff; font-weight:bold;">${geno.stats?.atk || 15}</span></div>
+                <div style="background:rgba(0,0,0,0.2); padding:5px 8px; border-radius:4px; color:#aaa;">🛡️ DEF: <span style="float:right; color:#fff; font-weight:bold;">${geno.stats?.def || 5}</span></div>
+                <div style="background:rgba(0,0,0,0.2); padding:5px 8px; border-radius:4px; color:#aaa;">⚡ SPD: <span style="float:right; color:#fff; font-weight:bold;">${geno.stats?.spd || 10}</span></div>
+            </div>
+        `;
+        
+        // Renderizar reglas IFTTT en modo visual
+        const rulesList = document.getElementById("defense-ifttt-rules-list");
+        if (!rulesList) return;
+        rulesList.innerHTML = "";
+        
+        const rules = geno.iftttRules || [];
+        if (rules.length === 0) {
+            rulesList.innerHTML = `<p style="color:#aaa; font-size:10px; text-align:center; padding:10px 0; font-style:italic;">No tiene reglas programadas. En combate usará ataques automáticos por defecto.</p>`;
+            return;
+        }
+        
+        const conditionLabels = {
+            "always": "Siempre",
+            "hp_under_50": "Mi HP < 50%",
+            "hp_under_30": "Mi HP < 30%",
+            "turn_1": "En el Turno 1",
+            "rival_infected": "Rival Infectado",
+            "rival_buffed_atk": "Rival con Buff de ATK",
+            "self_buffed_spd": "Tengo Buff de SPD",
+            "rival_element_biomutante": "Rival es Biomutante",
+            "rival_element_viral": "Rival es Viral",
+            "rival_element_cibernetico": "Rival es Cibernético",
+            "rival_element_radiactivo": "Rival es Radiactivo",
+            "rival_element_toxico": "Rival es Tóxico",
+            "rival_element_sintetico": "Rival es Sintético"
+        };
+        
+        const actionLabels = {
+            "ataque": "Usar Ataque Básico",
+            "especial": "Usar Ataque Especial",
+            "tactica": "Usar Soporte",
+            "definitivo": "Usar Definitivo"
+        };
+        
+        rules.forEach((rule, idx) => {
+            const row = document.createElement("div");
+            row.style.cssText = `
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background: rgba(13, 22, 28, 0.8);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                border-radius: 6px;
+                padding: 6px 10px;
+                font-size: 10px;
+                margin-bottom: 4px;
+            `;
+            
+            const condText = conditionLabels[rule.condition] || rule.condition;
+            const actText = actionLabels[rule.action] || rule.action;
+            
+            row.innerHTML = `
+                <span style="color:#aaa; font-weight:bold;">${idx + 1}.</span>
+                <span style="color:#00ffcc; font-weight:500;">IF [${condText}]</span>
+                <span style="color:#aaa;">➔</span>
+                <span style="color:#ff8c00; font-weight:bold;">THEN [${actText}]</span>
+            `;
+            rulesList.appendChild(row);
+        });
+    };
+
+    window.ColiseumManager.guardarDefensa = function() {
+        const genoId = window.ColiseumManager.tempSelectedGenoId;
+        if (!genoId) {
+            alert("Por favor selecciona un Geno para defender.");
+            return;
+        }
+        
+        const geno = window.misGenos.find(g => String(g.id) === String(genoId));
+        if (!geno) {
+            alert("No se pudo encontrar el Geno seleccionado.");
+            return;
+        }
+        
+        // Clonación limpia
+        const genoSnapshot = JSON.parse(JSON.stringify(geno));
+        
+        window.defensiveAlignment = {
+            genoId: String(geno.id),
+            geno: genoSnapshot
+        };
+        
+        // Cerrar modal
+        const modal = document.getElementById("coliseum-defense-modal");
+        if (modal) modal.classList.add("hidden");
+        
+        // Guardar progreso local y nube
+        if (window.guardarProgreso) {
+            window.guardarProgreso();
+        }
+        
+        window.ColiseumManager.actualizarLobbyUI();
+        
+        alert(`¡Defensa PvP establecida con éxito! ${geno.alias || geno.name} defenderá tu rango en la arena.`);
+    };
+
+    window.ColiseumManager.cerrarConfigurarDefensa = function() {
+        const modal = document.getElementById("coliseum-defense-modal");
+        if (modal) modal.classList.add("hidden");
+    };
+
+    window.ColiseumManager.irAlLaboratorioImplantes = function() {
+        const modal = document.getElementById("coliseum-defense-modal");
+        if (modal) modal.classList.add("hidden");
+        if (typeof window.navegarA === 'function') {
+            if (window.ImplantsManager && typeof window.ImplantsManager.init === 'function') {
+                window.ImplantsManager.init();
+            }
+            window.navegarA('implants-area');
+        }
     };
 });

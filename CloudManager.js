@@ -301,6 +301,7 @@ window.respaldarEnNube = async function() {
         tournamentSaldosPendientes: window.TournamentManager ? window.TournamentManager.saldosPendientes : 0.0,
         tournamentActive: window.TournamentManager ? window.TournamentManager.activeTournament : null,
         becasPlaza: window.becasPlaza || [],
+        defensiveAlignment: window.defensiveAlignment || null,
         prBronce: window.prBronce !== undefined ? window.prBronce : 0,
         prPlata: window.prPlata !== undefined ? window.prPlata : 0,
         prOro: window.prOro !== undefined ? window.prOro : 0,
@@ -508,6 +509,11 @@ async function cargarDatosDeLaNube() {
         }
         if (dj.becasPlaza !== undefined) {
             window.becasPlaza = dj.becasPlaza;
+        }
+        if (dj.defensiveAlignment !== undefined) {
+            window.defensiveAlignment = dj.defensiveAlignment;
+        } else {
+            window.defensiveAlignment = null;
         }
         if (window.NexoEnergyManager && dj.lastActiveTime) {
             window.NexoEnergyManager.aplicarRecuperacionPasiva(dj.lastActiveTime);

@@ -830,6 +830,41 @@
             </div>
         </div>
 
+        <!-- Modal de Configuración de Defensa PvP (Glassmorphism Cyberpunk) -->
+        <div id="coliseum-defense-modal" class="hidden" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 26, 46, 0.85); z-index: 3000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
+            <div class="modal-content" style="background: linear-gradient(180deg, #101524 0%, #080b12 100%); border: 2px solid #00e5ff; box-shadow: 0 0 25px rgba(0, 229, 255, 0.4), inset 0 0 15px rgba(0, 229, 255, 0.1); width: 90%; max-width: 360px; border-radius: 16px; padding: 20px 18px; box-sizing: border-box; position: relative; max-height: 90vh; display: flex; flex-direction: column; font-family: sans-serif; color: white;">
+                <button onclick="window.ColiseumManager.cerrarConfigurarDefensa()" style="position: absolute; top: 12px; right: 15px; background: transparent; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #ff4b4b; padding: 10px; z-index: 10; transition: transform 0.2s;"><svg style="pointer-events: none;" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+                
+                <h3 style="color: #00e5ff; text-transform: uppercase; margin: 0 0 4px 0; font-size: 14px; letter-spacing: 1.5px; text-align: center; font-weight: bold;">Defensa PvP Asíncrona</h3>
+                <p style="font-size: 10px; color: #80deea; text-align: center; margin: 0 0 15px 0; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px;">Selecciona tu Geno guardián y confirma sus tácticas</p>
+
+                <!-- Lista de Genos Seleccionables -->
+                <div style="font-size: 10px; color: #aaa; text-align: left; margin-bottom: 5px; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Elige tu Defensor:</div>
+                <div style="flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; padding-right: 4px; max-height: 25vh; min-height: 100px; scrollbar-width: none; -ms-overflow-style: none;" id="coliseum-defense-genos-list">
+                    <!-- Inyectado dinámicamente -->
+                </div>
+
+                <div style="margin-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 12px; display: flex; flex-direction: column; gap: 8px;">
+                    <div style="font-size: 10px; color: #aaa; text-align: left; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Vista Previa de Criatura:</div>
+                    <div id="defense-geno-preview">
+                        <!-- Inyectado dinámicamente -->
+                    </div>
+                </div>
+
+                <div style="border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 10px; display: flex; flex-direction: column; gap: 6px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size: 10px; color: #aaa; text-transform: uppercase; font-weight: bold; letter-spacing: 0.5px;">Tácticas IFTTT de Defensa:</span>
+                        <button onclick="window.ColiseumManager.irAlLaboratorioImplantes()" style="background: transparent; border: 1px solid #10b981; border-radius: 4px; color: #10b981; padding: 2px 6px; font-size: 9px; cursor: pointer; font-weight: bold;">Editar Tácticas 🛠️</button>
+                    </div>
+                    <div id="defense-ifttt-rules-list" style="max-height: 18vh; overflow-y: auto; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 6px; border: 1px solid rgba(255,255,255,0.05); min-height: 60px; scrollbar-width: none; -ms-overflow-style: none;">
+                        <!-- Inyectado dinámicamente -->
+                    </div>
+                </div>
+
+                <button onclick="window.ColiseumManager.guardarDefensa()" style="background: linear-gradient(90deg, #00d2ff, #8A2BE2); color: #fff; font-weight: bold; border: none; padding: 12px; border-radius: 10px; width: 100%; cursor: pointer; text-transform: uppercase; margin-top: 15px; font-size: 12px; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(0,210,255,0.3); transition: 0.2s;">Confirmar Guardián</button>
+            </div>
+        </div>
+
         <!-- Modal de Ofrecer en Beca (Premium Cyberpunk Neon Violet) -->
         <div id="modal-ofrecer-beca" class="hidden" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(11, 26, 46, 0.85); z-index: 3000; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);">
             <div class="modal-content" style="background: linear-gradient(180deg, #101524 0%, #080b12 100%); border: 2px solid #8A2BE2; box-shadow: 0 0 25px rgba(138, 43, 226, 0.4), inset 0 0 15px rgba(138, 43, 226, 0.1); width: 85%; max-width: 320px; border-radius: 16px; padding: 20px 18px; box-sizing: border-box; position: relative; max-height: 90vh; display: flex; flex-direction: column; font-family: sans-serif; color: white;">
